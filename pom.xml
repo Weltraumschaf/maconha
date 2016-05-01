@@ -50,7 +50,7 @@
     </dependencies>
 
     <build>
-        <finalName>Spring4MVCAngularJSExample</finalName>
+        <finalName>maconha</finalName>
 
         <pluginManagement>
             <plugins>
