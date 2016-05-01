@@ -1,4 +1,4 @@
-package com.websystique.springmvc.service;
+package de.weltraumschaf.maconha.service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.websystique.springmvc.model.User;
+import de.weltraumschaf.maconha.model.User;
 
 @Service("userService")
 @Transactional

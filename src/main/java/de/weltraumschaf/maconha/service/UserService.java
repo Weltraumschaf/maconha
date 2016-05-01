@@ -1,8 +1,8 @@
-package com.websystique.springmvc.service;
+package de.weltraumschaf.maconha.service;
 
 import java.util.List;
 
-import com.websystique.springmvc.model.User;
+import de.weltraumschaf.maconha.model.User;
 
 
 

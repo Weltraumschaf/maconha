@@ -1,4 +1,4 @@
-package com.websystique.springmvc.controller;
+package de.weltraumschaf.maconha.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

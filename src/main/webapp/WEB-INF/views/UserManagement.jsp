@@ -1,8 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html>
     <head>
-        <title>AngularJS $http Example</title>
+        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ</title>
+
         <style>
             .username.ng-valid {
                 background-color: lightgreen;
@@ -28,13 +30,16 @@
         <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
         <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
     </head>
+
     <body ng-app="myApp" class="ng-cloak">
         <div class="generic-container" ng-controller="UserController as ctrl">
             <div class="panel panel-default">
                 <div class="panel-heading"><span class="lead">User Registration Form </span></div>
+
                 <div class="formcontainer">
                     <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
                         <input type="hidden" ng-model="ctrl.user.id" />
+
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label class="col-md-2 control-lable" for="file">Name</label>
@@ -48,7 +53,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="row">
                             <div class="form-group col-md-12">
@@ -81,9 +85,11 @@
                     </form>
                 </div>
             </div>
+
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading"><span class="lead">List of Users </span></div>
+
                 <div class="tablecontainer">
                     <table class="table table-hover">
                         <thead>
@@ -95,6 +101,7 @@
                                 <th width="20%"></th>
                             </tr>
                         </thead>
+
                         <tbody>
                             <tr ng-repeat="u in ctrl.users">
                                 <td><span ng-bind="u.id"></span></td>

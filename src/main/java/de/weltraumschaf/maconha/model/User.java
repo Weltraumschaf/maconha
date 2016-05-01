@@ -1,4 +1,4 @@
-package com.websystique.springmvc.model;
+package de.weltraumschaf.maconha.model;
 
 public class User {
 
