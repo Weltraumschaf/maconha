@@ -16,7 +16,7 @@
     <name>Maconha NG</name>
 
     <properties>
-        <springframework.version>4.2.0.RELEASE</springframework.version>
+        <springframework.version>4.2.5.RELEASE</springframework.version>
         <jackson.version>2.5.3</jackson.version>
     </properties>
 
@@ -57,6 +57,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
+                    <version>2.6</version>
 
                     <configuration>
                         <warSourceDirectory>src/main/webapp</warSourceDirectory>
