@@ -16,9 +16,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import de.weltraumschaf.maconha.model.User;
 import de.weltraumschaf.maconha.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public final class HelloWorldRestController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldRestController.class);
 
     /**
      * Service which will do all data retrieval/manipulation work
@@ -50,11 +54,11 @@ public final class HelloWorldRestController {
      */
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUser(@PathVariable("id") long id) {
-        System.out.println("Fetching User with id " + id);
+        LOGGER.debug("Fetching User with {}.", id);
         User user = userService.findById(id);
 
         if (user == null) {
-            System.out.println("User with id " + id + " not found");
+            LOGGER.debug("User with id {} not found", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -70,10 +74,10 @@ public final class HelloWorldRestController {
      */
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating User " + user.getUsername());
+        LOGGER.debug("Creating User {}.", user.getUsername());
 
         if (userService.isUserExist(user)) {
-            System.out.println("A User with name " + user.getUsername() + " already exist");
+            LOGGER.debug("A User with name {} already exist.", user.getUsername());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -93,11 +97,11 @@ public final class HelloWorldRestController {
      */
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
-        System.out.println("Updating User " + id);
+        LOGGER.debug("Updating User {}.", id);
         User currentUser = userService.findById(id);
 
         if (currentUser == null) {
-            System.out.println("User with id " + id + " not found");
+            LOGGER.debug("User with id {} not found.", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -117,11 +121,11 @@ public final class HelloWorldRestController {
      */
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
-        System.out.println("Fetching & Deleting User with id " + id);
+        LOGGER.debug("Fetching & Deleting User with id {}.", id);
         User user = userService.findById(id);
 
         if (user == null) {
-            System.out.println("Unable to delete. User with id " + id + " not found");
+            LOGGER.debug("Unable to delete. User with id {} not found", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -136,7 +140,7 @@ public final class HelloWorldRestController {
      */
     @RequestMapping(value = "/user/", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteAllUsers() {
-        System.out.println("Deleting All Users");
+        LOGGER.debug("Deleting All Users");
 
         userService.deleteAllUsers();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
