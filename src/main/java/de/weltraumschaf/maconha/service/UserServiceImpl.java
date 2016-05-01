@@ -12,7 +12,7 @@ import de.weltraumschaf.maconha.model.User;
 
 @Transactional
 @Service("userService")
-public final class UserServiceImpl implements UserService {
+final class UserServiceImpl implements UserService {
 
     private static final AtomicLong counter = new AtomicLong();
 

@@ -17,7 +17,7 @@
 
     <properties>
         <springframework.version>4.2.5.RELEASE</springframework.version>
-        <jackson.version>2.5.3</jackson.version>
+        <jackson.version>2.7.3</jackson.version>
     </properties>
 
     <dependencies>
@@ -37,15 +37,18 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
