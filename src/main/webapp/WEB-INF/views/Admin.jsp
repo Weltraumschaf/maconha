@@ -9,7 +9,7 @@
         <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>
     </head>
     
-    <<body ng-app="AdminApp" class="ng-cloak">
+    <body ng-app="AdminApp" class="ng-cloak">
         <h1>Admin</h1>
     </body>
 </html>
