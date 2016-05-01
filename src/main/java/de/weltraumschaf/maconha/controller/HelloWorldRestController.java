@@ -24,7 +24,7 @@ public final class HelloWorldRestController {
      * Service which will do all data retrieval/manipulation work
      */
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * Retrieve All Users.

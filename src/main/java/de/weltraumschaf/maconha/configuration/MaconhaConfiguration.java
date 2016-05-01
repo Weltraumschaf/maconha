@@ -9,14 +9,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+/**
+ * Configures the web application.
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "de.weltraumschaf.maconha")
-public class HelloWorldConfiguration extends WebMvcConfigurerAdapter {
+public class MaconhaConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");

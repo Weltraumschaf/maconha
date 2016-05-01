@@ -28,7 +28,7 @@
 
         </style>
         <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
-        <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
+        <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>
     </head>
 
     <body ng-app="myApp" class="ng-cloak">
