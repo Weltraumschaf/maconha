@@ -31,7 +31,7 @@
         <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>
     </head>
 
-    <body ng-app="myApp" class="ng-cloak">
+    <body ng-app="Maconha" class="ng-cloak">
         <div class="generic-container" ng-controller="UserController as ctrl">
             <div class="panel panel-default">
                 <div class="panel-heading"><span class="lead">User Registration Form </span></div>

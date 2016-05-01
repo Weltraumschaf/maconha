@@ -1,10 +1,13 @@
+/* global App */
+
 'use strict';
 
 App.factory('UserService', ['$http', '$q', function ($http, $q) {
+        var uri = App.baseUr + '/user';
 
         return {
             fetchAllUsers: function () {
-                return $http.get('http://localhost:8080/maconha-ng/user/')
+                return $http.get(uri + '/')
                         .then(
                                 function (response) {
                                     return response.data;
@@ -16,7 +19,7 @@ App.factory('UserService', ['$http', '$q', function ($http, $q) {
                         );
             },
             createUser: function (user) {
-                return $http.post('http://localhost:8080/maconha-ng/user/', user)
+                return $http.post(uri + '/', user)
                         .then(
                                 function (response) {
                                     return response.data;
@@ -28,7 +31,7 @@ App.factory('UserService', ['$http', '$q', function ($http, $q) {
                         );
             },
             updateUser: function (user, id) {
-                return $http.put('http://localhost:8080/maconha-ng/user/' + id, user)
+                return $http.put(uri + '/' + id, user)
                         .then(
                                 function (response) {
                                     return response.data;
@@ -40,7 +43,7 @@ App.factory('UserService', ['$http', '$q', function ($http, $q) {
                         );
             },
             deleteUser: function (id) {
-                return $http.delete('http://localhost:8080/maconha-ng/user/' + id)
+                return $http.delete(uri + '/' + id)
                         .then(
                                 function (response) {
                                     return response.data;

@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ</title>
-        
+        <title>ã½(Â°âÂ° )ã Maconha ã½(Â°âÂ° )ã</title>
+
         <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
         <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>
     </head>
-    
-    <body ng-app="AdminApp" class="ng-cloak">
+
+    <body ng-app="Maconha" class="ng-cloak">
         <h1>Admin</h1>
     </body>
 </html>
