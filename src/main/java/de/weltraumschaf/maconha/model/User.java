@@ -1,6 +1,8 @@
 package de.weltraumschaf.maconha.model;
 
-public class User {
+import java.util.Objects;
+
+public final class User {
 
     private long id;
 
@@ -55,28 +57,20 @@ public class User {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (id ^ (id >>> 32));
-        return result;
+        return Objects.hash(id, username, address, email);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
+    public boolean equals(final Object obj) {
         if (!(obj instanceof User)) {
             return false;
         }
-        User other = (User) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+
+        final User other = (User) obj;
+        return Objects.equals(id, other.id)
+            && Objects.equals(username, other.username)
+            && Objects.equals(address, other.address)
+            && Objects.equals(email, other.email);
     }
 
     @Override
