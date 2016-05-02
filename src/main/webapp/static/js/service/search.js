@@ -3,7 +3,8 @@
 'use strict';
 
 App.factory('SearchService', ['$http', '$q', function ($http, $q) {
-        var uri = App.baseUr + '/search';
+        var uri = App.baseUri + '/search';
+        console.log("Register search service with base URI " + uri + ".");
 
         return {
             search: function(qury) {

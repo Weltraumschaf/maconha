@@ -3,7 +3,7 @@
 'use strict';
 
 App.factory('UserService', ['$http', '$q', function ($http, $q) {
-        var uri = App.baseUr + '/user';
+        var uri = App.baseUri + '/user';
 
         return {
             fetchAllUsers: function () {
