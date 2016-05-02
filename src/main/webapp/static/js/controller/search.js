@@ -2,7 +2,7 @@
 
 'use strict';
 
-App.controller('SearchController', ['$scope', 'SearchService', function ($scope, UserService) {
+App.controller('SearchController', ['$scope', 'SearchService', function ($scope, SearchService) {
         var self = this;
         self.search = {
             query: '',

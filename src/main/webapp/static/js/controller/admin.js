@@ -2,6 +2,6 @@
 
 'use strict';
 
-App.controller('AdminController', ['$scope', 'AdminService', function ($scope, UserService) {
+App.controller('AdminController', ['$scope', 'AdminService', function ($scope, AdminService) {
         var self = this;
     }]);
