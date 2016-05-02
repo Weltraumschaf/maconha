@@ -5,11 +5,11 @@ import javax.servlet.ServletContext;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public final class MaconhaInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public final class ServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{MaconhaConfiguration.class};
+        return new Class[]{MvcConfiguration.class};
     }
 
     @Override

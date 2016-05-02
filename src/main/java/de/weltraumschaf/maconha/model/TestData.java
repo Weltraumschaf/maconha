@@ -10,8 +10,13 @@ public final class TestData {
     public Collection<Media> generate(final int count) {
         final Collection<Media> data = new ArrayList<>();
 
-        for (int i = 0 ; i < count; ++i) {
-            data.add(new Media(i, Media.Type.MOVIE, "title " + String.valueOf(i), "/tiele_" + String.valueOf(i)));
+        for (int i = 0; i < count; ++i) {
+            final Media media = new Media();
+            media.setId(i);
+            media.setType(Media.Type.MOVIE);
+            media.setTitle("title " + String.valueOf(i));
+            media.setFilename("/tiele_" + String.valueOf(i));
+            data.add(media);
         }
 
         return data;

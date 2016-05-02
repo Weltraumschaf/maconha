@@ -106,8 +106,7 @@ public final class HelloWorldRestController {
         }
 
         currentUser.setUsername(user.getUsername());
-        currentUser.setAddress(user.getAddress());
-        currentUser.setEmail(user.getEmail());
+        currentUser.setPassword(user.getPassword());
 
         userService.updateUser(currentUser);
         return new ResponseEntity<>(currentUser, HttpStatus.OK);

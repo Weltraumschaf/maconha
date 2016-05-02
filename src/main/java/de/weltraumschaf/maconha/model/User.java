@@ -1,33 +1,40 @@
 package de.weltraumschaf.maconha.model;
 
+import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
 
-public final class User {
+@Entity
+@Table(name = "User")
+public class User implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotEmpty
+    @Size(min = 3, max = 50)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    private String address;
+    @NotEmpty
+    @Size(min = 8, max = 50)
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    private String email;
-
-    public User() {
-        id = 0;
-    }
-
-    public User(long id, String username, String address, String email) {
-        this.id = id;
-        this.username = username;
-        this.address = address;
-        this.email = email;
-    }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -35,29 +42,21 @@ public final class User {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, address, email);
+        return Objects.hash(id, username, password);
     }
 
     @Override
@@ -69,14 +68,12 @@ public final class User {
         final User other = (User) obj;
         return Objects.equals(id, other.id)
             && Objects.equals(username, other.username)
-            && Objects.equals(address, other.address)
-            && Objects.equals(email, other.email);
+            && Objects.equals(password, other.password);
     }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", address=" + address
-            + ", email=" + email + "]";
+        return "User{" + "id=" + id + ", username=" + username + ", password=" + password + '}';
     }
 
 }

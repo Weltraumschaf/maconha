@@ -19,7 +19,7 @@ public final class JobExecutor {
         final List<Runnable> unfinished = executor.shutdownNow();
     }
 
-    public void submit(final Job task) {
+    public void submit(final Job<?> task) {
         executor.submit(task);
     }
 }
