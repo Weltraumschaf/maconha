@@ -1,5 +1,7 @@
 package de.weltraumschaf.maconha.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,18 +19,26 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = "de.weltraumschaf.maconha")
 public class MaconhaConfiguration extends WebMvcConfigurerAdapter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaConfiguration.class);
+    private static final String VIEWS_PREFIX = "/WEB-INF/views/";
+    private static final String VIEWS_SUFFIX = ".jsp";
+    private static final String RESOURCES_PATTERN = "/static/**";
+    private static final String RESOURCES_LOCATION = "/static/";
+
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
+    public void configureViewResolvers(final ViewResolverRegistry registry) {
         final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/views/");
-        viewResolver.setSuffix(".jsp");
+        viewResolver.setPrefix(VIEWS_PREFIX);
+        viewResolver.setSuffix(VIEWS_SUFFIX);
+        LOGGER.debug("Register view resolver with prefix '{}' and suffix '{}'.", VIEWS_PREFIX, VIEWS_SUFFIX);
         registry.viewResolver(viewResolver);
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        LOGGER.debug("Register resource handler for pattern '{}' to location '{}'.", RESOURCES_PATTERN, RESOURCES_LOCATION);
+        registry.addResourceHandler(RESOURCES_PATTERN).addResourceLocations(RESOURCES_LOCATION);
     }
 
 }
