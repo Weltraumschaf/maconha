@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.configuration;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletContext;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -25,5 +26,12 @@ public final class MaconhaInitializer extends AbstractAnnotationConfigDispatcher
     protected Filter[] getServletFilters() {
         return new Filter[]{new CorsFilter()};
     }
+
+    @Override
+    protected void registerContextLoaderListener(ServletContext servletContext) {
+        super.registerContextLoaderListener(servletContext);
+        servletContext.addListener(new ExecutorContextListener());
+    }
+
 
 }
