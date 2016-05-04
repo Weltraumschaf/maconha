@@ -9,7 +9,7 @@ public final class ServletInitializer extends AbstractAnnotationConfigDispatcher
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{MvcConfiguration.class};
+        return new Class[]{MvcConfiguration.class, WebSecurityConfig.class};
     }
 
     @Override

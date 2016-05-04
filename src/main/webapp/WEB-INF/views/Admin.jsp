@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ã½(Â°âÂ° )ã Maconha ã½(Â°âÂ° )ã</title>
+        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ-Admin</title>
 
         <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
         <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  */
 @RestController
+@RequestMapping("/search/api")
 public final class SearchRestController {
 
     private final Validator validator = new Validator();

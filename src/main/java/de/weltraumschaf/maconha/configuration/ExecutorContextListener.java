@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.configuration;
 
+import de.weltraumschaf.maconha.job.JobExecutor;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ public final class ExecutorContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(final ServletContextEvent sce) {
+        MaconhaRegistry.INSTANCE.setJobExecutor(new JobExecutor());
         LOGGER.debug("Context initialized.");
     }
 

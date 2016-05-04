@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -32,6 +33,15 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     private static final String RESOURCES_LOCATION = "/static/";
 
     @Override
+    public void addViewControllers(final ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("Search");
+        registry.addViewController("/admin").setViewName("Admin");
+        registry.addViewController("/login").setViewName("Login");
+        registry.addViewController("/example").setViewName("UserManagement");
+        registry.addViewController("/403").setViewName("403");
+    }
+
+    @Override
     public void configureViewResolvers(final ViewResolverRegistry registry) {
         final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
@@ -49,7 +59,7 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
         return messageSource;
     }

@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ</title>
 
-        <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
-        <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>
+        <link href="<spring:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
+        <link href="<spring:url value='/static/css/main.css' />" rel="stylesheet"></link>
     </head>
 
     <body ng-app="Maconha" class="ng-cloak">
         <div class="generic-container" ng-controller="SearchController as ctrl">
             <div class="panel panel-default">
+                <a href="<spring:url value='/admin' />">Admin</a>
                 <div class="panel-heading"><span class="lead">Suche</span></div>
 
                 <div class="formcontainer">

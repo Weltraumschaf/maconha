@@ -5,6 +5,8 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,11 +30,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource(value = {"classpath:application.properties"})
 public class DatabaseConfiguration {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConfiguration.class);
+
     @Autowired
     private Environment environment;
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
+        LOGGER.debug("Create session factory bean.");
         final LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 
         sessionFactory.setDataSource(dataSource());
@@ -44,6 +49,7 @@ public class DatabaseConfiguration {
 
     @Bean
     public DataSource dataSource() {
+        LOGGER.debug("Create data source bean.");
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
@@ -67,7 +73,8 @@ public class DatabaseConfiguration {
     @Bean
     @Autowired
     public HibernateTransactionManager transactionManager(final SessionFactory sessions) {
-        HibernateTransactionManager transactions = new HibernateTransactionManager();
+        LOGGER.debug("Create transaction manager bean.");
+        final HibernateTransactionManager transactions = new HibernateTransactionManager();
         transactions.setSessionFactory(sessions);
         return transactions;
     }
