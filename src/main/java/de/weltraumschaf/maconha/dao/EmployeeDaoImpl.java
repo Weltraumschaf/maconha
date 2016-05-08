@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 /**
  */
 @Repository("employeeDao")
-public final class EmployeeDaoImpl extends AbstractDao<Integer, Employee> implements EmployeeDao {
+public class EmployeeDaoImpl extends AbstractDao<Integer, Employee> implements EmployeeDao {
 
     public EmployeeDaoImpl() {
         super(Employee.class);

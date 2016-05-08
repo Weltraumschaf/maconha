@@ -1,16 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+ <html lang="de">
     <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <titleヽ(°◇° )ノ Maconha ヽ(°◇° )ノ-Login</title>
 
-        <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
-        <link href="<c:url value='/static/css/main.css' />" rel="stylesheet"></link>
+        <link href="${baseUrl}/css/bootstrap.css" rel="stylesheet"/>
+        <link href="${baseUrl}/css/main.css" rel="stylesheet"/>
     </head>
 
     <body>
-        <form action="/login" method="post">
+        <form action="${baseUrl}/login" method="post">
 
             <div class="lc-block">
                 <div>
@@ -19,15 +18,15 @@
                 <div>
                     <input type="password" class="style-4" name="password" placeholder="Password" />
                 </div>
+                <#if error>
+                    <div class="alert-danger">Invalid username and password.</div>
+                </#if>
+                <#if logout>                
+                    <div class="alert-normal">You have been logged out.</div>
+                </#if>
                 <div>
                     <input type="submit" value="Sign In" class="button red small" />
                 </div>
-                <c:if test="${param.error ne null}">
-                    <div class="alert-danger">Invalid username and password.</div>
-                </c:if>
-                <c:if test="${param.logout ne null}">
-                    <div class="alert-normal">You have been logged out.</div>
-                </c:if>
             </div>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         </form>

@@ -23,7 +23,7 @@ public class CorsFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) {
+    public void init(final FilterConfig filterConfig) {
     }
 
     @Override

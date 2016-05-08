@@ -2,7 +2,6 @@ package de.weltraumschaf.maconha.dao;
 
 import java.io.Serializable;
 
-import java.lang.reflect.ParameterizedType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -24,24 +23,24 @@ abstract class AbstractDao<P extends Serializable, T> {
     @Autowired
     private SessionFactory sessionFactory;
 
-    protected final Session getSession() {
+    protected  Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 
     @SuppressWarnings("unchecked")
-    public final T getByKey(final P key) {
+    public  T getByKey(final P key) {
         return (T) getSession().get(persistentClass, key);
     }
 
-    public final void persist(final T entity) {
+    public  void persist(final T entity) {
         getSession().persist(entity);
     }
 
-    public final void delete(final T entity) {
+    public void delete(final T entity) {
         getSession().delete(entity);
     }
 
-    protected final Criteria createEntityCriteria() {
+    protected Criteria createEntityCriteria() {
         return getSession().createCriteria(persistentClass);
     }
 }
