@@ -1,34 +1,30 @@
 <!DOCTYPE html>
- <html lang="de">
+ <html lang="en">
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <titleヽ(°◇° )ノ Maconha ヽ(°◇° )ノ-Login</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <titleヽ(°◇° )ノ Maconha ヽ(°◇° )ノ - Login</title>
 
-        <link href="${baseUrl}/css/bootstrap.css" rel="stylesheet"/>
-        <link href="${baseUrl}/css/main.css" rel="stylesheet"/>
+        <link href="${baseUrl}/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${baseUrl}/css/main.css" rel="stylesheet">
     </head>
 
     <body>
-        <form action="${baseUrl}/login" method="post">
-
-            <div class="lc-block">
-                <div>
-                    <input type="text" class="style-4" name="username" placeholder="User Name" />
-                </div>
-                <div>
-                    <input type="password" class="style-4" name="password" placeholder="Password" />
-                </div>
-                <#if error>
-                    <div class="alert-danger">Invalid username and password.</div>
-                </#if>
-                <#if logout>                
-                    <div class="alert-normal">You have been logged out.</div>
-                </#if>
-                <div>
-                    <input type="submit" value="Sign In" class="button red small" />
-                </div>
-            </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        </form>
+        <div class="container">
+            <form class="form-signin" action="${baseUrl}/login" method="post">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" class="form-control" placeholder="Username" required autofocus>
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Password" required>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>                                
+            </form>
+        </div>
+        
+        <script src="${baseUrl}/js/jquery.min.js"></script>
+        <script src="${baseUrl}/js/bootstrap.min.js"></script>
     </body>
 </html>
