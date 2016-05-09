@@ -1,11 +1,7 @@
 <!DOCTYPE html>
- <html lang="de">
+<html lang="en">
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ-Access Denied</title>
-
-        <link href="${baseUrl}/css/bootstrap.css" rel="stylesheet"/>
-        <link href="${baseUrl}/css/main.css" rel="stylesheet"/>
+        <#include "includes/head.ftl">
     </head>
 
     <body>

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
- <html lang="de">
+ <html lang="en">
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ</title>
+        <#include "includes/head.ftl">
 
         <style>
             .username.ng-valid {
@@ -26,8 +25,6 @@
             }
 
         </style>
-        <link href="${baseUrl}/css/bootstrap.css" rel="stylesheet"/>
-        <link href="${baseUrl}/css/main.css" rel="stylesheet"/>
     </head>
 
     <body ng-app="Maconha" class="ng-cloak">

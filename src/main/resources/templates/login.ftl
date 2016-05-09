@@ -1,13 +1,7 @@
 <!DOCTYPE html>
- <html lang="en">
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <titleヽ(°◇° )ノ Maconha ヽ(°◇° )ノ - Login</title>
-
-        <link href="${baseUrl}/css/bootstrap.min.css" rel="stylesheet">
-        <link href="${baseUrl}/css/main.css" rel="stylesheet">
+        <#include "includes/head.ftl">
     </head>
 
     <body>
