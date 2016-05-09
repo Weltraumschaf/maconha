@@ -114,8 +114,7 @@
             </div>
         </div>
 
-        <script src="${baseUrl}/js/angular.js"></script>
-        <script src="${baseUrl}/js/app.js"></script>
+        <#include "includes/common_js.ftl">
         <script src="${baseUrl}/js/service/user_service.js"></script>
         <script src="${baseUrl}/js/controller/user_controller.js"></script>
     </body>

@@ -6,5 +6,7 @@
 
     <body ng-app="Maconha" class="ng-cloak">
         <h1>Admin</h1>
+
+        <#include "includes/common_js.ftl">
     </body>
 </html>
