@@ -5,7 +5,11 @@
     </head>
 
     <body ng-app="Maconha" class="ng-cloak">
-        <h1>Admin</h1>
+        <#include "includes/navbar.ftl">
+
+        <div class="container">
+            <h1>Admin</h1>
+        </div>
 
         <#include "includes/common_js.ftl">
     </body>

@@ -5,6 +5,8 @@
     </head>
 
     <body>
+        <#include "includes/navbar.ftl">
+
         <div class="container">
             <form class="form-signin" action="${baseUrl}/login" method="post">
                 <h2 class="form-signin-heading">Please sign in</h2>
