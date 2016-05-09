@@ -12,5 +12,8 @@
         </div>
 
         <#include "includes/common_js.ftl">
+        <script>
+            $("#admin").addClass("active");
+        </script>
     </body>
 </html>

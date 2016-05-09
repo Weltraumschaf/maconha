@@ -21,5 +21,8 @@
         </div>
 
         <#include "includes/common_js.ftl">
+        <script>
+            $("#login").addClass("active");
+        </script>
     </body>
 </html>

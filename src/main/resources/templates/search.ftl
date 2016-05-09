@@ -22,5 +22,8 @@
         <#include "includes/common_js.ftl">
         <script src="${baseUrl}/js/service/search.js"></script>
         <script src="${baseUrl}/js/controller/search.js"></script>
+        <script>
+            $("#search").addClass("active");
+        </script>
     </body>
 </html>
