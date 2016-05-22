@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha;
 
 import de.weltraumschaf.maconha.configuration.CorsFilter;
 import de.weltraumschaf.maconha.configuration.ExecutorContextListener;
+import de.weltraumschaf.maconha.job.JobExecutor;
 import java.util.Arrays;
 import java.util.EventListener;
 import javax.servlet.Filter;
@@ -19,14 +20,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
+/**
+ * Main entry point of the Spring boot application.
+ */
 @SpringBootApplication
 public class MaconhaApplication implements WebApplicationInitializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaApplication.class);
     private static final EventListener[] SERVLET_LISTENER = new EventListener[]{new ExecutorContextListener()};
-    private static final String[] SERVLET_MAPPINGS = new String[]{"/maconha-ng/*"};
+    private static final String[] SERVLET_MAPPINGS = new String[]{
+        "/maconha-ng/*"
+    };
 
     /**
      * Invoked main method.
@@ -58,16 +63,13 @@ public class MaconhaApplication implements WebApplicationInitializer {
     @Bean
     public ServletContextInitializer initializer() {
         LOGGER.debug("Create servlet initializer.");
-        return new ServletContextInitializer() {
 
-            @Override
-            public void onStartup(final ServletContext servletContext) throws ServletException {
-                LOGGER.debug("Servlet cotext initilaizer called.");
+        return (final ServletContext servletContext) -> {
+            LOGGER.debug("Servlet cotext initilaizer called.");
 
-                for (final EventListener listener : SERVLET_LISTENER) {
-                    LOGGER.debug("Register context loader listeners {}.", listener.getClass().getName());
-                    servletContext.addListener(listener);
-                }
+            for (final EventListener listener : SERVLET_LISTENER) {
+                LOGGER.debug("Register context loader listeners {}.", listener.getClass().getName());
+                servletContext.addListener(listener);
             }
         };
     }
@@ -94,4 +96,8 @@ public class MaconhaApplication implements WebApplicationInitializer {
         return messageSource;
     }
 
+    @Bean
+    public JobExecutor jobExecutor() {
+        return MaconhaRegistry.INSTANCE.getJobExecutor();
+    }
 }

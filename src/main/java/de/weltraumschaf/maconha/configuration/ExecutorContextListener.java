@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.configuration;
 
-import de.weltraumschaf.maconha.configuration.MaconhaRegistry;
+import de.weltraumschaf.maconha.MaconhaRegistry;
 import de.weltraumschaf.maconha.job.JobExecutor;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

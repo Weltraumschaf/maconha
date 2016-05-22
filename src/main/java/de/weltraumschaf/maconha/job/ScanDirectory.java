@@ -6,12 +6,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  */
-public final class GenerateIndex extends BaseJob<Void> {
+public final class ScanDirectory extends BaseJob<Void> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndex.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
 
-    public GenerateIndex() {
-        super(generateName(GenerateIndex.class));
+    public ScanDirectory() {
+        super(generateName(ScanDirectory.class));
     }
 
     @Override
@@ -27,5 +27,4 @@ public final class GenerateIndex extends BaseJob<Void> {
 
         return null;
     }
-
 }

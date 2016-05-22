@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.configuration;
+package de.weltraumschaf.maconha;
 
 import de.weltraumschaf.maconha.job.JobExecutor;
 
