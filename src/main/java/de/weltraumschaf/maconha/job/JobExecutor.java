@@ -47,7 +47,7 @@ public final class JobExecutor {
         pool.submit(task);
     }
 
-    public Collection<Description> list() {
+    public Collection<JobDescription> list() {
         return tasks.stream().map(task -> task.describe()).collect(Collectors.toList());
     }
 }

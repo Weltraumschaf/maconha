@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.job;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Base implementation of a job.
  */
 abstract class BaseJob<V> implements Job<V> {
 
@@ -18,17 +20,19 @@ abstract class BaseJob<V> implements Job<V> {
 
     public BaseJob(final String name) {
         super();
-        this.name = name;
+        this.name = Validate.notEmpty(name, "name");
     }
 
     @Override
     public final void register(final MessageConsumer consumer) {
+        Validate.notNull(consumer, "consumer");
         LOGGER.debug("Register message consumer {}.", consumer);
         consumers.add(consumer);
     }
 
     @Override
     public final void emmit(final String format, final Object ... args) {
+        Validate.notNull(format, "format");
         final String message = String.format(format, args);
         LOGGER.debug("Emmit message: {}", message);
 
@@ -43,15 +47,15 @@ abstract class BaseJob<V> implements Job<V> {
     }
 
     @Override
-    public final Description describe() {
-        return new Description(name, getClass(), state);
+    public final JobDescription describe() {
+        return new JobDescription(name, getClass(), state);
     }
 
     @Override
     public final V call() throws Exception {
         LOGGER.debug("Job called {}.", describe());
 
-        if (isRunning() || isRunning()) {
+        if (isRunning() || isFinished()) {
             throw new IllegalStateException(String.format("Can not call job in state '%s'!", state));
         }
 

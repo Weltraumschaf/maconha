@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.service;
 
-import de.weltraumschaf.maconha.job.Description;
+import de.weltraumschaf.maconha.job.JobDescription;
 import de.weltraumschaf.maconha.job.Job;
 import java.util.Collection;
 
@@ -12,6 +12,6 @@ public interface JobService {
     void submit(Job<?> job);
     void cancel(String name);
     void cancel(Class<? extends Job> type);
-    Collection<Description> list();
-    Collection<Description> list(Class<? extends Job> type);
+    Collection<JobDescription> list();
+    Collection<JobDescription> list(Class<? extends Job> type);
 }

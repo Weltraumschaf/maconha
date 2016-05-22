@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.controller;
 
-import de.weltraumschaf.maconha.job.Description;
+import de.weltraumschaf.maconha.job.JobDescription;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobConfig;
 import de.weltraumschaf.maconha.service.AdminService;
@@ -45,13 +45,13 @@ public final class AdminRestController {
     }
 
     @RequestMapping(value = "/jobs/", method = RequestMethod.GET)
-    public Collection<Description> jobs() {
+    public Collection<JobDescription> jobs() {
         LOGGER.debug("Serve admin job list.");
         return jobs.list();
     }
 
     @RequestMapping(value = "/jobs/", method = RequestMethod.POST)
-    public ResponseEntity<Description> submit(final @RequestBody JobConfig config, final UriComponentsBuilder uri) {
+    public ResponseEntity<JobDescription> submit(final @RequestBody JobConfig config, final UriComponentsBuilder uri) {
         String name  ="ScanDirectory";
 
         LOGGER.debug("Serve job submission for {}.", name);

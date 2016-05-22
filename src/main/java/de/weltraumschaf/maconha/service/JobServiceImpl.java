@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.service;
 
-import de.weltraumschaf.maconha.job.Description;
+import de.weltraumschaf.maconha.job.JobDescription;
 import de.weltraumschaf.maconha.job.GenerateIndex;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobExecutor;
@@ -50,12 +50,12 @@ final class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Collection<Description> list() {
+    public Collection<JobDescription> list() {
         return jobs.list();
     }
 
     @Override
-    public Collection<Description> list(Class<? extends Job> type) {
+    public Collection<JobDescription> list(Class<? extends Job> type) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

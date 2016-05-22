@@ -3,11 +3,13 @@ package de.weltraumschaf.maconha.job;
 import java.util.concurrent.Callable;
 
 /**
- * @param <V>
+ * Jobs are long running tasks executed in the background.
+ *
+ * @param <V> produced type of job
  */
 public interface Job<V> extends Callable<V>, MessageProducer {
 
-    Description describe();
+    JobDescription describe();
 
     void cancel();
 
@@ -19,6 +21,9 @@ public interface Job<V> extends Callable<V>, MessageProducer {
 
     State getState();
 
+    /**
+     * State of a job.
+     */
     enum State {
 
         NEW, CANCELED, RUNNING, FINISHED;
