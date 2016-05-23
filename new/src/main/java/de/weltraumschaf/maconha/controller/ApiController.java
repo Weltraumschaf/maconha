@@ -51,9 +51,9 @@ public final class ApiController {
         value = BASE_URI_PATH + "/jobs",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Collection<String> listrunningJobs() {
+    public Collection<JobDescription> listrunningJobs() {
         LOGGER.debug("Serve API job list.");
-        return Arrays.asList("foo", "bar", "baz");
+        return jobs.list();
     }
 
     @RequestMapping(

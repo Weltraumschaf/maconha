@@ -16,7 +16,7 @@ public final class ScanDirectory extends BaseJob<Void> {
 
     @Override
     public Void execute() throws Exception {
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 500; ++i) {
             if (isCanceled()) {
                 return null;
             }

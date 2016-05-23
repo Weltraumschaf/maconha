@@ -34,10 +34,10 @@ abstract class BaseJob<V> implements Job<V> {
     public final void emmit(final String format, final Object ... args) {
         Validate.notNull(format, "format");
         final String message = String.format(format, args);
-        LOGGER.debug("Emmit message: {}", message);
+        LOGGER.debug("Job {} emmits message: {}", name, message);
 
         if (consumers.isEmpty()) {
-            LOGGER.debug("No consumers registered.");
+            LOGGER.debug("Job {} has no consumers registered.", name);
             return;
         }
 
@@ -66,6 +66,12 @@ abstract class BaseJob<V> implements Job<V> {
 
         state = State.RUNNING;
         final V result = execute();
+
+        if (isCanceled()) {
+            LOGGER.debug("Job was canceld ({}).", describe());
+            return null;
+        }
+
         state = State.FINISHED;
         LOGGER.debug("Job finished ({}).", describe());
         return result;

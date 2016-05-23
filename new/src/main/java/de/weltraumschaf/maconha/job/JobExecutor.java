@@ -18,13 +18,14 @@ public final class JobExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobExecutor.class);
     private static final int TIMEOUT = 60;
-    private final ExecutorService pool = Executors.newSingleThreadExecutor();
+    private final ExecutorService pool = Executors.newFixedThreadPool(10);
     private final Collection<Job<?>> tasks = new CopyOnWriteArrayList<>();
 
     @PreDestroy
     public void shutdown() {
         LOGGER.debug("Shutdown job executor...");
         pool.shutdown(); // Disable new tasks from being submitted
+        cancelJobs();
 
         try {
             // Wait a while for existing tasks to terminate
@@ -53,5 +54,9 @@ public final class JobExecutor {
 
     public Collection<JobDescription> list() {
         return tasks.stream().map(task -> task.describe()).collect(Collectors.toList());
+    }
+
+    private void cancelJobs() {
+        tasks.stream().filter(j -> j.isRunning()).forEach(j -> j.cancel());
     }
 }
