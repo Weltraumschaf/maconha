@@ -19,11 +19,19 @@ public final class JobExecutor {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobExecutor.class);
     private static final int TIMEOUT = 60;
     private final ExecutorService pool = Executors.newFixedThreadPool(10);
-    private final Collection<Job<?>> tasks = new CopyOnWriteArrayList<>();
+    private final Collection<Job<?>> jobs = new CopyOnWriteArrayList<>();
+    private volatile boolean shutdown;
 
     @PreDestroy
     public void shutdown() {
         LOGGER.debug("Shutdown job executor...");
+
+        if (shutdown) {
+            LOGGER.debug("Already shut down, ignoring.");
+            return;
+        }
+
+        shutdown = true;
         pool.shutdown(); // Disable new tasks from being submitted
         cancelJobs();
 
@@ -46,17 +54,23 @@ public final class JobExecutor {
         }
     }
 
-    public void submit(final Job<?> task) {
-        LOGGER.debug("Submit new job: {}.", task);
-        tasks.add(task);
-        pool.submit(task);
+    public void submit(final Job<?> job) {
+        LOGGER.debug("Submit new job: {}.", job);
+
+        if (shutdown) {
+            LOGGER.debug("Aleady shut down, ignoring job {}.", job);
+            return;
+        }
+
+        jobs.add(job);
+        pool.submit(job);
     }
 
     public Collection<JobDescription> list() {
-        return tasks.stream().map(task -> task.describe()).collect(Collectors.toList());
+        return jobs.stream().map(task -> task.describe()).collect(Collectors.toList());
     }
 
     private void cancelJobs() {
-        tasks.stream().filter(j -> j.isRunning()).forEach(j -> j.cancel());
+        jobs.stream().filter(j -> j.isRunning()).forEach(j -> j.cancel());
     }
 }
