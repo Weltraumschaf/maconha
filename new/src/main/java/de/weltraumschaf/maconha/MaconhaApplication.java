@@ -22,13 +22,13 @@ public class MaconhaApplication {
      */
     public static void main(final String[] args) {
         final ConfigurableApplicationContext context = SpringApplication.run(MaconhaApplication.class, args);
-        LOGGER.debug("Provided beans:");
+        LOGGER.trace("Provided beans:");
 
         final String[] beanNames = context.getBeanDefinitionNames();
         Arrays.sort(beanNames);
 
         for (final String beanName : beanNames) {
-            LOGGER.debug(beanName);
+            LOGGER.trace(beanName);
         }
     }
 }

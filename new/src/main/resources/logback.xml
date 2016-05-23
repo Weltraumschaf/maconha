@@ -58,7 +58,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework" level="WARN" additivity="false">
+    <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="STDERR" />
     </logger>
