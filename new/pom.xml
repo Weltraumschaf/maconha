@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Maconha NG</name>
+    <name>Maconha NG (new)</name>
 
     <properties>
         <project.build.version.source>1.8</project.build.version.source>
