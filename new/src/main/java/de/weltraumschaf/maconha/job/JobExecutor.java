@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  */
+@Component
 public final class JobExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobExecutor.class);
