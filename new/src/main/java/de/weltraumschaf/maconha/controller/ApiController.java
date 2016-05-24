@@ -1,11 +1,12 @@
 package de.weltraumschaf.maconha.controller;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.core.Validator;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobConfig;
 import de.weltraumschaf.maconha.job.JobDescription;
 import de.weltraumschaf.maconha.service.JobService;
-import java.util.Arrays;
+import de.weltraumschaf.maconha.service.SearchService;
 import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,18 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
+ * THis controller serves the REST API.
  */
 @RestController
 public final class ApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
     private static final String BASE_URI_PATH = "/api";
+    private final Validator validator = new Validator();
     private final JobService jobs;
+    private final SearchService search;
 
     @Autowired
-    public ApiController(final JobService jobs) {
+    public ApiController(final JobService jobs, final SearchService search) {
         super();
         this.jobs = Validate.notNull(jobs, "jobs");
+        this.search = Validate.notNull(search, "search");
     }
 
     @RequestMapping(
