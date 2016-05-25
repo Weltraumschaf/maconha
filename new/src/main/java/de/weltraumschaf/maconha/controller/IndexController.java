@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Top level controller.
@@ -18,15 +19,22 @@ public final class IndexController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String index(final HttpServletRequest request, Map<String, Object> model) {
-        return search(request, model);
+    public String index(final HttpServletRequest request, Map<String, Object> model, final UriComponentsBuilder uri) {
+        return search(request, model, uri);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String search(final HttpServletRequest request, Map<String, Object> model) {
+    public String search(final HttpServletRequest request, final Map<String, Object> model, final UriComponentsBuilder uri) {
         traceRequest(request);
-        assignBaseVariables(request, model);
+        assignBaseVariables(uri, model);
         return "search";
+    }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String admin(final HttpServletRequest request, final Map<String, Object> model, final UriComponentsBuilder uri) {
+        traceRequest(request);
+        assignBaseVariables(uri, model);
+        return "admin";
     }
 
     private void traceRequest(final HttpServletRequest request) {
@@ -39,26 +47,11 @@ public final class IndexController {
         return requestURL.toString();
     }
 
-    private void assignBaseVariables(final HttpServletRequest request, final Map<String, Object> model) {
-        model.put("baseUrl", getBaseUrl(request));
+    private void assignBaseVariables(final UriComponentsBuilder uri, final Map<String, Object> model) {
+        model.put("baseUrl", getBaseUrl(uri));
     }
 
-    private String getBaseUrl(final HttpServletRequest request) {
-        final String port;
-
-        if (request.getServerPort() == 80)  {
-            port = "";
-        } else {
-            port = ":" + String.valueOf(request.getServerPort());
-        }
-
-        return new StringBuilder()
-            .append(request.getScheme())
-            .append("://")
-            .append(request.getServerName())
-            .append(port)
-            .append(request.getServletPath())
-            .append(request.getContextPath())
-            .toString();
+    private String getBaseUrl(final UriComponentsBuilder uri) {
+        return uri.toUriString();
     }
 }
