@@ -5,6 +5,7 @@ import de.weltraumschaf.maconha.core.Validator;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobConfig;
 import de.weltraumschaf.maconha.job.JobDescription;
+import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.service.JobService;
 import de.weltraumschaf.maconha.service.SearchService;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -75,5 +77,13 @@ public final class ApiController {
         final HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uri.path(BASE_URI_PATH + "/jobs/{id}").buildAndExpand(job.describe().getName()).toUri());
         return new ResponseEntity<>(job.describe(), headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(
+        value = BASE_URI_PATH + "/search",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Collection<Media> search(final @RequestParam(value = "q") String query) {
+        return search.search(validator.cleanSearchQuery(query));
     }
 }
