@@ -29,8 +29,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 public final class ApiController {
 
+    static final String BASE_URI_PATH = "/api";
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
-    private static final String BASE_URI_PATH = "/api";
     private final Validator validator = new Validator();
     private final JobService jobs;
     private final SearchService search;

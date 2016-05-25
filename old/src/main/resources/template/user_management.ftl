@@ -105,7 +105,8 @@
                                 <td><span ng-bind="u.address"></span></td>
                                 <td><span ng-bind="u.email"></span></td>
                                 <td>
-                                    <button type="button" ng-click="ctrl.edit(u.id)" class="btn btn-success custom-width">Edit</button>  <button type="button" ng-click="ctrl.remove(u.id)" class="btn btn-danger custom-width">Remove</button>
+                                    <button type="button" ng-click="ctrl.edit(u.id)" class="btn btn-success custom-width">Edit</button>
+                                    <button type="button" ng-click="ctrl.remove(u.id)" class="btn btn-danger custom-width">Remove</button>
                                 </td>
                             </tr>
                         </tbody>

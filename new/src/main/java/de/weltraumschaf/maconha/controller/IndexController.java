@@ -48,10 +48,8 @@ public final class IndexController {
     }
 
     private void assignBaseVariables(final UriComponentsBuilder uri, final Map<String, Object> model) {
-        model.put("baseUrl", getBaseUrl(uri));
+        model.put("baseUrl", uri.toUriString());
+        model.put("apiUrl", uri.path(ApiController.BASE_URI_PATH).toUriString());
     }
 
-    private String getBaseUrl(final UriComponentsBuilder uri) {
-        return uri.toUriString();
-    }
 }
