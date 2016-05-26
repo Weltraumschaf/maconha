@@ -22,31 +22,27 @@
                 </form>
             </div>
 
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-                <div class="panel-heading">Search results</div>
+            <h2 class="sub-header" ng-show="ctrl.hasResults()">Search results</h2>
+            <div class="table-responsive" ng-show="ctrl.hasResults()">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>title</th>
+                            <th>Filename</th>
+                        </tr>
+                    </thead>
 
-                <div class="tablecontainer">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Type</th>
-                                <th>title</th>
-                                <th>Filename</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr ng-repeat="r in ctrl.search.result">
-                                <td><span ng-bind="r.id"></span></td>
-                                <td><span ng-bind="r.type"></span></td>
-                                <td><span ng-bind="r.title"></span></td>
-                                <td><span ng-bind="r.filename"></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <tbody>
+                        <tr ng-repeat="r in ctrl.search.result">
+                            <td><span ng-bind="r.id"></span></td>
+                            <td><span ng-bind="r.type"></span></td>
+                            <td><span ng-bind="r.title"></span></td>
+                            <td><span ng-bind="r.filename"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

@@ -25,4 +25,8 @@ App.controller('SearchController', ['$scope', 'SearchService', function ($scope,
                     );
         };
 
+        self.hasResults = function() {
+            return self.search.result.length > 0;
+        };
+
     }]);
