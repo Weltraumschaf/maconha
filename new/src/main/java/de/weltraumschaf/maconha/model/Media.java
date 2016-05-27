@@ -11,6 +11,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
  */
@@ -22,7 +25,7 @@ public class Media implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @NotNull
     @Size(min = 1, max = 10)
@@ -39,11 +42,17 @@ public class Media implements Serializable {
     @Column(name = "filename", nullable = false)
     private String filename;
 
+    @NotNull
+    @DateTimeFormat(iso = ISO.DATE_TIME)
+    @Column(name = "lastIndexed", nullable = false)
+    @org.hibernate.annotations.Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate lastIndexed;
+
     public long getId() {
         return id;
     }
 
-    public void setId(final long id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -71,9 +80,17 @@ public class Media implements Serializable {
         this.filename = filename;
     }
 
+    public LocalDate getLastIndexed() {
+        return lastIndexed;
+    }
+
+    public void setLastIndexed(LocalDate lastIndexed) {
+        this.lastIndexed = lastIndexed;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, title, filename);
+        return Objects.hash(id, type, title, filename, lastIndexed);
     }
 
     @Override
@@ -86,7 +103,8 @@ public class Media implements Serializable {
         return Objects.equals(id, other.id)
             && Objects.equals(type, other.type)
             && Objects.equals(title, other.title)
-            && Objects.equals(filename, other.filename);
+            && Objects.equals(filename, other.filename)
+            && Objects.equals(lastIndexed, other.lastIndexed);
     }
 
     @Override
@@ -95,12 +113,13 @@ public class Media implements Serializable {
             + "id=" + id + ", "
             + "type=" + type + ", "
             + "title=" + title + ", "
-            + "filename=" + filename
+            + "filename=" + filename + ", "
+            + "lastIndexed=" + lastIndexed
             + '}';
     }
 
     public static enum Type {
 
-        MOVIE, SERIES, MUSIC;
+        VIDEO, AUDIO, OTHER;
     };
 }

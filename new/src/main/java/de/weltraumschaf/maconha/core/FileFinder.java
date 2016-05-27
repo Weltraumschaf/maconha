@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Walks file tree and collects files with wanted extension.
  */
-final class FileFinder extends SimpleFileVisitor<Path> {
+public final class FileFinder extends SimpleFileVisitor<Path> {
 
     private final Collection<Path> collectedFiles = new ArrayList<>();
     private final Set<? extends FileExtension> wantedFiles;

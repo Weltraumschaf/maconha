@@ -8,7 +8,7 @@ import java.nio.file.Path;
  * File extension is the string portion after the last dot of a file name.
  * </p>
  */
-interface FileExtension {
+public interface FileExtension {
 
     /**
      * The default if none found.

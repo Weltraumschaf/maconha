@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * http://fileinfo.com/extension/mov
  */
-enum Movies implements FileExtension {
+public enum Movies implements FileExtension {
 
     AUDIO_VIDEO_INTERLEAVE("avi"),
     DIVX_ENCODED_MOVIE_FILE("divx"),
