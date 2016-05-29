@@ -4,14 +4,17 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -28,27 +31,26 @@ public class Media implements Serializable {
     private int id;
 
     @NotNull
-    @Size(min = 1, max = 10)
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private Type type;
+    private MediaType type = MediaType.OTHER;
 
     @NotEmpty
-    @Size(min = 3, max = 255)
+    @Size(min = 1, max = 255)
     @Column(name = "title", nullable = false)
-    private String title;
+    private String title = "";
 
     @NotEmpty
     @Size(min = 1, max = 255)
     @Column(name = "filename", nullable = false)
-    private String filename;
+    private String filename = "";
 
-    @NotNull
+    @Column(name = "lastIndexed")
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    @Column(name = "lastIndexed", nullable = false)
-    @org.hibernate.annotations.Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate lastIndexed;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime lastIndexed;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -56,11 +58,11 @@ public class Media implements Serializable {
         this.id = id;
     }
 
-    public Type getType() {
+    public MediaType getType() {
         return type;
     }
 
-    public void setType(final Type type) {
+    public void setType(final MediaType type) {
         this.type = type;
     }
 
@@ -80,21 +82,21 @@ public class Media implements Serializable {
         this.filename = filename;
     }
 
-    public LocalDate getLastIndexed() {
+    public LocalDateTime getLastIndexed() {
         return lastIndexed;
     }
 
-    public void setLastIndexed(LocalDate lastIndexed) {
+    public void setLastIndexed(final LocalDateTime lastIndexed) {
         this.lastIndexed = lastIndexed;
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return Objects.hash(id, type, title, filename, lastIndexed);
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public final boolean equals(final Object obj) {
         if (!(obj instanceof Media)) {
             return false;
         }
@@ -108,7 +110,7 @@ public class Media implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "Media{"
             + "id=" + id + ", "
             + "type=" + type + ", "
@@ -118,7 +120,7 @@ public class Media implements Serializable {
             + '}';
     }
 
-    public static enum Type {
+    public static enum MediaType {
 
         VIDEO, AUDIO, OTHER;
     };

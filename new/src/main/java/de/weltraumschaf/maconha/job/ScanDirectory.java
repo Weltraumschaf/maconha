@@ -67,9 +67,9 @@ public final class ScanDirectory extends BaseJob<Void> {
         media.setTitle(extractor.extractTitle(mediaFile));
 
         if (Movies.hasValue(extractor.extractExtension(mediaFile).getExtension())) {
-            media.setType(Media.Type.VIDEO);
+            media.setType(Media.MediaType.VIDEO);
         } else {
-            media.setType(Media.Type.OTHER);
+            media.setType(Media.MediaType.OTHER);
         }
 
         dao.save(media);

@@ -13,7 +13,7 @@ public final class TestData {
         for (int i = 0; i < count; ++i) {
             final Media media = new Media();
             media.setId(i);
-            media.setType(Media.Type.VIDEO);
+            media.setType(Media.MediaType.VIDEO);
             media.setTitle("title " + String.valueOf(i));
             media.setFilename("/tiele_" + String.valueOf(i));
             data.add(media);
