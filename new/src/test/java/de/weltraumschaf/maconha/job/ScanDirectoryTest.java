@@ -3,15 +3,15 @@ package de.weltraumschaf.maconha.job;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Tests for {@link ScanDirectory}.
  */
+@ActiveProfiles("test")
 public class ScanDirectoryTest {
 
     @Rule

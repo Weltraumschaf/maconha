@@ -180,7 +180,7 @@
         </dependency>
 
         <!-- Testing dependencies -->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
@@ -254,9 +254,10 @@
                 <configuration>
                     <fork>true</fork>
                     <executable>true</executable>
-                    <!--                    <jvmArguments>
-                        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
-                    </jvmArguments>-->
+                    <!-- For debugging: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -->
+                    <jvmArguments>
+                        -Dspring.profiles.active=dev
+                    </jvmArguments>
                 </configuration>
             </plugin>
         </plugins>

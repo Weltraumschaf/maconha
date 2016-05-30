@@ -4,6 +4,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.job.JobExecutor;
 import java.util.Arrays;
 import java.util.Properties;
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -52,6 +53,11 @@ public class MaconhaApplication {
         for (final String beanName : beanNames) {
             LOGGER.trace(beanName);
         }
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        LOGGER.info("Used profiles: {}", Arrays.toString(environment.getActiveProfiles()));
     }
 
     @Bean
