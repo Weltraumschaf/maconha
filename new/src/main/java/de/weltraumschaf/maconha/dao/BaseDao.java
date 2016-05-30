@@ -2,7 +2,6 @@ package de.weltraumschaf.maconha.dao;
 
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.model.Media;
 import java.util.Collection;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
