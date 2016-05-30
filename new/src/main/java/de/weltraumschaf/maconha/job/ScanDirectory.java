@@ -1,7 +1,6 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.core.FileExtension;
 import de.weltraumschaf.maconha.core.FileFinder;
 import de.weltraumschaf.maconha.core.FileNameExtractor;
 import de.weltraumschaf.maconha.core.Movies;
@@ -13,6 +12,7 @@ import java.util.EnumSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * This job scans a directory for media files.

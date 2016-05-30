@@ -1,17 +1,30 @@
 package de.weltraumschaf.maconha.job;
 
+import de.weltraumschaf.maconha.MaconhaApplication;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.transaction.Transactional;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Tests for {@link ScanDirectory}.
  */
+@Transactional
+@Rollback(false)
 @ActiveProfiles("test")
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(MaconhaApplication.class)
 public class ScanDirectoryTest {
 
     @Rule
@@ -19,6 +32,12 @@ public class ScanDirectoryTest {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
     private final ScanDirectory sut = new ScanDirectory();
+    private @Autowired AutowireCapableBeanFactory beanFactory;
+
+    @Before
+    public void autowireDependnecies() {
+        beanFactory.autowireBean(sut);
+    }
 
     @Test
     public void execute_baseDirNotSet() throws Exception {
@@ -55,6 +74,14 @@ public class ScanDirectoryTest {
         final Path baseDir = tmp.newFile().toPath();
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(String.format("Base dir '%s' is not a directory!", baseDir));
+        sut.setBaseDir(baseDir);
+
+        sut.execute();
+    }
+
+    @Test
+    public void execute() throws Exception {
+        final Path baseDir = Paths.get("/Users/sst/src/private/maconha-ng/new/src/test/resources/examplefiles");
         sut.setBaseDir(baseDir);
 
         sut.execute();

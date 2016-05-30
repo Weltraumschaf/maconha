@@ -1,6 +1,0 @@
-<!DOCTYPE dataset SYSTEM "maconha-dataset.dtd">
-<dataset>
-    <Media id="0" type="VIDEO" title="foo" filename="movies/foo.avi"/>
-    <Media id="1" type="VIDEO" title="bar" filename="movies/bar.avi"/>
-    <Media id="2" type="VIDEO" title="baz" filename="movies/baz.avi"/>
-</dataset>
