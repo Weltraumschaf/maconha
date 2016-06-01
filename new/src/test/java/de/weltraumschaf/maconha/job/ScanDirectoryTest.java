@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.maconha.MaconhaApplication;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.transaction.Transactional;
@@ -21,7 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Tests for {@link ScanDirectory}.
  */
 @Transactional
-@Rollback(false)
+//@Rollback(false)
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(MaconhaApplication.class)
@@ -81,7 +82,8 @@ public class ScanDirectoryTest {
 
     @Test
     public void execute() throws Exception {
-        final Path baseDir = Paths.get("/Users/sst/src/private/maconha-ng/new/src/test/resources/examplefiles");
+        final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/job/ScanJob").toURI();
+        final Path baseDir = Paths.get(fixtures);
         sut.setBaseDir(baseDir);
 
         sut.execute();

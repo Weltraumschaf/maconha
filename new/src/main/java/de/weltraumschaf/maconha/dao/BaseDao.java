@@ -46,7 +46,7 @@ abstract class BaseDao<T> {
      *
      * @return never {@code null}
      */
-    public final Session getSession() {
+    protected final Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 

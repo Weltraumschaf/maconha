@@ -68,7 +68,6 @@ public class DefaultMediaDaoTest {
     }
 
     @Test
-//    @Ignore
     public void deleteById() {
         final Media toDelete = new Media();
         toDelete.setFilename("/foo/bar.avi");

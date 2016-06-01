@@ -9,7 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
@@ -19,9 +18,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
+ * Entity which represent imported media.
+ * <p>
+ * Must not be {@code final} for frameworks sake.
+ * </p>
  */
 @Entity
-@Table(name = "Media")
+@SuppressWarnings("PersistenceUnitPresent")
 public class Media implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,20 +35,19 @@ public class Media implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
+    @Column(nullable = false)
     private MediaType type = MediaType.OTHER;
 
     @NotEmpty
     @Size(min = 1, max = 255)
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title = "";
 
     @NotEmpty
     @Size(min = 1, max = 255)
-    @Column(name = "filename", nullable = false)
+    @Column(nullable = false)
     private String filename = "";
 
-    @Column(name = "lastIndexed")
     @DateTimeFormat(iso = ISO.DATE_TIME)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime lastIndexed;

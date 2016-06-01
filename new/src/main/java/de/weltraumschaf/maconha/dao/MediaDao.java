@@ -2,9 +2,9 @@ package de.weltraumschaf.maconha.dao;
 
 import de.weltraumschaf.maconha.model.Media;
 import java.util.Collection;
-import org.hibernate.Session;
 
 /**
+ * Data layer abstraction for {@link Media}.
  */
 public interface MediaDao {
 
@@ -12,11 +12,10 @@ public interface MediaDao {
 
     Collection<Media> findAll();
 
-    void save(Media media);
+    void save(Media entity);
 
-    void delete(Media media);
+    void delete(Media entity);
 
     void deleteById(int id);
 
-    Session getSession();
 }
