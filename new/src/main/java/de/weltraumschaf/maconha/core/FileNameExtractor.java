@@ -18,6 +18,8 @@ public final class FileNameExtractor {
             .collect(Collectors.toSet());
     }
 
+    // "foo-bar" -> "foo bar" (but "foo - bar" -> "foo - bar")
+    // "FooBar" -> "Foo Bar"
     public String extractTitle(final Path inputToExtract) {
         final String absolutePath = inputToExtract.toString();
         return cleanseTitle(absolutePath.substring(
@@ -39,7 +41,7 @@ public final class FileNameExtractor {
     }
 
     private String replaceMultipleWhitespacesWithOne(final String input) {
-        return input.replaceAll(" +", " ");
+        return input.replaceAll("\\s+", " ");
     }
 
 }
