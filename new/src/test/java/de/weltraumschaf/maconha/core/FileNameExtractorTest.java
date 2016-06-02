@@ -53,4 +53,17 @@ public class FileNameExtractorTest {
         assertThat(sut.extractExtension(fileThree), is(Movies.REAL_MEDIA_FILE));
     }
 
+    @Test
+    public void splitCamelCase() {
+        assertThat(sut.splitCamelCase(null), is(""));
+        assertThat(sut.splitCamelCase(""), is(""));
+        assertThat(sut.splitCamelCase("   "), is(""));
+        assertThat(sut.splitCamelCase("FooBarBaz"), is("Foo Bar Baz"));
+        assertThat(sut.splitCamelCase("foo"), is("foo"));
+        assertThat(sut.splitCamelCase("FOO"), is("FOO"));
+        assertThat(sut.splitCamelCase("Foo"), is("Foo"));
+        assertThat(sut.splitCamelCase("FOOBar"), is("FOO Bar"));
+        assertThat(sut.splitCamelCase("Foo42"), is("Foo 42"));
+    }
+
 }

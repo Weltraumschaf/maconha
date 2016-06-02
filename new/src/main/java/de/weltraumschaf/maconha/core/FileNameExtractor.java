@@ -44,4 +44,19 @@ public final class FileNameExtractor {
         return input.replaceAll("\\s+", " ");
     }
 
+    protected String splitCamelCase(final String input) {
+        if (null == input || input.trim().isEmpty()) {
+            return "";
+        }
+
+        // http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
+        return input.replaceAll(
+            String.format("%s|%s|%s",
+                "(?<=[A-Z])(?=[A-Z][a-z])", // UC behind me, UC followed by LC in front of me.
+                "(?<=[^A-Z])(?=[A-Z])", // non-UC behind me, UC in front of me.
+                "(?<=[A-Za-z])(?=[^A-Za-z])" // Letter behind me, non-letter in front of me.
+            ),
+            " "
+        );
+    }
 }
