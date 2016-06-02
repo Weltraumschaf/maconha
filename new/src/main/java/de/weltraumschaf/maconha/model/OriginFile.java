@@ -48,7 +48,7 @@ public class OriginFile implements Serializable {
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    private LocalDateTime indexTime = new LocalDateTime();
+    private LocalDateTime scanTime = new LocalDateTime();
 
     public int getId() {
         return id;
@@ -83,16 +83,16 @@ public class OriginFile implements Serializable {
     }
 
     public LocalDateTime getIndexTime() {
-        return indexTime;
+        return scanTime;
     }
 
-    public void setIndexTime(LocalDateTime indexTime) {
-        this.indexTime = indexTime;
+    public void setScanTime(LocalDateTime scanTime) {
+        this.scanTime = scanTime;
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, baseDir, absolutePath, fingerprint, indexTime);
+        return Objects.hash(id, baseDir, absolutePath, fingerprint, scanTime);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class OriginFile implements Serializable {
             && Objects.equals(fingerprint, other.fingerprint)
             && Objects.equals(baseDir, other.baseDir)
             && Objects.equals(absolutePath, other.absolutePath)
-            && Objects.equals(indexTime, other.indexTime);
+            && Objects.equals(scanTime, other.scanTime);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class OriginFile implements Serializable {
             + "baseDir=" + baseDir + ", "
             + "absolutePath=" + absolutePath + ", "
             + "fingerprint=" + fingerprint + ", "
-            + "indexTime=" + indexTime + '}';
+            + "scanTime=" + scanTime + '}';
     }
 
 }

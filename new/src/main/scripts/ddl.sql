@@ -5,7 +5,7 @@ create table OriginFile (
     baseDir VARCHAR(255) not null,
     absolutePath VARCHAR(255) not null,
     fingerprint VARCHAR(64) not null,
-    indexTime TIMESTAMP default CURRENT_TIMESTAMP,
+    scanTime TIMESTAMP default CURRENT_TIMESTAMP,
     primary key (id)
 );
 

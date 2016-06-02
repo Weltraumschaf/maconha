@@ -23,30 +23,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 public final class ScanDirectory extends BaseJob<Void> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
-    private final FileNameExtractor extractor = new FileNameExtractor();
     @Autowired
     private OriginFileDao dao;
     private Path baseDir;
+    private LocalDateTime scanTime = new LocalDateTime();
 
+    /**
+     * Dedicated constructor.
+     */
     public ScanDirectory() {
         super(generateName(ScanDirectory.class));
     }
 
+    /**
+     * Set the base dir to scan.
+     * <p>
+     * This must be set before execution, unless it will thow exceptions.
+     * </p>
+     *
+     * @param baseDir must not be {@code null}
+     */
     public void setBaseDir(final Path baseDir) {
         this.baseDir = Validate.notNull(baseDir, "baseDir");
+    }
+
+    /**
+     * Get the time of scan.
+     *
+     * @return never{@code null}
+     */
+    public LocalDateTime getScanTime() {
+        return scanTime;
     }
 
     @Override
     public Void execute() throws Exception {
         validateBaseDir();
-        LOGGER.debug("Scan dir {} ...", baseDir);
-        FileFinder.find(baseDir, EnumSet.allOf(Movies.class)).stream().forEach(mediaFile -> {
-            try {
-                scanFile(mediaFile);
-            } catch (final IOException ex) {
-                throw new IOError(ex);
-            }
-        });
+        scanTime = new LocalDateTime();
+        LOGGER.debug("Scan dir {} at {} ...", baseDir, scanTime);
+        FileFinder.find(baseDir, EnumSet.allOf(Movies.class)).stream().forEach(mediaFile -> scanFile(mediaFile));
         return null;
     }
 
@@ -68,13 +83,21 @@ public final class ScanDirectory extends BaseJob<Void> {
         }
     }
 
-    private void scanFile(final Path mediaFile) throws IOException {
+    private void scanFile(final Path mediaFile) {
         LOGGER.debug("Scan file {} ...", mediaFile);
         final OriginFile file = new OriginFile();
         file.setBaseDir(baseDir);
         file.setAbsolutePath(mediaFile);
-        file.setFingerprint(DigestUtils.sha256Hex(Files.newInputStream(mediaFile)));
-        file.setIndexTime(new LocalDateTime());
+        file.setFingerprint(fingerprint(mediaFile));
+        file.setScanTime(scanTime);
         dao.save(file);
+    }
+
+    private String fingerprint(final Path mediaFile) {
+        try {
+            return DigestUtils.sha256Hex(Files.newInputStream(mediaFile));
+        } catch (final IOException ex) {
+            throw new IOError(ex);
+        }
     }
 }

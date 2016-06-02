@@ -3,7 +3,6 @@ package de.weltraumschaf.maconha.model;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * Tests for {@link OriginFile}.
