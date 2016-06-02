@@ -48,7 +48,7 @@ public class OriginFile implements Serializable {
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    private LocalDateTime indexTime;
+    private LocalDateTime indexTime = new LocalDateTime();
 
     public int getId() {
         return id;

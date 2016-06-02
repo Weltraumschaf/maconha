@@ -6,6 +6,7 @@ import de.weltraumschaf.maconha.model.Media.MediaType;
 import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +50,6 @@ public class DefaultMediaDaoTest {
 
         assertThat(toSave.getId(), is(greaterThan(0)));
         final Media loaded = sut.findById(toSave.getId());
-        assertThat(loaded, is(not(nullValue())));
         assertThat(loaded, is(toSave));
     }
 
@@ -61,10 +61,11 @@ public class DefaultMediaDaoTest {
         toDelete.setType(MediaType.VIDEO);
         toDelete.setLastIndexed(new LocalDateTime());
         sut.save(toDelete);
+        final int id = toDelete.getId();
 
         sut.delete(toDelete);
 
-        assertThat(sut.findById(toDelete.getId()), is(nullValue()));
+        assertThat(sut.findById(id), is(nullValue()));
     }
 
     @Test
@@ -97,6 +98,7 @@ public class DefaultMediaDaoTest {
         three.setFilename("/baz.avi");
         sut.save(three);
 
+        assertThat(sut.findAll(), hasSize(3));
         assertThat(sut.findAll(), containsInAnyOrder(one, two, three));
     }
 }

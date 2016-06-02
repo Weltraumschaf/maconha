@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.transaction.Transactional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -14,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Tests for {@link ScanDirectory}.
  */
 @Transactional
-//@Rollback(false)
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(MaconhaApplication.class)
@@ -81,6 +80,7 @@ public class ScanDirectoryTest {
     }
 
     @Test
+    @Ignore("TODO assert from db")
     public void execute() throws Exception {
         final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/job/ScanJob").toURI();
         final Path baseDir = Paths.get(fixtures);
