@@ -1,6 +1,8 @@
 package de.weltraumschaf.maconha.dao;
 
 import de.weltraumschaf.maconha.MaconhaApplication;
+import de.weltraumschaf.maconha.core.Movies;
+import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.OriginFile;
 import java.nio.file.Paths;
 import javax.transaction.Transactional;
@@ -30,6 +32,8 @@ public class DefaultOriginFileDaoTest {
 
     @Autowired
     private OriginFileDao sut;
+    @Autowired
+    private MediaDao dao;
 
     @Before
     public void verifyAutowiredObjects() {
@@ -99,5 +103,24 @@ public class DefaultOriginFileDaoTest {
 
         assertThat(sut.findAll(), hasSize(3));
         assertThat(sut.findAll(), containsInAnyOrder(one, two, three));
+    }
+
+    @Test
+    public void find_withMedia() {
+        final OriginFile file = new OriginFile()
+            .setBaseDir(Paths.get("/foo/bar/movies"))
+            .setAbsolutePath(Paths.get("/foo/bar/movies/foo_bar.mov"))
+            .setFingerprint("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
+        final Media media = new Media()
+            .setType(Media.MediaType.VIDEO)
+            .setFormat(Movies.APPLE_QUICKTIME_MOVIE.getExtension())
+            .setTitle("Foo Bar SNAFU")
+            .setOriginFile(file);
+        dao.save(media);
+
+        final OriginFile loaded = sut.findById(file.getId());
+
+        assertThat(loaded, is(file));
+//        assertThat(loaded.getImported(), is(media));
     }
 }

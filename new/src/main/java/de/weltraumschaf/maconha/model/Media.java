@@ -58,6 +58,7 @@ public class Media implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime lastImported = new LocalDateTime();
 
+    // Fixme Optional should be false.
     @OneToOne(optional = true ,cascade = {CascadeType.ALL})
     @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
     private OriginFile originFile;
