@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  * Tests for {@link FileNameExtractor}.
@@ -66,4 +67,12 @@ public class FileNameExtractorTest {
         assertThat(sut.splitCamelCase("Foo42"), is("Foo 42"));
     }
 
+    @Test
+    public void replaceAndSplitDashes() {
+        assertThat(sut.replaceAndSplitDashes(null), is(""));
+        assertThat(sut.replaceAndSplitDashes(""), is(""));
+        assertThat(sut.replaceAndSplitDashes("   "), is(""));
+        assertThat(sut.replaceAndSplitDashes("foo-bar"), is("foo bar"));
+        assertThat(sut.replaceAndSplitDashes("foo - bar"), is("foo - bar"));
+    }
 }
