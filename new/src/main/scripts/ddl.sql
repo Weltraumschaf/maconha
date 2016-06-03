@@ -17,7 +17,9 @@ create table Media (
     format VARCHAR(10) not null,
     title VARCHAR(255) not null,
     lastImported TIMESTAMP default CURRENT_TIMESTAMP,
-    primary key (id)
+    originFile_id int,
+    primary key (id),
+    constraint fk_originFile foreign key (originFile_id) references OriginFile (id)
 );
 
 drop table if exists Keyword;

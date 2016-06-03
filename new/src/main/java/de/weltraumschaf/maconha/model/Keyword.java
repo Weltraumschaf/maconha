@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,7 @@ public class Keyword implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(unique=true, nullable=false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

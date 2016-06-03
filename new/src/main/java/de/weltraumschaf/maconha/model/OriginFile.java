@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
@@ -29,6 +32,7 @@ public class OriginFile implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(unique=true, nullable=false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -56,49 +60,67 @@ public class OriginFile implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime scanTime = new LocalDateTime();
 
+    @OneToOne(optional = true, cascade = {CascadeType.ALL})
+    @PrimaryKeyJoinColumn
+    private Media imported;
+
     public int getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public OriginFile setId(final int id) {
         this.id = id;
+        return this;
     }
 
     public Path getBaseDir() {
         return Paths.get(baseDir);
     }
 
-    public void setBaseDir(Path baseDir) {
+    public OriginFile setBaseDir(Path baseDir) {
         this.baseDir = baseDir.toString();
+        return this;
     }
 
     public Path getAbsolutePath() {
         return Paths.get(absolutePath);
     }
 
-    public void setAbsolutePath(Path absolutePath) {
+    public OriginFile setAbsolutePath(Path absolutePath) {
         this.absolutePath = absolutePath.toString();
+        return this;
     }
 
     public String getFingerprint() {
         return fingerprint;
     }
 
-    public void setFingerprint(String fingerprint) {
+    public OriginFile setFingerprint(String fingerprint) {
         this.fingerprint = fingerprint;
+        return this;
     }
 
     public LocalDateTime getIndexTime() {
         return scanTime;
     }
 
-    public void setScanTime(LocalDateTime scanTime) {
+    public OriginFile setScanTime(LocalDateTime scanTime) {
         this.scanTime = scanTime;
+        return this;
+    }
+
+    public Media getImported() {
+        return imported;
+    }
+
+    public OriginFile setImported(Media imported) {
+        this.imported = imported;
+        return this;
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, baseDir, absolutePath, fingerprint, scanTime);
+        return Objects.hash(id, baseDir, absolutePath, fingerprint, scanTime, imported);
     }
 
     @Override
@@ -113,7 +135,8 @@ public class OriginFile implements Serializable {
             && Objects.equals(fingerprint, other.fingerprint)
             && Objects.equals(baseDir, other.baseDir)
             && Objects.equals(absolutePath, other.absolutePath)
-            && Objects.equals(scanTime, other.scanTime);
+            && Objects.equals(scanTime, other.scanTime)
+            && Objects.equals(imported, other.imported);
     }
 
     @Override
@@ -123,7 +146,9 @@ public class OriginFile implements Serializable {
             + "baseDir=" + baseDir + ", "
             + "absolutePath=" + absolutePath + ", "
             + "fingerprint=" + fingerprint + ", "
-            + "scanTime=" + scanTime + '}';
+            + "scanTime=" + scanTime + ", "
+            + "imported=" + imported
+            + '}';
     }
 
 }

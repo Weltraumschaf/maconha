@@ -11,7 +11,10 @@ public class MediaTest {
 
     @Test
     public void equalsAndHashCode() {
-        EqualsVerifier.forClass(Media.class).verify();
+        EqualsVerifier
+            .forClass(Media.class)
+            .withPrefabValues(OriginFile.class, new OriginFile().setId(1), new OriginFile().setId(2))
+            .verify();
     }
 
 }

@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
@@ -30,6 +33,7 @@ public class Media implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -54,49 +58,67 @@ public class Media implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime lastImported = new LocalDateTime();
 
+    @OneToOne(optional = true ,cascade = {CascadeType.ALL})
+    @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
+    private OriginFile originFile;
+
     public int getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public Media setId(final int id) {
         this.id = id;
+        return this;
     }
 
     public MediaType getType() {
         return type;
     }
 
-    public void setType(final MediaType type) {
+    public Media setType(final MediaType type) {
         this.type = type;
+        return this;
     }
 
     public String getFormat() {
         return format;
     }
 
-    public void setFormat(String format) {
+    public Media setFormat(String format) {
         this.format = format;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public Media setTitle(final String title) {
         this.title = title;
+        return this;
     }
 
     public LocalDateTime getLastImported() {
         return lastImported;
     }
 
-    public void setLastImported(LocalDateTime lastImported) {
+    public Media setLastImported(LocalDateTime lastImported) {
         this.lastImported = lastImported;
+        return this;
+    }
+
+    public OriginFile getOriginFile() {
+        return originFile;
+    }
+
+    public Media setOriginFile(OriginFile originFile) {
+        this.originFile = originFile;
+        return this;
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, type, format, title, lastImported);
+        return Objects.hash(id, type, format, title, lastImported, originFile);
     }
 
     @Override
@@ -110,7 +132,8 @@ public class Media implements Serializable {
             && Objects.equals(type, other.type)
             && Objects.equals(format, other.format)
             && Objects.equals(title, other.title)
-            && Objects.equals(lastImported, other.lastImported);
+            && Objects.equals(lastImported, other.lastImported)
+            && Objects.equals(originFile, other.originFile);
     }
 
     @Override
@@ -120,7 +143,8 @@ public class Media implements Serializable {
             + "type=" + type + ", "
             + "format=" + format + ", "
             + "title=" + title + ", "
-            + "lastImported=" + lastImported
+            + "lastImported=" + lastImported + ", "
+            + "originFile=" + originFile
             + '}';
     }
 
