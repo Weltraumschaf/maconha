@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,22 +32,26 @@ public class OriginFile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
+    @NotEmpty
+    @Column(nullable = false)
     @Size(min = 1, max = 255)
     private String baseDir;
 
-    @NotNull
+    @NotEmpty
+    @Column(nullable = false)
     @Size(min = 1, max = 255)
     private String absolutePath;
 
     /**
      * SHA-256 (e.g. "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae")
      */
-    @NotNull
+    @NotEmpty
+    @Column(nullable = false)
     @Size(min = 64, max = 64)
     private String fingerprint;
 
     @NotNull
+    @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime scanTime = new LocalDateTime();

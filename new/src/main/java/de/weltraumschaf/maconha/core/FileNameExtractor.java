@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * Utility class to extract information from file names.
  */
 public final class FileNameExtractor {
 

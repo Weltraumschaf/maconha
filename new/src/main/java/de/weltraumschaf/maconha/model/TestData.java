@@ -15,7 +15,6 @@ public final class TestData {
             media.setId(i);
             media.setType(Media.MediaType.VIDEO);
             media.setTitle("title " + String.valueOf(i));
-            media.setFilename("/tiele_" + String.valueOf(i));
             data.add(media);
         }
 

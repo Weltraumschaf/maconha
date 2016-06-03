@@ -40,10 +40,10 @@ public class DefaultMediaDaoTest {
     @Test
     public void save() {
         final Media toSave = new Media();
-        toSave.setFilename("/foo/bar.avi");
+        toSave.setFormat("avi");
         toSave.setTitle("bar");
         toSave.setType(MediaType.VIDEO);
-        toSave.setLastIndexed(new LocalDateTime());
+        toSave.setLastImported(new LocalDateTime());
         assertThat(toSave.getId(), is(0));
 
         sut.save(toSave);
@@ -56,10 +56,10 @@ public class DefaultMediaDaoTest {
     @Test
     public void delete() {
         final Media toDelete = new Media();
-        toDelete.setFilename("/foo/bar.avi");
+        toDelete.setFormat("avi");
         toDelete.setTitle("bar");
         toDelete.setType(MediaType.VIDEO);
-        toDelete.setLastIndexed(new LocalDateTime());
+        toDelete.setLastImported(new LocalDateTime());
         sut.save(toDelete);
         final int id = toDelete.getId();
 
@@ -71,10 +71,10 @@ public class DefaultMediaDaoTest {
     @Test
     public void deleteById() {
         final Media toDelete = new Media();
-        toDelete.setFilename("/foo/bar.avi");
+        toDelete.setFormat("avi");
         toDelete.setTitle("bar");
         toDelete.setType(MediaType.VIDEO);
-        toDelete.setLastIndexed(new LocalDateTime());
+        toDelete.setLastImported(new LocalDateTime());
         sut.save(toDelete);
         final int id = toDelete.getId();
 
@@ -87,15 +87,15 @@ public class DefaultMediaDaoTest {
     public void findAll() {
         final Media one = new Media();
         one.setTitle("foo");
-        one.setFilename("/foo.avi");
+        one.setFormat("avi");
         sut.save(one);
         final Media two = new Media();
         two.setTitle("bar");
-        two.setFilename("/bar.avi");
+        two.setFormat("avi");
         sut.save(two);
         final Media three = new Media();
         three.setTitle("baz");
-        three.setFilename("/baz.avi");
+        three.setFormat("avi");
         sut.save(three);
 
         assertThat(sut.findAll(), hasSize(3));

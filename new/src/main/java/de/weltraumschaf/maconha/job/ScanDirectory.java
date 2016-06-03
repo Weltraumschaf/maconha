@@ -2,7 +2,6 @@ package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.FileFinder;
-import de.weltraumschaf.maconha.core.FileNameExtractor;
 import de.weltraumschaf.maconha.core.Movies;
 import de.weltraumschaf.maconha.dao.OriginFileDao;
 import de.weltraumschaf.maconha.model.OriginFile;
@@ -24,7 +23,7 @@ public final class ScanDirectory extends BaseJob<Void> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
     @Autowired
-    private OriginFileDao dao;
+    private OriginFileDao output;
     private Path baseDir;
     private LocalDateTime scanTime = new LocalDateTime();
 
@@ -90,7 +89,7 @@ public final class ScanDirectory extends BaseJob<Void> {
         file.setAbsolutePath(mediaFile);
         file.setFingerprint(fingerprint(mediaFile));
         file.setScanTime(scanTime);
-        dao.save(file);
+        output.save(file);
     }
 
     private String fingerprint(final Path mediaFile) {

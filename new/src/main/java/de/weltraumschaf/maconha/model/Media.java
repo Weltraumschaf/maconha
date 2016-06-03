@@ -34,23 +34,25 @@ public class Media implements Serializable {
     private int id;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private MediaType type = MediaType.OTHER;
+
+    @NotEmpty
+    @Size(min = 1, max = 10)
+    @Column(nullable = false)
+    private String format = "";
 
     @NotEmpty
     @Size(min = 1, max = 255)
     @Column(nullable = false)
     private String title = "";
 
-    @NotEmpty
-    @Size(min = 1, max = 255)
+    @NotNull
     @Column(nullable = false)
-    private String filename = "";
-
     @DateTimeFormat(iso = ISO.DATE_TIME)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    private LocalDateTime lastIndexed;
+    private LocalDateTime lastImported = new LocalDateTime();
 
     public int getId() {
         return id;
@@ -68,6 +70,14 @@ public class Media implements Serializable {
         this.type = type;
     }
 
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -76,25 +86,17 @@ public class Media implements Serializable {
         this.title = title;
     }
 
-    public String getFilename() {
-        return filename;
+    public LocalDateTime getLastImported() {
+        return lastImported;
     }
 
-    public void setFilename(final String filename) {
-        this.filename = filename;
-    }
-
-    public LocalDateTime getLastIndexed() {
-        return lastIndexed;
-    }
-
-    public void setLastIndexed(final LocalDateTime lastIndexed) {
-        this.lastIndexed = lastIndexed;
+    public void setLastImported(LocalDateTime lastImported) {
+        this.lastImported = lastImported;
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, type, title, filename, lastIndexed);
+        return Objects.hash(id, type, format, title, lastImported);
     }
 
     @Override
@@ -106,9 +108,9 @@ public class Media implements Serializable {
         final Media other = (Media) obj;
         return Objects.equals(id, other.id)
             && Objects.equals(type, other.type)
+            && Objects.equals(format, other.format)
             && Objects.equals(title, other.title)
-            && Objects.equals(filename, other.filename)
-            && Objects.equals(lastIndexed, other.lastIndexed);
+            && Objects.equals(lastImported, other.lastImported);
     }
 
     @Override
@@ -116,9 +118,9 @@ public class Media implements Serializable {
         return "Media{"
             + "id=" + id + ", "
             + "type=" + type + ", "
+            + "format=" + format + ", "
             + "title=" + title + ", "
-            + "filename=" + filename + ", "
-            + "lastIndexed=" + lastIndexed
+            + "lastImported=" + lastImported
             + '}';
     }
 
