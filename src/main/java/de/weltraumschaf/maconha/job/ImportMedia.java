@@ -61,7 +61,7 @@ public final class ImportMedia extends BaseJob<Void> {
         LOGGER.debug("Import file {}.", file);
         final FileExtension extension = extractor.extractExtension(file.getAbsolutePath());
         final Media imported = new Media()
-            .setType(MediaType.VIDEO) // FIXME Make it dynamic.
+            .setType(MediaType.forValue(extension))
             .setFormat(extension)
             .setTitle(extractor.extractTitle(file.getAbsolutePath()))
             .setLastImported(importTime)

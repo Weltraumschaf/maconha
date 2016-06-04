@@ -2,6 +2,12 @@ package de.weltraumschaf.maconha.model;
 
 import de.weltraumschaf.maconha.core.FileExtension;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,7 +66,7 @@ public class Media implements Serializable {
     private LocalDateTime lastImported = new LocalDateTime();
 
     // Fixme Optional should be false.
-    @OneToOne(optional = true ,cascade = {CascadeType.ALL})
+    @OneToOne(optional = true, cascade = {CascadeType.ALL})
     @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
     private OriginFile originFile;
 
@@ -153,5 +159,45 @@ public class Media implements Serializable {
     public static enum MediaType {
 
         VIDEO, AUDIO, OTHER;
+
+        private static final Collection<FileExtension> VIDEOS = Collections.unmodifiableCollection(Arrays.asList(
+            FileExtension.AUDIO_VIDEO_INTERLEAVE,
+            FileExtension.DIVX_ENCODED_MOVIE_FILE,
+            FileExtension.ITUNES_VIDEO_FILE,
+            FileExtension.MATROSKA_VIDEO_FILE,
+            FileExtension.APPLE_QUICKTIME_MOVIE,
+            FileExtension.MPEG4_VIDEO_FILE,
+            FileExtension.MPEG_MOVIE,
+            FileExtension.MPEG_VIDEO_FILE,
+            FileExtension.OGG_MEDIA_FILE,
+            FileExtension.REAL_MEDIA_FILE,
+            FileExtension.SHOCKWAVE_FLASH_MOVIE,
+            FileExtension.WINDOWS_MEDIA_VIDEO_FILE,
+            FileExtension.XVID_ENCODED_VIDEO_FILE
+        ));
+        private static final Collection<FileExtension> AUDIOS = Collections.unmodifiableCollection(Arrays.asList());
+
+        private static final Map<MediaType, Collection<FileExtension>> LOOKUP;
+
+        static {
+            Map<MediaType, Collection<FileExtension>> tmp = new HashMap<>();
+            tmp.put(VIDEO, VIDEOS);
+            tmp.put(AUDIO, AUDIOS);
+            LOOKUP = Collections.unmodifiableMap(tmp);
+        }
+
+        public static MediaType forValue(final FileExtension extension) {
+            if (null == extension) {
+                return OTHER;
+            }
+
+            for (final Entry<MediaType, Collection<FileExtension>> pair : LOOKUP.entrySet()) {
+                if (pair.getValue().contains(extension)) {
+                    return pair.getKey();
+                }
+            }
+
+            return OTHER;
+        }
     };
 }
