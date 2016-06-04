@@ -10,17 +10,20 @@ import java.util.stream.Collectors;
  */
 public final class FileNameExtractor {
 
-    public Collection<String> extractKeywords(final Path inputToExtract) {
-        final String absolutePath = inputToExtract.toString();
-        final String cleansed = replaceMultipleWhitespacesWithOne(absolutePath.replaceAll("[/\\-_\\.]", " ").trim());
+    Path relativeToBaseDir(final Path base, final Path absolute) {
+        return absolute.subpath(base.getNameCount(), absolute.getNameCount());
+    }
+
+    public Collection<String> extractKeywords(final Path base, final Path absolute) {
+        final String path = relativeToBaseDir(base, absolute).toString();
+        final String cleansed = cleanseTitle(
+            path.substring(0, path.lastIndexOf('.')).replaceAll("[/\\-_\\.]", " ").trim());
         return Arrays.asList(cleansed.split("\\s+"))
             .stream()
             .map(String::toLowerCase)
             .collect(Collectors.toSet());
     }
 
-    // "foo-bar" -> "foo bar" (but "foo - bar" -> "foo - bar")
-    // "FooBar" -> "Foo Bar"
     public String extractTitle(final Path inputToExtract) {
         final String absolutePath = inputToExtract.toString();
         return cleanseTitle(absolutePath.substring(

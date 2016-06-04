@@ -12,31 +12,43 @@ import static org.junit.Assert.*;
  */
 public class FileNameExtractorTest {
 
-    private final Path fileOne = Paths.get(
-        "/Volumes/Blackhole/Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi");
-    private final Path fileTwo = Paths.get(
-        "/Volumes/Blackhole/Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4");
-    private final Path fileThree = Paths.get(
-        "/Volumes/Blackhole/Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht müde - 020317.rm");
+    private final Path baseDir = Paths.get("/Volumes/Blackhole");
+    private final Path fileOne = baseDir.resolve(
+        "Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi");
+    private final Path fileTwo = baseDir.resolve(
+        "Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4");
+    private final Path fileThree = baseDir.resolve(
+        "Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht müde - 020317.rm");
     private final FileNameExtractor sut = new FileNameExtractor();
 
     @Test
+    public void relativeToBaseDir() {
+        assertThat(
+            sut.relativeToBaseDir(baseDir, fileOne),
+            is(Paths.get("Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi")));
+        assertThat(
+            sut.relativeToBaseDir(baseDir, fileTwo),
+            is(Paths.get("Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4")));
+        assertThat(
+            sut.relativeToBaseDir(baseDir, fileThree),
+            is(Paths.get("Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht müde - 020317.rm")));
+    }
+
+    @Test
     public void extractKeywords() {
-        assertThat(sut.extractKeywords(fileOne),
+        assertThat(sut.extractKeywords(baseDir, fileOne),
             containsInAnyOrder(
-                "volumes", "blackhole", "filme", "musikvideos", "linkin", "park", "what", "i", "ve", "done",
-                "musikvideo", "avi"));
+                "filme", "musikvideos", "linkin", "park", "what", "i", "ve", "done", "musikvideo"));
 
         assertThat(
-            sut.extractKeywords(fileTwo),
+            sut.extractKeywords(baseDir, fileTwo),
             containsInAnyOrder(
-                "volumes", "blackhole", "filme", "kinofilme", "deutsch", "der", "unglaubliche", "hulk", "mp4"));
+                "filme", "kinofilme", "deutsch", "der", "unglaubliche", "hulk"));
 
         assertThat(
-            sut.extractKeywords(fileThree),
+            sut.extractKeywords(baseDir, fileThree),
             containsInAnyOrder(
-                "volumes", "blackhole", "filme", "dokumentation", "alpha", "centauri", "realmedia", "091", "wird",
-                "licht", "müde", "020317", "rm"));
+                "filme", "dokumentation", "alpha", "centauri", "realmedia", "091", "wird", "licht", "müde", "020317"));
     }
 
     @Test
