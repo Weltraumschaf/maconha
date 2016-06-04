@@ -13,8 +13,8 @@ drop table if exists Media;
 
 create table Media (
     id int not null auto_increment,
-    type VARCHAR(10) not null,
-    format VARCHAR(10) not null,
+    type VARCHAR(32) not null,
+    format VARCHAR(32) not null,
     title VARCHAR(255) not null,
     lastImported TIMESTAMP default CURRENT_TIMESTAMP,
     originFile_id int,

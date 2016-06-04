@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  * Tests for {@link FileNameExtractor}.
@@ -49,9 +48,9 @@ public class FileNameExtractorTest {
 
     @Test
     public void extractExtension() {
-        assertThat(sut.extractExtension(fileOne), is(Movies.AUDIO_VIDEO_INTERLEAVE));
-        assertThat(sut.extractExtension(fileTwo), is(Movies.MPEG4_VIDEO_FILE));
-        assertThat(sut.extractExtension(fileThree), is(Movies.REAL_MEDIA_FILE));
+        assertThat(sut.extractExtension(fileOne), is(FileExtension.AUDIO_VIDEO_INTERLEAVE));
+        assertThat(sut.extractExtension(fileTwo), is(FileExtension.MPEG4_VIDEO_FILE));
+        assertThat(sut.extractExtension(fileThree), is(FileExtension.REAL_MEDIA_FILE));
     }
 
     @Test

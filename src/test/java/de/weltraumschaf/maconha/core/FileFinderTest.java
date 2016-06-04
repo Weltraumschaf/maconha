@@ -24,7 +24,7 @@ public class FileFinderTest {
     public final TemporaryFolder tmp = new TemporaryFolder();
 
     private final Set<? extends FileExtension> wantedFiles=
-        EnumSet.of(Movies.APPLE_QUICKTIME_MOVIE, Movies.AUDIO_VIDEO_INTERLEAVE);
+        EnumSet.of(FileExtension.APPLE_QUICKTIME_MOVIE, FileExtension.AUDIO_VIDEO_INTERLEAVE);
     private final FileFinder sut = new FileFinder(wantedFiles);
 
     @Test

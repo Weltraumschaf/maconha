@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.dao;
 
 import de.weltraumschaf.maconha.MaconhaApplication;
-import de.weltraumschaf.maconha.core.Movies;
+import de.weltraumschaf.maconha.core.FileExtension;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.OriginFile;
 import java.nio.file.Paths;
@@ -113,7 +113,7 @@ public class DefaultOriginFileDaoTest {
             .setFingerprint("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
         final Media media = new Media()
             .setType(Media.MediaType.VIDEO)
-            .setFormat(Movies.APPLE_QUICKTIME_MOVIE.getExtension())
+            .setFormat(FileExtension.APPLE_QUICKTIME_MOVIE)
             .setTitle("Foo Bar SNAFU")
             .setOriginFile(file);
         dao.save(media);

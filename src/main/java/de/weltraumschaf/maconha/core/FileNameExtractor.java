@@ -29,7 +29,7 @@ public final class FileNameExtractor {
     }
 
     public FileExtension extractExtension(final Path inputToExtract) {
-        return Movies.forValue(FileExtension.extractExtension(inputToExtract));
+        return FileExtension.forValue(FileExtension.extractExtension(inputToExtract));
     }
 
     private String cleanseTitle(final String title) {

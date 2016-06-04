@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.model;
 
+import de.weltraumschaf.maconha.core.FileExtension;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -42,10 +43,10 @@ public class Media implements Serializable {
     @Enumerated(EnumType.STRING)
     private MediaType type = MediaType.OTHER;
 
-    @NotEmpty
-    @Size(min = 1, max = 10)
+    @NotNull
     @Column(nullable = false)
-    private String format = "";
+    @Enumerated(EnumType.STRING)
+    private FileExtension format = FileExtension.NONE;
 
     @NotEmpty
     @Size(min = 1, max = 255)
@@ -81,11 +82,11 @@ public class Media implements Serializable {
         return this;
     }
 
-    public String getFormat() {
+    public FileExtension getFormat() {
         return format;
     }
 
-    public Media setFormat(String format) {
+    public Media setFormat(FileExtension format) {
         this.format = format;
         return this;
     }

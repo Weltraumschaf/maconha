@@ -12,14 +12,19 @@ import static org.junit.Assert.*;
 public class FileExtensionTest {
 
     @Test
-    public void hasValue_false() {
+    public void hasValue_null() {
         assertThat(FileExtension.hasValue(null), is(false));
-        assertThat(FileExtension.hasValue(""), is(false));
+    }
+
+
+    public void hasValue_empty() {
+        assertThat(FileExtension.hasValue(""), is(true));
+        assertThat(FileExtension.hasValue("   "), is(true));
     }
 
     @Test
     public void hasValue_trueForMovues() {
-        for (final Movies m : Movies.values()){
+        for (final FileExtension m : FileExtension.values()){
             assertThat(FileExtension.hasValue(m.getExtension()), is(true));
         }
     }

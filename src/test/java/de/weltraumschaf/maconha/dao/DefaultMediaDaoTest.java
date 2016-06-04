@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.dao;
 
 import de.weltraumschaf.maconha.MaconhaApplication;
-import de.weltraumschaf.maconha.core.Movies;
+import de.weltraumschaf.maconha.core.FileExtension;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.Media.MediaType;
 import de.weltraumschaf.maconha.model.OriginFile;
@@ -43,7 +43,7 @@ public class DefaultMediaDaoTest {
     @Test
     public void save() {
         final Media toSave = new Media();
-        toSave.setFormat("avi");
+        toSave.setFormat(FileExtension.AUDIO_VIDEO_INTERLEAVE);
         toSave.setTitle("bar");
         toSave.setType(MediaType.VIDEO);
         toSave.setLastImported(new LocalDateTime());
@@ -59,7 +59,7 @@ public class DefaultMediaDaoTest {
     @Test
     public void delete() {
         final Media toDelete = new Media();
-        toDelete.setFormat("avi");
+        toDelete.setFormat(FileExtension.AUDIO_VIDEO_INTERLEAVE);
         toDelete.setTitle("bar");
         toDelete.setType(MediaType.VIDEO);
         toDelete.setLastImported(new LocalDateTime());
@@ -74,7 +74,7 @@ public class DefaultMediaDaoTest {
     @Test
     public void deleteById() {
         final Media toDelete = new Media();
-        toDelete.setFormat("avi");
+        toDelete.setFormat(FileExtension.AUDIO_VIDEO_INTERLEAVE);
         toDelete.setTitle("bar");
         toDelete.setType(MediaType.VIDEO);
         toDelete.setLastImported(new LocalDateTime());
@@ -90,15 +90,15 @@ public class DefaultMediaDaoTest {
     public void findAll() {
         final Media one = new Media();
         one.setTitle("foo");
-        one.setFormat("avi");
+        one.setFormat(FileExtension.AUDIO_VIDEO_INTERLEAVE);
         sut.save(one);
         final Media two = new Media();
         two.setTitle("bar");
-        two.setFormat("avi");
+        two.setFormat(FileExtension.AUDIO_VIDEO_INTERLEAVE);
         sut.save(two);
         final Media three = new Media();
         three.setTitle("baz");
-        three.setFormat("avi");
+        three.setFormat(FileExtension.AUDIO_VIDEO_INTERLEAVE);
         sut.save(three);
 
         assertThat(sut.findAll(), hasSize(3));
@@ -113,7 +113,7 @@ public class DefaultMediaDaoTest {
             .setFingerprint("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
         final Media media = new Media()
             .setType(Media.MediaType.VIDEO)
-            .setFormat(Movies.APPLE_QUICKTIME_MOVIE.getExtension())
+            .setFormat(FileExtension.APPLE_QUICKTIME_MOVIE)
             .setTitle("Foo Bar SNAFU")
             .setOriginFile(file);
 

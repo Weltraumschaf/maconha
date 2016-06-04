@@ -1,8 +1,8 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.core.FileExtension;
 import de.weltraumschaf.maconha.core.FileFinder;
-import de.weltraumschaf.maconha.core.Movies;
 import de.weltraumschaf.maconha.dao.OriginFileDao;
 import de.weltraumschaf.maconha.model.OriginFile;
 import java.io.IOError;
@@ -37,7 +37,7 @@ public final class ScanDirectory extends BaseJob<Void> {
     /**
      * Set the base dir to scan.
      * <p>
-     * This must be set before execution, unless it will thow exceptions.
+     * This must be set before execution, unless it will throw exceptions.
      * </p>
      *
      * @param baseDir must not be {@code null}
@@ -60,7 +60,11 @@ public final class ScanDirectory extends BaseJob<Void> {
         validateBaseDir();
         scanTime = new LocalDateTime();
         LOGGER.debug("Scan dir {} at {} ...", baseDir, scanTime);
-        FileFinder.find(baseDir, EnumSet.allOf(Movies.class)).stream().forEach(mediaFile -> scanFile(mediaFile));
+        FileFinder.find(
+            baseDir,
+            EnumSet.complementOf(EnumSet.of(FileExtension.NONE)))
+                .stream()
+                .forEach(mediaFile -> scanFile(mediaFile));
         return null;
     }
 
