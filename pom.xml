@@ -281,16 +281,18 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <target>
-                                <copy file="${project.build.directory}/${project.build.finalName}"
-                                      tofile="${project.basedir}/bin" />
-                            </target>
-                        </configuration>
+                        <phase>install</phase>
+
                         <goals>
                             <goal>run</goal>
                         </goals>
+
+                        <configuration>
+                            <target>
+                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
+                                      todir="${project.basedir}/bin" />
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
