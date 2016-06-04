@@ -261,6 +261,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springframework.version}</version>
 
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            
                 <dependencies>
                     <dependency>
                         <groupId>org.springframework</groupId>
