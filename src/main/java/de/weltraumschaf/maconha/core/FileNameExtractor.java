@@ -10,12 +10,18 @@ import java.util.stream.Collectors;
  */
 public final class FileNameExtractor {
 
-    Path relativeToBaseDir(final Path base, final Path absolute) {
-        return absolute.subpath(base.getNameCount(), absolute.getNameCount());
+    String relativeToBaseDir(final Path base, final Path absolute) {
+        final Path subpath = absolute.subpath(base.getNameCount(), absolute.getNameCount());
+
+        if (null == subpath) {
+            return "";
+        }
+
+        return subpath.toString();
     }
 
     public Collection<String> extractKeywords(final Path base, final Path absolute) {
-        final String path = relativeToBaseDir(base, absolute).toString();
+        final String path = relativeToBaseDir(base, absolute);
         final String cleansed = cleanseTitle(
             path.substring(0, path.lastIndexOf('.')).replaceAll("[/\\-_\\.]", " ").trim());
         return Arrays.asList(cleansed.split("\\s+"))

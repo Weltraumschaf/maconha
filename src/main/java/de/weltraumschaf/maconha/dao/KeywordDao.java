@@ -10,6 +10,8 @@ public interface KeywordDao {
 
     Keyword findById(int id);
 
+    Keyword findByLiteral(String literal);
+
     Collection<Keyword> findAll();
 
     void save(Keyword entity);

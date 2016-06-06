@@ -117,4 +117,13 @@ public class DefaultKeywordDaoTest {
         assertThat(loadedTwo.getMedias(), containsInAnyOrder(mediaTwo, mediaThree));
     }
 
+    @Test
+    public void findByLiteral() {
+        sut.save(new Keyword().setLiteral("foo"));
+
+        final Keyword found = sut.findByLiteral("foo");
+
+        assertThat(found, is(not(nullValue())));
+        assertThat(found.getLiteral(), is("foo"));
+    }
 }

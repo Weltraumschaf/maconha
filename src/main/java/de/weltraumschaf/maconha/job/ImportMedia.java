@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * THis job import scanned media files.
+ * This job import scanned media files.
  */
 public final class ImportMedia extends BaseJob<Void> {
 

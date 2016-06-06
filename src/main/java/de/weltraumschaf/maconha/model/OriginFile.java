@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
@@ -40,12 +39,12 @@ public class OriginFile implements Serializable {
     @NotEmpty
     @Column(nullable = false)
     @Size(min = 1, max = 255)
-    private String baseDir;
+    private String baseDir = "";
 
     @NotEmpty
     @Column(nullable = false)
     @Size(min = 1, max = 255)
-    private String absolutePath;
+    private String absolutePath = "";
 
     /**
      * SHA-256 (e.g. "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae")
@@ -53,7 +52,7 @@ public class OriginFile implements Serializable {
     @NotEmpty
     @Column(nullable = false)
     @Size(min = 64, max = 64)
-    private String fingerprint;
+    private String fingerprint = "";
 
     @NotNull
     @Column(nullable = false)

@@ -25,13 +25,13 @@ public class FileNameExtractorTest {
     public void relativeToBaseDir() {
         assertThat(
             sut.relativeToBaseDir(baseDir, fileOne),
-            is(Paths.get("Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi")));
+            is("Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi"));
         assertThat(
             sut.relativeToBaseDir(baseDir, fileTwo),
-            is(Paths.get("Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4")));
+            is("Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4"));
         assertThat(
             sut.relativeToBaseDir(baseDir, fileThree),
-            is(Paths.get("Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht müde - 020317.rm")));
+            is("Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht müde - 020317.rm"));
     }
 
     @Test
