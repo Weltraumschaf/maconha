@@ -6,9 +6,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -69,6 +73,9 @@ public class Media implements Serializable {
     @OneToOne(optional = true, cascade = {CascadeType.ALL})
     @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
     private OriginFile originFile;
+
+    @ManyToMany(mappedBy="medias", cascade = {CascadeType.ALL})
+    private Set<Keyword> keywords = new HashSet<>();
 
     public int getId() {
         return id;
@@ -124,9 +131,23 @@ public class Media implements Serializable {
         return this;
     }
 
+    public Set<Keyword> getKeywords() {
+        return keywords;
+    }
+
+    public Media setKeywords(Set<Keyword> keywords) {
+        this.keywords = keywords;
+        return this;
+    }
+
+    public Media addKeyword(Keyword keyword) {
+        keywords.add(keyword);
+        return this;
+    }
+
     @Override
     public final int hashCode() {
-        return Objects.hash(id, type, format, title, lastImported, originFile);
+        return Objects.hash(id, type, format, title, lastImported, originFile, keywords);
     }
 
     @Override
@@ -141,7 +162,8 @@ public class Media implements Serializable {
             && Objects.equals(format, other.format)
             && Objects.equals(title, other.title)
             && Objects.equals(lastImported, other.lastImported)
-            && Objects.equals(originFile, other.originFile);
+            && Objects.equals(originFile, other.originFile)
+            && Objects.equals(keywords, other.keywords);
     }
 
     @Override
@@ -152,7 +174,8 @@ public class Media implements Serializable {
             + "format=" + format + ", "
             + "title=" + title + ", "
             + "lastImported=" + lastImported + ", "
-            + "originFile=" + originFile
+            + "originFile=" + originFile + ", "
+            + "keywords=" + keywords
             + '}';
     }
 

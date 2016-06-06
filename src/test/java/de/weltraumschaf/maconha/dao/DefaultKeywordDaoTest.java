@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -31,6 +30,8 @@ public class DefaultKeywordDaoTest {
 
     @Autowired
     private KeywordDao sut;
+    @Autowired
+    private MediaDao dao;
 
     @Before
     public void verifyAutowiredObjects() {
@@ -88,6 +89,32 @@ public class DefaultKeywordDaoTest {
 
         assertThat(sut.findAll(), hasSize(3));
         assertThat(sut.findAll(), containsInAnyOrder(one, two, three));
+    }
+
+    @Test
+    public void save_withMedias() {
+        final Media mediaOne = new Media()
+            .setTitle("media one");
+        final Media mediaTwo = new Media()
+            .setTitle("media two");
+        final Media mediaThree = new Media()
+            .setTitle("media three");
+        final Keyword keywordOne = new Keyword()
+            .setLiteral("one")
+            .addMedias(mediaOne)
+            .addMedias(mediaTwo);
+        final Keyword keywordTwo = new Keyword()
+            .setLiteral("two")
+            .addMedias(mediaTwo)
+            .addMedias(mediaThree);
+
+        sut.save(keywordOne);
+        sut.save(keywordTwo);
+
+        final Keyword loadedOne = sut.findById(keywordOne.getId());
+        assertThat(loadedOne.getMedias(), containsInAnyOrder(mediaOne, mediaTwo));
+        final Keyword loadedTwo = sut.findById(keywordTwo.getId());
+        assertThat(loadedTwo.getMedias(), containsInAnyOrder(mediaTwo, mediaThree));
     }
 
 }

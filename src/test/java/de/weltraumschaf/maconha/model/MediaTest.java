@@ -17,6 +17,7 @@ public class MediaTest {
         EqualsVerifier
             .forClass(Media.class)
             .withPrefabValues(OriginFile.class, new OriginFile().setId(1), new OriginFile().setId(2))
+            .withPrefabValues(Keyword.class, new Keyword().setId(1), new Keyword().setId(2))
             .verify();
     }
 
