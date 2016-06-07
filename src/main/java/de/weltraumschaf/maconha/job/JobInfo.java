@@ -7,59 +7,66 @@ import java.util.Objects;
 /**
  * Describes a {@link Job}.
  */
-public final class JobDescription {
+public final class JobInfo {
 
+    /**
+     * Unique name of job.
+     */
     private final String name;
-    private final Class<? extends Job> type;
+    /**
+     * State of the job.
+     */
     private final State state;
 
     /**
      * Dedicated constructor.
      *
      * @param name must not be {@code null} or empty
-     * @param type must not be {@code null}
      * @param state must not be {@code null}
      */
-    public JobDescription(final String name, final Class<? extends Job> type, final State state) {
+    public JobInfo(final String name, final State state) {
         super();
         this.name = Validate.notEmpty(name, "name");
-        this.type = Validate.notNull(type, "type");
         this.state = Validate.notNull(state, "state");
     }
 
+    /**
+     * Get the unique job name.
+     *
+     * @return never {@code null} or empty
+     */
     public String getName() {
         return name;
     }
 
-    public Class<? extends Job> getType() {
-        return type;
-    }
-
+    /**
+     * Get the current state of the job.
+     *
+     * @return never {@code null}
+     */
     public State getState() {
         return state;
     }
 
     @Override
     public String toString() {
-        return "name=" + name + ", type=" + type + ", state=" + state;
+        return "JobInfo{" + "name=" + name + ", state=" + state + '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, type, state);
+        return Objects.hash(name, state);
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof JobDescription)) {
+        if (!(obj instanceof JobInfo)) {
             return false;
         }
 
-        final JobDescription other = (JobDescription) obj;
+        final JobInfo other = (JobInfo) obj;
         return Objects.equals(name, other.name)
-            && Objects.equals(type, other.type)
             && Objects.equals(state, other.state);
     }
-
 
 }

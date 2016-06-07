@@ -18,8 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job import scanned media files.
  */
-public final class ImportMedia extends BaseJob<Void> {
+final class ImportMedia extends BaseJob<Void> {
 
+    static final Description DESCRIPTION = new Description(ImportMedia.class);
     private static final Logger LOGGER = LoggerFactory.getLogger(ImportMedia.class);
     private final FileNameExtractor extractor = new FileNameExtractor();
     @Autowired
@@ -28,7 +29,7 @@ public final class ImportMedia extends BaseJob<Void> {
     private MediaDao output;
     private LocalDateTime importTime;
 
-    public ImportMedia() {
+    ImportMedia() {
         super(generateName(ImportMedia.class));
     }
 
@@ -42,6 +43,11 @@ public final class ImportMedia extends BaseJob<Void> {
 
     LocalDateTime getImportTime() {
         return importTime;
+    }
+
+    @Override
+    protected Description description() {
+        return DESCRIPTION;
     }
 
     @Override

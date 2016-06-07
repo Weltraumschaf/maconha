@@ -7,7 +7,9 @@ import org.junit.Test;
  */
 public class FooTest {
 
-
     @Test
-    public void foo() {}
+    public void foo() throws Exception {
+
+    }
+
 }

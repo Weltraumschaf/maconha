@@ -17,8 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job indexes imported media.
  */
-public final class GenerateIndex extends BaseJob<Void> {
+final class GenerateIndex extends BaseJob<Void> {
 
+    static final Description DESCRIPTION = new Description(GenerateIndex.class);
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndex.class);
     private static final Collection<String> IGNORED_KEYWORDS = Arrays.asList(
         "i", "a", "an", "ve", "the", "this", "that", "who");
@@ -28,7 +29,7 @@ public final class GenerateIndex extends BaseJob<Void> {
     @Autowired
     private KeywordDao output;
 
-    public GenerateIndex() {
+    GenerateIndex() {
         super(generateName(GenerateIndex.class));
     }
 
@@ -45,6 +46,11 @@ public final class GenerateIndex extends BaseJob<Void> {
         final Collection<Media> allImportedMedia = input.findAll();
         allImportedMedia.stream().forEach(media -> index(media));
         return null;
+    }
+
+    @Override
+    protected Description description() {
+        return DESCRIPTION;
     }
 
     private void index(final Media media) {

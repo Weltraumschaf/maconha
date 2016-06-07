@@ -1,11 +1,15 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 
 /**
  * Base implementation of a job.
@@ -31,7 +35,7 @@ abstract class BaseJob<V> implements Job<V> {
     }
 
     @Override
-    public final void emmit(final String format, final Object ... args) {
+    public final void emit(final String format, final Object... args) {
         Validate.notNull(format, "format");
         final String message = String.format(format, args);
         LOGGER.debug("Job {} emmits message: {}", name, message);
@@ -47,20 +51,20 @@ abstract class BaseJob<V> implements Job<V> {
     }
 
     @Override
-    public final JobDescription describe() {
-        return new JobDescription(name, getClass(), state);
+    public final JobInfo info() {
+        return new JobInfo(name, state);
     }
 
     @Override
     public final V call() throws Exception {
-        LOGGER.debug("Job called {}.", describe());
+        LOGGER.debug("Job called {}.", info());
 
         if (isRunning() || isFinished()) {
             throw new IllegalStateException(String.format("Can not call job in state '%s'!", state));
         }
 
         if (isCanceled()) {
-            LOGGER.debug("Job is canceld ({}). Not excuting.", describe());
+            LOGGER.debug("Job is canceld ({}). Not excuting.", info());
             return null;
         }
 
@@ -68,18 +72,18 @@ abstract class BaseJob<V> implements Job<V> {
         final V result = execute();
 
         if (isCanceled()) {
-            LOGGER.debug("Job was canceld ({}).", describe());
+            LOGGER.debug("Job was canceld ({}).", info());
             return null;
         }
 
         state = State.FINISHED;
-        LOGGER.debug("Job finished ({}).", describe());
+        LOGGER.debug("Job finished ({}).", info());
         return result;
     }
 
     @Override
     public final void cancel() {
-        LOGGER.debug("Cancel job ({}).", describe());
+        LOGGER.debug("Cancel job ({}).", info());
         state = State.CANCELED;
     }
 
@@ -104,9 +108,65 @@ abstract class BaseJob<V> implements Job<V> {
     }
 
     @Override
-    public String toString() {
-        return "Job (" + describe().toString() + ')';
+    public final void configure(final Map<String, Object> config) {
+        configure(Validate.notNull(config, "config"), description());
     }
+
+    private void configure(final Map<String, Object> config, final Description description) {
+        description.required().stream().forEach((property) -> {
+            injectRequiredProperty(config, property);
+        });
+        description.optional().stream().forEach((property) -> {
+            injectOptionalProperty(config, property);
+        });
+    }
+
+    private void injectRequiredProperty(final Map<String, Object> config, final Property property) {
+        injectProperty(config, property, true);
+    }
+
+    private void injectOptionalProperty(final Map<String, Object> config, final Property property) {
+        injectProperty(config, property, false);
+    }
+
+    private void injectProperty(final Map<String, Object> config, final Property property, boolean isRequired) {
+        if (!config.containsKey(property.getBeanName())) {
+            if (isRequired) {
+                throw new JobConfigurationError(
+                    String.format("Missing required config property '%s' for job '%s'!",
+                        property.getBeanName(), description().name()));
+            } else {
+                return;
+            }
+        }
+
+        final PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(getClass(), property.getBeanName());
+
+        if (null == descriptor) {
+            if (isRequired) {
+                throw new JobConfigurationError(
+                    String.format("There is no bean property for '%s' in job '%s'",
+                        property.getBeanName(), description().name()));
+            } else {
+                return;
+            }
+        }
+
+        try {
+            descriptor.getWriteMethod().invoke(this, config.get(property.getBeanName()));
+        } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new JobConfigurationError(
+                String.format("Can not set bean property '%s' on job '%s' (cause '%s')!",
+                    property.getBeanName(), description().name(), ex.getMessage()), ex);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Job (" + info().toString() + ')';
+    }
+
+    protected abstract Description description();
 
     protected abstract V execute() throws Exception;
 

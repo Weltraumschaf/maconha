@@ -9,6 +9,8 @@ import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.EnumSet;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.LocalDateTime;
@@ -19,8 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job scans a directory for media files.
  */
-public final class ScanDirectory extends BaseJob<Void> {
+final class ScanDirectory extends BaseJob<Void> {
 
+    static final Description DESCRIPTION = new Description(
+        ScanDirectory.class,
+        EnumSet.allOf(RquiredProperty.class),
+        Collections.emptySet());
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
     @Autowired
     private OriginFileDao output;
@@ -42,8 +48,8 @@ public final class ScanDirectory extends BaseJob<Void> {
      *
      * @param baseDir must not be {@code null}
      */
-    public void setBaseDir(final Path baseDir) {
-        this.baseDir = Validate.notNull(baseDir, "baseDir");
+    public void setBaseDir(final String baseDir) {
+        this.baseDir = Paths.get(Validate.notNull(baseDir, "baseDir"));
     }
 
     /**
@@ -51,12 +57,17 @@ public final class ScanDirectory extends BaseJob<Void> {
      *
      * @return never{@code null}
      */
-    public LocalDateTime getScanTime() {
+    LocalDateTime getScanTime() {
         return scanTime;
     }
 
     @Override
-    public Void execute() throws Exception {
+    protected Description description() {
+        return DESCRIPTION;
+    }
+
+    @Override
+    protected Void execute() throws Exception {
         validateBaseDir();
         scanTime = new LocalDateTime();
         LOGGER.debug("Scan dir {} at {} ...", baseDir, scanTime);
@@ -98,9 +109,24 @@ public final class ScanDirectory extends BaseJob<Void> {
 
     private String fingerprint(final Path mediaFile) {
         try {
+            // TODO Read from prepared file.
             return DigestUtils.sha256Hex(Files.newInputStream(mediaFile));
         } catch (final IOException ex) {
             throw new IOError(ex);
+        }
+    }
+
+    private enum RquiredProperty implements Property {
+        BASE_DIR("baseDir");
+        private final String name;
+
+        private RquiredProperty(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getBeanName() {
+            return name;
         }
     }
 }

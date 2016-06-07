@@ -66,8 +66,8 @@ public final class JobExecutor {
         pool.submit(job);
     }
 
-    public Collection<JobDescription> list() {
-        return jobs.stream().map(task -> task.describe()).collect(Collectors.toList());
+    public Collection<JobInfo> list() {
+        return jobs.stream().map(task -> task.info()).collect(Collectors.toList());
     }
 
     private void cancelJobs() {

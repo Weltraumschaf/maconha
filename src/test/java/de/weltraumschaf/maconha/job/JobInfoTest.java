@@ -5,36 +5,30 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 /**
- * Tests for {@link JobDescription}.
+ * Tests for {@link JobInfo}.
  */
-public class JobDescriptionTest {
+public class JobInfoTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constuct_nameMustNotBeNull() {
-        new JobDescription(null, Job.class, State.NEW);
+        new JobInfo(null,  State.NEW);
     }
 
     @Test(expected = IllegalArgumentException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constuct_nameMustNotBeEmpty() {
-        new JobDescription("", Job.class, State.NEW);
-    }
-
-    @Test(expected = NullPointerException.class)
-    @SuppressWarnings("ResultOfObjectAllocationIgnored")
-    public void constuct_typeMustNotBeNull() {
-        new JobDescription("name", null, State.NEW);
+        new JobInfo("", State.NEW);
     }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constuct_stateMustNotBeNull() {
-        new JobDescription("name", Job.class, null);
+        new JobInfo("name", null);
     }
 
     @Test
     public void equalsAndHAshCode() {
-        EqualsVerifier.forClass(JobDescription.class).verify();
+        EqualsVerifier.forClass(JobInfo.class).verify();
     }
 }

@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.job.JobExecutor;
+import de.weltraumschaf.maconha.job.Jobs;
 import java.util.Arrays;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
@@ -10,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -33,7 +35,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class MaconhaApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaApplication.class);
-
+    private final JobExecutor executor = new JobExecutor();
     @Autowired
     private Environment environment;
 
@@ -62,7 +64,7 @@ public class MaconhaApplication {
     @Bean
     public JobExecutor jobExecutor() {
         LOGGER.debug("Create new job executor.");
-        return new JobExecutor();
+        return executor;
     }
 
     @Bean

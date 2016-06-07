@@ -6,11 +6,9 @@ import de.weltraumschaf.maconha.model.OriginFile;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -64,7 +62,7 @@ public class ScanDirectoryTest {
     public void execute_baseDirDoesNotExist() throws Exception {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage("Base dir '/foo/bar' does not exist!");
-        sut.setBaseDir(Paths.get("/foo/bar"));
+        sut.setBaseDir("/foo/bar");
 
         sut.execute();
     }
@@ -77,7 +75,7 @@ public class ScanDirectoryTest {
         baseDir.toFile().setReadable(false);
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(String.format("Base dir '%s' is not readable!", baseDir));
-        sut.setBaseDir(baseDir);
+        sut.setBaseDir(baseDir.toString());
 
         sut.execute();
     }
@@ -87,7 +85,7 @@ public class ScanDirectoryTest {
         final Path baseDir = tmp.newFile().toPath();
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(String.format("Base dir '%s' is not a directory!", baseDir));
-        sut.setBaseDir(baseDir);
+        sut.setBaseDir(baseDir.toString());
 
         sut.execute();
     }
@@ -96,7 +94,7 @@ public class ScanDirectoryTest {
     public void execute() throws Exception {
         final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/job/ScanJob").toURI();
         final Path baseDir = Paths.get(fixtures);
-        sut.setBaseDir(baseDir);
+        sut.setBaseDir(baseDir.toString());
 
         sut.execute();
 

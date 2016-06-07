@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import org.junit.Test;
 import org.junit.Before;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

@@ -1,6 +1,9 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.maconha.job.Job.State;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -37,7 +40,7 @@ public class BaseJobTest {
         final MessageConsumer three = mock(MessageConsumer.class);
         sut.register(three);
 
-        sut.emmit("hello %s", "world");
+        sut.emit("hello %s", "world");
 
         verify(one, times(1)).receive("hello world");
         verify(two, times(1)).receive("hello world");
@@ -46,7 +49,7 @@ public class BaseJobTest {
 
     @Test
     public void describe() {
-        assertThat(sut.describe(), is(new JobDescription("test", BaseJobStub.class, State.NEW)));
+        assertThat(sut.info(), is(new JobInfo("test", State.NEW)));
     }
 
     @Test
@@ -77,10 +80,53 @@ public class BaseJobTest {
         assertThat(sut.call(), is(nullValue()));
     }
 
+    @Test
+    public void foo() throws Exception {
+        final Map<String, Object> input = new HashMap<>();
+        input.put(RquiredProperty.FOO.getBeanName(), "foo");
+        input.put(RquiredProperty.BAR.getBeanName(), true);
+        input.put(OptionslProperty.BAZ.getBeanName(), 42);
+        final BaseJobStub sut = new BaseJobStub("foo");
+
+        sut.configure(input);
+
+        assertThat(sut.getFoo(), is("foo"));
+        assertThat(sut.isBar(), is(true));
+        assertThat(sut.getBaz(), is(42));
+    }
+
     private static final class BaseJobStub extends BaseJob<String> {
+
+        private String foo;
+        private boolean bar;
+        private int baz;
 
         public BaseJobStub(String name) {
             super(name);
+        }
+
+        public void setFoo(String foo) {
+            this.foo = foo;
+        }
+
+        public void setBar(boolean bar) {
+            this.bar = bar;
+        }
+
+        public void setBaz(int baz) {
+            this.baz = baz;
+        }
+
+        public String getFoo() {
+            return foo;
+        }
+
+        public boolean isBar() {
+            return bar;
+        }
+
+        public int getBaz() {
+            return baz;
         }
 
         @Override
@@ -88,5 +134,38 @@ public class BaseJobTest {
             return "snafu";
         }
 
+        @Override
+        protected Description description() {
+            return new Description(BaseJobStub.class, EnumSet.allOf(RquiredProperty.class), EnumSet.allOf(OptionslProperty.class));
+        }
+
+    }
+
+    enum RquiredProperty implements Property {
+        FOO("foo"), BAR("bar");
+        private final String name;
+
+        private RquiredProperty(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getBeanName() {
+            return name;
+        }
+    }
+
+    enum OptionslProperty implements Property {
+        BAZ("baz");
+        private final String name;
+
+        private OptionslProperty(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getBeanName() {
+            return name;
+        }
     }
 }
