@@ -74,6 +74,10 @@ public interface Job<V> extends Callable<V>, MessageProducer, Configurable {
         /**
          * Job is done.
          */
-        FINISHED;
+        FINISHED,
+        /**
+         * Job which had some errors.
+         */
+        FAILED;
     }
 }

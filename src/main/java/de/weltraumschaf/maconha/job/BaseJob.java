@@ -70,7 +70,15 @@ abstract class BaseJob<V> implements Job<V> {
         }
 
         state = State.RUNNING;
-        final V result = execute();
+        final V result;
+
+        try {
+            result = execute();
+        } catch (final Exception ex) {
+            state = State.FAILED;
+            LOGGER.error("Job failed due to exception in it's execute method!", ex);
+            throw ex;
+        }
 
         if (isCanceled()) {
             LOGGER.debug("Job was canceld ({}).", info());
@@ -170,7 +178,6 @@ abstract class BaseJob<V> implements Job<V> {
     protected final void worked(final int work) {
         monitor.worked(work);
     }
-
 
     @Override
     public String toString() {
