@@ -69,4 +69,9 @@ public final class ProgressMonitor {
 
         return 100d / (double) totalWork * (double) worked * 0.01d;
     }
+
+    @Override
+    public String toString() {
+        return "ProgressMonitor{" + "totalWork=" + totalWork + ", worked=" + worked + '}';
+    }
 }

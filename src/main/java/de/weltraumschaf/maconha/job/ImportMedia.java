@@ -57,8 +57,9 @@ final class ImportMedia extends BaseJob<Void> {
         final Collection<OriginFile> notImportedFiles = allScannedFiles.stream()
             .filter(file -> file.getImported() == null)
             .collect(Collectors.toList());
-        LOGGER.debug("There are {} files not imported yet.", notImportedFiles);
+        LOGGER.debug("There are {} files not imported yet.", notImportedFiles.size());
         importTime = new LocalDateTime();
+        begin(notImportedFiles.size());
         notImportedFiles.stream().forEach(file -> importFile(file));
         return null;
     }
@@ -73,5 +74,6 @@ final class ImportMedia extends BaseJob<Void> {
             .setLastImported(importTime)
             .setOriginFile(file);
         output.save(imported);
+        worked(1);
     }
 }
