@@ -53,19 +53,20 @@ final class ImportMedia extends BaseJob<Void> {
     @Override
     protected Void execute() throws Exception {
         final Collection<OriginFile> allScannedFiles = input.findAll();
-        LOGGER.debug("Found {} scanned files.", allScannedFiles);
+        begin(allScannedFiles.size());
+        LOGGER.debug("Found {} scanned files.", allScannedFiles.size());
         final Collection<OriginFile> notImportedFiles = allScannedFiles.stream()
             .filter(file -> file.getImported() == null)
             .collect(Collectors.toList());
         LOGGER.debug("There are {} files not imported yet.", notImportedFiles.size());
         importTime = new LocalDateTime();
-        begin(notImportedFiles.size());
+        worked(allScannedFiles.size() - notImportedFiles.size());
         notImportedFiles.stream().forEach(file -> importFile(file));
         return null;
     }
 
     private void importFile(final OriginFile file) {
-        LOGGER.debug("Import file {}.", file);
+        LOGGER.debug("Import file {}.", file.getAbsolutePath());
         final FileExtension extension = extractor.extractExtension(file.getAbsolutePath());
         final Media imported = new Media()
             .setType(MediaType.forValue(extension))

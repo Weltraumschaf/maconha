@@ -40,14 +40,13 @@ public final class ProgressMonitor {
     }
 
     /**
-     * Add the amount of done work until the toal amount set by {@link #begin(int)} is reached.
+     * Add the amount of done work until the total amount set by {@link #begin(int)} is reached.
      *
-     * @param work must not be less than 1
+     * @param work values less than 1 are ignored
      */
     public void worked(final int work) {
         if (work < 1) {
-            throw new IllegalArgumentException(
-                String.format("Parameter work must not be less than 1 (was %d)!", work));
+            return;
         }
 
         worked = Math.min(totalWork, worked + work);

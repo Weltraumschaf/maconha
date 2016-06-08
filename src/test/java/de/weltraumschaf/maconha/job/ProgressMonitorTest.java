@@ -55,9 +55,13 @@ public class ProgressMonitorTest {
         sut.begin(0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void worked() {
+        sut.begin(1);
+
         sut.worked(0);
+
+        assertThat(sut.progress(), is(0.));
     }
 
 }
