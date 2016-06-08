@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -71,9 +72,11 @@ final class ScanDirectory extends BaseJob<Void> {
         validateBaseDir();
         scanTime = new LocalDateTime();
         LOGGER.debug("Scan dir {} at {} ...", baseDir, scanTime);
-        FileFinder.find(
+        final Collection<Path> foundFiles = FileFinder.find(
             baseDir,
-            EnumSet.complementOf(EnumSet.of(FileExtension.NONE)))
+            EnumSet.complementOf(EnumSet.of(FileExtension.NONE)));
+        begin(foundFiles.size());
+        foundFiles
                 .stream()
                 .forEach(mediaFile -> scanFile(mediaFile));
         return null;
@@ -105,6 +108,7 @@ final class ScanDirectory extends BaseJob<Void> {
         file.setFingerprint(fingerprint(mediaFile));
         file.setScanTime(scanTime);
         output.save(file);
+        worked(1);
     }
 
     private String fingerprint(final Path mediaFile) {

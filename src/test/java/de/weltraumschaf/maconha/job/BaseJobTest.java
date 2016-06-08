@@ -49,7 +49,7 @@ public class BaseJobTest {
 
     @Test
     public void describe() {
-        assertThat(sut.info(), is(new JobInfo("test", State.NEW)));
+        assertThat(sut.info(), is(new JobInfo("test", State.NEW, 0d)));
     }
 
     @Test

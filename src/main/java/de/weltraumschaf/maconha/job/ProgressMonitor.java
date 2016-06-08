@@ -25,7 +25,8 @@ public final class ProgressMonitor {
      */
     public void begin(final int totalWork) {
         if (totalWork < 1) {
-            throw new IllegalArgumentException("Parameter totalWork must not be less than 1!");
+            throw new IllegalArgumentException(
+                String.format("Parameter totalWork must not be less than 1 (was %d)!", totalWork));
         }
 
         this.totalWork = totalWork;
@@ -45,7 +46,8 @@ public final class ProgressMonitor {
      */
     public void worked(final int work) {
         if (work < 1) {
-            throw new IllegalArgumentException("Parameter work must not be less than 1!");
+            throw new IllegalArgumentException(
+                String.format("Parameter work must not be less than 1 (was %d)!", work));
         }
 
         worked = Math.min(totalWork, worked + work);

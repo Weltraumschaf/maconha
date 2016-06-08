@@ -19,6 +19,7 @@ abstract class BaseJob<V> implements Job<V> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseJob.class);
 
     private final Collection<MessageConsumer> consumers = new CopyOnWriteArrayList<>();
+    private final ProgressMonitor monitor = new ProgressMonitor();
     private final String name;
     private volatile State state = State.NEW;
 
@@ -52,7 +53,7 @@ abstract class BaseJob<V> implements Job<V> {
 
     @Override
     public final JobInfo info() {
-        return new JobInfo(name, state);
+        return new JobInfo(name, state, monitor.progress());
     }
 
     @Override
@@ -76,6 +77,7 @@ abstract class BaseJob<V> implements Job<V> {
             return null;
         }
 
+        monitor.done();
         state = State.FINISHED;
         LOGGER.debug("Job finished ({}).", info());
         return result;
@@ -160,6 +162,15 @@ abstract class BaseJob<V> implements Job<V> {
                     property.getBeanName(), description().name(), ex.getMessage()), ex);
         }
     }
+
+    protected final void begin(final int totalWork) {
+        monitor.begin(totalWork);
+    }
+
+    protected final void worked(final int work) {
+        monitor.worked(work);
+    }
+
 
     @Override
     public String toString() {
