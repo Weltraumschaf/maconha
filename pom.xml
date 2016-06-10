@@ -22,8 +22,6 @@
         <java.version>${project.build.version.source}</java.version>
         <!-- Dependency versions: -->
         <springframework.version>1.3.4.RELEASE</springframework.version>
-        <joda-time.version>2.3</joda-time.version>
-        <logback-classic.version>1.1.7</logback-classic.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <h2.version>1.4.187</h2.version>
         <dbunit.version>2.2</dbunit.version>
@@ -113,7 +111,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
         </dependency>
 
         <!-- Hibernate -->
@@ -137,7 +134,6 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
         </dependency>
 
         <!-- To map JodaTime with database type -->
@@ -170,7 +166,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -182,7 +177,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -268,7 +262,7 @@
                         </goals>
                     </execution>
                 </executions>
-            
+
                 <dependencies>
                     <dependency>
                         <groupId>org.springframework</groupId>
