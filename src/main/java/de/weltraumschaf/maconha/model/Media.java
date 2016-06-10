@@ -1,7 +1,6 @@
 package de.weltraumschaf.maconha.model;
 
 import de.weltraumschaf.maconha.core.FileExtension;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,16 +10,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -39,9 +39,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  */
 @Entity
 @SuppressWarnings("PersistenceUnitPresent")
-public class Media implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Media extends BaseEntity {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -70,12 +68,12 @@ public class Media implements Serializable {
     private LocalDateTime lastImported = new LocalDateTime();
 
     // Fixme Optional should be false.
-    @OneToOne(optional = true, cascade = {CascadeType.ALL})
+    @OneToOne(optional = true, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
     private OriginFile originFile;
 
-    @ManyToMany(mappedBy="medias", cascade = {CascadeType.ALL})
-    private Set<Keyword> keywords = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "medias", cascade = {CascadeType.ALL})
+    private final Set<Keyword> keywords = new HashSet<>();
 
     public int getId() {
         return id;
@@ -99,7 +97,7 @@ public class Media implements Serializable {
         return format;
     }
 
-    public Media setFormat(FileExtension format) {
+    public Media setFormat(final FileExtension format) {
         this.format = format;
         return this;
     }
@@ -117,7 +115,7 @@ public class Media implements Serializable {
         return lastImported;
     }
 
-    public Media setLastImported(LocalDateTime lastImported) {
+    public Media setLastImported(final LocalDateTime lastImported) {
         this.lastImported = lastImported;
         return this;
     }
@@ -126,28 +124,41 @@ public class Media implements Serializable {
         return originFile;
     }
 
-    public Media setOriginFile(OriginFile originFile) {
+    public Media setOriginFile(final OriginFile originFile) {
+        if (sameAsFormer(originFile)) {
+            return this;
+        }
+
         this.originFile = originFile;
+        this.originFile.setImported(this);
         return this;
+    }
+
+    private boolean sameAsFormer(final OriginFile newOriginFile) {
+        return sameAsFormer(originFile, newOriginFile);
     }
 
     public Set<Keyword> getKeywords() {
-        return keywords;
+        return new HashSet<>(keywords);
     }
 
-    public Media setKeywords(Set<Keyword> keywords) {
-        this.keywords = keywords;
-        return this;
-    }
+    public Media addKeyword(final Keyword keyword) {
+        if (isAlreadyAdded(keyword)) {
+            return this;
+        }
 
-    public Media addKeyword(Keyword keyword) {
         keywords.add(keyword);
+        keyword.addMedias(this);
         return this;
+    }
+
+    private boolean isAlreadyAdded(final Keyword newKeyword) {
+        return isAlreadyAdded(keywords, newKeyword);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, type, format, title, lastImported, originFile, keywords);
+        return Objects.hash(id, type, format, title, lastImported);
     }
 
     @Override
@@ -161,9 +172,7 @@ public class Media implements Serializable {
             && Objects.equals(type, other.type)
             && Objects.equals(format, other.format)
             && Objects.equals(title, other.title)
-            && Objects.equals(lastImported, other.lastImported)
-            && Objects.equals(originFile, other.originFile)
-            && Objects.equals(keywords, other.keywords);
+            && Objects.equals(lastImported, other.lastImported);
     }
 
     @Override
@@ -174,8 +183,10 @@ public class Media implements Serializable {
             + "format=" + format + ", "
             + "title=" + title + ", "
             + "lastImported=" + lastImported + ", "
-            + "originFile=" + originFile + ", "
-            + "keywords=" + keywords
+            // Do not use toString() to prevent endless loop.
+            + "originFile=" + (null == originFile ? "" : originFile.getAbsolutePath().toString()) + ", "
+            // Do not use toString() to prevent endless loop.
+            + "keywords=" + (null == keywords ? "" : keywords.stream().map(k -> k.getLiteral()).collect(Collectors.joining(", ")))
             + '}';
     }
 

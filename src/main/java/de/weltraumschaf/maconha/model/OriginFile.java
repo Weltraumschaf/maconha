@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.model;
 
-import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -27,12 +26,10 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @SuppressWarnings("PersistenceUnitPresent")
-public class OriginFile implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class OriginFile extends BaseEntity {
 
     @Id
-    @Column(unique=true, nullable=false)
+    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -60,7 +57,7 @@ public class OriginFile implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime scanTime = new LocalDateTime();
 
-    @OneToOne(optional = true, cascade = {CascadeType.ALL})
+    @OneToOne(optional = true, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id", referencedColumnName = "originFile_id", insertable = true, updatable = true)
     private Media imported;
 
@@ -77,7 +74,7 @@ public class OriginFile implements Serializable {
         return Paths.get(baseDir);
     }
 
-    public OriginFile setBaseDir(Path baseDir) {
+    public OriginFile setBaseDir(final Path baseDir) {
         this.baseDir = baseDir.toString();
         return this;
     }
@@ -86,7 +83,7 @@ public class OriginFile implements Serializable {
         return Paths.get(absolutePath);
     }
 
-    public OriginFile setAbsolutePath(Path absolutePath) {
+    public OriginFile setAbsolutePath(final Path absolutePath) {
         this.absolutePath = absolutePath.toString();
         return this;
     }
@@ -95,7 +92,7 @@ public class OriginFile implements Serializable {
         return fingerprint;
     }
 
-    public OriginFile setFingerprint(String fingerprint) {
+    public OriginFile setFingerprint(final String fingerprint) {
         this.fingerprint = fingerprint;
         return this;
     }
@@ -104,7 +101,7 @@ public class OriginFile implements Serializable {
         return scanTime;
     }
 
-    public OriginFile setScanTime(LocalDateTime scanTime) {
+    public OriginFile setScanTime(final LocalDateTime scanTime) {
         this.scanTime = scanTime;
         return this;
     }
@@ -113,14 +110,23 @@ public class OriginFile implements Serializable {
         return imported;
     }
 
-    public OriginFile setImported(Media imported) {
+    public OriginFile setImported(final Media imported) {
+        if (sameAsFormer(imported)) {
+            return this;
+        }
+
         this.imported = imported;
+        this.imported.setOriginFile(this);
         return this;
+    }
+
+    private boolean sameAsFormer(final Media newImported) {
+        return sameAsFormer(imported, newImported);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, baseDir, absolutePath, fingerprint, scanTime, imported);
+        return Objects.hash(id, baseDir, absolutePath, fingerprint, scanTime);
     }
 
     @Override
@@ -135,14 +141,13 @@ public class OriginFile implements Serializable {
             && Objects.equals(fingerprint, other.fingerprint)
             && Objects.equals(baseDir, other.baseDir)
             && Objects.equals(absolutePath, other.absolutePath)
-            && Objects.equals(scanTime, other.scanTime)
-            && Objects.equals(imported, other.imported);
+            && Objects.equals(scanTime, other.scanTime);
     }
 
     @Override
     public String toString() {
-        return "OriginFile{" +
-            "id=" + id + ", "
+        return "OriginFile{"
+            + "id=" + id + ", "
             + "baseDir=" + baseDir + ", "
             + "absolutePath=" + absolutePath + ", "
             + "fingerprint=" + fingerprint + ", "

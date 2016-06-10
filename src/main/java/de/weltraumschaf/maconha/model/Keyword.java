@@ -1,12 +1,12 @@
 package de.weltraumschaf.maconha.model;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,9 +24,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @SuppressWarnings("PersistenceUnitPresent")
-public class Keyword implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Keyword extends BaseEntity {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -37,13 +35,13 @@ public class Keyword implements Serializable {
     @Size(min = 1, max = 255)
     private String literal;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(name = "Keyword_Media",
         joinColumns = {
             @JoinColumn(name = "keyword_id")},
         inverseJoinColumns = {
             @JoinColumn(name = "media_id")})
-    private Set<Media> medias = new HashSet<>();
+    private final Set<Media> medias = new HashSet<>();
 
     public int getId() {
         return id;
@@ -58,7 +56,7 @@ public class Keyword implements Serializable {
         return literal;
     }
 
-    public Keyword setLiteral(String literal) {
+    public Keyword setLiteral(final String literal) {
         this.literal = literal;
         return this;
     }
@@ -67,19 +65,23 @@ public class Keyword implements Serializable {
         return medias;
     }
 
-    public Keyword setMedias(Set<Media> medias) {
-        this.medias = medias;
+    public Keyword addMedias(final Media media) {
+        if (isAlreadyAdded(media)) {
+            return this;
+        }
+
+        medias.add(media);
+        media.addKeyword(this);
         return this;
     }
 
-    public Keyword addMedias(Media media) {
-        medias.add(media);
-        return this;
+    private boolean isAlreadyAdded(final Media newMedia) {
+        return isAlreadyAdded(medias, newMedia);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, literal, medias);
+        return Objects.hash(id, literal);
     }
 
     @Override
@@ -90,8 +92,7 @@ public class Keyword implements Serializable {
 
         final Keyword other = (Keyword) obj;
         return Objects.equals(id, other.id)
-            && Objects.equals(literal, other.literal)
-            && Objects.equals(medias, other.medias);
+            && Objects.equals(literal, other.literal);
     }
 
     @Override

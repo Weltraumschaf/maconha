@@ -14,6 +14,7 @@ public class KeywordTest {
         EqualsVerifier
             .forClass(Keyword.class)
             .withPrefabValues(Media.class, new Media().setId(1), new Media().setId(2))
+            .withIgnoredFields("medias")
             .verify();
     }
 

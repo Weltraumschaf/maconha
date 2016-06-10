@@ -76,11 +76,14 @@ final class GenerateIndex extends BaseJob<Void> {
     }
 
     private void save(final String literal, final Media media) {
-        Keyword keyword = output.findByLiteral(literal);
+        Keyword keyword;// = output.findByLiteral(literal);
 
-        if (null == keyword) {
+//        if (null == keyword) {
+//            LOGGER.debug("Create new keyword for literal '{}'.", literal);
             keyword = new Keyword().setLiteral(literal);
-        }
+//        } else {
+//            LOGGER.debug("Use existing keyword with id {} for literal '{}'.", keyword.getId(), literal);
+//        }
 
         output.save(keyword.addMedias(media));
     }
