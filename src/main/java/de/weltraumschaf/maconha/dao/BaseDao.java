@@ -67,11 +67,12 @@ abstract class BaseDao<T> {
     }
 
     public final void save(final T entity) {
-        LOGGER.debug("Save entity: {}", entity);
+        LOGGER.trace("Save entity: {}", entity);
         getSession().saveOrUpdate(entity);
     }
 
     public final void delete(final T entity) {
+        LOGGER.trace("Delete entity: {}", entity);
         getSession().delete(entity);
     }
 

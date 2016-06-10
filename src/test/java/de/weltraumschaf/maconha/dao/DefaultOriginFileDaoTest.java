@@ -111,6 +111,7 @@ public class DefaultOriginFileDaoTest {
             .setBaseDir(Paths.get("/foo/bar/movies"))
             .setAbsolutePath(Paths.get("/foo/bar/movies/foo_bar.mov"))
             .setFingerprint("2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae");
+        sut.save(file);
         final Media media = new Media()
             .setType(Media.MediaType.VIDEO)
             .setFormat(FileExtension.APPLE_QUICKTIME_MOVIE)
@@ -121,6 +122,6 @@ public class DefaultOriginFileDaoTest {
         final OriginFile loaded = sut.findById(file.getId());
 
         assertThat(loaded, is(file));
-//        assertThat(loaded.getImported(), is(media));
+        assertThat(loaded.getImported(), is(media));
     }
 }
