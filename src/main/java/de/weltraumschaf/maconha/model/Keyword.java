@@ -33,6 +33,7 @@ public class Keyword extends BaseEntity {
 
     @NotEmpty
     @Size(min = 1, max = 255)
+    @Column(unique = true, nullable = false)
     private String literal;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
