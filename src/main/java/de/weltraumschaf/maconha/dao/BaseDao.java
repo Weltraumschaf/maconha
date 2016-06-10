@@ -68,7 +68,7 @@ abstract class BaseDao<T> {
 
     public final void save(final T entity) {
         LOGGER.debug("Save entity: {}", entity);
-        getSession().persist(entity);
+        getSession().saveOrUpdate(entity);
     }
 
     public final void delete(final T entity) {

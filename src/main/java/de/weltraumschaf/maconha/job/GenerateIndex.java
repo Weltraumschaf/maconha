@@ -44,6 +44,7 @@ final class GenerateIndex extends BaseJob<Void> {
     @Override
     public Void execute() throws Exception {
         final Collection<Media> allImportedMedia = input.findAll();
+        begin(allImportedMedia.size());
         allImportedMedia.stream().forEach(media -> index(media));
         return null;
     }
@@ -65,6 +66,7 @@ final class GenerateIndex extends BaseJob<Void> {
         extract(file)
             .filter(literal -> wanted(literal))
             .forEach(literal -> save(literal, media));
+        worked(1);
     }
 
     private boolean wanted(final String literal) {
@@ -76,16 +78,19 @@ final class GenerateIndex extends BaseJob<Void> {
     }
 
     private void save(final String literal, final Media media) {
-        Keyword keyword;// = output.findByLiteral(literal);
+        LOGGER.debug("Save keyword '{}' to media with id {}", literal, media.getId());
+        Keyword keyword = output.findByLiteral(literal);
 
-//        if (null == keyword) {
-//            LOGGER.debug("Create new keyword for literal '{}'.", literal);
+        if (null == keyword) {
+            LOGGER.debug("Create new keyword for literal '{}'.", literal);
             keyword = new Keyword().setLiteral(literal);
-//        } else {
-//            LOGGER.debug("Use existing keyword with id {} for literal '{}'.", keyword.getId(), literal);
-//        }
+        } else {
+            LOGGER.debug("Use existing keyword with id {} for literal '{}'.", keyword.getId(), literal);
+        }
 
-        output.save(keyword.addMedias(media));
+        media.addKeyword(keyword);
+        input.save(media);
+        output.save(keyword);
     }
 
 }
