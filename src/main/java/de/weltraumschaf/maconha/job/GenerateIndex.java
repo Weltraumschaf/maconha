@@ -2,12 +2,13 @@ package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.FileNameExtractor;
+import de.weltraumschaf.maconha.core.IgnoredKeywords;
+import de.weltraumschaf.maconha.core.MalformedKeywords;
 import de.weltraumschaf.maconha.dao.KeywordDao;
 import de.weltraumschaf.maconha.dao.MediaDao;
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.OriginFile;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
@@ -21,8 +22,6 @@ final class GenerateIndex extends BaseJob<Void> {
 
     static final Description DESCRIPTION = new Description(GenerateIndex.class);
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndex.class);
-    private static final Collection<String> IGNORED_KEYWORDS = Arrays.asList(
-        "i", "a", "an", "ve", "the", "this", "that", "who");
     private final FileNameExtractor extractor = new FileNameExtractor();
     @Autowired
     private MediaDao input;
@@ -64,13 +63,10 @@ final class GenerateIndex extends BaseJob<Void> {
 
         // TODO Not only extract from file name, but also from title because will be editable.
         extract(file)
-            .filter(literal -> wanted(literal))
+            .filter(new IgnoredKeywords())
+            .filter(new MalformedKeywords())
             .forEach(literal -> save(literal, media));
         worked(1);
-    }
-
-    private boolean wanted(final String literal) {
-        return !IGNORED_KEYWORDS.contains(literal);
     }
 
     private Stream<String> extract(final OriginFile file) {
