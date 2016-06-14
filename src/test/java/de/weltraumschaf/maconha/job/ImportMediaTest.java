@@ -1,10 +1,10 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.maconha.core.FileExtension;
-import de.weltraumschaf.maconha.dao.MediaDao;
-import de.weltraumschaf.maconha.dao.OriginFileDao;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.OriginFile;
+import de.weltraumschaf.maconha.repos.MediaRepo;
+import de.weltraumschaf.maconha.repos.OriginFileRepo;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -21,8 +21,8 @@ import static org.mockito.Mockito.when;
  */
 public class ImportMediaTest {
 
-    private final OriginFileDao input = mock(OriginFileDao.class);
-    private final MediaDao output = mock(MediaDao.class);
+    private final OriginFileRepo input = mock(OriginFileRepo.class);
+    private final MediaRepo output = mock(MediaRepo.class);
     private final ImportMedia sut = new ImportMedia();
 
     @Before

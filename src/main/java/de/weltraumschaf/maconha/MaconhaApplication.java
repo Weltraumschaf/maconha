@@ -1,17 +1,14 @@
 package de.weltraumschaf.maconha;
 
-import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.job.JobExecutor;
-import de.weltraumschaf.maconha.job.Jobs;
 import java.util.Arrays;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -19,9 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -29,6 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Main entry point of the Spring boot application.
  */
 @SpringBootApplication
+@EnableJpaRepositories
 @EnableTransactionManagement
 @ComponentScan({"de.weltraumschaf.maconha"})
 @PropertySource(value = {"classpath:application.properties"})
@@ -68,16 +68,6 @@ public class MaconhaApplication {
     }
 
     @Bean
-    @SuppressWarnings("deprecation")
-    public SessionFactory sessionFactory() {
-        LOGGER.debug("Create session factory bean.");
-        return new LocalSessionFactoryBuilder(dataSource())
-            .scanPackages(new String[]{"de.weltraumschaf.maconha.model"})
-            .addProperties(hibernateProperties())
-            .buildSessionFactory();
-    }
-
-    @Bean
     public DataSource dataSource() {
         LOGGER.debug("Create data source bean.");
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -91,21 +81,25 @@ public class MaconhaApplication {
     }
 
     @Bean
-    @Autowired
-    public PlatformTransactionManager transactionManager(final SessionFactory sessions) {
-        LOGGER.debug("Create transaction manager bean with session factory {}.", sessions);
-        final HibernateTransactionManager manager = new HibernateTransactionManager();
-        manager.setSessionFactory(Validate.notNull(sessions, "sessions"));
-        return manager;
+    public EntityManagerFactory entityManagerFactory() {
+        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(true);
+
+        final LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan("de.weltraumschaf.maconha.model");
+        factory.setDataSource(dataSource());
+        factory.afterPropertiesSet();
+
+        return factory.getObject();
     }
 
-    private Properties hibernateProperties() {
-        final Properties properties = new Properties();
-
-        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
-        properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
-
-        return properties;
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        LOGGER.debug("Create transaction manager.");
+        final JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory());
+        return txManager;
     }
+
 }

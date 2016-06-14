@@ -72,7 +72,7 @@ public class Media extends BaseEntity {
     @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
     private OriginFile originFile;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "medias", cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "medias", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private final Set<Keyword> keywords = new HashSet<>();
 
     public int getId() {

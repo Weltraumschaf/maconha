@@ -1,8 +1,8 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.maconha.MaconhaApplication;
-import de.weltraumschaf.maconha.dao.OriginFileDao;
 import de.weltraumschaf.maconha.model.OriginFile;
+import de.weltraumschaf.maconha.repos.OriginFileRepo;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +43,7 @@ public class ScanDirectoryTest {
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
     @Autowired
-    private OriginFileDao db;
+    private OriginFileRepo db;
 
     @Before
     public void autowireDependnecies() {

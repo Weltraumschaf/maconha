@@ -3,11 +3,11 @@ package de.weltraumschaf.maconha.job;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.FileExtension;
 import de.weltraumschaf.maconha.core.FileNameExtractor;
-import de.weltraumschaf.maconha.dao.MediaDao;
-import de.weltraumschaf.maconha.dao.OriginFileDao;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.Media.MediaType;
 import de.weltraumschaf.maconha.model.OriginFile;
+import de.weltraumschaf.maconha.repos.MediaRepo;
+import de.weltraumschaf.maconha.repos.OriginFileRepo;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.joda.time.LocalDateTime;
@@ -24,20 +24,20 @@ final class ImportMedia extends BaseJob<Void> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImportMedia.class);
     private final FileNameExtractor extractor = new FileNameExtractor();
     @Autowired
-    private OriginFileDao input;
+    private OriginFileRepo input;
     @Autowired
-    private MediaDao output;
+    private MediaRepo output;
     private LocalDateTime importTime;
 
     ImportMedia() {
         super(generateName(ImportMedia.class));
     }
 
-    void setInput(final OriginFileDao input) {
+    void setInput(final OriginFileRepo input) {
         this.input = Validate.notNull(input, "input");
     }
 
-    void setOutput(final MediaDao output) {
+    void setOutput(final MediaRepo output) {
         this.output = Validate.notNull(output, "output");
     }
 

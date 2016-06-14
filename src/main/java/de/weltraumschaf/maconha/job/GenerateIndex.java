@@ -4,11 +4,11 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.FileNameExtractor;
 import de.weltraumschaf.maconha.core.IgnoredKeywords;
 import de.weltraumschaf.maconha.core.MalformedKeywords;
-import de.weltraumschaf.maconha.dao.KeywordDao;
-import de.weltraumschaf.maconha.dao.MediaDao;
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.OriginFile;
+import de.weltraumschaf.maconha.repos.KeywordRepo;
+import de.weltraumschaf.maconha.repos.MediaRepo;
 import java.util.Collection;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
@@ -24,19 +24,19 @@ final class GenerateIndex extends BaseJob<Void> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndex.class);
     private final FileNameExtractor extractor = new FileNameExtractor();
     @Autowired
-    private MediaDao input;
+    private MediaRepo input;
     @Autowired
-    private KeywordDao output;
+    private KeywordRepo output;
 
     GenerateIndex() {
         super(generateName(GenerateIndex.class));
     }
 
-    void setInput(final MediaDao input) {
+    void setInput(final MediaRepo input) {
         this.input = Validate.notNull(input, "input");
     }
 
-    void setOutput(final KeywordDao output) {
+    void setOutput(final KeywordRepo output) {
         this.output = Validate.notNull(output, "output");
     }
 

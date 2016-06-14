@@ -36,7 +36,7 @@ public class Keyword extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String literal;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "Keyword_Media",
         joinColumns = {
             @JoinColumn(name = "keyword_id")},

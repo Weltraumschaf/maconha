@@ -3,8 +3,8 @@ package de.weltraumschaf.maconha.job;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.FileExtension;
 import de.weltraumschaf.maconha.core.FileFinder;
-import de.weltraumschaf.maconha.dao.OriginFileDao;
 import de.weltraumschaf.maconha.model.OriginFile;
+import de.weltraumschaf.maconha.repos.OriginFileRepo;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +30,7 @@ final class ScanDirectory extends BaseJob<Void> {
         Collections.emptySet());
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
     @Autowired
-    private OriginFileDao output;
+    private OriginFileRepo output;
     private Path baseDir;
     private LocalDateTime scanTime = new LocalDateTime();
 

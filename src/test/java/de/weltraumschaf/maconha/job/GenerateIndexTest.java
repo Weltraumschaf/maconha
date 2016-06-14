@@ -1,10 +1,10 @@
 package de.weltraumschaf.maconha.job;
 
-import de.weltraumschaf.maconha.dao.KeywordDao;
-import de.weltraumschaf.maconha.dao.MediaDao;
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.Media;
 import de.weltraumschaf.maconha.model.OriginFile;
+import de.weltraumschaf.maconha.repos.KeywordRepo;
+import de.weltraumschaf.maconha.repos.MediaRepo;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import org.junit.Test;
@@ -19,8 +19,8 @@ import static org.mockito.Mockito.when;
  */
 public class GenerateIndexTest {
 
-    private final MediaDao input = mock(MediaDao.class);
-    private final KeywordDao output = mock(KeywordDao.class);
+    private final MediaRepo input = mock(MediaRepo.class);
+    private final KeywordRepo output = mock(KeywordRepo.class);
     private final GenerateIndex sut = new GenerateIndex();
 
     @Before
