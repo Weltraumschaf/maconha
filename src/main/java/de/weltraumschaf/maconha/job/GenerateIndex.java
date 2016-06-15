@@ -80,13 +80,13 @@ final class GenerateIndex extends BaseJob<Void> {
         if (null == keyword) {
             LOGGER.debug("Create new keyword for literal '{}'.", literal);
             keyword = new Keyword().setLiteral(literal);
+            output.save(keyword);
         } else {
             LOGGER.debug("Use existing keyword with id {} for literal '{}'.", keyword.getId(), literal);
         }
 
         media.addKeyword(keyword);
         input.save(media);
-        output.save(keyword);
     }
 
 }

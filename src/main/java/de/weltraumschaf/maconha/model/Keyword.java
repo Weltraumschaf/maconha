@@ -36,13 +36,10 @@ public class Keyword extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String literal;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "Keyword_Media",
-        joinColumns = {
-            @JoinColumn(name = "keyword_id")},
-        inverseJoinColumns = {
-            @JoinColumn(name = "media_id")})
-    private final Set<Media> medias = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
+    @SuppressWarnings("FieldMayBeFinal")
+    private Set<Media> medias = new HashSet<>();
 
     public int getId() {
         return id;
