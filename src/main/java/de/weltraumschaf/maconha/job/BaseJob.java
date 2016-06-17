@@ -179,6 +179,10 @@ abstract class BaseJob<V> implements Job<V> {
         monitor.worked(work);
     }
 
+    protected final ProgressMonitor monitor() {
+        return monitor;
+    }
+
     @Override
     public String toString() {
         return "Job (" + info().toString() + ')';

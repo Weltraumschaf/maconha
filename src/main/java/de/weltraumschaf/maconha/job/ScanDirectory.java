@@ -1,19 +1,12 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.core.FileExtension;
-import de.weltraumschaf.maconha.core.FileFinder;
-import de.weltraumschaf.maconha.model.OriginFile;
-import de.weltraumschaf.maconha.repos.OriginFileRepo;
-import java.io.IOError;
-import java.io.IOException;
+import de.weltraumschaf.maconha.service.MediaService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +22,20 @@ final class ScanDirectory extends BaseJob<Void> {
         EnumSet.allOf(RquiredProperty.class),
         Collections.emptySet());
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
-    @Autowired
-    private OriginFileRepo output;
     private Path baseDir;
-    private LocalDateTime scanTime = new LocalDateTime();
+
+    @Autowired
+    private MediaService service;
 
     /**
      * Dedicated constructor.
      */
     public ScanDirectory() {
         super(generateName(ScanDirectory.class));
+    }
+
+    void setService(final MediaService service) {
+        this.service = Validate.notNull(service, "service");
     }
 
     /**
@@ -59,7 +56,7 @@ final class ScanDirectory extends BaseJob<Void> {
      * @return never{@code null}
      */
     LocalDateTime getScanTime() {
-        return scanTime;
+        return service.getStartTime();
     }
 
     @Override
@@ -69,16 +66,9 @@ final class ScanDirectory extends BaseJob<Void> {
 
     @Override
     protected Void execute() throws Exception {
+        LOGGER.debug("execute job {}.", getClass().getSimpleName());
         validateBaseDir();
-        scanTime = new LocalDateTime();
-        LOGGER.debug("Scan dir {} at {} ...", baseDir, scanTime);
-        final Collection<Path> foundFiles = FileFinder.find(
-            baseDir,
-            EnumSet.complementOf(EnumSet.of(FileExtension.NONE)));
-        begin(foundFiles.size());
-        foundFiles
-                .stream()
-                .forEach(mediaFile -> scanFile(mediaFile));
+        service.scanDirecotry(monitor(), baseDir);
         return null;
     }
 
@@ -97,26 +87,6 @@ final class ScanDirectory extends BaseJob<Void> {
 
         if (!Files.isDirectory(baseDir)) {
             throw new IllegalStateException(String.format("Base dir '%s' is not a directory!", baseDir));
-        }
-    }
-
-    private void scanFile(final Path mediaFile) {
-        LOGGER.debug("Scan file {} ...", mediaFile);
-        final OriginFile file = new OriginFile();
-        file.setBaseDir(baseDir);
-        file.setAbsolutePath(mediaFile);
-        file.setFingerprint(fingerprint(mediaFile));
-        file.setScanTime(scanTime);
-        output.save(file);
-        worked(1);
-    }
-
-    private String fingerprint(final Path mediaFile) {
-        try {
-            // TODO Read from prepared file.
-            return DigestUtils.sha256Hex(Files.newInputStream(mediaFile));
-        } catch (final IOException ex) {
-            throw new IOError(ex);
         }
     }
 

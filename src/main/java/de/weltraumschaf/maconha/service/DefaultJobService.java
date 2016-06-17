@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 /**
  */
 @Service
-final class JobServiceImpl implements JobService {
+final class DefaultJobService implements JobService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultJobService.class);
     private final JobExecutor executor;
     private final Jobs jobs;
 
     @Autowired
-    public JobServiceImpl(final JobExecutor executor, final Jobs jobs) {
+    public DefaultJobService(final JobExecutor executor, final Jobs jobs) {
         super();
         this.executor = Validate.notNull(executor, "executor");
         this.jobs = Validate.notNull(jobs, "jobs");
@@ -38,6 +38,7 @@ final class JobServiceImpl implements JobService {
 
     @Override
     public void submit(final Job<?> job) {
+        LOGGER.debug("Job submission: {}.", job);
         executor.submit(job);
     }
 

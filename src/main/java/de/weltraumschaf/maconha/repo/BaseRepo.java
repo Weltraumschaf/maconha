@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.repos;
+package de.weltraumschaf.maconha.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

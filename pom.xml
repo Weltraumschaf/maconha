@@ -274,7 +274,9 @@
                     <fork>true</fork>
                     <executable>true</executable>
                     <!-- For debugging: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -->
-                    <jvmArguments>-Dspring.profiles.active=dev</jvmArguments>
+                    <jvmArguments>
+                      -Dspring.profiles.active=dev
+                    </jvmArguments>
                 </configuration>
             </plugin>
 

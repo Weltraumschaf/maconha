@@ -4,6 +4,8 @@ import de.weltraumschaf.commons.validate.Validate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class Jobs {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Jobs.class);
 
     /**
      * Maps name of jobs to its description.
@@ -63,6 +67,7 @@ public final class Jobs {
         final Job newJob;
 
         try {
+            LOGGER.debug("Create job for name {}.", name);
             newJob = description.type().newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new JobGenerationError(

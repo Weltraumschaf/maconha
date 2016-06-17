@@ -16,7 +16,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -72,7 +71,7 @@ public class Media extends BaseEntity {
     @JoinColumn(name = "originFile_id", referencedColumnName = "id", insertable = true, updatable = true)
     private OriginFile originFile;
 
-    @ManyToMany(mappedBy = "medias", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "medias")
     @SuppressWarnings("FieldMayBeFinal")
     private Set<Keyword> keywords = new HashSet<>();
 

@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.repos;
+package de.weltraumschaf.maconha.repo;
 
 import de.weltraumschaf.maconha.model.Keyword;
 

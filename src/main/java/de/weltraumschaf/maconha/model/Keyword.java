@@ -3,10 +3,8 @@ package de.weltraumschaf.maconha.model;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,8 +34,8 @@ public class Keyword extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String literal;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
+    @ManyToMany
+    @JoinTable(name = "Keyword_Media", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
     @SuppressWarnings("FieldMayBeFinal")
     private Set<Media> medias = new HashSet<>();
 
