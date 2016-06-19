@@ -25,6 +25,7 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +64,8 @@ final class DefaultMediaService implements MediaService {
             EnumSet.complementOf(EnumSet.of(FileExtension.NONE)));
         monitor.begin(foundFiles.size());
         foundFiles
-                .stream()
-                .forEach(mediaFile -> scanFile(baseDir, mediaFile, startTime, monitor));
+            .stream()
+            .forEach(mediaFile -> scanFile(baseDir, mediaFile, startTime, monitor));
     }
 
     private void scanFile(final Path baseDir, final Path mediaFile, final LocalDateTime scanTime, final ProgressMonitor monitor) {
@@ -133,7 +134,7 @@ final class DefaultMediaService implements MediaService {
         extract(file)
             .filter(new IgnoredKeywords())
             .filter(new MalformedKeywords())
-            .forEach(literal -> save(literal, media));
+            .forEach(literal -> saveIndex(literal, media));
         monitor.worked(1);
     }
 
@@ -141,7 +142,7 @@ final class DefaultMediaService implements MediaService {
         return extractor.extractKeywords(file.getBaseDir(), file.getAbsolutePath()).stream();
     }
 
-    private void save(final String literal, final Media media) {
+    private void saveIndex(final String literal, final Media media) {
         LOGGER.debug("Save keyword '{}' to media with id {}", literal, media.getId());
         Keyword keyword = keywordRepo.findByLiteral(literal);
 
@@ -156,5 +157,20 @@ final class DefaultMediaService implements MediaService {
 
         media.addKeyword(keyword);
         mediaRepo.save(media);
+    }
+
+    @Override
+    public Collection<OriginFile> allFiles(final Pageable pageable) {
+        return originFileRepo.findAll(pageable).getContent();
+    }
+
+    @Override
+    public Collection<Media> allMedias(final Pageable pageable) {
+        return mediaRepo.findAll(pageable).getContent();
+    }
+
+    @Override
+    public Collection<Keyword> allKeywords(final Pageable pageable) {
+        return keywordRepo.findAll(pageable).getContent();
     }
 }

@@ -8,7 +8,7 @@
     <body ng-app="Maconha" class="ng-cloak">
         <#include "includes/navbar.ftl">
 
-        <div class="container-fluid">
+        <div class="container-fluid" ng-controller="AdminController as ctrl">
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar">
@@ -16,8 +16,9 @@
                         <li><a href="#">Reports</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                        <li><a href="">Nav item</a></li>
-                        <li><a href="">Nav item again</a></li>
+                        <li><a href="#" ng-click="ctrl.showScannedFiles()">Scanned files</a></li>
+                        <li><a href="#" ng-click="ctrl.showImportedMedias()">Imported medias</a></li>
+                        <li><a href="#" ng-click="ctrl.showKeywords()">Keywords</a></li>
                     </ul>
                     </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -46,60 +47,75 @@
                             </div>
                         </div>
 
-                    <h2 class="sub-header">Indexes</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Header</th>
-                                    <th>Header</th>
-                                    <th>Header</th>
-                                    <th>Header</th>
+                    <div ng-show="showScannedFiles" class="ng-show">
+                        <h2 class="sub-header">Scanned files</h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>Base Dir</td>
+                                        <td>Absolute Path</td>
+                                        <td>Fingerprint</td>
+                                        <td>Scan Time</td>
                                     </tr>
                                 </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1,001</td>
-                                    <td>Lorem</td>
-                                    <td>ipsum</td>
-                                    <td>dolor</td>
-                                    <td>sit</td>
+                                <tbody>
+                                    <tr ng-repeat="r in ctrl.files">
+                                        <td><span ng-bind="r.id"></span></td>
+                                        <td><span ng-bind="r.baseDir"></span></td>
+                                        <td><span ng-bind="r.absolutePath"></span></td>
+                                        <td><span ng-bind="r.fingerprint"></span></td>
+                                        <td><span ng-bind="r.scanTime"></span></td>
                                     </tr>
-                                <tr>
-                                    <td>1,002</td>
-                                    <td>amet</td>
-                                    <td>consectetur</td>
-                                    <td>adipiscing</td>
-                                    <td>elit</td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div ng-show="showImportedMedias" class="ng-show">
+                        <h2 class="sub-header">Imported medias</h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>Type</td>
+                                        <td>Format</td>
+                                        <td>Title</td>
+                                        <td>last imported</td>
                                     </tr>
-                                <tr>
-                                    <td>1,003</td>
-                                    <td>Integer</td>
-                                    <td>nec</td>
-                                    <td>odio</td>
-                                    <td>Praesent</td>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="r in ctrl.medias">
+                                        <td><span ng-bind="r.id"></span></td>
+                                        <td><span ng-bind="r.type"></span></td>
+                                        <td><span ng-bind="r.format"></span></td>
+                                        <td><span ng-bind="r.title"></span></td>
+                                        <td><span ng-bind="r.lastImported"></span></td>
                                     </tr>
-                                <tr>
-                                    <td>1,003</td>
-                                    <td>libero</td>
-                                    <td>Sed</td>
-                                    <td>cursus</td>
-                                    <td>ante</td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div ng-show="showKeywords" class="ng-show">
+                        <h2 class="sub-header">Keywords</h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>Literal</td>
                                     </tr>
-                                <tr>
-                                    <td>1,004</td>
-                                    <td>dapibus</td>
-                                    <td>diam</td>
-                                    <td>Sed</td>
-                                    <td>nisi</td>
-                                    </tr>
-                                <tr>
-                                    <td>1,005</td>
-                                    <td>Nulla</td>
-                                    <td>quis</td>
-                                    <td>sem</td>
-                                    <td>at</td>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="r in ctrl.keywords">
+                                        <td><span ng-bind="r.id"></span></td>
+                                        <td><span ng-bind="r.literal"></span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -108,9 +124,13 @@
                 </div>
             </div>
 
-        <#include "includes/common_js.ftl">
-        <script>
-            $("#admin").addClass("active");
+            <#include "includes/common_js.ftl">
+            <script src="${baseUrl}/js/service/admin.js"></script>
+            <script src="${baseUrl}/js/controller/admin.js"></script>
+            <script>
+                App.baseUri = '${baseUrl}';
+                App.apiUri = '${apiUrl}';
+                $("#admin").addClass("active");
             </script>
         </body>
     </html>

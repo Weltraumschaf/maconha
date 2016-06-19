@@ -5,3 +5,4 @@
 
         <link href="${baseUrl}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${baseUrl}/css/main.css" rel="stylesheet">
+        <link href="${baseUrl}/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>

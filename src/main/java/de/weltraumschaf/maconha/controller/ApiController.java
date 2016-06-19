@@ -4,14 +4,18 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.Validator;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobInfo;
+import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.Media;
+import de.weltraumschaf.maconha.model.OriginFile;
 import de.weltraumschaf.maconha.service.JobService;
+import de.weltraumschaf.maconha.service.MediaService;
 import de.weltraumschaf.maconha.service.SearchService;
 import java.util.Collection;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,12 +38,14 @@ public final class ApiController {
     private final Validator validator = new Validator();
     private final JobService jobs;
     private final SearchService search;
+    private final MediaService medias;
 
     @Autowired
-    public ApiController(final JobService jobs, final SearchService search) {
+    public ApiController(final JobService jobs, final SearchService search, final MediaService medias) {
         super();
         this.jobs = Validate.notNull(jobs, "jobs");
         this.search = Validate.notNull(search, "search");
+        this.medias = Validate.notNull(medias, "medias");
     }
 
     @RequestMapping(
@@ -88,5 +94,29 @@ public final class ApiController {
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Collection<Media> search(final @RequestParam(value = "q") String query) {
         return search.search(validator.cleanSearchQuery(query));
+    }
+
+    @RequestMapping(
+        value = BASE_URI_PATH + "/file",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Collection<OriginFile> allFiles() {
+        return medias.allFiles(new PageRequest(1, 20));
+    }
+
+    @RequestMapping(
+        value = BASE_URI_PATH + "/media",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Collection<Media> allMedias() {
+        return medias.allMedias(new PageRequest(1, 20));
+    }
+
+    @RequestMapping(
+        value = BASE_URI_PATH + "/keyword",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Collection<Keyword> allKeywords() {
+        return medias.allKeywords(new PageRequest(1, 20));
     }
 }

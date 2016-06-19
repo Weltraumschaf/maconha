@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -57,6 +58,7 @@ public class OriginFile extends BaseEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime scanTime = new LocalDateTime();
 
+    @JsonIgnore
     @OneToOne(optional = true, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id", referencedColumnName = "originFile_id", insertable = true, updatable = true)
     private Media imported;

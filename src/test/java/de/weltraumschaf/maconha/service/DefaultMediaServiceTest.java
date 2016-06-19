@@ -17,16 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
 import org.joda.time.LocalDateTime;
-import static org.junit.Assert.assertThat;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,11 +65,11 @@ public class DefaultMediaServiceTest {
         final Keyword movieKeyword = new Keyword().setId(42).setLiteral("movie");
         when(keywordRepo.findByLiteral("movie")).thenReturn(movieKeyword);
 
-        sut.generateIndex(mock(ProgressMonitor.class));
+        sut.generateIndex(new ProgressMonitor());
 
-        verify(keywordRepo, times(2)).save(movieKeyword);
         verify(keywordRepo, times(1)).save(new Keyword().setLiteral("two").addMedias(mediaTwo));
         verify(keywordRepo, times(1)).save(new Keyword().setLiteral("three").addMedias(mediaThree));
+        verify(mediaRepo, never()).save(mediaOne);
     }
 
     @Test

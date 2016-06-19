@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan({"de.weltraumschaf.maconha"})
 @EntityScan("de.weltraumschaf.maconha.model")
-@EnableJpaRepositories(basePackages = { "de.weltraumschaf.maconha.repos" })
+@EnableJpaRepositories(basePackages = { "de.weltraumschaf.maconha.repo" })
 @PropertySource(value = {"classpath:application.properties"})
 public class MaconhaApplication {
 
