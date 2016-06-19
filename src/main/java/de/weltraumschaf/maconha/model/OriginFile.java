@@ -99,7 +99,7 @@ public class OriginFile extends BaseEntity {
         return this;
     }
 
-    public LocalDateTime getIndexTime() {
+    public LocalDateTime getScanTime() {
         return scanTime;
     }
 

@@ -5,6 +5,16 @@
     App.factory('AdminService', ['$http', '$q', function ($http, $q) {
             console.log("Register admin service with base URI " + App.apiUri + ".");
 
+/*
+ * {"timestamp":1466344494674,"status":500,"error":"Internal Server Error","exception":"java.lang.NullPointerException"
+,"message":"org.springframework.web.util.NestedServletException: Request processing failed; nested exception
+ is java.lang.NullPointerException","path":"/api/file"}
+ */
+            function logError(e) {
+                console.error('%s (%i) %s: %s',
+                    e.error, e.status, e.exception, e.message);
+            }
+
             return {
                 allFiles: function () {
                     console.log("All files");
@@ -15,7 +25,7 @@
                                         return response.data;
                                     },
                                     function (errResponse) {
-                                        console.error('Error while searching: ' + errResponse);
+                                        logError(errResponse.data);
                                         return $q.reject(errResponse);
                                     }
                             );
@@ -29,7 +39,7 @@
                                         return response.data;
                                     },
                                     function (errResponse) {
-                                        console.error('Error while searching: ' + errResponse);
+                                        logError(errResponse.data);
                                         return $q.reject(errResponse);
                                     }
                             );
@@ -43,7 +53,7 @@
                                         return response.data;
                                     },
                                     function (errResponse) {
-                                        console.error('Error while searching: ' + errResponse);
+                                        logError(errResponse.data);
                                         return $q.reject(errResponse);
                                     }
                             );

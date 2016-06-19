@@ -100,23 +100,48 @@ public final class ApiController {
         value = BASE_URI_PATH + "/file",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Collection<OriginFile> allFiles() {
-        return medias.allFiles(new PageRequest(1, 20));
+    public Collection<OriginFile> allFiles(
+        final @RequestParam(value = "page", required = false) Integer page,
+        final @RequestParam(value = "size", required = false) Integer size)
+    {
+        return medias.allFiles(new PageRequest(validatePage(page), validateSize(size)));
     }
 
     @RequestMapping(
         value = BASE_URI_PATH + "/media",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Collection<Media> allMedias() {
-        return medias.allMedias(new PageRequest(1, 20));
+    public Collection<Media> allMedias(
+        final @RequestParam(value = "page", required = false) Integer page,
+        final @RequestParam(value = "size", required = false) Integer size)
+    {
+        return medias.allMedias(new PageRequest(validatePage(page), validateSize(size)));
     }
 
     @RequestMapping(
         value = BASE_URI_PATH + "/keyword",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Collection<Keyword> allKeywords() {
-        return medias.allKeywords(new PageRequest(1, 20));
+    public Collection<Keyword> allKeywords(
+        final @RequestParam(value = "page", required = false) Integer page,
+        final @RequestParam(value = "size", required = false) Integer size)
+    {
+        return medias.allKeywords(new PageRequest(validatePage(page), validateSize(size)));
+    }
+
+    private int validatePage(final Integer input) {
+        if (null == input || input < 0) {
+            return 0;
+        }
+
+        return input;
+    }
+
+    private int validateSize(final Integer input) {
+        if (null == input || input < 1) {
+            return 10;
+        }
+
+        return input;
     }
 }

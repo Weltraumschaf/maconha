@@ -63,11 +63,11 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="r in ctrl.files">
-                                        <td><span ng-bind="r.id"></span></td>
-                                        <td><span ng-bind="r.baseDir"></span></td>
-                                        <td><span ng-bind="r.absolutePath"></span></td>
-                                        <td><span ng-bind="r.fingerprint"></span></td>
-                                        <td><span ng-bind="r.scanTime"></span></td>
+                                        <td>{{r.id}}</td>
+                                        <td>{{r.baseDir}}</td>
+                                        <td>{{r.absolutePath}}</td>
+                                        <td>{{r.fingerprint}}</td>
+                                        <td>{{r.scanTime | formatDateTime}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -90,11 +90,11 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="r in ctrl.medias">
-                                        <td><span ng-bind="r.id"></span></td>
-                                        <td><span ng-bind="r.type"></span></td>
-                                        <td><span ng-bind="r.format"></span></td>
-                                        <td><span ng-bind="r.title"></span></td>
-                                        <td><span ng-bind="r.lastImported"></span></td>
+                                        <td>{{r.id}}</td>
+                                        <td>{{r.type}}</td>
+                                        <td>{{r.format}}</td>
+                                        <td>{{r.title}}</td>
+                                        <td>{{r.lastImported | formatDateTime}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,8 +114,8 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="r in ctrl.keywords">
-                                        <td><span ng-bind="r.id"></span></td>
-                                        <td><span ng-bind="r.literal"></span></td>
+                                        <td>{{r.id}}</td>
+                                        <td>{{r.literal}}</td>
                                     </tr>
                                 </tbody>
                             </table>
