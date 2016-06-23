@@ -1,136 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="Maconha">
     <head>
-        <#include "includes/head.ftl">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ</title>
+
+        <link href="${baseUrl}/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <link href="${baseUrl}/css/main.css" rel="stylesheet">
         <link href="${baseUrl}/css/admin.css" rel="stylesheet">
+        <link href="${baseUrl}/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
     </head>
 
-    <body ng-app="Maconha" class="ng-cloak">
+    <body class="ng-cloak">
         <#include "includes/navbar.ftl">
 
-        <div class="container-fluid" ng-controller="AdminController as ctrl">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar">
-                        <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">Reports</a></li>
+                        <li class="active"><a href="#!/overview">Overview</a></li>
+                        <li><a href="#!/file">Scanned files</a></li>
+                        <li><a href="#!/media">Imported medias</a></li>
+                        <li><a href="#!/keyword">Keywords</a></li>
                     </ul>
-                    <ul class="nav nav-sidebar">
-                        <li><a href="#" ng-click="ctrl.showScannedFiles()">Scanned files</a></li>
-                        <li><a href="#" ng-click="ctrl.showImportedMedias()">Imported medias</a></li>
-                        <li><a href="#" ng-click="ctrl.showKeywords()">Keywords</a></li>
-                    </ul>
-                    </div>
+                </div>
+
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <h1 class="page-header">Background Jobs</h1>
-
-                    <div class="row placeholders">
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                            </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                            </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                            </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                            </div>
-                        </div>
-
-                    <div ng-show="showScannedFiles" class="ng-show">
-                        <h2 class="sub-header">Scanned files</h2>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <td>ID</td>
-                                        <td>Base Dir</td>
-                                        <td>Absolute Path</td>
-                                        <td>Fingerprint</td>
-                                        <td>Scan Time</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="r in ctrl.files">
-                                        <td>{{r.id}}</td>
-                                        <td>{{r.baseDir}}</td>
-                                        <td>{{r.absolutePath}}</td>
-                                        <td>{{r.fingerprint}}</td>
-                                        <td>{{r.scanTime | formatDateTime}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div ng-show="showImportedMedias" class="ng-show">
-                        <h2 class="sub-header">Imported medias</h2>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <td>ID</td>
-                                        <td>Type</td>
-                                        <td>Format</td>
-                                        <td>Title</td>
-                                        <td>last imported</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="r in ctrl.medias">
-                                        <td>{{r.id}}</td>
-                                        <td>{{r.type}}</td>
-                                        <td>{{r.format}}</td>
-                                        <td>{{r.title}}</td>
-                                        <td>{{r.lastImported | formatDateTime}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div ng-show="showKeywords" class="ng-show">
-                        <h2 class="sub-header">Keywords</h2>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <td>ID</td>
-                                        <td>Literal</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="r in ctrl.keywords">
-                                        <td>{{r.id}}</td>
-                                        <td>{{r.literal}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div ng-view></div>
                 </div>
             </div>
+        </div>
 
-            <#include "includes/common_js.ftl">
-            <script src="${baseUrl}/js/service/admin.js"></script>
-            <script src="${baseUrl}/js/controller/admin.js"></script>
-            <script>
-                App.baseUri = '${baseUrl}';
-                App.apiUri = '${apiUrl}';
-                $("#admin").addClass("active");
-            </script>
-        </body>
-    </html>
+        <script src="${baseUrl}/lib/jquery/dist/jquery.js"></script>
+        <script src="${baseUrl}/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+        <script src="${baseUrl}/lib/angular/angular.js"></script>
+        <script src="${baseUrl}/lib/angular-animate/angular-animate.js"></script>
+        <script src="${baseUrl}/lib/angular-resource/angular-resource.js"></script>
+        <script src="${baseUrl}/lib/angular-route/angular-route.js"></script>
+
+        <script src="${baseUrl}/js/app.module.js"></script>
+        <script src="${baseUrl}/js/app.config.js"></script>
+        <script src="${baseUrl}/js/core/core.module.js"></script>
+        <script src="${baseUrl}/js/core/format-date-time/format-date-time.filter.js"></script>
+
+        <script src="${baseUrl}/js/core/file/file.module.js"></script>
+        <script src="${baseUrl}/js/core/file/file.service.js"></script>
+        <script src="${baseUrl}/js/core/keyword/keyword.module.js"></script>
+        <script src="${baseUrl}/js/core/keyword/keyword.service.js"></script>
+        <script src="${baseUrl}/js/core/media/media.module.js"></script>
+        <script src="${baseUrl}/js/core/media/media.service.js"></script>
+
+        <script src="${baseUrl}/js/file-list/file-list.module.js"></script>
+        <script src="${baseUrl}/js/file-list/file-list.component.js"></script>
+        <script src="${baseUrl}/js/keyword-list/keyword-list.module.js"></script>
+        <script src="${baseUrl}/js/keyword-list/keyword-list.component.js"></script>
+        <script src="${baseUrl}/js/media-list/media-list.module.js"></script>
+        <script src="${baseUrl}/js/media-list/media-list.component.js"></script>
+        <script src="${baseUrl}/js/overview/overview.module.js"></script>
+        <script src="${baseUrl}/js/overview/overview.component.js"></script>
+
+        <script>
+            $("#admin").addClass("active");
+        </script>
+    </body>
+</html>

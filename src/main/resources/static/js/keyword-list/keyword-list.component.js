@@ -3,11 +3,11 @@
 'use strict';
 
 angular.
-        module('keywrodList').
-        component('keywrodList', {
-            templateUrl: 'keywrod-list/keywrod-list.template.html',
-            controller: ['$routeParams', 'File',
-                function KeywrodListController($routeParams, Keywrod) {
+        module('keywordList').
+        component('keywordList', {
+            templateUrl: 'js/keyword-list/keyword-list.template.html',
+            controller: ['$routeParams', 'Keyword',
+                function KeywordListController($routeParams, Keyword) {
                     var self = this;
                 }
             ]

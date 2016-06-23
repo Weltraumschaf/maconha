@@ -1,22 +1,28 @@
-<h2 class="sub-header">Keywords</h2>
+<h1 class="sub-header">Scanned files</h1>
 
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
                 <td>ID</td>
-                <td>Literal</td>
+                <td>Base Dir</td>
+                <td>Absolute Path</td>
+                <td>Fingerprint</td>
+                <td>Scan Time</td>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="r in ctrl.keywords">
+            <tr ng-repeat="r in ctrl.files">
                 <td>{{r.id}}</td>
-                <td>{{r.literal}}</td>
+                <td>{{r.baseDir}}</td>
+                <td>{{r.absolutePath}}</td>
+                <td>{{r.fingerprint}}</td>
+                <td>{{r.scanTime| formatDateTime}}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2">
+                <td colspan="5">
                     <div class="pagination pull-right">
                         <ul>
                             <li ng-class="{disabled: currentPage == 0}">

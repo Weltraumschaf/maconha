@@ -5,7 +5,7 @@
 angular.
         module('mediaList').
         component('mediaList', {
-            templateUrl: 'media-list/media-list.template.html',
+            templateUrl: 'js/media-list/media-list.template.html',
             controller: ['$routeParams', 'Media',
                 function MediaListController($routeParams, Media) {
                     var self = this;

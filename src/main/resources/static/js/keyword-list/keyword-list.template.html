@@ -1,28 +1,22 @@
-<h2 class="sub-header">Imported medias</h2>
+<h1 class="sub-header">Keywords</h1>
 
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
                 <td>ID</td>
-                <td>Type</td>
-                <td>Format</td>
-                <td>Title</td>
-                <td>last imported</td>
+                <td>Literal</td>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="r in ctrl.medias">
+            <tr ng-repeat="r in ctrl.keywords">
                 <td>{{r.id}}</td>
-                <td>{{r.type}}</td>
-                <td>{{r.format}}</td>
-                <td>{{r.title}}</td>
-                <td>{{r.lastImported| formatDateTime}}</td>
+                <td>{{r.literal}}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5">
+                <td colspan="2">
                     <div class="pagination pull-right">
                         <ul>
                             <li ng-class="{disabled: currentPage == 0}">
