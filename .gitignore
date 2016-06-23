@@ -1,2 +1,3 @@
-examples/*
-/new/nbproject/
+.idea/
+examples/
+maconha-ng.iml
