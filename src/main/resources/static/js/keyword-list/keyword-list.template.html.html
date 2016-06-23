@@ -1,0 +1,39 @@
+<h2 class="sub-header">Keywords</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Literal</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="r in ctrl.keywords">
+                <td>{{r.id}}</td>
+                <td>{{r.literal}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div class="pagination pull-right">
+                        <ul>
+                            <li ng-class="{disabled: currentPage == 0}">
+                                <a href ng-click="prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in range(pagedItems.length)"
+                                ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                <a href ng-bind="n + 1">1</a>
+                            </li>
+                            <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                <a href ng-click="nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
