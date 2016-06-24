@@ -1,11 +1,11 @@
 <#ftl strip_whitespace = false strip_text = false>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="Search">
     <head>
         <#include "includes/head.ftl">
     </head>
 
-    <body ng-app="Maconha" class="ng-cloak">
+    <body class="ng-cloak">
         <#include "includes/navbar.ftl">
 
         <div class="container" ng-controller="SearchController as ctrl">
@@ -22,33 +22,21 @@
                 </form>
             </div>
 
-            <h2 class="sub-header" ng-show="ctrl.hasResults()">Search results</h2>
-            <div class="table-responsive" ng-show="ctrl.hasResults()">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Type</th>
-                            <th>title</th>
-                            <th>Filename</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr ng-repeat="r in ctrl.search.result">
-                            <td><span ng-bind="r.id"></span></td>
-                            <td><span ng-bind="r.type"></span></td>
-                            <td><span ng-bind="r.title"></span></td>
-                            <td><span ng-bind="r.filename"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <div ng-view></div>
         </div>
 
         <#include "includes/common_js.ftl">
-        <script src="${baseUrl}/js/service/search.js"></script>
-        <script src="${baseUrl}/js/controller/search.js"></script>
+
+        <script src="${baseUrl}/js/search.app.module.js"></script>
+        <script src="${baseUrl}/js/search.app.config.js"></script>
+
+        <script src="${baseUrl}/js/core/search/search.module.js"></script>
+        <script src="${baseUrl}/js/core/search/search.service.js"></script>
+
+        <script src="${baseUrl}/js/search-result/search-result.module.js"></script>
+        <script src="${baseUrl}/js/search-result/search-result.component.js"></script>
+
+        <script src="${baseUrl}/js/controller/search.controller.js"></script>
         <script>
             App.baseUri = '${baseUrl}';
             App.apiUri = '${apiUrl}';

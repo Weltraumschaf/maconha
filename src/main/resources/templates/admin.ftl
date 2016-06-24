@@ -1,15 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="Maconha">
+<html lang="en" ng-app="Admin">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ヽ(°◇° )ノ Maconha ヽ(°◇° )ノ</title>
-
-        <link href="${baseUrl}/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-        <link href="${baseUrl}/css/main.css" rel="stylesheet">
+        <#include "includes/head.ftl">
         <link href="${baseUrl}/css/admin.css" rel="stylesheet">
-        <link href="${baseUrl}/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
     </head>
 
     <body class="ng-cloak">
@@ -32,16 +25,10 @@
             </div>
         </div>
 
-        <script src="${baseUrl}/lib/jquery/dist/jquery.js"></script>
-        <script src="${baseUrl}/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <#include "includes/common_js.ftl">
 
-        <script src="${baseUrl}/lib/angular/angular.js"></script>
-        <script src="${baseUrl}/lib/angular-animate/angular-animate.js"></script>
-        <script src="${baseUrl}/lib/angular-resource/angular-resource.js"></script>
-        <script src="${baseUrl}/lib/angular-route/angular-route.js"></script>
-
-        <script src="${baseUrl}/js/app.module.js"></script>
-        <script src="${baseUrl}/js/app.config.js"></script>
+        <script src="${baseUrl}/js/admin.app.module.js"></script>
+        <script src="${baseUrl}/js/admin.app.config.js"></script>
         <script src="${baseUrl}/js/core/core.module.js"></script>
         <script src="${baseUrl}/js/core/format-date-time/format-date-time.filter.js"></script>
 
@@ -62,6 +49,8 @@
         <script src="${baseUrl}/js/overview/overview.component.js"></script>
 
         <script>
+            App.baseUri = '${baseUrl}';
+            App.apiUri = '${apiUrl}';
             $("#admin").addClass("active");
         </script>
     </body>

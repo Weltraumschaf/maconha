@@ -1,3 +1,8 @@
 'use strict';
 
-angular.module('core', ['core.file', 'core.keyword', 'core.media']);
+angular.module('core', [
+    'core.file',
+    'core.keyword',
+    'core.media',
+    'core.search'
+]);

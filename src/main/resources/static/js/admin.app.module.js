@@ -2,7 +2,7 @@
 'use strict';
 
 var App = angular
-        .module('Maconha', [
+        .module('Admin', [
             'ngAnimate',
             'ngRoute',
             'core',
