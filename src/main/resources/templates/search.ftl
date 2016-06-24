@@ -22,7 +22,7 @@
                 </form>
             </div>
 
-            <div ng-view></div>
+            <search-result ng-show="ctrl.search.result.length > 0"></search-result>
         </div>
 
         <#include "includes/common_js.ftl">
