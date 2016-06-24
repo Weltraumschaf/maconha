@@ -5,6 +5,5 @@ var App = angular
         .module('Search', [
             'ngAnimate',
             'ngRoute',
-            'core.search',
             'searchResult'
         ]);

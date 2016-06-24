@@ -30,9 +30,6 @@
         <script src="${baseUrl}/js/search.app.module.js"></script>
         <script src="${baseUrl}/js/search.app.config.js"></script>
 
-        <script src="${baseUrl}/js/core/search/search.module.js"></script>
-        <script src="${baseUrl}/js/core/search/search.service.js"></script>
-
         <script src="${baseUrl}/js/search-result/search-result.module.js"></script>
         <script src="${baseUrl}/js/search-result/search-result.component.js"></script>
 

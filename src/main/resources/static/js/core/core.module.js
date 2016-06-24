@@ -3,6 +3,5 @@
 angular.module('core', [
     'core.file',
     'core.keyword',
-    'core.media',
-    'core.search'
+    'core.media'
 ]);

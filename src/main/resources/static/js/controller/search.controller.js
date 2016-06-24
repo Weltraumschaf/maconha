@@ -2,7 +2,7 @@
 
 'use strict';
 
-App.controller('SearchController', ['$scope', 'Search', function ($scope, Search) {
+App.controller('SearchController', ['$scope', '$http', function ($scope, $http) {
     var self = this;
     self.search = {
         query: '',
@@ -10,16 +10,11 @@ App.controller('SearchController', ['$scope', 'Search', function ($scope, Search
     };
 
     self.submit = function () {
-        console.log('Search for: ', self.search.query);
-        Search.search(self.search.query).then(
-            function (r) {
-                console.log("Storing result: %s", r);
-                self.search.result = r;
-            },
-            function (errResponse) {
-                console.error('Error submit search:' + errResponse);
-            }
-        );
+        $http.get(App.apiUri + '/search?q=' + self.search.query)
+            .success(function (data) {
+                $scope.result = data;
+                self.search.result = data;
+            });
     };
 
     self.hasResults = function () {
