@@ -12,11 +12,11 @@
         </thead>
 
         <tbody>
-            <tr ng-repeat="r in ctrl.search.result">
-                <td><span ng-bind="r.id"></span></td>
-                <td><span ng-bind="r.type"></span></td>
-                <td><span ng-bind="r.title"></span></td>
-                <td><span ng-bind="r.filename"></span></td>
+            <tr ng-repeat="r in result">
+                <td>{{r.id}}</td>
+                <td>{{r.type}}</td>
+                <td>{{r.title}}</td>
+                <td>{{r.filename}}</td>
             </tr>
         </tbody>
     </table>

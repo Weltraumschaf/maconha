@@ -2,23 +2,16 @@
 
 'use strict';
 
-App.controller('SearchController', ['$scope', '$http', function ($scope, $http) {
+App.controller('SearchController', ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     var self = this;
-    self.search = {
-        query: '',
-        result: []
-    };
+    $rootScope.result = [];
 
-    self.submit = function () {
-        $http.get(App.apiUri + '/search?q=' + self.search.query)
+    $scope.submit = function () {
+        $http.get(App.apiUri + '/search?q=' + $scope.query)
             .success(function (data) {
-                $scope.result = data;
-                self.search.result = data;
+                console.log("Search result: %s", JSON.stringify(data));
+                $rootScope.result = data;
+                $scope.hasResult = data.length > 0;
             });
     };
-
-    self.hasResults = function () {
-        return self.search.result.length > 0;
-    };
-
 }]);
