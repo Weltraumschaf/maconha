@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * Default implementation.
  */
 @Service
 final class DefaultJobService implements JobService {

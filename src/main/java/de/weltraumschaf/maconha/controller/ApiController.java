@@ -1,7 +1,6 @@
 package de.weltraumschaf.maconha.controller;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.core.Validator;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobInfo;
 import de.weltraumschaf.maconha.model.Keyword;
@@ -35,7 +34,6 @@ public final class ApiController {
 
     static final String BASE_URI_PATH = "/api";
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
-    private final Validator validator = new Validator();
     private final JobService jobs;
     private final SearchService search;
     private final MediaService medias;
@@ -93,7 +91,7 @@ public final class ApiController {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Collection<Media> search(final @RequestParam(value = "q") String query) {
-        return search.search(validator.cleanSearchQuery(query));
+        return search.search(query);
     }
 
     @RequestMapping(

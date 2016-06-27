@@ -37,8 +37,8 @@ public class Keyword extends BaseEntity {
 
     @JsonIgnore
     @ManyToMany
+    @SuppressWarnings("FieldMayBeFinal") // XXX Must not be final?
     @JoinTable(name = "Keyword_Media", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
-    @SuppressWarnings("FieldMayBeFinal")
     private Set<Media> medias = new HashSet<>();
 
     public int getId() {
