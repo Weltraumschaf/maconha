@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +19,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 final class DefaultSearchService implements SearchService {
-
 
     private final KeywordRepo keywords;
 
@@ -27,7 +30,7 @@ final class DefaultSearchService implements SearchService {
 
     @Override
     public Collection<Media> search(final String query) {
-        if (null == query|| query.trim().isEmpty()) {
+        if (null == query || query.trim().isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -39,10 +42,49 @@ final class DefaultSearchService implements SearchService {
         return Arrays.asList(query.trim().split("\\s+"));
     }
 
-    private Collection<Media> prepare(final Collection<Keyword> found) {
-        final Collection<Media> result = new ArrayList<>();
+    private Collection<Media> prepare(final Collection<Keyword> keywords) {
+        final Set<Media> unique = keywords.stream()
+            .map(keyword -> keyword.getMedias())
+            .flatMap(medias -> medias.stream())
+            .collect(Collectors.toSet());
+        final List<Media> sorted = new ArrayList<>(unique);
+        Collections.sort(sorted, new SotByMatchedKeywords(keywords));
 
+        return sorted;
+    }
 
-        return result;
+    static final class SotByMatchedKeywords implements Comparator<Media> {
+
+        private final Collection<Keyword> keywords;
+
+        SotByMatchedKeywords(final Collection<Keyword> keywords) {
+            super();
+            this.keywords = new ArrayList<>(keywords);
+        }
+
+        @Override
+        public int compare(final Media left, final Media right) {
+            final int leftCount = countContainingKeywords(left);
+            final int rightCount = countContainingKeywords(right);
+
+            if (leftCount < rightCount) {
+                return 1;
+            } else if (leftCount > rightCount) {
+                return -1;
+            }
+
+            return 0;
+        }
+
+        int countContainingKeywords(final Media media) {
+            if (null == media) {
+                return 0;
+            }
+
+            return keywords.stream()
+                .filter(keyword -> media.getKeywords().contains(keyword))
+                .map(item -> 1)
+                .reduce(0, Integer::sum);
+        }
     }
 }

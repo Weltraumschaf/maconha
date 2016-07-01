@@ -8,10 +8,12 @@ import org.springframework.data.domain.Pageable;
 /**
  * Auto implemented by Spring.
  */
-public interface KeywordRepo extends BaseRepo<Keyword>{
+public interface KeywordRepo extends BaseRepo<Keyword> {
 
     Keyword findByLiteral(String literal);
+
     Collection<Keyword> findByLiterals(Collection<String> literals);
+
     @Override
     Page<Keyword> findAll(Pageable pageable);
 }
