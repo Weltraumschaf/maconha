@@ -12,7 +12,7 @@ public interface KeywordRepo extends BaseRepo<Keyword> {
 
     Keyword findByLiteral(String literal);
 
-    Collection<Keyword> findByLiterals(Collection<String> literals);
+    Collection<Keyword> findByLiteralIn(Collection<String> literals);
 
     @Override
     Page<Keyword> findAll(Pageable pageable);

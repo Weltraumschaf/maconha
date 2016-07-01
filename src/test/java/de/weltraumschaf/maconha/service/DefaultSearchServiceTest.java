@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.mockito.Matchers;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,7 +43,7 @@ public class DefaultSearchServiceTest {
 
     @Test
     public void search_nothingFound() {
-        when(keywords.findByLiterals(Matchers.anyCollection())).thenReturn(Collections.emptyList());
+        when(keywords.findByLiteralIn(Matchers.anyCollection())).thenReturn(Collections.emptyList());
 
         assertThat(sut.search("snafu"), hasSize(0));
     }
@@ -75,7 +74,7 @@ public class DefaultSearchServiceTest {
         found.add(foo);
         found.add(bar);
         found.add(baz);
-        when(keywords.findByLiterals(Arrays.asList("foo", "bar", "baz"))).thenReturn(found);
+        when(keywords.findByLiteralIn(Arrays.asList("foo", "bar", "baz"))).thenReturn(found);
 
         final Collection<Media> result = sut.search("foo  bar baz");
 
