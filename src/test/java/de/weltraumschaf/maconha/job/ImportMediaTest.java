@@ -11,12 +11,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Tests for {@link ImportMedia}.
+ * Tests for {@link ImportMediaJob}.
  */
 public class ImportMediaTest {
 
     private final MediaService service = mock(MediaService.class);
-    private final ImportMedia sut = new ImportMedia();
+    private final ImportMediaJob sut = new ImportMediaJob();
 
     @Before
     public void injectMocks() {

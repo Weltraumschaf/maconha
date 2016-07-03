@@ -5,7 +5,7 @@ import de.weltraumschaf.commons.validate.Validate;
 /**
  * Thrown if any error occurred during job creation.
  */
-public final class JobGenerationError extends Error {
+public final class JobGenerationError extends JobError {
 
     /**
      * Convenience constructor without cause.

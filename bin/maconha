@@ -23,6 +23,7 @@ while [ -h "${PROGRAM}" ]; do
 done
 
 PROGRAM_DIRECTORY=`dirname "${PROGRAM}"`
+PROGRAM_DIRECTORY=`realpath "${PROGRAM_DIRECTORY}"`
 
 JAR="${PROGRAM_DIRECTORY}/maconha.jar"
 
@@ -37,4 +38,4 @@ if [ "" != "${MACONHA_DEBUG}" ] ; then
     JVM_OPTIONS=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 fi
 
-java ${JVM_OPTIONS} -jar "${JAR}" --spring.profiles.active=prod
+java ${JVM_OPTIONS} -jar "${JAR}" --spring.profiles.active=prod --bin=${PROGRAM_DIRECTORY}

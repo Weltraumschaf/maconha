@@ -11,12 +11,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Tests for {@link GenerateIndex}.
+ * Tests for {@link GenerateIndexJob}.
  */
 public class GenerateIndexTest {
 
     private final MediaService service = mock(MediaService.class);
-    private final GenerateIndex sut = new GenerateIndex();
+    private final GenerateIndexJob sut = new GenerateIndexJob();
 
     @Before
     public void injectMocks() {

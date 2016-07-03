@@ -16,7 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Tests for {@link ScanDirectory}.
+ * Tests for {@link ScanDirectoryJob}.
  */
 public class ScanDirectoryTest {
 
@@ -25,7 +25,7 @@ public class ScanDirectoryTest {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
     private final MediaService service = mock(MediaService.class);
-    private final ScanDirectory sut = new ScanDirectory();
+    private final ScanDirectoryJob sut = new ScanDirectoryJob();
 
     @Before
     public void injectMocks() {

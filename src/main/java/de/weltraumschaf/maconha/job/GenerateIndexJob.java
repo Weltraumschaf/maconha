@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job indexes imported media.
  */
-final class GenerateIndex extends BaseJob<Void> {
+final class GenerateIndexJob extends BaseJob<Void> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndex.class);
-    static final Description DESCRIPTION = new Description(GenerateIndex.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndexJob.class);
+    static final Description DESCRIPTION = new Description(GenerateIndexJob.class);
     @Autowired
     private MediaService service;
 
-    GenerateIndex() {
-        super(generateName(GenerateIndex.class));
+    GenerateIndexJob() {
+        super(generateName(GenerateIndexJob.class));
     }
 
     void setService(final MediaService service) {

@@ -25,9 +25,10 @@ public final class Jobs {
 
     static {
         final Map<String, Description> tmp = new HashMap<>();
-        tmp.put(ScanDirectory.DESCRIPTION.name(), ScanDirectory.DESCRIPTION);
-        tmp.put(ImportMedia.DESCRIPTION.name(), ImportMedia.DESCRIPTION);
-        tmp.put(GenerateIndex.DESCRIPTION.name(), GenerateIndex.DESCRIPTION);
+        tmp.put(ScanDirectoryJob.DESCRIPTION.name(), ScanDirectoryJob.DESCRIPTION);
+        tmp.put(HashFilesJob.DESCRIPTION.name(), HashFilesJob.DESCRIPTION);
+        tmp.put(ImportMediaJob.DESCRIPTION.name(), ImportMediaJob.DESCRIPTION);
+        tmp.put(GenerateIndexJob.DESCRIPTION.name(), GenerateIndexJob.DESCRIPTION);
         LOOKUP = Collections.unmodifiableMap(tmp);
     }
 

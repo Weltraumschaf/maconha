@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job scans a directory for media files.
  */
-final class ScanDirectory extends BaseJob<Void> {
+final class ScanDirectoryJob extends BaseJob<Void> {
 
     static final Description DESCRIPTION = new Description(
-        ScanDirectory.class,
+        ScanDirectoryJob.class,
         EnumSet.allOf(RquiredProperty.class),
         Collections.emptySet());
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScanDirectoryJob.class);
     private Path baseDir;
 
     @Autowired
@@ -30,8 +30,8 @@ final class ScanDirectory extends BaseJob<Void> {
     /**
      * Dedicated constructor.
      */
-    public ScanDirectory() {
-        super(generateName(ScanDirectory.class));
+    public ScanDirectoryJob() {
+        super(generateName(ScanDirectoryJob.class));
     }
 
     void setService(final MediaService service) {

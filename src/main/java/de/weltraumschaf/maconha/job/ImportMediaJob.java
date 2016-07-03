@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job import scanned media files.
  */
-final class ImportMedia extends BaseJob<Void> {
+final class ImportMediaJob extends BaseJob<Void> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImportMedia.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImportMediaJob.class);
 
-    static final Description DESCRIPTION = new Description(ImportMedia.class);
+    static final Description DESCRIPTION = new Description(ImportMediaJob.class);
     @Autowired
     private MediaService service;
 
-    ImportMedia() {
-        super(generateName(ImportMedia.class));
+    ImportMediaJob() {
+        super(generateName(ImportMediaJob.class));
     }
 
     void setService(final MediaService service) {

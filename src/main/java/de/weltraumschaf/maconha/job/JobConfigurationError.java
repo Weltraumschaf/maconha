@@ -5,7 +5,7 @@ import de.weltraumschaf.commons.validate.Validate;
 /**
  * Thrown if any error occurred during {@link Configurable#configure(java.util.Map)}.
  */
-public final class JobConfigurationError extends Error {
+public final class JobConfigurationError extends JobError {
 
     /**
      * Convenience constructor without cause.
