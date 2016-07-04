@@ -1,5 +1,10 @@
 package de.weltraumschaf.maconha.job;
 
+import de.weltraumschaf.maconha.shell.Command;
+import de.weltraumschaf.maconha.shell.Commands;
+import de.weltraumschaf.maconha.shell.Result;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,12 +13,16 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * Hashes all files in given directory by external program.
  */
 final class HashFilesJob extends BaseJob<Void> {
 
-    static final Description DESCRIPTION = new Description(HashFilesJob.class);
+    static final Description DESCRIPTION = new Description(
+        HashFilesJob.class,
+        EnumSet.allOf(RquiredProperty.class),
+        Collections.emptySet()
+    );
     private static final Logger LOGGER = LoggerFactory.getLogger(HashFilesJob.class);
-    private static final String EXTERNAL_PROGRAM = "dirhash";
 
     @Autowired
     private ApplicationContext appContext;
@@ -39,9 +48,23 @@ final class HashFilesJob extends BaseJob<Void> {
                     binValues.size()));
         }
 
-        final String dirhash = binValues.get(0) + '/' + EXTERNAL_PROGRAM;
+        final Command dirhash = new Commands(binValues.get(0)).dirhash(null);
         LOGGER.debug("Calling external program: {}.", dirhash);
+        final Result result = dirhash.execute();
         return null;
     }
 
+    private enum RquiredProperty implements Property {
+        DIR("dir");
+        private final String name;
+
+        private RquiredProperty(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getBeanName() {
+            return name;
+        }
+    }
 }
