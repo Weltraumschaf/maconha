@@ -1,23 +1,25 @@
 package de.weltraumschaf.maconha.shell;
 
+import java.nio.file.Path;
+
 /**
- * Executes the {@literal ls} command.
+ * Executes the {@literal dirhash} command.
  */
-final class Dirhash extends BaseCommand{
+final class Dirhash extends BaseCommand {
 
     /**
      * Literal shell command.
      */
-    private static final String CMD  = "dirhash";
+    private static final String CMD = "dirhash";
 
     /**
      * Dedicated constructor.
      *
-     * @param path must not be {@code null} or empty
-     * @param arguments must not be {@link null}
+     * @param path must not be {@code null}
+     * @param baseDir must not be {@link null}
      */
-    Dirhash(final String path, final String arguments) {
-        super(path, CMD, arguments);
+    Dirhash(final Path path, final Path baseDir) {
+        super(path, CMD, baseDir.toString());
     }
 
 }

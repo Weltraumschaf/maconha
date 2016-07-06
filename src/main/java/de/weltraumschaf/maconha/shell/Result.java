@@ -38,7 +38,7 @@ public final class Result {
     /**
      * Get the commands exit code.
      *
-     * @return any int
+     * @return any integer
      */
     public int getExitCode() {
         return exitCode;

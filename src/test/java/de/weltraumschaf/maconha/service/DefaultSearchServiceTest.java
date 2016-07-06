@@ -43,7 +43,7 @@ public class DefaultSearchServiceTest {
 
     @Test
     public void search_nothingFound() {
-        when(keywords.findByLiteralIn(Matchers.anyCollection())).thenReturn(Collections.emptyList());
+        when(keywords.findByLiteralIn(Matchers.<String>anyCollection())).thenReturn(Collections.<Keyword>emptyList());
 
         assertThat(sut.search("snafu"), hasSize(0));
     }

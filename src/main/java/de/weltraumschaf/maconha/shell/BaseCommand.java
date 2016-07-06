@@ -4,6 +4,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Scanner;
  */
 abstract class BaseCommand implements Command {
 
-    private final String path;
+    private final Path path;
 
     /**
      * Command to execute.
@@ -33,13 +34,13 @@ abstract class BaseCommand implements Command {
     /**
      * Dedicated constructor.
      *
-     * @param path must not be {@code null} or empty
+     * @param path must not be {@code null}
      * @param command must not be {@code null} or empty
      * @param arguments must not be {@code null}
      */
-    BaseCommand(final String path, final String command, final String arguments) {
+    BaseCommand(final Path path, final String command, final String arguments) {
         super();
-        this.path = Validate.notEmpty(path, "path");
+        this.path = Validate.notNull(path, "path");
         this.command = Validate.notEmpty(command, "command");
         this.arguments = Validate.notNull(arguments, "arguments");
     }
@@ -50,7 +51,7 @@ abstract class BaseCommand implements Command {
 
     @Override
     public final Result execute() throws IOException, InterruptedException {
-        final Process process = builder.start(path + '/' + command, arguments);
+        final Process process = builder.start(path.resolve(command).toString(), arguments);
         final IoThreadHandler stdout = new IoThreadHandler(process.getInputStream());
         stdout.start();
         final IoThreadHandler stderr = new IoThreadHandler(process.getErrorStream());
@@ -60,6 +61,16 @@ abstract class BaseCommand implements Command {
         stderr.join();
 
         return new Result(errCode, stdout.getOutput(), stderr.getOutput());
+    }
+
+    @Override
+    public final Path getPath() {
+        return path;
+    }
+
+    @Override
+    public final String getArguments() {
+        return arguments;
     }
 
     /**
@@ -90,7 +101,11 @@ abstract class BaseCommand implements Command {
         public void run() {
             try (final Scanner br = new Scanner(new InputStreamReader(input))) {
                 while (br.hasNextLine()) {
-                    buffer.append(br.nextLine()).append('\n');
+                    buffer.append(br.nextLine());
+
+                    if (br.hasNextLine()) {
+                        buffer.append('\n');
+                    }
                 }
             }
         }

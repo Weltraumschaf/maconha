@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.shell;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Shell command.
@@ -16,4 +17,7 @@ public interface Command {
      */
     Result execute() throws IOException, InterruptedException;
 
+    Path getPath();
+
+    String getArguments();
 }

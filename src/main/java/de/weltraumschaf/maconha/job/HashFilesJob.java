@@ -1,8 +1,11 @@
 package de.weltraumschaf.maconha.job;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.shell.Command;
 import de.weltraumschaf.maconha.shell.Commands;
 import de.weltraumschaf.maconha.shell.Result;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -26,6 +29,7 @@ final class HashFilesJob extends BaseJob<Void> {
 
     @Autowired
     private ApplicationContext appContext;
+    private Path baseDir;
 
     public HashFilesJob() {
         super(generateName(HashFilesJob.class));
@@ -34,6 +38,18 @@ final class HashFilesJob extends BaseJob<Void> {
     @Override
     protected Description description() {
         return DESCRIPTION;
+    }
+
+    /**
+     * Set the base dir to hash.
+     * <p>
+     * This must be set before execution, unless it will throw exceptions.
+     * </p>
+     *
+     * @param baseDir must not be {@code null}
+     */
+    public void setBaseDir(final String baseDir) {
+        this.baseDir = Paths.get(Validate.notNull(baseDir, "baseDir"));
     }
 
     @Override
@@ -48,7 +64,7 @@ final class HashFilesJob extends BaseJob<Void> {
                     binValues.size()));
         }
 
-        final Command dirhash = new Commands(binValues.get(0)).dirhash(null);
+        final Command dirhash = new Commands(Paths.get(binValues.get(0))).dirhash(null);
         LOGGER.debug("Calling external program: {}.", dirhash);
         final Result result = dirhash.execute();
         return null;
