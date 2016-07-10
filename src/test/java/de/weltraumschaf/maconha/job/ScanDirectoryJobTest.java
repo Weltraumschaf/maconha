@@ -3,22 +3,22 @@ package de.weltraumschaf.maconha.job;
 import de.weltraumschaf.maconha.service.MediaService;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
  * Tests for {@link ScanDirectoryJob}.
  */
-public class ScanDirectoryTest {
+public class ScanDirectoryJobTest {
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();

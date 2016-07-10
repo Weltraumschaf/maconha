@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.shell;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.nio.file.Path;
 
 /**
@@ -19,7 +20,7 @@ final class Dirhash extends BaseCommand {
      * @param baseDir must not be {@link null}
      */
     Dirhash(final Path path, final Path baseDir) {
-        super(path, CMD, baseDir.toString());
+        super(path, CMD, Validate.notNull(baseDir, "baseDir").toString());
     }
 
 }

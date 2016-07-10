@@ -20,6 +20,10 @@
         <project.build.version.source>1.8</project.build.version.source>
         <project.build.version.target>${project.build.version.source}</project.build.version.target>
         <java.version>${project.build.version.source}</java.version>
+
+        <project.bin.directory>${project.basedir}/bin</project.bin.directory>
+        <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
+
         <!-- Dependency versions: -->
         <springframework.version>1.3.4.RELEASE</springframework.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
@@ -164,10 +168,11 @@
             <version>2.2.0</version>
         </dependency>
 
+        <!-- String utility -->
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
+            <groupId>com.shekhargulati</groupId>
+            <artifactId>strman</artifactId>
+            <version>0.2.0</version>
         </dependency>
 
         <!-- Provided from container -->
@@ -235,6 +240,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -298,6 +309,23 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>copy-scripts-for-tests</id>
+                        <phase>generate-resources</phase>
+
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
+                        <configuration>
+                            <target>
+                                <copy file="${project.scripts.directory}/dirhash.sh"
+                                      tofile="${project.build.directory}/test-classes/dirhash"/>
+                                <chmod file="${project.build.directory}/test-classes/dirhash" perm="ugo+rx"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-scritps-for-install</id>
                         <phase>install</phase>
 
                         <goals>
@@ -307,7 +335,13 @@
                         <configuration>
                             <target>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      todir="${project.basedir}/bin" />
+                                      todir="${project.bin.directory}"/>
+                                <copy file="${project.scripts.directory}/dirhash.sh"
+                                      tofile="${project.bin.directory}/dirhash"/>
+                                <chmod file="${project.bin.directory}/dirhash" perm="ugo+rx"/>
+                                <copy file="${project.scripts.directory}/maconha.sh"
+                                      tofile="${project.bin.directory}/maconha"/>
+                                <chmod file="${project.bin.directory}/maconha" perm="ugo+rx"/>
                             </target>
                         </configuration>
                     </execution>

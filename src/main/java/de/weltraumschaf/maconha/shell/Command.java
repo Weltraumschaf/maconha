@@ -20,4 +20,6 @@ public interface Command {
     Path getPath();
 
     String getArguments();
+
+    String getCommand();
 }

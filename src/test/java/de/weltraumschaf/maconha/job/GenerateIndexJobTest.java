@@ -1,22 +1,22 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.maconha.service.MediaService;
+import org.junit.Test;
+import org.junit.Before;
+import static org.mockito.Mockito.times;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import org.junit.Test;
-import org.junit.Before;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Tests for {@link ImportMediaJob}.
+ * Tests for {@link GenerateIndexJob}.
  */
-public class ImportMediaTest {
+public class GenerateIndexJobTest {
 
     private final MediaService service = mock(MediaService.class);
-    private final ImportMediaJob sut = new ImportMediaJob();
+    private final GenerateIndexJob sut = new GenerateIndexJob();
 
     @Before
     public void injectMocks() {
@@ -27,7 +27,7 @@ public class ImportMediaTest {
     public void execute() throws Exception {
         assertThat(sut.execute(), is(nullValue()));
 
-        verify(service, times(1)).importMedia(sut.monitor());
+        verify(service, times(1)).generateIndex(sut.monitor());
     }
 
 }

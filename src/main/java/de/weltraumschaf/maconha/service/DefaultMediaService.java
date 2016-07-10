@@ -12,15 +12,12 @@ import de.weltraumschaf.maconha.model.OriginFile;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaRepo;
 import de.weltraumschaf.maconha.repo.OriginFileRepo;
-import java.io.IOError;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,19 +71,9 @@ final class DefaultMediaService implements MediaService {
         final OriginFile file = new OriginFile();
         file.setBaseDir(baseDir);
         file.setAbsolutePath(mediaFile);
-        file.setFingerprint(fingerprint(mediaFile));
         file.setScanTime(scanTime);
         originFileRepo.save(file);
         monitor.worked(1);
-    }
-
-    private String fingerprint(final Path mediaFile) {
-        try {
-            // TODO Read from prepared file.
-            return DigestUtils.sha256Hex(Files.newInputStream(mediaFile));
-        } catch (final IOException ex) {
-            throw new IOError(ex);
-        }
     }
 
     @Override

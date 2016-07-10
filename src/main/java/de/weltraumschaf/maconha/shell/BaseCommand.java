@@ -73,6 +73,11 @@ abstract class BaseCommand implements Command {
         return arguments;
     }
 
+    @Override
+    public final String getCommand() {
+        return command;
+    }
+
     /**
      * Reads the output from the process in separate thread.
      */
