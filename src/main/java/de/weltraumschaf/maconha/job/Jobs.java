@@ -1,9 +1,11 @@
 package de.weltraumschaf.maconha.job;
 
 import de.weltraumschaf.commons.validate.Validate;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +23,7 @@ public final class Jobs {
     /**
      * Maps name of jobs to its description.
      */
-    private static final Map<String, Description> LOOKUP;
-
-    static {
-        final Map<String, Description> tmp = new HashMap<>();
-        tmp.put(ScanDirectoryJob.DESCRIPTION.name(), ScanDirectoryJob.DESCRIPTION);
-        tmp.put(HashFilesJob.DESCRIPTION.name(), HashFilesJob.DESCRIPTION);
-        tmp.put(ImportMediaJob.DESCRIPTION.name(), ImportMediaJob.DESCRIPTION);
-        tmp.put(GenerateIndexJob.DESCRIPTION.name(), GenerateIndexJob.DESCRIPTION);
-        LOOKUP = Collections.unmodifiableMap(tmp);
-    }
+    private final Map<String, Description> lookup;
 
     /**
      * Necessary to inject dependencies into created service.
@@ -46,6 +39,7 @@ public final class Jobs {
     public Jobs(final AutowireCapableBeanFactory beanFactory) {
         super();
         this.beanFactory = Validate.notNull(beanFactory, "beanFactory");
+        lookup = init();
     }
 
     /**
@@ -58,8 +52,8 @@ public final class Jobs {
         Validate.notEmpty(name, "name");
         final Description description;
 
-        if (LOOKUP.containsKey(name)) {
-            description = LOOKUP.get(name);
+        if (lookup.containsKey(name)) {
+            description = lookup.get(name);
         } else {
             throw new JobGenerationError(
                 String.format("There is no description for a job with name '%s'", name));
@@ -78,5 +72,28 @@ public final class Jobs {
 
         beanFactory.autowireBean(newJob);
         return newJob;
+    }
+
+    Set<Class<?>> findImplementations() {
+        final Reflections reflections = new Reflections(getClass().getPackage().getName());
+        return reflections.getTypesAnnotatedWith(JobImplementation.class);
+    }
+
+    Map<String, Description> generateLookUp(final Set<Class<?>> found) {
+        return found.stream()
+            .filter(type -> {
+                return BaseJob.class.isAssignableFrom(type);
+            })
+            .map(type -> {
+                try {
+                    return ((BaseJob)type.newInstance()).description();
+                } catch (InstantiationException | IllegalAccessException ex) {
+                    throw new JobGenerationError(ex.getMessage(), ex);
+                }
+            }).collect(Collectors.toMap(Description::name, Function.identity()));
+    }
+
+    private Map<String, Description> init() {
+        return generateLookUp(findImplementations());
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job indexes imported media.
  */
+@JobImplementation
 final class GenerateIndexJob extends BaseJob<Void> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIndexJob.class);

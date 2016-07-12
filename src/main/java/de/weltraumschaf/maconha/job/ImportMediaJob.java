@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job import scanned media files.
  */
+@JobImplementation
 final class ImportMediaJob extends BaseJob<Void> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImportMediaJob.class);

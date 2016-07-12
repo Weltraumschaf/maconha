@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * Hashes all files in given directory by external program.
  */
+@JobImplementation
 final class HashFilesJob extends BaseJob<Void> {
 
     static final Description DESCRIPTION = new Description(

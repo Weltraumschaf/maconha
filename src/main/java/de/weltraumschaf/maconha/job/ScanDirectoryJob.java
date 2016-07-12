@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * This job scans a directory for media files.
  */
+@JobImplementation
 final class ScanDirectoryJob extends BaseJob<Void> {
 
     static final Description DESCRIPTION = new Description(
@@ -34,12 +35,17 @@ final class ScanDirectoryJob extends BaseJob<Void> {
         super(generateName(ScanDirectoryJob.class));
     }
 
+    /**
+     * Injection point for service.
+     *
+     * @param service must not be {@code null}
+     */
     void setService(final MediaService service) {
         this.service = Validate.notNull(service, "service");
     }
 
     /**
-     * Set the base dir to scan.
+     * Set the base directory to scan.
      * <p>
      * This must be set before execution, unless it will throw exceptions.
      * </p>
