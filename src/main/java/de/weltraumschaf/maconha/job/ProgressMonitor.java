@@ -18,6 +18,10 @@ public final class ProgressMonitor {
      */
     private int worked;
 
+    public int getTotalWork() {
+        return totalWork;
+    }
+
     /**
      * Call this method initial to set the total amount of work to be done.
      *

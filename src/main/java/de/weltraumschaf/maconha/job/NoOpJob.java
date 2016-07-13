@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.job;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ final class NoOpJob extends BaseJob<Void> {
         EnumSet.allOf(RquiredProperty.class),
         Collections.emptySet());
     private static final Logger LOGGER = LoggerFactory.getLogger(NoOpJob.class);
-    private int seconds;
+    private int seconds = 1;
 
     /**
      * Dedicated constructor.
@@ -33,7 +34,7 @@ final class NoOpJob extends BaseJob<Void> {
      *
      * @param seconds must not be less than 1
      */
-    public void setBaseDir(final int seconds) {
+    public void setSeconds(final int seconds) {
         if (seconds < 1) {
             throw new IllegalArgumentException(String.format("Parameter seconds must not be less than 1! Given %d.", seconds));
         }
@@ -48,7 +49,18 @@ final class NoOpJob extends BaseJob<Void> {
 
     @Override
     protected Void execute() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+        monitor().begin(seconds);
+        emit("Waiting for %d seconds...", seconds);
+
+        for (int i = 1; i <= seconds; ++i) {
+            TimeUnit.SECONDS.sleep(1);
+            monitor().worked(1);
+            emit("%d of %d secondes done.", i, seconds);
+        }
+
+        emit("Ready, waited %d seconds.", seconds);
+        monitor().done();
+        return null;
     }
 
     private enum RquiredProperty implements Property {
