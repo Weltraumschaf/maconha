@@ -6,9 +6,9 @@ package de.weltraumschaf.maconha.job;
 public interface MessageConsumer {
 
     /**
-     * Consumes a given message.
+     * Consumes a given message from named producer.
      *
-     * @param message must not be {@code null} or empty
+     * @param message must not be {@code null}
      */
-    void receive(final String message);
+    void receive(final JobMessage message);
 }

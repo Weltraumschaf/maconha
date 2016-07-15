@@ -19,8 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -127,12 +125,6 @@ public final class ApiController {
         final @RequestParam(value = "size", required = false) Integer size)
     {
         return medias.allKeywords(new PageRequest(validatePage(page), validateSize(size)));
-    }
-
-    @SendTo("/topic/jobs")
-    @MessageMapping(BASE_URI_PATH +"/jobs")
-    public JobInfo greeting(String jobId) throws Exception {
-        return new JobInfo(jobId, Job.State.NEW, 0);
     }
 
     private int validatePage(final Integer input) {

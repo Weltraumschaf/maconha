@@ -20,4 +20,6 @@ public interface JobService {
     Collection<JobInfo> list();
 
     Collection<JobInfo> list(Class<? extends Job> type);
+
+    void pushChangesToWebSocket() throws InterruptedException;
 }

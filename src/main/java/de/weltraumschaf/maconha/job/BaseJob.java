@@ -38,8 +38,8 @@ abstract class BaseJob<V> implements Job<V> {
     @Override
     public final void emit(final String format, final Object... args) {
         Validate.notNull(format, "format");
-        final String message = String.format(format, args);
-        LOGGER.debug("Job {} emmits message: {}", name, message);
+        final String messageBody = String.format(format, args);
+        LOGGER.debug("Job {} emmits message: {}.", name, messageBody);
 
         if (consumers.isEmpty()) {
             LOGGER.debug("Job {} has no consumers registered.", name);
@@ -47,7 +47,7 @@ abstract class BaseJob<V> implements Job<V> {
         }
 
         consumers.stream().forEach((consumer) -> {
-            consumer.receive(message);
+            consumer.receive(new JobMessage(name, messageBody));
         });
     }
 

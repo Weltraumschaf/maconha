@@ -33,11 +33,11 @@ public class NoOpJobTest {
         assertThat(sut.monitor().progress(), is(1.0));
 
         final InOrder inOrder = inOrder(receiver);
-        inOrder.verify(receiver, times(1)).receive("Waiting for 3 seconds...");
-        inOrder.verify(receiver, times(1)).receive("1 of 3 secondes done.");
-        inOrder.verify(receiver, times(1)).receive("2 of 3 secondes done.");
-        inOrder.verify(receiver, times(1)).receive("3 of 3 secondes done.");
-        inOrder.verify(receiver, times(1)).receive("Ready, waited 3 seconds.");
+        inOrder.verify(receiver, times(1)).receive(new JobMessage(sut.info().getName(), "Waiting for 3 seconds..."));
+        inOrder.verify(receiver, times(1)).receive(new JobMessage(sut.info().getName(), "1 of 3 secondes done."));
+        inOrder.verify(receiver, times(1)).receive(new JobMessage(sut.info().getName(), "2 of 3 secondes done."));
+        inOrder.verify(receiver, times(1)).receive(new JobMessage(sut.info().getName(), "3 of 3 secondes done."));
+        inOrder.verify(receiver, times(1)).receive(new JobMessage(sut.info().getName(), "Ready, waited 3 seconds."));
     }
 
 }

@@ -42,9 +42,9 @@ public class BaseJobTest {
 
         sut.emit("hello %s", "world");
 
-        verify(one, times(1)).receive("hello world");
-        verify(two, times(1)).receive("hello world");
-        verify(three, times(1)).receive("hello world");
+        verify(one, times(1)).receive(new JobMessage(sut.info().getName(), "hello world"));
+        verify(two, times(1)).receive(new JobMessage(sut.info().getName(), "hello world"));
+        verify(three, times(1)).receive(new JobMessage(sut.info().getName(), "hello world"));
     }
 
     @Test
