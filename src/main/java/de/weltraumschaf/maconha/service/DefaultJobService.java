@@ -13,6 +13,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -75,12 +76,18 @@ final class DefaultJobService implements JobService {
 
     @Async
     @Override
-    public void pushChangesToWebSocket() throws InterruptedException {
-        LOGGER.debug("Push changes to web socket...");
+    public void pushChangesToWebSocket() {
+        LOGGER.debug("Start pushing changes to web socket...");
 
         while (true) {
             final JobMessage message = messageHandler.take();
-            LOGGER.debug("Send message: {}.", message);
+
+            if (null == message) {
+                LOGGER.debug("Exiting message taking.");
+                return;
+            }
+
+            LOGGER.debug("Send message to web socket: {}.", message);
             webSocket.convertAndSend("/topic/messages", message);
         }
     }
@@ -91,19 +98,22 @@ final class DefaultJobService implements JobService {
 
         @Override
         public void receive(final JobMessage message) {
+            LOGGER.debug("Receiving message: {}", message);
+
             if (null == message) {
                 return;
             }
 
-            try {
-                messages.put(message);
-            } catch (final InterruptedException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-            }
+            messages.add(message);
         }
 
-        public JobMessage take() throws InterruptedException {
-            return messages.take();
+        public JobMessage take() {
+            try {
+                return messages.take();
+            } catch (InterruptedException ex) {
+                LOGGER.error("Receiver was interrupted!", ex);
+                return null;
+            }
         }
 
     }

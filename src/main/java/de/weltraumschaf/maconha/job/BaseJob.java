@@ -39,7 +39,7 @@ abstract class BaseJob<V> implements Job<V> {
     public final void emit(final String format, final Object... args) {
         Validate.notNull(format, "format");
         final String messageBody = String.format(format, args);
-        LOGGER.debug("Job {} emmits message: {}.", name, messageBody);
+        LOGGER.debug("Job {} emmits message: {}", name, messageBody);
 
         if (consumers.isEmpty()) {
             LOGGER.debug("Job {} has no consumers registered.", name);
@@ -95,6 +95,10 @@ abstract class BaseJob<V> implements Job<V> {
     public final void cancel() {
         LOGGER.debug("Cancel job ({}).", info());
         state = State.CANCELED;
+    }
+
+    protected final void canceled() {
+        emit("Canceling job %s (%.2f %% done).", name, monitor.progress() * 100);
     }
 
     @Override

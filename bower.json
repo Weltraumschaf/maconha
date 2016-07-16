@@ -12,6 +12,8 @@
         "angular-resource": "1.5.x",
         "angular-route": "1.5.x",
         "bootstrap": "3.3.x",
-        "jquery": "2.2.x"
+        "jquery": "2.2.x",
+        "sockjs-client": "0.3.4",
+        "stomp-websocket": "2.3.3"
     }
 }

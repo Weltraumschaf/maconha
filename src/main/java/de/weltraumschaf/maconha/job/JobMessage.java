@@ -8,25 +8,25 @@ import java.util.Objects;
 public final class JobMessage {
 
     private final String producerName;
-    private final String body;
+    private final String content;
 
-    public JobMessage(final String producerName, final String body) {
+    public JobMessage(final String producerName, final String content) {
         super();
         this.producerName = Validate.notEmpty(producerName, "producerName");
-        this.body = Validate.notEmpty(body, "body");
+        this.content = Validate.notEmpty(content, "content");
     }
 
     public String getProducerName() {
         return producerName;
     }
 
-    public String getBody() {
-        return body;
+    public String getContent() {
+        return content;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(producerName, body);
+        return Objects.hash(producerName, content);
     }
 
     @Override
@@ -37,12 +37,12 @@ public final class JobMessage {
 
         final JobMessage other = (JobMessage) obj;
         return Objects.equals(this.producerName, other.producerName)
-            && Objects.equals(this.body, other.body);
+            && Objects.equals(this.content, other.content);
     }
 
     @Override
     public String toString() {
-        return "JobMessage{" + "producerName=" + producerName + ", body=" + body + '}';
+        return "JobMessage{" + "producerName=" + producerName + ", content=" + content + '}';
     }
 
 }

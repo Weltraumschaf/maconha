@@ -53,6 +53,11 @@ final class NoOpJob extends BaseJob<Void> {
         emit("Waiting for %d seconds...", seconds);
 
         for (int i = 1; i <= seconds; ++i) {
+            if (isCanceled()) {
+                canceled();
+                return null;
+            }
+
             TimeUnit.SECONDS.sleep(1);
             monitor().worked(1);
             emit("%d of %d secondes done.", i, seconds);
