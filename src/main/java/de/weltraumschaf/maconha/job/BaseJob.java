@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,7 @@ abstract class BaseJob<V> implements Job<V> {
     private final Collection<MessageConsumer> consumers = new CopyOnWriteArrayList<>();
     private final ProgressMonitor monitor = new ProgressMonitor();
     private final String name;
+    private LocalDateTime startTime = new LocalDateTime(); // Prevent NPE.
     private volatile State state = State.NEW;
 
     public BaseJob(final String name) {
@@ -53,12 +55,13 @@ abstract class BaseJob<V> implements Job<V> {
 
     @Override
     public final JobInfo info() {
-        return new JobInfo(name, state, monitor.progress());
+        return new JobInfo(name, state, monitor.progress(), startTime);
     }
 
     @Override
     public final V call() throws Exception {
         LOGGER.debug("Job called {}.", info());
+        startTime = new LocalDateTime();
 
         if (isRunning() || isFinished()) {
             throw new IllegalStateException(String.format("Can not call job in state '%s'!", state));
@@ -185,6 +188,10 @@ abstract class BaseJob<V> implements Job<V> {
 
     protected final ProgressMonitor monitor() {
         return monitor;
+    }
+
+    final LocalDateTime getStartTime() {
+        return startTime;
     }
 
     @Override

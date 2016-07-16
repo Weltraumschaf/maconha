@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.job;
 
 import java.util.concurrent.Callable;
+import org.joda.time.LocalDateTime;
 
 /**
  * Jobs are long running tasks executed in the background.

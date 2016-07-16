@@ -56,15 +56,6 @@ final class ScanDirectoryJob extends BaseJob<Void> {
         this.baseDir = Paths.get(Validate.notNull(baseDir, "baseDir"));
     }
 
-    /**
-     * Get the time of scan.
-     *
-     * @return never{@code null}
-     */
-    LocalDateTime getScanTime() {
-        return service.getStartTime();
-    }
-
     @Override
     protected Description description() {
         return DESCRIPTION;

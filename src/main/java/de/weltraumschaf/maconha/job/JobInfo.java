@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.job;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.job.Job.State;
 import java.util.Objects;
+import org.joda.time.LocalDateTime;
 
 /**
  * Describes a {@link Job}.
@@ -21,14 +22,17 @@ public final class JobInfo {
      * Percentage of work done.
      */
     private final double progress;
+    private final LocalDateTime startTime;
+
     /**
      * Dedicated constructor.
      *
      * @param name must not be {@code null} or empty
      * @param state must not be {@code null}
      * @param progress must not be negative
+     * @param startTime must not be {@code null}
      */
-    public JobInfo(final String name, final State state, final double progress) {
+    public JobInfo(final String name, final State state, final double progress, final LocalDateTime startTime) {
         super();
         this.name = Validate.notEmpty(name, "name");
         this.state = Validate.notNull(state, "state");
@@ -39,6 +43,7 @@ public final class JobInfo {
         }
 
         this.progress = progress;
+        this.startTime = Validate.notNull(startTime, "startTime");
     }
 
     /**
@@ -68,14 +73,29 @@ public final class JobInfo {
         return progress;
     }
 
+
+    /**
+     * Get the time of job started.
+     *
+     * @return never{@code null}
+     */
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
     @Override
     public String toString() {
-        return "JobInfo{" + "name=" + name + ", state=" + state + ", progress=" + progress + '}';
+        return "JobInfo{"
+            + "name=" + name + ", "
+            + "state=" + state + ", "
+            + "progress=" + progress + ", "
+            + "startTime=" + startTime
+            + '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, state, progress);
+        return Objects.hash(name, state, progress, startTime);
     }
 
     @Override
@@ -87,7 +107,8 @@ public final class JobInfo {
         final JobInfo other = (JobInfo) obj;
         return Objects.equals(name, other.name)
             && Objects.equals(state, other.state)
-            && Objects.equals(progress, other.progress);
+            && Objects.equals(progress, other.progress)
+            && Objects.equals(startTime, other.startTime);
     }
 
 }

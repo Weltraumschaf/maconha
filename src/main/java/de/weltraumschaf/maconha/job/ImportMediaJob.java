@@ -27,10 +27,6 @@ final class ImportMediaJob extends BaseJob<Void> {
         this.service = Validate.notNull(service, "service");
     }
 
-    LocalDateTime getImportTime() {
-        return service.getStartTime();
-    }
-
     @Override
     protected Description description() {
         return DESCRIPTION;

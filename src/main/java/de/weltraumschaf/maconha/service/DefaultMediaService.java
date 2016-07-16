@@ -48,8 +48,7 @@ final class DefaultMediaService implements MediaService {
         this.originFileRepo = originFileRepo;
     }
 
-    @Override
-    public LocalDateTime getStartTime() {
+    LocalDateTime getStartTime() {
         return startTime;
     }
 

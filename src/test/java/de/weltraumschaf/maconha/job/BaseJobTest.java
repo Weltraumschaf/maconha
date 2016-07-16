@@ -49,7 +49,7 @@ public class BaseJobTest {
 
     @Test
     public void describe() {
-        assertThat(sut.info(), is(new JobInfo("test", State.NEW, 0d)));
+        assertThat(sut.info(), is(new JobInfo("test", State.NEW, 0d, sut.getStartTime())));
     }
 
     @Test
@@ -86,13 +86,13 @@ public class BaseJobTest {
         input.put(RquiredProperty.FOO.getBeanName(), "foo");
         input.put(RquiredProperty.BAR.getBeanName(), true);
         input.put(OptionslProperty.BAZ.getBeanName(), 42);
-        final BaseJobStub sut = new BaseJobStub("foo");
+        final BaseJobStub innerSut = new BaseJobStub("foo");
 
-        sut.configure(input);
+        innerSut.configure(input);
 
-        assertThat(sut.getFoo(), is("foo"));
-        assertThat(sut.isBar(), is(true));
-        assertThat(sut.getBaz(), is(42));
+        assertThat(innerSut.getFoo(), is("foo"));
+        assertThat(innerSut.isBar(), is(true));
+        assertThat(innerSut.getBaz(), is(42));
     }
 
     private static final class BaseJobStub extends BaseJob<String> {

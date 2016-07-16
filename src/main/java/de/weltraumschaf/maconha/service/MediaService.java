@@ -7,14 +7,12 @@ import de.weltraumschaf.maconha.model.OriginFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-import org.joda.time.LocalDateTime;
 import org.springframework.data.domain.Pageable;
 
 /**
  */
 public interface MediaService {
 
-    LocalDateTime getStartTime();
     void scanDirecotry(final ProgressMonitor monitor, final Path baseDir) throws IOException;
     void importMedia(final ProgressMonitor monitor);
     void generateIndex(final ProgressMonitor monitor);
