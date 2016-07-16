@@ -321,7 +321,23 @@
 
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
+
                 <executions>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
+                        <configuration>
+                            <target>
+                                <delete dir="${project.bin.directory}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>copy-scripts-for-tests</id>
                         <phase>generate-resources</phase>
@@ -338,6 +354,7 @@
                             </target>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>copy-scritps-for-install</id>
                         <phase>install</phase>
@@ -352,10 +369,15 @@
                                       todir="${project.bin.directory}"/>
                                 <copy file="${project.scripts.directory}/dirhash.sh"
                                       tofile="${project.bin.directory}/dirhash"/>
-                                <chmod file="${project.bin.directory}/dirhash" perm="ugo+rx"/>
                                 <copy file="${project.scripts.directory}/maconha.sh"
                                       tofile="${project.bin.directory}/maconha"/>
-                                <chmod file="${project.bin.directory}/maconha" perm="ugo+rx"/>
+                                <chmod dir="${project.bin.directory}" perm="ugo+rx"/>
+                                <chmod perm="ugo+rx">
+                                    <fileset dir="${project.bin.directory}">
+                                        <include name="**/*"/>
+                                        <exclude name="**/*.jar"/>
+                                    </fileset>
+                                </chmod>
                             </target>
                         </configuration>
                     </execution>
