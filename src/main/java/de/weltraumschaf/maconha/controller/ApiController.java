@@ -62,7 +62,7 @@ public final class ApiController {
         value = BASE_URI_PATH + "/jobs",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Collection<JobInfo> listrunningJobs() {
+    public Collection<JobInfo> listJobs() {
         LOGGER.debug("Serve API job list.");
         return jobs.list();
     }

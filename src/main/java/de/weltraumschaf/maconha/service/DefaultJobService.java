@@ -60,18 +60,8 @@ final class DefaultJobService implements JobService {
     }
 
     @Override
-    public void cancel(Class<? extends Job> type) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public Collection<JobInfo> list() {
         return executor.list();
-    }
-
-    @Override
-    public Collection<JobInfo> list(Class<? extends Job> type) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Async

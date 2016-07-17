@@ -15,11 +15,7 @@ public interface JobService {
 
     void cancel(String name);
 
-    void cancel(Class<? extends Job> type);
-
     Collection<JobInfo> list();
-
-    Collection<JobInfo> list(Class<? extends Job> type);
 
     void pushChangesToWebSocket();
 }
