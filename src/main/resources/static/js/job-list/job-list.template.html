@@ -1,28 +1,26 @@
-<h1 class="sub-header">Imported medias</h1>
+<h1 class="sub-header">Jobs</h1>
 
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <td>ID</td>
-                <td>Type</td>
-                <td>Format</td>
-                <td>Title</td>
-                <td>last imported</td>
+                <td>Name</td>
+                <td>Started</td>
+                <td>State</td>
+                <td>%</td>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="r in ctrl.medias">
-                <td>{{r.id}}</td>
-                <td>{{r.type}}</td>
-                <td>{{r.format}}</td>
-                <td>{{r.title}}</td>
-                <td>{{r.lastImported | formatDateTime}}</td>
+            <tr ng-repeat="r in ctrl.jobs">
+                <td>{{r.name}}</td>
+                <td>{{r.startTime | formatDateTime}}</td>
+                <td>{{r.state}}</td>
+                <td>{{r.progress}}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5">
+                <td colspan="2">
                     <div class="pagination pull-right">
                         <ul>
                             <li ng-class="{disabled: currentPage == 0}">

@@ -16,6 +16,7 @@
                         <li><a href="#!/file">Scanned files</a></li>
                         <li><a href="#!/media">Imported medias</a></li>
                         <li><a href="#!/keyword">Keywords</a></li>
+                        <li><a href="#!/job">Jobss</a></li>
                     </ul>
                 </div>
 
@@ -34,6 +35,8 @@
 
         <script src="${baseUrl}/js/core/file/file.module.js"></script>
         <script src="${baseUrl}/js/core/file/file.service.js"></script>
+        <script src="${baseUrl}/js/core/job/job.module.js"></script>
+        <script src="${baseUrl}/js/core/job/job.service.js"></script>
         <script src="${baseUrl}/js/core/keyword/keyword.module.js"></script>
         <script src="${baseUrl}/js/core/keyword/keyword.service.js"></script>
         <script src="${baseUrl}/js/core/media/media.module.js"></script>
@@ -41,6 +44,8 @@
 
         <script src="${baseUrl}/js/file-list/file-list.module.js"></script>
         <script src="${baseUrl}/js/file-list/file-list.component.js"></script>
+        <script src="${baseUrl}/js/job-list/job-list.module.js"></script>
+        <script src="${baseUrl}/js/job-list/job-list.component.js"></script>
         <script src="${baseUrl}/js/keyword-list/keyword-list.module.js"></script>
         <script src="${baseUrl}/js/keyword-list/keyword-list.component.js"></script>
         <script src="${baseUrl}/js/media-list/media-list.module.js"></script>

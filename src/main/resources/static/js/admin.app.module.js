@@ -9,5 +9,6 @@ var App = angular
             'fileList',
             'keywordList',
             'mediaList',
+            'jobList',
             'overview'
         ]);

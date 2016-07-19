@@ -1,7 +1,7 @@
 'use strict';
 
 angular.
-  module('Maconha').
+  module('Admin').
   config(['$locationProvider' ,'$routeProvider',
     function config($locationProvider, $routeProvider) {
       $locationProvider.hashPrefix('!');
@@ -14,6 +14,9 @@ angular.
           template: '<keyword-list></keyword-list>'
         }).
         when('/media', {
+          template: '<media-list></media-list>'
+        }).
+        when('/job', {
           template: '<media-list></media-list>'
         }).
         when('/overview', {
