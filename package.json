@@ -1,0 +1,11 @@
+{
+  "name": "Maconha",
+  "version": "1.0.0",
+  "dependencies": {
+    "bower": "~1.7.2",
+    "gulp": "^3.9.0"
+  },
+  "scripts": {
+    "prebuild": "npm install"
+  }
+}
