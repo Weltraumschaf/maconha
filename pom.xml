@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.weltraumschaf.organization</groupId>
         <artifactId>organization-parent</artifactId>
-        <version>2.1.0</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>de.weltraumschaf</groupId>
@@ -17,6 +17,8 @@
     <description>Search engine for my NAS.</description>
 
     <properties>
+        <enforcer.skip>true</enforcer.skip>
+
         <project.build.version.source>1.8</project.build.version.source>
         <project.build.version.target>${project.build.version.source}</project.build.version.target>
         <java.version>${project.build.version.source}</java.version>
@@ -25,10 +27,15 @@
         <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
 
         <!-- Dependency versions: -->
-        <springframework.version>1.3.4.RELEASE</springframework.version>
+        <springframework.version>1.5.2.RELEASE</springframework.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
-        <h2.version>1.4.187</h2.version>
-        <dbunit.version>2.2</dbunit.version>
+        <dbunit.version>2.5.3</dbunit.version>
+        <usertype.core.version>5.0.0.GA</usertype.core.version>
+        <commons.version>2.2.0</commons.version>
+        <strman.version>0.2.0</strman.version>
+        <reflections.version>0.9.10</reflections.version>
+        <javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
+        <rest-assured.version>3.0.1</rest-assured.version>
     </properties>
 
     <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html -->
@@ -66,10 +73,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
                 <exclusion>
+                    <!-- We use Logback for logging. -->
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
                 <exclusion>
+                    <!-- We use Jetty because it is cooler ;) -->
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
@@ -78,10 +87,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <!--        <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -116,7 +121,7 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jdk7</artifactId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -131,12 +136,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-
-        <!-- Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
         </dependency>
 
         <!-- jsr303 validation -->
@@ -160,7 +159,7 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
-            <version>3.0.0.CR1</version>
+            <version>${usertype.core.version}</version>
         </dependency>
 
         <!-- MySQL -->
@@ -172,20 +171,20 @@
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>validate</artifactId>
-            <version>2.2.0</version>
+            <version>${commons.version}</version>
         </dependency>
 
         <!-- String utility -->
         <dependency>
             <groupId>com.shekhargulati</groupId>
             <artifactId>strman</artifactId>
-            <version>0.2.0</version>
+            <version>${strman.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.10</version>
+            <version>${reflections.version}</version>
         </dependency>
 
         <!-- Provided from container -->
@@ -197,7 +196,7 @@
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.1</version>
+            <version>${javax.servlet.jsp-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -215,7 +214,7 @@
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
-            <version>2.5.2</version>
+            <version>${dbunit.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -231,7 +230,7 @@
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>testing</artifactId>
-            <version>2.2.0</version>
+            <version>${commons.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -254,10 +253,41 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -266,10 +296,56 @@
 
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+
+                        <phase>generate-test-sources</phase>
+
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+
+                        <configuration>
+                            <sources>
+                                <source>src/it/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>-Dspring.profiles.active=test</argLine>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <!-- http://maven.apache.org/surefire/maven-failsafe-plugin/usage.html -->
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.19.1</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.19.1</version>
+                    </dependency>
+                </dependencies>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -303,6 +379,17 @@
                 </dependencies>
 
                 <configuration>
+                    <!--
+                        Due to a change in the failsafe plugin the project artifact (jar) is on classpath instead of
+                        target/classes. The Spring Boot Maven plugin repackages this jar and failsafe plugin does not
+                        know which one to use (original or repackaged). So this is a workaround: The repackaged
+                        jar gets a classifier so that failsafe plugin can pick up the original one.
+
+                        See: https://github.com/spring-projects/spring-boot/issues/6254
+
+                        Will be fixed in failsafe plugin 2.19.2
+                    -->
+                    <classifier>exec</classifier>
                     <fork>true</fork>
                     <executable>true</executable>
                     <!-- For debugging: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -->
@@ -313,9 +400,19 @@
             </plugin>
 
             <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.0</version>
+                <artifactId>maven-clean-plugin</artifactId>
+
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.bin.directory}</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -323,39 +420,7 @@
 
                 <executions>
                     <execution>
-                        <id>clean</id>
-                        <phase>clean</phase>
-
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-
-                        <configuration>
-                            <target>
-                                <delete dir="${project.bin.directory}"/>
-                            </target>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-scripts-for-tests</id>
-                        <phase>generate-resources</phase>
-
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-
-                        <configuration>
-                            <target>
-                                <copy file="${project.scripts.directory}/dirhash.sh"
-                                      tofile="${project.build.directory}/test-classes/dirhash"/>
-                                <chmod file="${project.build.directory}/test-classes/dirhash" perm="ugo+rx"/>
-                            </target>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-scritps-for-install</id>
+                        <id>copy-scripts-for-install</id>
                         <phase>install</phase>
 
                         <goals>
@@ -366,10 +431,8 @@
                             <target>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
                                       todir="${project.bin.directory}"/>
-                                <copy file="${project.scripts.directory}/dirhash.sh"
-                                      tofile="${project.bin.directory}/dirhash"/>
-                                <copy file="${project.scripts.directory}/maconha.sh"
-                                      tofile="${project.bin.directory}/maconha"/>
+                                <copy file="${project.scripts.directory}/${project.build.finalName}.sh"
+                                      tofile="${project.bin.directory}/${project.build.finalName}"/>
                                 <chmod dir="${project.bin.directory}" perm="ugo+rx"/>
                                 <chmod perm="ugo+rx">
                                     <fileset dir="${project.bin.directory}">
@@ -384,51 +447,80 @@
             </plugin>
 
             <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.0</version>
+                <groupId>com.github.jeluard</groupId>
+                <artifactId>plantuml-maven-plugin</artifactId>
+                <version>1.2</version>
 
                 <executions>
                     <execution>
-                        <id>install-node-and-npm</id>
-                        <phase>initialize</phase>
+                        <id>generate-uml-model-site</id>
+                        <phase>pre-site</phase>
 
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>generate</goal>
                         </goals>
-
-                        <configuration>
-                            <nodeVersion>v5.3.0</nodeVersion>
-                            <npmVersion>3.3.12</npmVersion>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>npm-install</id>
-                        <phase>initialize</phase>
-
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>bower-install</id>
-                        <phase>generate-sources</phase>
-
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
-
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
                     </execution>
                 </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml</artifactId>
+                        <version>8059</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <sourceFiles>
+                        <directory>${basedir}/src/site/resources/plantuml</directory>
+                        <includes>
+                            <include>**/*.puml</include>
+                        </includes>
+                    </sourceFiles>
+
+                    <outputDirectory>${project.build.directory}/site/images</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+
+                <configuration>
+                    <generateReports>true</generateReports>
+                    <generateSitemap>false</generateSitemap>
+                    <relativizeDecorationLinks>true</relativizeDecorationLinks>
+                    <locales>de</locales>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <outputEncoding>UTF-8</outputEncoding>
+
+                    <asciidoc>
+                        <!-- optional site-wide AsciiDoc attributes -->
+                        <attributes>
+                            <icons>font</icons>
+                            <source-highlighter>coderay</source-highlighter>
+                            <coderay-css>style</coderay-css>
+                            <toclevels>2</toclevels>
+                        </attributes>
+                    </asciidoc>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <version>1.5.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jruby</groupId>
+                        <artifactId>jruby-complete</artifactId>
+                        <version>1.7.25</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj</artifactId>
+                        <version>1.5.4.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

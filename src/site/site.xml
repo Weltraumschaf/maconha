@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Maconha" xmlns="http://maven.apache.org/DECORATION/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+     <bannerLeft>
+         <name>Maconha</name>
+     </bannerLeft>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.5</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <sideBarEnabled>true</sideBarEnabled>
+            <copyrightClass>pull-right</copyrightClass>
+        </fluidoSkin>
+    </custom>
+
+    <body>
+        <links>
+            <item name="arc42" href="http://www.arc42.de/"/>
+            <item name="AsciiDoc" href="http://asciidoctor.org/docs/asciidoc-writers-guide/"/>
+            <item name="PlantUML" href="http://plantuml.com/"/>
+        </links>
+
+        <menu ref="reports" inherit="top"/>
+        <menu name="Architektur">
+            <item href="01_introduction_and_goals.html" name="Einführung und Ziele"/>
+            <item href="02_architecture_constraints.html" name="Randbedingungen"/>
+            <item href="03_system_scope_and_context.html" name="Kontextabgrenzung"/>
+            <item href="04_solution_strategy.html" name="Lösungsstrategie"/>
+            <item href="05_building_block_view.html" name="Bausteinsicht"/>
+            <item href="06_runtime_view.html" name="Laufzeitsicht"/>
+            <item href="07_deployment_view.html" name="Verteilungssicht"/>
+            <item href="08_concepts.html" name="Querschnittliche Konzepte"/>
+            <item href="09_design_decisions.html" name="Entwurfsentscheidungen"/>
+            <item href="10_quality_scenarios.html" name="Qualitätsanforderungen"/>
+            <item href="11_technical_risks.html" name="Risiken und technische Schulden"/>
+            <item href="12_glossary.html" name="Glossar"/>
+        </menu>
+    </body>
+</project>
