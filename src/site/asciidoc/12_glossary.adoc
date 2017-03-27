@@ -1,38 +1,31 @@
 [[section-glossary]]
-== Glossar
+== Glossary
+
 
 
 [role="arc42help"]
 ****
-.Inhalt
-Die wesentlichen fachlichen und technischen Begriffe,
-die Stakeholder im Zusammenhang mit dem System verwenden.
+.Contents
+The most important domain and technical terms that your stakeholders use when discussing the system.
 
-Nutzen Sie das Glossar ebenfalls als Übersetzungsreferenz,
-falls Sie in mehrsprachigen Teams arbeiten.
+You can also see the glossary as source for translations if you work in multi-language teams.
 
 .Motivation
-Sie sollten relevante Begriffe klar definieren,
-so dass alle Beteiligten
+You should clearly define your terms, so that all stakeholders
 
-1. diese Begriffe identisch verstehen, und
-2. vermeiden, mehrere Begriffe für die gleiche Sache zu haben.
-
+* have an identical understanding of these terme
+* do not use synonyms and homonyms
 
 .Form
-* Zweispaltige Tabelle mit <Begriff> und <Definition>
-* Eventuell weitere Spalten mit Übersetzungen, falls notwendig.
+A table with columns <Term> and <Definition>.
+
+Potentially more columns in case you need translations.
+
 ****
 
-[cols="1,2" options="header"]
+[options="header"]
 |===
-|Begriff
-|Definition
-
-|_<Begriff-1>_
-|_<Definition-1>_
-
-
-|_<Begriff-2_
-|_<Definition-2>_
+| Term         | Definition
+| <Term-1>     | <definition-1>
+| <Term-2>     | <definition-2>
 |===

@@ -1,26 +1,17 @@
 [[section-technical-risks]]
-== Risiken und technische Schulden
+== Risks and Technical Debts
 
 
 [role="arc42help"]
 ****
-.Inhalt
-Eine nach Prioritäten geordnete Liste der
-erkannten Architekturrisiken und/oder technischen Schulden.
+.Contents
+A list of identified technical risks or technical debts, ordered by priority
 
 .Motivation
-"Risikomanagement ist Projektmanagement für Erwachsene"
-(Tim Lister, Atlantic Systems Guild.)
+“Risk management is project management for grown-ups” (Tim Lister, Atlantic Systems Guild.) 
 
-Unter diesem Motto sollten Sie Architekturrisiken und/oder technische Schulden
-gezielt ermitteln, bewerten und Ihren Management-Stakeholdern
-(z.B. Projektleitung, Product-Owner)
-transparent machen.
+This should be your motto for systematic detection and evaluation of risks and technical debts in the architecture, which will be needed by management stakeholders (e.g. project managers, product owners) as part of the overall risk analysis and measurement planning.
 
 .Form
-Liste oder Tabelle von Risiko und/oder technischen Schulden,
-eventuell mit vorgeschlagenen Maßnahmen zur Risikovermeidung, Risikominimierung
-oder dem Abbau der technischen Schulden.
-
+List of risks and/or technical debts, probably including suggested measures to minimize, mitigate or avoid risks or reduce technical debts.
 ****
-

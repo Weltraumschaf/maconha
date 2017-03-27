@@ -1,85 +1,66 @@
 [[section-system-scope-and-context]]
-
-== Kontextabgrenzung
+== System Scope and Context
 
 
 [role="arc42help"]
 ****
-.Inhalt
-Die Kontextabgrenzung grenzt das System von allen Kommunikationspartnern
-(Nachbarsystemen und Benutzerrollen) ab. Sie legt damit die
-externen Schnittstellen fest.
+.Contents
+System scope and context - as the name suggests - delimits your system (i.e. your scope) from all its communication partners
+(neighboring systems and users, i.e. the context of your system). It thereby specifies the external interfaces.
 
-Differenzieren Sie fachlichen Kontext (fachliche Ein- und Ausgaben) und
-technischen Kontext (Kanäle, Protokolle, Hardware), falls nötig.
-
+If necessary, differentiate the business context (domain specific inputs and outputs) from the technical context (channels, protocols, hardware).
 
 .Motivation
-Die fachlichen und technischen Schnittstellen zu Kommunikationspartnern gehören
-zu den kritischsten Aspekten eines Systems.
-Stellen Sie sicher, dass Sie diese komplett verstanden haben.
+The domain interfaces and technical interfaces to communication partners are among your system's most critical aspects. Make sure that you completely understand them.
 
 .Form
-Verschiedene Optionen:
+Various options:
 
-* Diverse Kontextdiagramme
-* Listen von Kommunikationspartnern mit deren Schnittstellen
-
+* Context diagrams
+* Lists of communication partners and their interfaces.
 ****
 
 
-=== Fachlicher Kontext
+=== Business Context
 
 [role="arc42help"]
 ****
-.Inhalt
-Festlegung *aller* Kommunikationspartner (Nutzer, IT-Systeme, ...) mit Erklärung der
-fachlichen Ein- und Ausgabedaten oder Schnittstellen. Zusätzlich bei Bedarf fachliche Datenformate
-oder Protokolle der Kommunikation mit den Nachbarsystemen.
+.Contents
+Specification of *all* communication partners (users, IT-systems, ...) with explanations of domain specific inputs and outputs or interfaces.
+Optionally you can add domain specific formats or communication protocols.
 
 .Motivation
-Alle Beteiligten müssen verstehen, welche fachlichen Informationen mit der Umwelt
-ausgetauscht werden.
-
+All stakeholders should understand which data are exchanged with the environment of the system.
 
 .Form
-Alle Diagrammarten, die das System als Black Box
-darstellen und die fachlichen Schnittstellen zu den Nachbarn beschreiben.
+All kinds of diagrams that show the system as a black box and specify the domain interfaces to communication partners.
 
-Alternativ oder ergänzend können Sie eine Tabelle verwenden.
-Der Titel gibt den Namen Ihres Systems wieder; die drei Spalten sind: Kommunikationspartner, Eingabe, Ausgabe.
+Alternatively (or additionally) you can use a table.
+The title of the table is the name of your system, the three columns contain the name of the communication partner, the inputs, and the outputs.
 ****
 
-**<Diagramm und/oder Tabelle>**
+**<Diagram or Table>**
 
-**<optional: Erläuterung der externen fachlichen Schnittstellen>**
+**<optionally: Explanation of external domain interfaces>**
 
-
-=== Technischer Kontext
+=== Technical Context
 
 [role="arc42help"]
 ****
-.Inhalt
-Technische Schnittstellen (Kanäle, Übertragungsmedien)
-zwischen dem System und seiner Umwelt. Zusätzlich eine Erklärung (_mapping_),
-welche fachlichen Ein- und Ausgaben über welche technischen Kanäle fließen.
-
+.Contents
+Technical interfaces (channels and transmission media) linking your system to its environment. In addition a mapping of domain specific input/output to the channels, i.e. an explanation with I/O uses which channel.
 
 .Motivation
-Viele Stakeholder treffen Architekturentscheidungen auf Basis
-der technischen Schnittstellen des Systems zu seinem Kontext.
-
-Insbesondere Infrastruktur- oder Hardwareentwickler entscheiden auch über
-diese technischen Schnittstellen.
+Many stakeholders make architectural decision based on the technical interfaces between the system and its context. Especially infrastructure or hardware designers decide these technical interfaces.
 
 .Form
-Beispielsweise UML Deployment-Diagramme mit den Kanälen zu Nachbarsystemen,
-begleitet von einer Tabelle, die Kanäle auf Ein-/Ausgaben abbildet.
+E.g. UML deployment diagram describing channels to neighboring systems,
+together with a mapping table showing the relationships between channels and input/output.
 
 ****
 
-**<Diagramm oder Tabelle>**
+**<Diagram or Table>**
 
-**<optional: Erläuterung der externen technischen Schnittstellen>**
+**<optionally: Explanation of technical interfaces>**
 
-**<Mapping fachliche auf technische Schnittstellen>**
+**<Mapping Input/Output to Channels>**
