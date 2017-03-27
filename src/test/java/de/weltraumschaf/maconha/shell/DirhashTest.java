@@ -11,6 +11,8 @@ import org.apache.commons.io.FileUtils;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -37,6 +39,7 @@ public class DirhashTest {
     }
 
     @Test
+    @Ignore
     public void execute() throws IOException, InterruptedException, URISyntaxException {
         final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/job/ScanJob").toURI();
         final Path target = tmp.getRoot().toPath().resolve("filesToHash");
