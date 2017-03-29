@@ -1,3 +1,4 @@
 == Maconha
 
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+Maconha is an application which crawls some given directories for media files and provides
+an easy and simply search interface to find the crawled media.
