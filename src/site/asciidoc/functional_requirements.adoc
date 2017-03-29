@@ -8,7 +8,7 @@ A persona describes a user stereotype grouped by there special needs.
 
 [options="header",cols="1,2"]
 |===
-| Persona | Description
+| Name | Description
 | _Administrator_ | An administrator is a person which maintains the system: E.g. add
 directories to crawl for media files, schedule crawl/indexer etc.
 | _User_ | An user is a person which want to search for media.
@@ -18,7 +18,7 @@ directories to crawl for media files, schedule crawl/indexer etc.
 
 [options="header",cols="1,2,2"]
 |===
-| As a ... | I want ... | so that ...
+| As ... | I want ... | so that ...
 | _Administrator_ | to add a directory | the media files in that directory are available to the system.
 | _Administrator_ | to change the location of an existing directory | I can fix wrong locations.
 | _Administrator_ | to delete directories | to remove obsolete locations.
