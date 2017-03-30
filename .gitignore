@@ -1,6 +1,5 @@
-examples/
-maconha-ng.iml
 src/main/resources/static/lib/
 bin/*
 node/
 node_modules/
+.envrc
