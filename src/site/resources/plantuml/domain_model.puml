@@ -1,0 +1,39 @@
+@startuml
+skinparam componentStyle uml2
+
+class Bucket {
+    directoryLocation
+}
+
+class MediaFile {
+    relativeFileName
+    filexHash
+    lastCrawled
+    lastIndexed
+}
+
+note left of MediaFile {
+    The relative file name is relative
+    to the bucket's directory location.
+}
+
+enum Type {
+    VIDEO
+    AUDIO
+    OTHER
+}
+
+class Keyword {
+    literal
+}
+
+note right of Keyword {
+    The literal keyword is normalized:
+    - all letters lowercase
+}
+
+Bucket *-- MediaFile
+MediaFile -- Type
+MediaFile "1" -- "*" Keyword
+
+@enduml
