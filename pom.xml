@@ -435,8 +435,8 @@
 
                         <configuration>
                             <target>
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      todir="${project.bin.directory}"/>
+                                <copy file="${project.build.directory}/${project.build.finalName}-exec.jar"
+                                      tofile="${project.bin.directory}/${project.build.finalName}.jar"/>
                                 <copy file="${project.scripts.directory}/${project.build.finalName}.sh"
                                       tofile="${project.bin.directory}/${project.build.finalName}"/>
                                 <chmod dir="${project.bin.directory}" perm="ugo+rx"/>
