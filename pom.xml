@@ -8,13 +8,61 @@
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.weltraumschaf</groupId>
-    <artifactId>maconha-ng</artifactId>
+    <groupId>de.weltraumschaf.maconha</groupId>
+    <artifactId>maconha</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Maconha NG (new)</name>
+    <name>Maconha</name>
     <description>Search engine for my NAS.</description>
+
+    <developers>
+        <developer>
+            <id>Weltraumschaf</id>
+            <name>Sven Strittmatter</name>
+            <email>ich@weltraumschaf.de</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>THE BEER-WARE LICENSE</name>
+            <url>http://www.weltraumschaf.de/the-beer-ware-license.txt</url>
+            <distribution>repo</distribution>
+            <comments>
+                LICENSE
+
+                "THE BEER-WARE LICENSE" (Revision 42):
+                "Sven Strittmatter" &lt;weltraumschaf(at)googlemail(dot)com&gt; wrote this file.
+                As long as you retain this notice you can do whatever you want with
+                this stuff. If we meet some day, and you think this stuff is worth it,
+                you can buy me a beer in return.
+            </comments>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/Weltraumschaf/maconha/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:git://github.com/Weltraumschaf/maconha.git</connection>
+        <developerConnection>scm:git:git@github.com:Weltraumschaf/maconha.git</developerConnection>
+        <url>https://github.com/Weltraumschaf/maconha.git</url>
+    </scm>
+
+    <distributionManagement>
+        <site>
+            <id>github-project-site</id>
+            <url>gitsite:git@github.com/Weltraumschaf/cay-the.git</url>
+        </site>
+    </distributionManagement>
+
+    <ciManagement>
+        <system>jenkins</system>
+        <url>https://ci.weltraumschaf.de/job/cay-the/</url>
+    </ciManagement>
 
     <properties>
         <enforcer.skip>true</enforcer.skip>
@@ -302,6 +350,22 @@
 
         <plugins>
             <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.bin.directory}</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
 
@@ -406,19 +470,39 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.4</version>
 
                 <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${project.bin.directory}</directory>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
+                    <nodeVersion>v6.10.2</nodeVersion>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>npm-install</id>
+
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>bower-install</id>
+
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
