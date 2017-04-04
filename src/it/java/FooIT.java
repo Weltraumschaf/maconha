@@ -1,5 +1,4 @@
 import de.weltraumschaf.maconha.MaconhaApplication;
-import de.weltraumschaf.maconha.service.JobService;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,12 +20,12 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration(classes = {MaconhaApplication.class})
 public class FooIT {
 
-    @Autowired
-    private JobService jobs;
+//    @Autowired
+//    private JobService jobs;
 
     @Test
     @Ignore
     public void foo() {
-        assertThat(jobs, is(not(nullValue())));
+//        assertThat(jobs, is(not(nullValue())));
     }
 }

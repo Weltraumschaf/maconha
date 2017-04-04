@@ -38,4 +38,11 @@ if [ "" != "${MACONHA_DEBUG}" ] ; then
     JVM_OPTIONS=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 fi
 
-java ${JVM_OPTIONS} -jar "${JAR}" --spring.profiles.active=prod --bin=${PROGRAM_DIRECTORY}
+profiles="prod"
+
+if [ "" != "${1}" ]; then
+    profiles="${1}"
+    echo "Using custom profile: ${profiles}."
+fi
+
+java ${JVM_OPTIONS} -jar "${JAR}" --spring.profiles.active=${profiles} --bin=${PROGRAM_DIRECTORY}

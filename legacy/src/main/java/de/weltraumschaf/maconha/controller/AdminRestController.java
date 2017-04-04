@@ -4,7 +4,7 @@ import de.weltraumschaf.maconha.job.JobDescription;
 import de.weltraumschaf.maconha.job.Job;
 import de.weltraumschaf.maconha.job.JobConfig;
 import de.weltraumschaf.maconha.service.AdminService;
-import de.weltraumschaf.maconha.service.JobService;
+
 import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

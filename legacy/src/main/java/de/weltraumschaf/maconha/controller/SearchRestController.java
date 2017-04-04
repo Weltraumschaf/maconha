@@ -2,7 +2,7 @@ package de.weltraumschaf.maconha.controller;
 
 import de.weltraumschaf.maconha.core.Validator;
 import de.weltraumschaf.maconha.model.Media;
-import de.weltraumschaf.maconha.service.SearchService;
+
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
