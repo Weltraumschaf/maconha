@@ -18,7 +18,7 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories(basePackages = { "de.weltraumschaf.maconha.repo" })
 public class DatabaseConfiguration {
-    @Value("${spring.datasource.driverClassName}")
+    @Value("${spring.datasource.driver-class-name}")
     private String driver = "";
 
     @Value("${spring.datasource.url}")
