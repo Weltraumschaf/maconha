@@ -12,8 +12,6 @@
 
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li id="search"><a href="${baseUrl}/search">Search</a></li>
-                        <li id="login"><a href="${baseUrl}/login">Login</a></li>
                         <li id="admin"><a href="${baseUrl}/admin">Admin</a></li>
                     </ul>
                 </div>

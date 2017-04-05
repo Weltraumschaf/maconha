@@ -41,8 +41,8 @@ public final class AdditionalHttpHeaders implements Filter {
 
     private void addCspHeader(final ServletRequest request, final ServletResponse response) {
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setHeader(CSP_HEADER_NAME, CSP_POLICY);
-        httpResponse.setHeader(CSP_HEADER_NAME_IE, CSP_POLICY);
+//        httpResponse.setHeader(CSP_HEADER_NAME, CSP_POLICY);
+//        httpResponse.setHeader(CSP_HEADER_NAME_IE, CSP_POLICY);
     }
 
     @Override

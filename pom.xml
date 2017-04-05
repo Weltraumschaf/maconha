@@ -76,6 +76,7 @@
 
         <!-- Dependency versions: -->
         <springframework.version>1.5.2.RELEASE</springframework.version>
+        <vaadin.version>8.0.4</vaadin.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <dbunit.version>2.5.3</dbunit.version>
         <usertype.core.version>5.0.0.GA</usertype.core.version>
@@ -97,6 +98,34 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.spring.extensions</groupId>
+                <artifactId>vaadin-spring-ext-boot</artifactId>
+                <version>2.0.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.spring.addons</groupId>
+                <artifactId>vaadin-spring-addon-eventbus</artifactId>
+                <version>2.0.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin</groupId>
+                <artifactId>viritin</artifactId>
+                <version>2.0.beta1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.teemu</groupId>
+                <artifactId>switch</artifactId>
+                <version>3.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -104,6 +133,11 @@
         <repository>
             <id>spring-milestone</id>
             <url>https://repo.spring.io/libs-release</url>
+        </repository>
+
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
 
@@ -115,6 +149,28 @@
     </pluginRepositories>
 
     <dependencies>
+        <!-- Vaadin https://github.com/mstahv/spring-data-vaadin-crud/blob/master/pom.xml -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring.extensions</groupId>
+            <artifactId>vaadin-spring-ext-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring.addons</groupId>
+            <artifactId>vaadin-spring-addon-eventbus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin</groupId>
+            <artifactId>viritin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.teemu</groupId>
+            <artifactId>switch</artifactId>
+        </dependency>
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -466,6 +522,25 @@
                     <jvmArguments>
                         -Dspring.profiles.active=dev
                     </jvmArguments>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <widgetsetMode>cdn</widgetsetMode>
                 </configuration>
             </plugin>
 
