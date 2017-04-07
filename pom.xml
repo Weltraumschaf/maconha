@@ -170,6 +170,11 @@
             <groupId>org.vaadin.teemu</groupId>
             <artifactId>switch</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
 
         <!-- Spring -->
         <dependency>

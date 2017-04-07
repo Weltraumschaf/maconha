@@ -5,19 +5,22 @@ import com.vaadin.server.WidgetsetInfo;
 /**
  *
  */
-final class AppWidgetset implements WidgetsetInfo {
+public final class AppWidgetset implements WidgetsetInfo {
+
+    public static final String NAME = "wsc77af946b966b8373a35d19f0624b738";
+
     @Override
     public String getWidgetsetName() {
-        return "wsc77af946b966b8373a35d19f0624b738";
+        return NAME;
     }
 
     @Override
     public String getWidgetsetUrl() {
-        return "https://ws.vaadin.com/wsc77af946b966b8373a35d19f0624b738/wsc77af946b966b8373a35d19f0624b738.nocache.js";
+        return "https://ws.vaadin.com/" + NAME + "/" + NAME +".nocache.js";
     }
 
     @Override
     public boolean isCdn() {
-        return !true;
+        return false;
     }
 }

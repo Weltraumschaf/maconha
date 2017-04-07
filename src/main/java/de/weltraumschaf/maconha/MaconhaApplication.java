@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class MaconhaApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaApplication.class);
+
     @Autowired
     private Environment environment;
 
