@@ -543,10 +543,6 @@
                         </goals>
                     </execution>
                 </executions>
-
-                <configuration>
-                    <widgetsetMode>cdn</widgetsetMode>
-                </configuration>
             </plugin>
 
             <plugin>
