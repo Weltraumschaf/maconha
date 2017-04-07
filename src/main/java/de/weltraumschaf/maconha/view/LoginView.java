@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.AdminUi;
+import de.weltraumschaf.maconha.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,7 @@ public final class LoginView extends VerticalLayout {
 
         signin.addClickListener((Button.ClickListener) event -> {
             if ("admin".equals(username.getValue()) && "maconha".equals(password.getValue())) {
-                events.publish(LoginView.this, "authenticated");
+                events.publish(LoginView.this, new User(username.getValue(), true));
             } else {
                 LOGGER.warn("Login failed for username {}!", username.getValue());
             }

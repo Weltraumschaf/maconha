@@ -4,10 +4,13 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
+import de.weltraumschaf.maconha.model.User;
 import de.weltraumschaf.maconha.view.LoginView;
+import de.weltraumschaf.maconha.view.MainView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import org.vaadin.spring.events.EventBusListener;
 @Theme("valo")
 @SpringUI(path = "/admin")
 @Title("Maconha - Admin")
-public final class AdminUi extends UI implements EventBusListener<String> {
+public final class AdminUi extends UI implements EventBusListener<User> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminUi.class);
 
@@ -37,12 +40,23 @@ public final class AdminUi extends UI implements EventBusListener<String> {
     }
 
     private void updateContent() {
-        setContent(new LoginView(events));
-        addStyleName("loginview");
+        final User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
+
+        if (null != user && user.isAdmin()) {
+            setContent(new MainView(events));
+            removeStyleName("loginview");
+            getNavigator().navigateTo(getNavigator().getState());
+        } else {
+            setContent(new LoginView(events));
+            addStyleName("loginview");
+        }
     }
 
     @Override
-    public void onEvent(final org.vaadin.spring.events.Event<String> event) {
-        LOGGER.info("Login performed: {}", event.getPayload());
+    public void onEvent(final org.vaadin.spring.events.Event<User> event) {
+        final User user = event.getPayload();
+        LOGGER.info("Login performed: {}", user);
+        VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
+        updateContent();
     }
 }
