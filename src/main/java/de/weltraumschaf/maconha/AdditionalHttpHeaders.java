@@ -35,14 +35,15 @@ public final class AdditionalHttpHeaders implements Filter {
         final ServletRequest request,
         final ServletResponse response,
         final FilterChain chain) throws IOException, ServletException {
-        addCspHeader(request, response);
+//        addCspHeader(request, response);
         chain.doFilter(request, response);
     }
 
     private void addCspHeader(final ServletRequest request, final ServletResponse response) {
+        // FIXME Vaadin does not work with that!
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
-//        httpResponse.setHeader(CSP_HEADER_NAME, CSP_POLICY);
-//        httpResponse.setHeader(CSP_HEADER_NAME_IE, CSP_POLICY);
+        httpResponse.setHeader(CSP_HEADER_NAME, CSP_POLICY);
+        httpResponse.setHeader(CSP_HEADER_NAME_IE, CSP_POLICY);
     }
 
     @Override
