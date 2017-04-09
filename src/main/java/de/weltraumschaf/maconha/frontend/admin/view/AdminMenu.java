@@ -56,7 +56,7 @@ final class AdminMenu extends CustomComponent {
         menuItemsLayout.addStyleName("valo-menuitems");
 
         for (final AdminViewType view : AdminViewType.values()) {
-            final Component menuItemComponent = new ValoMenuItemButton(view, events);
+            final Component menuItemComponent = new ValoMenuItemButton(view);
             menuItemsLayout.addComponent(menuItemComponent);
         }
 
@@ -65,15 +65,11 @@ final class AdminMenu extends CustomComponent {
 
     private final class ValoMenuItemButton extends Button {
 
-        // TODO Set selcted after view has changed.
-        private static final String STYLE_SELECTED = "selected";
         private final AdminViewType view;
-        private final EventBus.UIEventBus events;
 
-        ValoMenuItemButton(final AdminViewType view, final EventBus.UIEventBus events) {
+        ValoMenuItemButton(final AdminViewType view) {
             super();
             this.view = view;
-            this.events = events;
             setPrimaryStyleName("valo-menu-item");
             setIcon(view.getIcon());
             setCaption(view.getViewName().substring(0, 1).toUpperCase() + view.getViewName().substring(1));
