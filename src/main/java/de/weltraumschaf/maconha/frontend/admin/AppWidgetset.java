@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha;
+package de.weltraumschaf.maconha.frontend.admin;
 
 import com.vaadin.server.WidgetsetInfo;
 

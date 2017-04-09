@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha;
+package de.weltraumschaf.maconha.frontend.admin;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -9,8 +9,8 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.model.User;
-import de.weltraumschaf.maconha.view.LoginView;
-import de.weltraumschaf.maconha.view.MainView;
+import de.weltraumschaf.maconha.frontend.admin.view.LoginView;
+import de.weltraumschaf.maconha.frontend.admin.view.MainView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

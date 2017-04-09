@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.controller;
+package de.weltraumschaf.maconha.frontend.search.controller;
 
 import de.weltraumschaf.maconha.job.JobDescription;
 import de.weltraumschaf.maconha.job.Job;

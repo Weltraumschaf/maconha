@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.view;
+package de.weltraumschaf.maconha.frontend.admin.view;
 
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;

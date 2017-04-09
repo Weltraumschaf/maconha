@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.controller;
+package de.weltraumschaf.maconha.frontend.search.controller;
 
 import de.weltraumschaf.maconha.core.Validator;
 import de.weltraumschaf.maconha.model.Media;

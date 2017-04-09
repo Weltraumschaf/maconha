@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.view.buckets;
+package de.weltraumschaf.maconha.frontend.admin.view.buckets;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;

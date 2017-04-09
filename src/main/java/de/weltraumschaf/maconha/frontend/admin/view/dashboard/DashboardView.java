@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.view.dashboard;
+package de.weltraumschaf.maconha.frontend.admin.view.dashboard;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;

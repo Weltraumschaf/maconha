@@ -1,10 +1,10 @@
-package de.weltraumschaf.maconha.view;
+package de.weltraumschaf.maconha.frontend.admin.view;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Resource;
-import de.weltraumschaf.maconha.view.buckets.BucketsView;
-import de.weltraumschaf.maconha.view.dashboard.DashboardView;
+import de.weltraumschaf.maconha.frontend.admin.view.buckets.BucketsView;
+import de.weltraumschaf.maconha.frontend.admin.view.dashboard.DashboardView;
 
 /**
  *
