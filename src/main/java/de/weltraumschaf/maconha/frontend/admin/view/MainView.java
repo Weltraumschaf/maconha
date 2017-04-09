@@ -14,7 +14,7 @@ public final class MainView extends HorizontalLayout {
         setSizeFull();
         addStyleName("mainview");
 
-        addComponent(new AdminMenu(events));
+        addComponent(new AdminMenu());
 
         ComponentContainer content = new CssLayout();
         content.addStyleName("view-content");

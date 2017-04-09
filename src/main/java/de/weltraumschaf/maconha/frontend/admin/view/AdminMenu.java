@@ -11,19 +11,12 @@ import org.vaadin.spring.events.EventBus;
 final class AdminMenu extends CustomComponent {
 
     public static final String ID = "dashboard-menu";
-    private final EventBus.UIEventBus events;
 
-    AdminMenu(final EventBus.UIEventBus events) {
+    AdminMenu() {
         super();
-        this.events = events;
         setPrimaryStyleName("valo-menu");
         setId(ID);
         setSizeUndefined();
-
-        // There's only one DashboardMenu per UI so this doesn't need to be
-        // unregistered from the UI-scoped event bus.
-        events.subscribe(this);
-
         setCompositionRoot(buildContent());
     }
 
@@ -73,7 +66,6 @@ final class AdminMenu extends CustomComponent {
             setPrimaryStyleName("valo-menu-item");
             setIcon(view.getIcon());
             setCaption(view.getViewName().substring(0, 1).toUpperCase() + view.getViewName().substring(1));
-            events.subscribe(this);
             addClickListener((ClickListener) event -> UI.getCurrent().getNavigator().navigateTo(view.getViewName()));
         }
     }
