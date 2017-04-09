@@ -9,7 +9,7 @@ import de.weltraumschaf.maconha.frontend.admin.view.dashboard.DashboardView;
 /**
  *
  */
-public enum AdminViewType {
+enum AdminViewType {
     DASHBOARD("dashboard", DashboardView.class, VaadinIcons.HOME, true),
     BUCKETS("buckets", BucketsView.class, VaadinIcons.TABLE, false);
 
@@ -25,23 +25,23 @@ public enum AdminViewType {
         this.stateful = stateful;
     }
 
-    public boolean isStateful() {
+    boolean isStateful() {
         return stateful;
     }
 
-    public String getViewName() {
+    String getViewName() {
         return viewName;
     }
 
-    public Class<? extends View> getViewClass() {
+    Class<? extends View> getViewClass() {
         return viewClass;
     }
 
-    public Resource getIcon() {
+    Resource getIcon() {
         return icon;
     }
 
-    public static AdminViewType getByViewName(final String viewName) {
+    static AdminViewType getByViewName(final String viewName) {
         AdminViewType result = null;
 
         for (AdminViewType viewType : values()) {

@@ -10,11 +10,11 @@ import com.vaadin.ui.UI;
 /**
  *
  */
-public final class AdminNavigator extends Navigator {
+final class AdminNavigator extends Navigator {
     private static final AdminViewType ERROR_VIEW = AdminViewType.DASHBOARD;
     private ViewProvider errorViewProvider;
 
-    public AdminNavigator(final ComponentContainer container) {
+    AdminNavigator(final ComponentContainer container) {
         super(UI.getCurrent(), container);
         initViewChangeListener();
         initViewProviders();

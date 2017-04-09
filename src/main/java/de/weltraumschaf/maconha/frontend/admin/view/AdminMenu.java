@@ -3,7 +3,6 @@ package de.weltraumschaf.maconha.frontend.admin.view;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.spring.events.EventBus;
 
 /**
  *
