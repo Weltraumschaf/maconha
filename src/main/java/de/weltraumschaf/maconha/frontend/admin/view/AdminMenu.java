@@ -8,12 +8,12 @@ import org.vaadin.spring.events.EventBus;
 /**
  *
  */
-public final class AdminMenu extends CustomComponent {
+final class AdminMenu extends CustomComponent {
 
     public static final String ID = "dashboard-menu";
     private final EventBus.UIEventBus events;
 
-    public AdminMenu(final EventBus.UIEventBus events) {
+    AdminMenu(final EventBus.UIEventBus events) {
         super();
         this.events = events;
         setPrimaryStyleName("valo-menu");
@@ -37,6 +37,7 @@ public final class AdminMenu extends CustomComponent {
         menuContent.setHeight("100%");
 
         menuContent.addComponent(buildTitle());
+        menuContent.addComponent(buildMenuItems());
 
         return menuContent;
     }
@@ -48,5 +49,36 @@ public final class AdminMenu extends CustomComponent {
         logoWrapper.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
         logoWrapper.addStyleName("valo-menu-title");
         return logoWrapper;
+    }
+
+    private Component buildMenuItems() {
+        CssLayout menuItemsLayout = new CssLayout();
+        menuItemsLayout.addStyleName("valo-menuitems");
+
+        for (final AdminViewType view : AdminViewType.values()) {
+            final Component menuItemComponent = new ValoMenuItemButton(view, events);
+            menuItemsLayout.addComponent(menuItemComponent);
+        }
+
+        return menuItemsLayout;
+    }
+
+    private final class ValoMenuItemButton extends Button {
+
+        // TODO Set selcted after view has changed.
+        private static final String STYLE_SELECTED = "selected";
+        private final AdminViewType view;
+        private final EventBus.UIEventBus events;
+
+        ValoMenuItemButton(final AdminViewType view, final EventBus.UIEventBus events) {
+            super();
+            this.view = view;
+            this.events = events;
+            setPrimaryStyleName("valo-menu-item");
+            setIcon(view.getIcon());
+            setCaption(view.getViewName().substring(0, 1).toUpperCase() + view.getViewName().substring(1));
+            events.subscribe(this);
+            addClickListener((ClickListener) event -> UI.getCurrent().getNavigator().navigateTo(view.getViewName()));
+        }
     }
 }
