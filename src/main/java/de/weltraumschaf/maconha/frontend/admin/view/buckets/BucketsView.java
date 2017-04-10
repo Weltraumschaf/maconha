@@ -3,6 +3,9 @@ package de.weltraumschaf.maconha.frontend.admin.view.buckets;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Panel;
 import de.weltraumschaf.maconha.model.Bucket;
@@ -18,10 +21,16 @@ import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Vie to manage {@link Bucket buckets}.
  */
+@UIScope
+@SpringComponent
+@SpringView(name = BucketsView.VIEW_NAME)
 public final class BucketsView extends Panel implements View {
+    public static final String VIEW_NAME = "buckets";
 
     private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
         .withProperties("id", "directory")
@@ -33,6 +42,7 @@ public final class BucketsView extends Panel implements View {
     private final Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
     private final Button delete = new ConfirmButton(VaadinIcons.TRASH,
         "Are you sure you want to delete the entry?", this::remove);
+
     @Autowired
     private BucketRepo buckets;
     @Autowired
@@ -42,6 +52,11 @@ public final class BucketsView extends Panel implements View {
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
+        // This view is constructed in the init() method.
+    }
+
+    @PostConstruct
+    public void init() {
         setContent(
             new MVerticalLayout(
                 new MHorizontalLayout(filterByDirectory, addNew, edit, delete),

@@ -3,26 +3,28 @@ package de.weltraumschaf.maconha.frontend.admin.view;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 
-/**
- *
- */
+@UIScope
+@SpringComponent
 public final class LoginView extends VerticalLayout {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 
-    private final EventBus.UIEventBus events;
+    @Autowired
+    private EventBus.UIEventBus events;
 
-    public LoginView(final EventBus.UIEventBus events) {
+    public LoginView() {
         super();
-        this.events = events;
         setSizeFull();
 
         final Component loginForm = buildLoginForm();
@@ -88,6 +90,7 @@ public final class LoginView extends VerticalLayout {
                 LOGGER.warn("Login failed for username {}!", username.getValue());
             }
         });
+
         return fields;
     }
 }

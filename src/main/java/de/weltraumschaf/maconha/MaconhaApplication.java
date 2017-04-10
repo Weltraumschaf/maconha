@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Main entry point of the Spring boot application.
  */
-@EnableAsync
+@EnableAsync // XXX Really necessary?
 @SpringBootApplication
 @EnableTransactionManagement
 @ComponentScan({"de.weltraumschaf.maconha"})

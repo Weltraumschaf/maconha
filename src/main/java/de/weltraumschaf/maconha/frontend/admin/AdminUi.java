@@ -6,6 +6,7 @@ import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.model.User;
@@ -21,14 +22,18 @@ import org.vaadin.spring.events.EventBusListener;
  * https://github.com/mstahv/spring-data-vaadin-crud
  */
 @Theme("valo")
-@SpringUI(path = "/admin")
 @Title("Maconha - Admin")
+@SpringUI(path = "/admin")
 public final class AdminUi extends UI implements EventBusListener<User> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminUi.class);
 
     @Autowired
     private EventBus.UIEventBus events;
+    @Autowired
+    private MainView main;
+    @Autowired
+    private LoginView login;
 
     @Override
     protected void init(final VaadinRequest request) {
@@ -43,11 +48,11 @@ public final class AdminUi extends UI implements EventBusListener<User> {
         final User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
 
         if (null != user && user.isAdmin()) {
-            setContent(new MainView(events));
+            setContent(main);
             removeStyleName("loginview");
             getNavigator().navigateTo(getNavigator().getState());
         } else {
-            setContent(new LoginView(events));
+            setContent(login);
             addStyleName("loginview");
         }
     }

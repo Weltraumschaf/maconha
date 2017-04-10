@@ -1,17 +1,20 @@
 package de.weltraumschaf.maconha.frontend.admin.view;
 
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.Resource;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-/**
- *
- */
-final class AdminMenu extends CustomComponent {
+@UIScope
+@SpringComponent
+public final class AdminMenu extends CustomComponent {
 
     public static final String ID = "dashboard-menu";
 
-    AdminMenu() {
+    public AdminMenu() {
         super();
         setPrimaryStyleName("valo-menu");
         setId(ID);
@@ -44,28 +47,20 @@ final class AdminMenu extends CustomComponent {
     }
 
     private Component buildMenuItems() {
-        CssLayout menuItemsLayout = new CssLayout();
+        final CssLayout menuItemsLayout = new CssLayout();
         menuItemsLayout.addStyleName("valo-menuitems");
-
-        for (final AdminViewType view : AdminViewType.values()) {
-            final Component menuItemComponent = new ValoMenuItemButton(view);
-            menuItemsLayout.addComponent(menuItemComponent);
-        }
-
+        menuItemsLayout.addComponent(new MenuItemButton(VaadinIcons.HOME, "Dashboard"));
+        menuItemsLayout.addComponent(new MenuItemButton(VaadinIcons.TABLE, "Buckets"));
         return menuItemsLayout;
     }
 
-    private final class ValoMenuItemButton extends Button {
+    private final class MenuItemButton extends Button {
 
-        private final AdminViewType view;
-
-        ValoMenuItemButton(final AdminViewType view) {
+        MenuItemButton(final Resource icon, final String caption) {
             super();
-            this.view = view;
             setPrimaryStyleName("valo-menu-item");
-            setIcon(view.getIcon());
-            setCaption(view.getViewName().substring(0, 1).toUpperCase() + view.getViewName().substring(1));
-            addClickListener((ClickListener) event -> UI.getCurrent().getNavigator().navigateTo(view.getViewName()));
+            setIcon(icon);
+            setCaption(caption);
         }
     }
 }
