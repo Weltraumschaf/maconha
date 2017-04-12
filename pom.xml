@@ -76,7 +76,8 @@
 
         <!-- Dependency versions: -->
         <springframework.version>1.5.2.RELEASE</springframework.version>
-        <vaadin.version>8.0.4</vaadin.version>
+        <vaadin.version>8.0.5</vaadin.version>
+        <vaadin-spring.version>2.0.0.RELEASE</vaadin-spring.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <dbunit.version>2.5.3</dbunit.version>
         <usertype.core.version>5.0.0.GA</usertype.core.version>
@@ -109,12 +110,12 @@
             <dependency>
                 <groupId>org.vaadin.spring.extensions</groupId>
                 <artifactId>vaadin-spring-ext-boot</artifactId>
-                <version>2.0.0.RELEASE</version>
+                <version>${vaadin-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.vaadin.spring.addons</groupId>
                 <artifactId>vaadin-spring-addon-eventbus</artifactId>
-                <version>2.0.0.RELEASE</version>
+                <version>${vaadin-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.vaadin</groupId>
@@ -192,6 +193,10 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
