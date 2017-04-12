@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @SpringView(name = DashboardView.VIEW_NAME)
 public final class DashboardView extends Panel implements View {
-    public static final String VIEW_NAME = "dashboard";
+    public static final String VIEW_NAME = "";
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
@@ -24,6 +24,6 @@ public final class DashboardView extends Panel implements View {
 
     @PostConstruct
     public void init() {
-        setContent(new Label("Hello, world!"));
+        setContent(new Label("Dashboard"));
     }
 }
