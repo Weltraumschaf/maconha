@@ -22,10 +22,6 @@ public final class DashboardView extends Panel implements View {
     private final Label titleLabel = new Label("Dashboard");
     private final VerticalLayout root = new VerticalLayout();
 
-    public DashboardView() {
-        super();
-    }
-
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent event) {
         // This view is constructed in the init() method.
@@ -42,7 +38,7 @@ public final class DashboardView extends Panel implements View {
     }
 
     private Component buildHeader() {
-        HorizontalLayout header = new HorizontalLayout();
+        final HorizontalLayout header = new HorizontalLayout();
         header.addStyleName("viewheader");
 
         titleLabel.setId(TITLE_ID);

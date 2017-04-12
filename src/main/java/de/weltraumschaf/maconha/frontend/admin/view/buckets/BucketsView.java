@@ -3,11 +3,12 @@ package de.weltraumschaf.maconha.frontend.admin.view.buckets;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Panel;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,10 @@ import javax.annotation.PostConstruct;
 @SpringView(name = BucketsView.VIEW_NAME)
 public final class BucketsView extends Panel implements View {
     public static final String VIEW_NAME = "buckets";
+    private static final String TITLE_ID = "buckets-title";
 
+    private final Label titleLabel = new Label("Buckets");
+    private final VerticalLayout root = new VerticalLayout();
     private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
         .withProperties("id", "directory")
         .withColumnHeaders("id", "directory")
@@ -57,20 +61,41 @@ public final class BucketsView extends Panel implements View {
 
     @PostConstruct
     public void init() {
-        setContent(
-            new MVerticalLayout(
+        root.setSizeFull();
+        root.setSpacing(false);
+        root.addStyleName("buckets-view");
+        setContent(root);
+        Responsive.makeResponsive(root);
+        root.addComponent(buildHeader());
+        root.addComponent(buildContent());
+        // Listen to change events emitted by PersonForm see onEvent method
+        events.subscribe(this);
+    }
+
+    private Component buildHeader() {
+        final HorizontalLayout header = new HorizontalLayout();
+        header.addStyleName("viewheader");
+
+        titleLabel.setId(TITLE_ID);
+        titleLabel.setSizeUndefined();
+        titleLabel.addStyleName(ValoTheme.LABEL_H1);
+        titleLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+        header.addComponent(titleLabel);
+
+        return header;
+    }
+
+    private Component buildContent() {
+        final MVerticalLayout content = new MVerticalLayout(
                 new MHorizontalLayout(filterByDirectory, addNew, edit, delete),
                 list
-            ).expand(list)
-        );
+            ).expand(list);
         listEntities();
         list.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
         filterByDirectory.addValueChangeListener(e -> {
             listEntities(e.getValue());
         });
-
-        // Listen to change events emitted by PersonForm see onEvent method
-        events.subscribe(this);
+        return content;
     }
 
     private void listEntities() {
