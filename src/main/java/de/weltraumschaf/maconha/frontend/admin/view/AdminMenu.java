@@ -7,6 +7,8 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import de.weltraumschaf.maconha.frontend.admin.view.buckets.BucketsView;
+import de.weltraumschaf.maconha.frontend.admin.view.dashboard.DashboardView;
 
 @UIScope
 @SpringComponent
@@ -49,9 +51,15 @@ public final class AdminMenu extends CustomComponent {
     private Component buildMenuItems() {
         final CssLayout menuItemsLayout = new CssLayout();
         menuItemsLayout.addStyleName("valo-menuitems");
-        menuItemsLayout.addComponent(new MenuItemButton(VaadinIcons.HOME, "Dashboard"));
-        menuItemsLayout.addComponent(new MenuItemButton(VaadinIcons.TABLE, "Buckets"));
+        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.HOME, DashboardView.VIEW_NAME, "Dashboard"));
+        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, BucketsView.VIEW_NAME, "Buckets"));
         return menuItemsLayout;
+    }
+
+    private Button createNavigationButton(final Resource icon, final String viewName, final String caption) {
+        final MenuItemButton button = new MenuItemButton(icon, caption);
+        button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
+        return button;
     }
 
     private final class MenuItemButton extends Button {
