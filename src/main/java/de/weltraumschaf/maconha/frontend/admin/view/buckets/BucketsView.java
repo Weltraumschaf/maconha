@@ -12,6 +12,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.frontend.admin.view.SubView;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.repo.BucketRepo;
+import de.weltraumschaf.maconha.service.ScanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
@@ -48,6 +49,8 @@ public final class BucketsView extends SubView {
     private final Button scan = new MButton(VaadinIcons.COGS, this::scan);
     private final Button schedule = new MButton(VaadinIcons.ALARM, this::schedule);
 
+    @Autowired
+    private ScanService scanner;
     @Autowired
     private BucketRepo buckets;
     @Autowired
@@ -119,7 +122,7 @@ public final class BucketsView extends SubView {
     }
 
     public void scan(Button.ClickEvent e) {
-        final Bucket bucket = list.asSingleSelect().getValue();
+        scanner.scan(list.asSingleSelect().getValue());
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)

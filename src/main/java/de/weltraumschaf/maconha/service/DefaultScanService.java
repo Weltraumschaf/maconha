@@ -1,5 +1,7 @@
 package de.weltraumschaf.maconha.service;
 
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-final class DefaultBucketService implements BucketService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBucketService.class);
+final class DefaultScanService implements ScanService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
 
-    private final BucketRepo buckets;
-
-    @Autowired
-    DefaultBucketService(final BucketRepo buckets) {
-        super();
-        this.buckets = buckets;
+    @Override
+    public void scan(final Bucket bucket) {
+        Validate.notNull(bucket, "bucket");
+        LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
     }
 }

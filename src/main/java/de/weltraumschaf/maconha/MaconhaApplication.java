@@ -12,13 +12,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Main entry point of the Spring boot application.
  */
-@EnableAsync // XXX Really necessary?
 @SpringBootApplication
 @EnableTransactionManagement
 @ComponentScan({"de.weltraumschaf.maconha"})
