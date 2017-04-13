@@ -45,6 +45,8 @@ public final class BucketsView extends SubView {
     private final Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
     private final Button delete = new ConfirmButton(VaadinIcons.TRASH,
         "Are you sure you want to delete the entry?", this::remove);
+    private final Button scan = new MButton(VaadinIcons.COGS, this::scan);
+    private final Button schedule = new MButton(VaadinIcons.ALARM, this::schedule);
 
     @Autowired
     private BucketRepo buckets;
@@ -66,7 +68,7 @@ public final class BucketsView extends SubView {
 
     private Component buildContent() {
         final MVerticalLayout content = new MVerticalLayout(
-                new MHorizontalLayout(filterByDirectory, addNew, edit, delete),
+                new MHorizontalLayout(filterByDirectory, addNew, edit, delete, scan, schedule),
                 list
             ).expand(list);
         listEntities();
@@ -89,6 +91,8 @@ public final class BucketsView extends SubView {
         boolean hasSelection = !list.getSelectedItems().isEmpty();
         edit.setEnabled(hasSelection);
         delete.setEnabled(hasSelection);
+        scan.setEnabled(hasSelection);
+        schedule.setEnabled(hasSelection);
     }
 
     public void add(Button.ClickEvent clickEvent) {
@@ -108,6 +112,14 @@ public final class BucketsView extends SubView {
     private void edit(final Bucket bucket) {
         form.setEntity(bucket);
         form.openInModalPopup();
+    }
+
+    public void schedule(Button.ClickEvent e) {
+        final Bucket bucket = list.asSingleSelect().getValue();
+    }
+
+    public void scan(Button.ClickEvent e) {
+        final Bucket bucket = list.asSingleSelect().getValue();
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)
