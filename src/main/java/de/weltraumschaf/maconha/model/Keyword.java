@@ -54,23 +54,21 @@ public class Keyword extends BaseEntity {
         return literal;
     }
 
-    public Keyword setLiteral(final String literal) {
+    public void setLiteral(final String literal) {
         this.literal = literal;
-        return this;
     }
 
     public Set<Media> getMedias() {
         return medias;
     }
 
-    public Keyword addMedias(final Media media) {
+    public void addMedias(final Media media) {
         if (isAlreadyAdded(media)) {
-            return this;
+            return;
         }
 
         medias.add(media);
         media.addKeyword(this);
-        return this;
     }
 
     private boolean isAlreadyAdded(final Media newMedia) {

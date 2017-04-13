@@ -67,59 +67,53 @@ public class OriginFile extends BaseEntity {
         return id;
     }
 
-    public OriginFile setId(final int id) {
+    public void setId(final int id) {
         this.id = id;
-        return this;
     }
 
     public Path getBaseDir() {
         return Paths.get(baseDir);
     }
 
-    public OriginFile setBaseDir(final Path baseDir) {
+    public void setBaseDir(final Path baseDir) {
         this.baseDir = baseDir.toString();
-        return this;
     }
 
     public Path getAbsolutePath() {
         return Paths.get(absolutePath);
     }
 
-    public OriginFile setAbsolutePath(final Path absolutePath) {
+    public void setAbsolutePath(final Path absolutePath) {
         this.absolutePath = absolutePath.toString();
-        return this;
     }
 
     public String getFingerprint() {
         return fingerprint;
     }
 
-    public OriginFile setFingerprint(final String fingerprint) {
+    public void setFingerprint(final String fingerprint) {
         this.fingerprint = fingerprint;
-        return this;
     }
 
     public LocalDateTime getScanTime() {
         return scanTime;
     }
 
-    public OriginFile setScanTime(final LocalDateTime scanTime) {
+    public void setScanTime(final LocalDateTime scanTime) {
         this.scanTime = scanTime;
-        return this;
     }
 
     public Media getImported() {
         return imported;
     }
 
-    public OriginFile setImported(final Media imported) {
+    public void setImported(final Media imported) {
         if (sameAsFormer(imported)) {
-            return this;
+            return;
         }
 
         this.imported = imported;
         this.imported.setOriginFile(this);
-        return this;
     }
 
     private boolean sameAsFormer(final Media newImported) {

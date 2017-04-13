@@ -71,9 +71,7 @@ public final class BucketsView extends SubView {
             ).expand(list);
         listEntities();
         list.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
-        filterByDirectory.addValueChangeListener(e -> {
-            listEntities(e.getValue());
-        });
+        filterByDirectory.addValueChangeListener(e -> listEntities(e.getValue()));
         return content;
     }
 
@@ -107,8 +105,8 @@ public final class BucketsView extends SubView {
         listEntities();
     }
 
-    private void edit(final Bucket phoneBookEntry) {
-        form.setEntity(phoneBookEntry);
+    private void edit(final Bucket bucket) {
+        form.setEntity(bucket);
         form.openInModalPopup();
     }
 

@@ -19,9 +19,13 @@ public class MediaTest {
 
     @Test
     public void equalsAndHashCode() {
+        final OriginFile fileOne = new OriginFile();
+        fileOne.setId(1);
+        final OriginFile fileTwo = new OriginFile();
+        fileTwo.setId(2);
         EqualsVerifier
             .forClass(Media.class)
-            .withPrefabValues(OriginFile.class, new OriginFile().setId(1), new OriginFile().setId(2))
+            .withPrefabValues(OriginFile.class, fileOne, fileTwo)
             .withPrefabValues(Keyword.class, new Keyword().setId(1), new Keyword().setId(2))
             .withIgnoredFields("keywords", "originFile")
             .verify();
@@ -38,8 +42,10 @@ public class MediaTest {
 
     @Test
     public void addKeyword() {
-        final Keyword keywordOne = new Keyword().setLiteral("one");
-        final Keyword keywordTwo = new Keyword().setLiteral("two");
+        final Keyword keywordOne = new Keyword();
+        keywordOne.setLiteral("one");
+        final Keyword keywordTwo = new Keyword();
+        keywordTwo.setLiteral("two");
 
         sut.addKeyword(keywordOne);
 
@@ -48,31 +54,40 @@ public class MediaTest {
 
     @Test
     public void toString_doesNotEndlessLoop() {
-        sut.setFormat(FileExtension.MATROSKA_VIDEO_FILE)
-            .setId(23)
-            .setLastImported(new LocalDateTime(0))
-            .setTitle("title")
-            .setType(MediaType.VIDEO);
+        sut.setFormat(FileExtension.MATROSKA_VIDEO_FILE);
+        sut.setId(23);
+        sut.setLastImported(new LocalDateTime(0));
+        sut.setTitle("title");
+        sut.setType(MediaType.VIDEO);
+
         assertThat(
             sut.toString(),
             is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=, keywords=}"));
 
-        sut.setOriginFile(new OriginFile().setAbsolutePath(Paths.get("/foo/bar")));
+        final OriginFile file = new OriginFile();
+        file.setAbsolutePath(Paths.get("/foo/bar"));
+        sut.setOriginFile(file);
         assertThat(
             sut.toString(),
             is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=}"));
 
-        sut.addKeyword(new Keyword().setLiteral("foo"));
+        final Keyword keywordOne = new Keyword();
+        keywordOne.setLiteral("foo");
+        sut.addKeyword(keywordOne);
         assertThat(
             sut.toString(),
             is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=foo}"));
 
-        sut.addKeyword(new Keyword().setLiteral("bar"));
+        final Keyword keywordTwo = new Keyword();
+        keywordTwo.setLiteral("bar");
+        sut.addKeyword(keywordTwo);
         assertThat(
             sut.toString(),
             is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=bar, foo}"));
 
-        sut.addKeyword(new Keyword().setLiteral("baz"));
+        final Keyword keywordThree = new Keyword();
+        keywordThree.setLiteral("baz");
+        sut.addKeyword(keywordThree);
         assertThat(
             sut.toString(),
             is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=bar, foo, baz}"));

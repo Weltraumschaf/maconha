@@ -29,18 +29,16 @@ public class Bucket extends BaseEntity{
         return id;
     }
 
-    public Bucket setId(final int id) {
+    public void setId(final int id) {
         this.id = id;
-        return this;
     }
 
     public String getDirectory() {
         return directory;
     }
 
-    public Bucket setDirectory(final String directory) {
+    public void setDirectory(final String directory) {
         this.directory = directory;
-        return this;
     }
 
     @Override

@@ -79,59 +79,53 @@ public class Media extends BaseEntity {
         return id;
     }
 
-    public Media setId(final int id) {
+    public void setId(final int id) {
         this.id = id;
-        return this;
     }
 
     public MediaType getType() {
         return type;
     }
 
-    public Media setType(final MediaType type) {
+    public void setType(final MediaType type) {
         this.type = type;
-        return this;
     }
 
     public FileExtension getFormat() {
         return format;
     }
 
-    public Media setFormat(final FileExtension format) {
+    public void setFormat(final FileExtension format) {
         this.format = format;
-        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public Media setTitle(final String title) {
+    public void setTitle(final String title) {
         this.title = title;
-        return this;
     }
 
     public LocalDateTime getLastImported() {
         return lastImported;
     }
 
-    public Media setLastImported(final LocalDateTime lastImported) {
+    public void setLastImported(final LocalDateTime lastImported) {
         this.lastImported = lastImported;
-        return this;
     }
 
     public OriginFile getOriginFile() {
         return originFile;
     }
 
-    public Media setOriginFile(final OriginFile originFile) {
+    public void setOriginFile(final OriginFile originFile) {
         if (sameAsFormer(originFile)) {
-            return this;
+            return;
         }
 
         this.originFile = originFile;
         this.originFile.setImported(this);
-        return this;
     }
 
     private boolean sameAsFormer(final OriginFile newOriginFile) {
@@ -142,14 +136,13 @@ public class Media extends BaseEntity {
         return new HashSet<>(keywords);
     }
 
-    public Media addKeyword(final Keyword keyword) {
+    public void addKeyword(final Keyword keyword) {
         if (isAlreadyAdded(keyword)) {
-            return this;
+            return;
         }
 
         keywords.add(keyword);
         keyword.addMedias(this);
-        return this;
     }
 
     private boolean isAlreadyAdded(final Keyword newKeyword) {
