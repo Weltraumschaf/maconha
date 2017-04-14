@@ -18,23 +18,29 @@ note left of MediaFile {
     to the bucket's directory.
 }
 
-enum Type {
+enum MediaType {
     VIDEO
     AUDIO
     OTHER
+}
+
+enum FileExtension {
+    extension
 }
 
 class Keyword {
     literal
 }
 
-note right of Keyword {
+note bottom of Keyword {
     The literal keyword is normalized:
     - all letters lowercase
 }
 
 Bucket *-- MediaFile
-MediaFile -- Type
+MediaFile -- MediaType : type
+MediaFile -- FileExtension : format
 MediaFile "1" -- "*" Keyword
+MediaType "1" -- "*" FileExtension
 
 @enduml

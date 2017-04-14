@@ -4,6 +4,7 @@ skinparam componentStyle uml2
 [Filesystem] #White
 :Administrator: #White
 :User: #White
+database SQL
 
 frame Maconha {
     [Admin Interface] as webadmin <<Vaadin>>
@@ -22,5 +23,6 @@ frame Maconha {
 Administrator ..> webadmin
 User ..> searchui
 crawler ..> Filesystem
+model ..> SQL
 
 @enduml

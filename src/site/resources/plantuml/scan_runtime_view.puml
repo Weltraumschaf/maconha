@@ -1,0 +1,6 @@
+@startuml
+skinparam componentStyle uml2
+
+ScanService -> Job
+
+@enduml
