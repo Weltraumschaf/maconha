@@ -37,8 +37,8 @@ public final class BucketsView extends SubView {
     private static final String TITLE_ID = "buckets-title";
 
     private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
-        .withProperties("id", "directory")
-        .withColumnHeaders("id", "directory")
+        .withProperties("id", "name", "directory")
+        .withColumnHeaders("id", "name", "directory")
         .withFullWidth();
     private MTextField filterByDirectory = new MTextField()
         .withPlaceholder("Filter by directory");

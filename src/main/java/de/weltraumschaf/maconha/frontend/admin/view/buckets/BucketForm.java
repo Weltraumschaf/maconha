@@ -16,6 +16,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 @UIScope
 @SpringComponent
 final class BucketForm extends AbstractForm<Bucket> {
+    private final TextField name = new MTextField("Name");
     private final TextField directory = new MTextField("Directory");
     private final BucketRepo buckets;
     private final EventBus.UIEventBus events;
@@ -41,7 +42,7 @@ final class BucketForm extends AbstractForm<Bucket> {
     protected Component createContent() {
         return new MVerticalLayout(
             new MFormLayout(
-                directory
+                name, directory
             ).withWidth(""),
             getToolbar()
         ).withWidth("");
