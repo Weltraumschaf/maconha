@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Auto implemented by Spring.
  */
-public interface MediaRepo extends BaseRepo<MediaFile> {
+public interface MediaFileRepo extends BaseRepo<MediaFile> {
 
     @Override
     Page<MediaFile> findAll(Pageable pageable);
