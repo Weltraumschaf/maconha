@@ -4,6 +4,7 @@ import java.util.Arrays;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Main entry point of the Spring boot application.
  */
 @SpringBootApplication
+@EnableBatchProcessing
 @EnableTransactionManagement
 @ComponentScan({"de.weltraumschaf.maconha"})
 @PropertySource(value = {"classpath:application.properties"})

@@ -2,19 +2,20 @@
 skinparam componentStyle uml2
 
 class Bucket {
-    directoryLocation
+    id
+    directory
+    name
 }
 
 class MediaFile {
     relativeFileName
-    filexHash
-    lastCrawled
-    lastIndexed
+    fileHash
+    lastScanned
 }
 
 note left of MediaFile {
     The relative file name is relative
-    to the bucket's directory location.
+    to the bucket's directory.
 }
 
 enum Type {
