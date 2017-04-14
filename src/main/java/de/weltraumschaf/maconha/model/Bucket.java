@@ -25,6 +25,11 @@ public class Bucket extends BaseEntity{
     @Column(unique = true, nullable = false)
     private String directory;
 
+    @NotEmpty
+    @Size(min = 1, max = 512)
+    @Column(unique = false, nullable = false)
+    private String name;
+
     public int getId() {
         return id;
     }
@@ -41,20 +46,29 @@ public class Bucket extends BaseEntity{
         this.directory = directory;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (!(o instanceof Bucket)) {
             return false;
         }
 
-        final Bucket bucket = (Bucket) o;
-        return id == bucket.id &&
-            Objects.equals(directory, bucket.directory);
+        final Bucket other = (Bucket) o;
+        return id == other.id &&
+            Objects.equals(directory, other.directory) &&
+            Objects.equals(name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, directory);
+        return Objects.hash(id, directory, name);
     }
 
     @Override
@@ -62,6 +76,7 @@ public class Bucket extends BaseEntity{
         return "Bucket{" +
             "id=" + id +
             ", directory='" + directory + '\'' +
+            ", name='" + name + '\'' +
             '}';
     }
 }

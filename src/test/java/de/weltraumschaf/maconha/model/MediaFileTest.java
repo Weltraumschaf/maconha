@@ -1,8 +1,6 @@
 package de.weltraumschaf.maconha.model;
 
 import de.weltraumschaf.maconha.core.FileExtension;
-import de.weltraumschaf.maconha.model.Media.MediaType;
-import java.nio.file.Paths;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
@@ -11,33 +9,19 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
- * Tests for {@link Media}.
+ * Tests for {@link MediaFile}.
  */
-public class MediaTest {
+public class MediaFileTest {
 
-    final Media sut = new Media();
+    private final MediaFile sut = new MediaFile();
 
     @Test
     public void equalsAndHashCode() {
-        final OriginFile fileOne = new OriginFile();
-        fileOne.setId(1);
-        final OriginFile fileTwo = new OriginFile();
-        fileTwo.setId(2);
         EqualsVerifier
-            .forClass(Media.class)
-            .withPrefabValues(OriginFile.class, fileOne, fileTwo)
+            .forClass(MediaFile.class)
             .withPrefabValues(Keyword.class, new Keyword().setId(1), new Keyword().setId(2))
-            .withIgnoredFields("keywords", "originFile")
+            .withIgnoredFields("keywords")
             .verify();
-    }
-
-    @Test
-    public void setOriginFile() {
-        final OriginFile file = new OriginFile();
-
-        sut.setOriginFile(file);
-
-        assertThat(file.getImported(), is(sut));
     }
 
     @Test
@@ -49,48 +33,45 @@ public class MediaTest {
 
         sut.addKeyword(keywordOne);
 
-        assertThat(keywordOne.getMedias(), contains(sut));
+        assertThat(keywordOne.getMediaFiles(), contains(sut));
     }
 
     @Test
     public void toString_doesNotEndlessLoop() {
         sut.setFormat(FileExtension.MATROSKA_VIDEO_FILE);
         sut.setId(23);
-        sut.setLastImported(new LocalDateTime(0));
-        sut.setTitle("title");
+        sut.setLastScanned(new LocalDateTime(0));
+        sut.setRelativeFileName("title");
         sut.setType(MediaType.VIDEO);
 
         assertThat(
             sut.toString(),
-            is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=, keywords=}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=}"));
 
-        final OriginFile file = new OriginFile();
-        file.setAbsolutePath(Paths.get("/foo/bar"));
-        sut.setOriginFile(file);
         assertThat(
             sut.toString(),
-            is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=}"));
 
         final Keyword keywordOne = new Keyword();
         keywordOne.setLiteral("foo");
         sut.addKeyword(keywordOne);
         assertThat(
             sut.toString(),
-            is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=foo}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=foo}"));
 
         final Keyword keywordTwo = new Keyword();
         keywordTwo.setLiteral("bar");
         sut.addKeyword(keywordTwo);
         assertThat(
             sut.toString(),
-            is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=bar, foo}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=bar, foo}"));
 
         final Keyword keywordThree = new Keyword();
         keywordThree.setLiteral("baz");
         sut.addKeyword(keywordThree);
         assertThat(
             sut.toString(),
-            is("Media{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, title=title, lastImported=1970-01-01T01:00:00.000, originFile=/foo/bar, keywords=bar, foo, baz}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=bar, foo, baz}"));
     }
 
     @Test

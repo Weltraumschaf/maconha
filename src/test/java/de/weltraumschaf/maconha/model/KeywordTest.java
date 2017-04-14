@@ -11,15 +11,15 @@ public class KeywordTest {
 
     @Test
     public void equalsAndHashCode() {
-        final Media mediaOne = new Media();
-        mediaOne.setId(1);
-        final Media mediaTwo = new Media();
-        mediaTwo.setId(2);
+        final MediaFile mediaFileOne = new MediaFile();
+        mediaFileOne.setId(1);
+        final MediaFile mediaFileTwo = new MediaFile();
+        mediaFileTwo.setId(2);
 
         EqualsVerifier
             .forClass(Keyword.class)
-            .withPrefabValues(Media.class, mediaOne, mediaTwo)
-            .withIgnoredFields("medias")
+            .withPrefabValues(MediaFile.class, mediaFileOne, mediaFileTwo)
+            .withIgnoredFields("mediaFiles")
             .verify();
     }
 

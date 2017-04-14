@@ -1,14 +1,14 @@
 package de.weltraumschaf.maconha.repo;
 
-import de.weltraumschaf.maconha.model.Media;
+import de.weltraumschaf.maconha.model.MediaFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
  * Auto implemented by Spring.
  */
-public interface MediaRepo extends BaseRepo<Media> {
+public interface MediaRepo extends BaseRepo<MediaFile> {
 
     @Override
-    Page<Media> findAll(Pageable pageable);
+    Page<MediaFile> findAll(Pageable pageable);
 }

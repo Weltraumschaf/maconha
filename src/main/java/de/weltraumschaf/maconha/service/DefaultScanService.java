@@ -30,12 +30,12 @@ import javax.sql.DataSource;
 final class DefaultScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
 
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
-    @Autowired
-    private DataSource dataSource;
+//    @Autowired
+//    private JobBuilderFactory jobBuilderFactory;
+//    @Autowired
+//    private StepBuilderFactory stepBuilderFactory;
+//    @Autowired
+//    private DataSource dataSource;
 
     @Override
     public void scan(final Bucket bucket) {
@@ -43,23 +43,23 @@ final class DefaultScanService implements ScanService {
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
     }
 
-    @Bean
-    public Job importUserJob(final JobExecutionListener listener) {
-        return jobBuilderFactory.get("importUserJob")
-            .incrementer(new RunIdIncrementer())
-            .listener(listener)
-            .flow(step1())
-            .end()
-            .build();
-    }
+//    @Bean
+//    public Job importUserJob(final JobExecutionListener listener) {
+//        return jobBuilderFactory.get("importUserJob")
+//            .incrementer(new RunIdIncrementer())
+//            .listener(listener)
+//            .flow(step1())
+//            .end()
+//            .build();
+//    }
 
-    @Bean
-    public Step step1() {
-        return stepBuilderFactory.get("step1")
-            .<User, User> chunk(10)
-//            .reader(null)
-//            .processor(null)
-//            .writer(null)
-            .build();
-    }
+//    @Bean
+//    public Step step1() {
+//        return stepBuilderFactory.get("step1")
+//            .<User, User> chunk(10)
+////            .reader(null)
+////            .processor(null)
+////            .writer(null)
+//            .build();
+//    }
 }

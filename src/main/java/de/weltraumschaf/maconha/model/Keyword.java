@@ -38,8 +38,8 @@ public class Keyword extends BaseEntity {
     @JsonIgnore
     @ManyToMany
     @SuppressWarnings("FieldMayBeFinal") // XXX Must not be final?
-    @JoinTable(name = "Keyword_Media", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
-    private Set<Media> medias = new HashSet<>();
+    @JoinTable(name = "Keyword_MediaFile", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
+    private Set<MediaFile> mediaFiles = new HashSet<>();
 
     public int getId() {
         return id;
@@ -58,21 +58,21 @@ public class Keyword extends BaseEntity {
         this.literal = literal;
     }
 
-    public Set<Media> getMedias() {
-        return medias;
+    public Set<MediaFile> getMediaFiles() {
+        return mediaFiles;
     }
 
-    public void addMedias(final Media media) {
-        if (isAlreadyAdded(media)) {
+    public void addMedias(final MediaFile mediaFile) {
+        if (isAlreadyAdded(mediaFile)) {
             return;
         }
 
-        medias.add(media);
-        media.addKeyword(this);
+        mediaFiles.add(mediaFile);
+        mediaFile.addKeyword(this);
     }
 
-    private boolean isAlreadyAdded(final Media newMedia) {
-        return isAlreadyAdded(medias, newMedia);
+    private boolean isAlreadyAdded(final MediaFile newMediaFile) {
+        return isAlreadyAdded(mediaFiles, newMediaFile);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Keyword extends BaseEntity {
         return "Keyword{"
             + "id=" + id + ", "
             + "literal=" + literal + ", "
-            + "medias=" + medias
+            + "mediaFiles=" + mediaFiles
             + '}';
     }
 
