@@ -5,10 +5,7 @@ import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.*;
@@ -47,10 +44,11 @@ final class DefaultScanService implements ScanService {
     public Long scan(final Bucket bucket) throws ScanError {
         Validate.notNull(bucket, "bucket");
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
+        final JobParameters parameters = new JobParametersBuilder()
+            .toJobParameters();
 
         try {
             final Job job = registry.getJob(JOB_NAME);
-            final JobParameters parameters = new JobParameters();
             return launcher.run(job, parameters).getId();
         } catch (final NoSuchJobException e) {
             throw new ScanError(e, "There is no such job with name '%s'!", JOB_NAME);

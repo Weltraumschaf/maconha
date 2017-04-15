@@ -11,6 +11,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.tasklet.SystemCommandTasklet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Import;
 @Import(DatabaseConfiguration.class) // Provide a datasource for meta dta storage in database to make them persistent.
 public class ScanBatchConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanBatchConfiguration.class);
+    public static final int COMMAND_TIMEOUT_IN_MSEC = 5000;
 
     private final JobExecutionListener listener = new JobExecutionListener() {
         @Override
@@ -62,8 +64,12 @@ public class ScanBatchConfiguration {
     @Bean
     public Step findFilesStep() {
         LOGGER.debug("Create FindFilesStep bean.");
+        final SystemCommandTasklet findFiles = new SystemCommandTasklet();
+        findFiles.setCommand("echo hello");
+        findFiles.setTimeout(COMMAND_TIMEOUT_IN_MSEC);
         return steps.get("FindFilesStep")
-            .tasklet(new FindFilesTasklet())
+            .tasklet(findFiles)
+            .allowStartIfComplete(true)
             .build();
     }
 
@@ -72,6 +78,7 @@ public class ScanBatchConfiguration {
         LOGGER.debug("Create FilterSeenFilesStep bean.");
         return steps.get("FilterSeenFilesStep")
             .tasklet(new FilterSeenFilesTasklet())
+            .allowStartIfComplete(true)
             .build();
     }
 
@@ -80,6 +87,7 @@ public class ScanBatchConfiguration {
         LOGGER.debug("Create MetaDataExtractionStep bean.");
         return steps.get("MetaDataExtractionStep")
             .tasklet(new MetaDataExtractionTasklet())
+            .allowStartIfComplete(true)
             .build();
     }
 }
