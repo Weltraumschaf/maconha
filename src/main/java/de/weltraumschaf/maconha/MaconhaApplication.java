@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha;
 
+import de.weltraumschaf.maconha.service.scan.ScanBatchConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -65,7 +66,7 @@ public class MaconhaApplication implements CommandLineRunner {
     }
 
     @Bean
-    public ApplicationContextFactory someJobs() {
+    public ApplicationContextFactory scanJobFactory() {
         return new GenericApplicationContextFactory(ScanBatchConfiguration.class);
     }
 }

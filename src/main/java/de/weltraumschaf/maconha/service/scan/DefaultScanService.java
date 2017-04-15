@@ -1,7 +1,8 @@
-package de.weltraumschaf.maconha.service;
+package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;

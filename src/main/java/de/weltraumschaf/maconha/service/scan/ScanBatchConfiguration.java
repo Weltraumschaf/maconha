@@ -1,5 +1,6 @@
-package de.weltraumschaf.maconha;
+package de.weltraumschaf.maconha.service.scan;
 
+import de.weltraumschaf.maconha.DatabaseConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +25,6 @@ import org.springframework.context.annotation.Import;
 public class ScanBatchConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanBatchConfiguration.class);
 
-    @Autowired
-    private JobBuilderFactory jobs;
-
-    @Autowired
-    private StepBuilderFactory steps;
-
     private final JobExecutionListener listener = new JobExecutionListener() {
         @Override
         public void beforeJob(final JobExecution jobExecution) {
@@ -41,6 +36,16 @@ public class ScanBatchConfiguration {
             LOGGER.debug("<<after job>>");
         }
     };
+
+    private final JobBuilderFactory jobs;
+    private final StepBuilderFactory steps;
+
+    @Autowired
+    ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps) {
+        super();
+        this.jobs = jobs;
+        this.steps = steps;
+    }
 
     @Bean(name = ScanService.JOB_NAME)
     public Job scanJob() {

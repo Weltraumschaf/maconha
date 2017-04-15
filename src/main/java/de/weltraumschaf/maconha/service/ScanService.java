@@ -15,11 +15,11 @@ public interface ScanService {
     String getStatus(long executionId) throws ScanError;
 
     class ScanError extends Exception {
-        ScanError(final String message, Object... args) {
+        public ScanError(final String message, Object... args) {
             this(null, message, args);
         }
 
-        ScanError(final Throwable cause, final String message, Object... args) {
+        public ScanError(final Throwable cause, final String message, Object... args) {
             super(String.format(message, args), cause);
         }
     }
