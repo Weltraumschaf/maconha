@@ -8,6 +8,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -16,6 +17,7 @@ import java.util.Properties;
  * This is a manual database configuration because auto config only via properties does notwork w/ current SpringBoot version.
  */
 @Configuration
+@EnableTransactionManagement
 @EnableJpaRepositories(basePackages = { "de.weltraumschaf.maconha.repo" })
 public class DatabaseConfiguration {
     @Value("${spring.datasource.driver-class-name}")

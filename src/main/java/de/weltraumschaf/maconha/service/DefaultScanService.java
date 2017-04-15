@@ -16,7 +16,6 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Default implementation.
@@ -26,19 +25,17 @@ import org.springframework.transaction.annotation.Transactional;
  * </p>
  */
 @Service
-@Transactional
 final class DefaultScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
-    private static final String JOB_NAME = "scan-bucket";
 
     @Autowired
-    private JobRegistry jobs;
+    private JobRegistry registry;
     @Autowired
-    private JobLauncher jobLauncher;
+    private JobLauncher launcher;
     @Autowired
-    private JobOperator jobOperator;
+    private JobOperator operator;
     @Autowired
-    private JobExplorer jobExplorer;
+    private JobExplorer explorer;
 
     @Override
     public Long scan(final Bucket bucket) throws ScanError {
@@ -46,9 +43,9 @@ final class DefaultScanService implements ScanService {
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
 
         try {
-            final Job job = jobs.getJob(JOB_NAME);
+            final Job job = registry.getJob(JOB_NAME);
             final JobParameters parameters = new JobParameters();
-            return jobLauncher.run(job, parameters).getId();
+            return launcher.run(job, parameters).getId();
         } catch (final NoSuchJobException e) {
             throw new ScanError(e, "There is no such job with name '%s'!", JOB_NAME);
         } catch (final JobInstanceAlreadyCompleteException e) {
@@ -66,7 +63,7 @@ final class DefaultScanService implements ScanService {
     public boolean stop(final long executionId) throws ScanError {
         LOGGER.debug("Stop JobExecution with id: " + executionId);
         try {
-            return jobOperator.stop(executionId);
+            return operator.stop(executionId);
         } catch (final NoSuchJobExecutionException e) {
             throw new ScanError(e, "No job execution present for id %d!", executionId);
         } catch (final JobExecutionNotRunningException e) {
@@ -77,7 +74,7 @@ final class DefaultScanService implements ScanService {
     @Override
     public String getStatus(final long executionId) throws ScanError {
         LOGGER.debug("Get ExitCode for JobExecution with id: " + executionId + ".");
-        final JobExecution jobExecution = jobExplorer.getJobExecution(executionId);
+        final JobExecution jobExecution = explorer.getJobExecution(executionId);
 
         if (jobExecution != null) {
             return jobExecution.getExitStatus().getExitCode();
