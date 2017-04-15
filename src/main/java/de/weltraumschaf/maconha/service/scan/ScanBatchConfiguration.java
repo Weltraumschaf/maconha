@@ -4,13 +4,13 @@ import de.weltraumschaf.maconha.DatabaseConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobExecutionListener;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Import;
  * This class configures the batch job for {@link ScanService scanning}.
  */
 @Configuration
-@Import(DatabaseConfiguration.class)
+@Import(DatabaseConfiguration.class) // Provide a datasource for meta dta storage in database to make them persistent.
 public class ScanBatchConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanBatchConfiguration.class);
 

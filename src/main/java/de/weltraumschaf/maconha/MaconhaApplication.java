@@ -23,7 +23,7 @@ import java.util.Arrays;
  * Main entry point of the Spring boot application.
  */
 @SpringBootApplication
-@EnableBatchProcessing(modular = true)
+@EnableBatchProcessing(modular = true) // Modular because job configuration is in other class.
 @ComponentScan( {"de.weltraumschaf.maconha"})
 @PropertySource(value = {"classpath:application.properties"})
 public class MaconhaApplication implements CommandLineRunner {
@@ -67,6 +67,7 @@ public class MaconhaApplication implements CommandLineRunner {
 
     @Bean
     public ApplicationContextFactory scanJobFactory() {
+        // Provide a context factory for the scan job so the job registry will be populated with the job.
         return new GenericApplicationContextFactory(ScanBatchConfiguration.class);
     }
 }
