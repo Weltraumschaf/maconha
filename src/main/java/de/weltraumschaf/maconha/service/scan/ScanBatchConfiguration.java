@@ -4,13 +4,12 @@ import de.weltraumschaf.maconha.DatabaseConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -64,10 +63,7 @@ public class ScanBatchConfiguration {
     public Step findFilesStep() {
         LOGGER.debug("Create FindFilesStep bean.");
         return steps.get("FindFilesStep")
-            .tasklet((contribution, chunkContext) -> {
-                LOGGER.debug("<<FindFilesStep>>");
-                return RepeatStatus.FINISHED;
-            })
+            .tasklet(new FindFilesTasklet())
             .build();
     }
 
@@ -75,21 +71,15 @@ public class ScanBatchConfiguration {
     public Step filterSeenFilesStep() {
         LOGGER.debug("Create FilterSeenFilesStep bean.");
         return steps.get("FilterSeenFilesStep")
-            .tasklet((contribution, chunkContext) -> {
-                LOGGER.debug("<<FilterSeenFilesStep>>");
-                return RepeatStatus.FINISHED;
-            })
+            .tasklet(new FilterSeenFilesTasklet())
             .build();
     }
 
     @Bean
     public Step metaDataExtractionStep() {
-        LOGGER.debug("Create FetaDataExtractionStep bean.");
-        return steps.get("FetaDataExtractionStep")
-            .tasklet((contribution, chunkContext) -> {
-                LOGGER.debug("<<FilterSeenFilesStep>>");
-                return RepeatStatus.FINISHED;
-            })
+        LOGGER.debug("Create MetaDataExtractionStep bean.");
+        return steps.get("MetaDataExtractionStep")
+            .tasklet(new MetaDataExtractionTasklet())
             .build();
     }
 }

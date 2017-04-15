@@ -29,14 +29,19 @@ import org.springframework.stereotype.Service;
 final class DefaultScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
 
+    private final JobRegistry registry;
+    private final JobLauncher launcher;
+    private final JobOperator operator;
+    private final JobExplorer explorer;
+
     @Autowired
-    private JobRegistry registry;
-    @Autowired
-    private JobLauncher launcher;
-    @Autowired
-    private JobOperator operator;
-    @Autowired
-    private JobExplorer explorer;
+    DefaultScanService(final JobRegistry registry, final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer) {
+        super();
+        this.registry = registry;
+        this.launcher = launcher;
+        this.operator = operator;
+        this.explorer = explorer;
+    }
 
     @Override
     public Long scan(final Bucket bucket) throws ScanError {
