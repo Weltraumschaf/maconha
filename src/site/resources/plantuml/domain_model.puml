@@ -11,6 +11,7 @@ class MediaFile {
     relativeFileName
     fileHash
     lastScanned
+    hasMetaData()
 }
 
 note left of MediaFile {
@@ -28,6 +29,15 @@ enum FileExtension {
     extension
 }
 
+interface MetaData {
+}
+
+class NoMetaData {
+}
+
+class Mp3MetaData {
+}
+
 class Keyword {
     literal
 }
@@ -40,7 +50,10 @@ note bottom of Keyword {
 Bucket *-- MediaFile
 MediaFile -- MediaType : type
 MediaFile -- FileExtension : format
+MediaFile "1" -- "0..1" MetaData
 MediaFile "1" -- "*" Keyword
 MediaType "1" -- "*" FileExtension
+NoMetaData --|> MetaData
+Mp3MetaData --|> MetaData
 
 @enduml
