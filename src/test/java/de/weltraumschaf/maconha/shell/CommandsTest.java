@@ -24,17 +24,4 @@ public class CommandsTest {
         new Commands(null);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void dirhash_directoryMustNotBeNull(){
-        new Commands(tmp.getRoot().toPath()).dirhash(null);
-    }
-
-    @Test
-    public void dirhash() {
-        final Command dirhash = new Commands(tmp.getRoot().toPath()).dirhash(Paths.get("/foo/bar"));
-
-        assertThat(dirhash, is(not(nullValue())));
-        assertThat(dirhash.getPath(), is(tmp.getRoot().toPath()));
-        assertThat(dirhash.getArguments(), is("/foo/bar"));
-    }
 }

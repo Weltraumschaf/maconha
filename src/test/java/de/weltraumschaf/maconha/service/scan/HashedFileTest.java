@@ -1,5 +1,5 @@
 
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.service.scan;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;

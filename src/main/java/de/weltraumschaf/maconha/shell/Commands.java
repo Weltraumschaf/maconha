@@ -23,13 +23,4 @@ public final class Commands {
         this.path = Validate.notNull(path, "path");
     }
 
-    /**
-     * Create directory hash command.
-     *
-     * @param directory must not be {@code null}
-     * @return never {@code null}, always new object
-     */
-    public Command dirhash(final Path directory) {
-        return new Dirhash(path, Validate.notNull(directory, "directory"));
-    }
 }

@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.util.Objects;
@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Represents a file with a hash of its content.
  */
-public final class HashedFile {
+final class HashedFile {
 
     private final String hash;
     private final String file;

@@ -19,10 +19,9 @@ final class FindFilesTasklet extends SystemCommandTasklet {
 
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) throws Exception {
-        LOGGER.debug("<<FindFilesTasklet>>");
-
         final String directory = (String) chunkContext.getStepContext().getJobParameters().get(JobParameterKeys.BUCKET_DIRECTORY);
         LOGGER.debug("Find and hash files in directory {} ...", directory);
+        // FIXME Remove absolute path!
         setCommand("/Users/sst/src/private/maconha-ng/bin/dirhash " + directory);
         setTimeout(TimeUnit.MINUTES.toMillis(10L));
 
