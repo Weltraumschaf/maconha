@@ -23,11 +23,6 @@ import java.util.stream.Collectors;
 @SuppressWarnings("PersistenceUnitPresent")
 public class MediaFile extends BaseEntity {
 
-    @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -44,7 +39,7 @@ public class MediaFile extends BaseEntity {
     private String relativeFileName = "";
 
     @NotEmpty
-    @Size(min = 1, max = 256)
+    @Size(min = 64, max = 64)
     @Column(nullable = false)
     private String fileHash = "";
 
@@ -57,14 +52,6 @@ public class MediaFile extends BaseEntity {
     @ManyToMany(mappedBy = "mediaFiles")
     @SuppressWarnings("FieldMayBeFinal")
     private Set<Keyword> keywords = new HashSet<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
-    }
 
     public MediaType getType() {
         return type;
@@ -125,7 +112,7 @@ public class MediaFile extends BaseEntity {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, type, format, relativeFileName, fileHash, lastScanned);
+        return Objects.hash(type, format, relativeFileName, fileHash, lastScanned);
     }
 
     @Override
@@ -135,8 +122,7 @@ public class MediaFile extends BaseEntity {
         }
 
         final MediaFile other = (MediaFile) obj;
-        return Objects.equals(id, other.id)
-            && Objects.equals(type, other.type)
+        return Objects.equals(type, other.type)
             && Objects.equals(format, other.format)
             && Objects.equals(relativeFileName, other.relativeFileName)
             && Objects.equals(fileHash, other.fileHash)
@@ -146,7 +132,7 @@ public class MediaFile extends BaseEntity {
     @Override
     public final String toString() {
         return "MediaFile{"
-            + "id=" + id + ", "
+            + "id=" + getId() + ", "
             + "type=" + type + ", "
             + "format=" + format + ", "
             + "relativeFileName=" + relativeFileName + ", "

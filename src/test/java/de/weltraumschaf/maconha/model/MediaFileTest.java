@@ -17,10 +17,14 @@ public class MediaFileTest {
 
     @Test
     public void equalsAndHashCode() {
+        final Keyword keywordOne = new Keyword();
+        keywordOne.setLiteral("foo");
+        final Keyword keywordTwo = new Keyword();
+        keywordTwo.setLiteral("bar");
         EqualsVerifier
             .forClass(MediaFile.class)
-            .withPrefabValues(Keyword.class, new Keyword().setId(1), new Keyword().setId(2))
-            .withIgnoredFields("keywords")
+            .withPrefabValues(Keyword.class, keywordOne, keywordTwo)
+            .withIgnoredFields("id", "keywords")
             .verify();
     }
 

@@ -9,6 +9,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @param <E> type of entity
  */
 @NoRepositoryBean
-interface BaseRepo<E> extends JpaRepository<E, Integer> {
+interface BaseRepo<E> extends JpaRepository<E, Long> {
 
 }

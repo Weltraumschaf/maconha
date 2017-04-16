@@ -25,11 +25,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @SuppressWarnings("PersistenceUnitPresent")
 public class Keyword extends BaseEntity {
 
-    @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @NotEmpty
     @Size(min = 1, max = 255)
     @Column(unique = true, nullable = false)
@@ -40,15 +35,6 @@ public class Keyword extends BaseEntity {
     @SuppressWarnings("FieldMayBeFinal") // XXX Must not be final?
     @JoinTable(name = "Keyword_MediaFile", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
     private Set<MediaFile> mediaFiles = new HashSet<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public Keyword setId(final int id) {
-        this.id = id;
-        return this;
-    }
 
     public String getLiteral() {
         return literal;
@@ -77,7 +63,7 @@ public class Keyword extends BaseEntity {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id, literal);
+        return Objects.hash(literal);
     }
 
     @Override
@@ -87,14 +73,13 @@ public class Keyword extends BaseEntity {
         }
 
         final Keyword other = (Keyword) obj;
-        return Objects.equals(id, other.id)
-            && Objects.equals(literal, other.literal);
+        return Objects.equals(literal, other.literal);
     }
 
     @Override
     public String toString() {
         return "Keyword{"
-            + "id=" + id + ", "
+            + "id=" + getId() + ", "
             + "literal=" + literal + ", "
             + "mediaFiles=" + mediaFiles
             + '}';

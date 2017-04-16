@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Import;
 @Import(DatabaseConfiguration.class) // Provide a datasource for meta dta storage in database to make them persistent.
 public class ScanBatchConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanBatchConfiguration.class);
-    public static final int COMMAND_TIMEOUT_IN_MSEC = 5000;
 
     private final JobExecutionListener listener = new JobExecutionListener() {
         @Override
@@ -64,11 +63,8 @@ public class ScanBatchConfiguration {
     @Bean
     public Step findFilesStep() {
         LOGGER.debug("Create FindFilesStep bean.");
-        final SystemCommandTasklet findFiles = new SystemCommandTasklet();
-        findFiles.setCommand("echo hello");
-        findFiles.setTimeout(COMMAND_TIMEOUT_IN_MSEC);
         return steps.get("FindFilesStep")
-            .tasklet(findFiles)
+            .tasklet(new FindFilesTasklet())
             .allowStartIfComplete(true)
             .build();
     }

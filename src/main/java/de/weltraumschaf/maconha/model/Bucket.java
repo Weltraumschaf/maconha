@@ -15,10 +15,6 @@ import java.util.Objects;
 @Entity
 @SuppressWarnings("PersistenceUnitPresent")
 public class Bucket extends BaseEntity{
-    @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @NotEmpty
     @Size(min = 1, max = 4096)
@@ -29,14 +25,6 @@ public class Bucket extends BaseEntity{
     @Size(min = 1, max = 512)
     @Column(unique = false, nullable = false)
     private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
-    }
 
     public String getDirectory() {
         return directory;
@@ -61,20 +49,19 @@ public class Bucket extends BaseEntity{
         }
 
         final Bucket other = (Bucket) o;
-        return id == other.id &&
-            Objects.equals(directory, other.directory) &&
+        return Objects.equals(directory, other.directory) &&
             Objects.equals(name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, directory, name);
+        return Objects.hash(directory, name);
     }
 
     @Override
     public String toString() {
         return "Bucket{" +
-            "id=" + id +
+            "id=" + getId() +
             ", directory='" + directory + '\'' +
             ", name='" + name + '\'' +
             '}';

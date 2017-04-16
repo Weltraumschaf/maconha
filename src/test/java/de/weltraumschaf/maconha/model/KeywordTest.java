@@ -12,14 +12,14 @@ public class KeywordTest {
     @Test
     public void equalsAndHashCode() {
         final MediaFile mediaFileOne = new MediaFile();
-        mediaFileOne.setId(1);
+        mediaFileOne.setFileHash("foo");
         final MediaFile mediaFileTwo = new MediaFile();
-        mediaFileTwo.setId(2);
+        mediaFileTwo.setFileHash("bar");
 
         EqualsVerifier
             .forClass(Keyword.class)
             .withPrefabValues(MediaFile.class, mediaFileOne, mediaFileTwo)
-            .withIgnoredFields("mediaFiles")
+            .withIgnoredFields("id", "mediaFiles")
             .verify();
     }
 

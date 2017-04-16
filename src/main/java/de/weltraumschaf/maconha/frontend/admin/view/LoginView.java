@@ -85,7 +85,10 @@ public final class LoginView extends VerticalLayout {
 
         signin.addClickListener((Button.ClickListener) event -> {
             if ("admin".equals(username.getValue()) && "maconha".equals(password.getValue())) {
-                events.publish(LoginView.this, new User(username.getValue(), true));
+                final User user = new User();
+                user.setName(username.getValue());
+                user.setAdmin(true);
+                events.publish(LoginView.this, user);
             } else {
                 LOGGER.warn("Login failed for username {}!", username.getValue());
             }

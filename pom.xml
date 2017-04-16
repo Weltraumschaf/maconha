@@ -609,6 +609,9 @@
                                       tofile="${project.bin.directory}/${project.build.finalName}.jar"/>
                                 <copy file="${project.scripts.directory}/${project.build.finalName}.sh"
                                       tofile="${project.bin.directory}/${project.build.finalName}"/>
+                                <copy file="${project.scripts.directory}/dirhash.sh"
+                                      tofile="${project.bin.directory}/dirhash"/>
+
                                 <chmod dir="${project.bin.directory}" perm="ugo+rx"/>
                                 <chmod perm="ugo+rx">
                                     <fileset dir="${project.bin.directory}">

@@ -45,6 +45,8 @@ final class DefaultScanService implements ScanService {
         Validate.notNull(bucket, "bucket");
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
         final JobParameters parameters = new JobParametersBuilder()
+            .addLong(JobParameterKeys.BUCKET_ID, bucket.getId())
+            .addString(JobParameterKeys.BUCKET_DIRECTORY, bucket.getDirectory())
             .toJobParameters();
 
         try {

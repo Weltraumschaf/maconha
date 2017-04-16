@@ -1,26 +1,44 @@
 package de.weltraumschaf.maconha.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 /**
- *
+ * Entity which represent an user.
+ * <p>
+ * Must not be {@code final} for frameworks sake.
+ * </p>
  */
-public final class User {
-    private final String name;
-    private final boolean admin;
+@Entity
+@SuppressWarnings("PersistenceUnitPresent")
+public final class User extends BaseEntity {
 
-    public User(final String name, final boolean admin) {
-        super();
-        this.name = name;
-        this.admin = admin;
-    }
+    @NotEmpty
+    @Size(min = 1, max = 256)
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private boolean admin;
 
     public String getName() {
         return name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     public boolean isAdmin() {
         return admin;
+    }
+
+    public void setAdmin(final boolean admin) {
+        this.admin = admin;
     }
 
     @Override
@@ -42,6 +60,7 @@ public final class User {
     @Override
     public String toString() {
         return "User{" +
+            "id=" + getId() + ", " +
             "name='" + name + '\'' +
             ", admin=" + admin +
             '}';
