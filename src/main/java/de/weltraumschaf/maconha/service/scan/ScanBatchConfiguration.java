@@ -2,18 +2,17 @@ package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.DatabaseConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
-import jdk.nashorn.internal.scripts.JO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.listener.ExecutionContextPromotionListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * This class configures the batch job for {@link ScanService scanning}.
@@ -73,6 +71,15 @@ public class ScanBatchConfiguration {
         return taskExecutor;
     }
 
+    @Bean
+    public ExecutionContextPromotionListener promotionListener() {
+        final ExecutionContextPromotionListener listener = new ExecutionContextPromotionListener();
+        listener.setKeys(new String[]{
+            ContextKeys.UNSEEN_FILES
+        });
+        return listener;
+    }
+
     @Bean(name = ScanService.JOB_NAME)
     public Job scanJob() {
         LOGGER.debug("Create {} bean.", ScanService.JOB_NAME);
@@ -98,7 +105,7 @@ public class ScanBatchConfiguration {
     public Step filterSeenFilesStep() {
         LOGGER.debug("Create FilterSeenFilesStep bean.");
         return steps.get("FilterSeenFilesStep")
-            .tasklet(new FilterSeenFilesTasklet())
+            .tasklet(new FilterUnseenFilesTasklet())
             .allowStartIfComplete(true)
             .build();
     }

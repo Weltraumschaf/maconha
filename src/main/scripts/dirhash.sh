@@ -40,7 +40,7 @@ if [ -e "${checksumFile}" ]; then
 fi
 
 echo "Start checksumming. May take a while ..."
-# Find all fie but not hidden files (start with .).
+# Find all files but not hidden files (start with .).
 find "${basedir}" -type f ! -iname ".*" -print0 | \
     xargs -0 -n1 -P4 $hashCmd \
     > "${checksumFile}"

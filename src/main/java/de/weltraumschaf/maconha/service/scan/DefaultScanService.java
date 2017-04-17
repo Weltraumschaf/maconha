@@ -6,7 +6,6 @@ import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
-import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.*;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -30,17 +29,15 @@ final class DefaultScanService implements ScanService {
     private final JobLauncher launcher;
     private final JobOperator operator;
     private final JobExplorer explorer;
+    private final Job job;
 
     @Autowired
-    @Qualifier(JOB_NAME)
-    private Job job;
-
-    @Autowired
-    DefaultScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer) {
+    DefaultScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job) {
         super();
         this.launcher = launcher;
         this.operator = operator;
         this.explorer = explorer;
+        this.job = job;
     }
 
     @Override
@@ -63,6 +60,7 @@ final class DefaultScanService implements ScanService {
     }
 
     private JobParameters createJobParameters(final Bucket bucket) {
+        // The job framework does not allow to use arbitrary objects s parameters so the bare values are used here.
         return new JobParametersBuilder()
             .addLong(JobParameterKeys.START_TIME, System.currentTimeMillis())
             .addLong(JobParameterKeys.BUCKET_ID, bucket.getId())
