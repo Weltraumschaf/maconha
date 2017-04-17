@@ -4,45 +4,42 @@
 # This is the Unix wrapper script to run Maconha.
 #
 
+set -e
+
 # JVM settings.
-JVM_MIN_HEAP_SPACE="128m"
-JVM_MAX_HEAP_SPACE="1024m"
-JVM_OPTIONS="-Xms${JVM_MIN_HEAP_SPACE} -Xmx${JVM_MAX_HEAP_SPACE}"
+jvm_min_heap_space="32m"
+jvm_max_heap_space="128m"
+jvm_options="-Xms${jvm_min_heap_space} -Xmx${jvm_max_heap_space}"
 
-PROGRAM="${0}"
+program="${0}"
+while [ -h "${program}" ]; do
+  ls=`ls -ld "${program}"`
+  link=`expr "${ls}" : '.*-> \(.*\)$'`
 
-while [ -h "${PROGRAM}" ]; do
-  LS=`ls -ld "${PROGRAM}"`
-  LINK=`expr "${LS}" : '.*-> \(.*\)$'`
-
-  if expr "${LINK}" : '.*/.*' > /dev/null; then
-    PROGRAM="${LINK}"
+  if expr "${link}" : '.*/.*' > /dev/null; then
+    program="${link}"
   else
-    PROGRAM=`dirname "${PROGRAM}"`/"${LINK}"
+    program=`dirname "${program}"`/"${link}"
   fi
 done
+program=$(realpath "${program}")
 
-PROGRAM_DIRECTORY=`dirname "${PROGRAM}"`
-PROGRAM_DIRECTORY=`realpath "${PROGRAM_DIRECTORY}"`
-
-JAR="${PROGRAM_DIRECTORY}/maconha.jar"
-
-if [ ! -f "${JAR}" ] ; then
-    PROJECT_DIR=`dirname "${PROGRAM_DIRECTORY}"`
-    echo "ERROR: JAR file ${JAR} not pressent!"
-    echo "Invoke 'mvn clean install' in the project base directory: ${PROJECT_DIR}."
-    exit 1
+java=java
+if [[ -n "${JAVA_HOME}" ]]; then
+    java="${JAVA_HOME}/bin/java"
 fi
 
-if [ "" != "${MACONHA_DEBUG}" ] ; then
-    JVM_OPTIONS=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+if [[ -n "${MACONHA_DEBUG}" ]] && [[ "" != "${MACONHA_DEBUG}" ]] ; then
+    jvm_options=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 fi
 
 profiles="prod"
-
 if [ "" != "${1}" ]; then
     profiles="${1}"
     echo "Using custom profile: ${profiles}."
 fi
 
-java ${JVM_OPTIONS} -jar "${JAR}" --spring.profiles.active=${profiles} --bin=${PROGRAM_DIRECTORY}
+programDirectory=$(dirname "${program}")
+
+exec "$java" ${jvm_options} -jar "${program}" --spring.profiles.active=${profiles} --bin=${programDirectory}
+exit 1

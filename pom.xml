@@ -605,18 +605,25 @@
 
                         <configuration>
                             <target>
-                                <copy file="${project.build.directory}/${project.build.finalName}-exec.jar"
-                                      tofile="${project.bin.directory}/${project.build.finalName}.jar"/>
-                                <copy file="${project.scripts.directory}/${project.build.finalName}.sh"
-                                      tofile="${project.bin.directory}/${project.build.finalName}"/>
-                                <copy file="${project.scripts.directory}/dirhash.sh"
-                                      tofile="${project.bin.directory}/dirhash"/>
+                                <!-- Generate main executable. -->
+                                <concat destfile="${project.bin.directory}/${project.build.finalName}" binary="yes">
+                                    <fileset file="${project.scripts.directory}/${project.build.finalName}.sh" />
+                                    <fileset file="${project.build.directory}/${project.build.finalName}-exec.jar" />
+                                </concat>
+
+                                <!-- Copy additional scripts. -->
+                                <copy todir="${project.bin.directory}">
+                                    <fileset dir="${project.scripts.directory}">
+                                        <include name="*.sh"/>
+                                        <exclude name="${project.build.finalName}.sh"/>
+                                    </fileset>
+                                    <mapper type="glob" from="*.sh" to="*"/>
+                                </copy>
 
                                 <chmod dir="${project.bin.directory}" perm="ugo+rx"/>
                                 <chmod perm="ugo+rx">
                                     <fileset dir="${project.bin.directory}">
                                         <include name="**/*"/>
-                                        <exclude name="**/*.jar"/>
                                     </fileset>
                                 </chmod>
                             </target>

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-set -u
 
 usage="Usage: dirhash <BASEDIR>"
 basedir="${1}"
