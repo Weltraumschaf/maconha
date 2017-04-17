@@ -11,9 +11,9 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.*;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,20 +27,20 @@ import org.springframework.stereotype.Service;
 final class DefaultScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
 
-    private final JobRegistry registry;
     private final JobLauncher launcher;
     private final JobOperator operator;
     private final JobExplorer explorer;
-    private final JobRepository repo;
 
     @Autowired
-    DefaultScanService(final JobRegistry registry, final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, final JobRepository repo) {
+    @Qualifier(JOB_NAME)
+    private Job job;
+
+    @Autowired
+    DefaultScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer) {
         super();
-        this.registry = registry;
         this.launcher = launcher;
         this.operator = operator;
         this.explorer = explorer;
-        this.repo = repo;
     }
 
     @Override
@@ -49,11 +49,8 @@ final class DefaultScanService implements ScanService {
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
 
         try {
-            final Job job = registry.getJob(JOB_NAME);
-            final JobParameters parameters = job.getJobParametersIncrementer().getNext(createJobParameters(bucket));
+            final JobParameters parameters = createJobParameters(bucket);
             return launcher.run(job, parameters).getId();
-        } catch (final NoSuchJobException e) {
-            throw new ScanError(e, "There is no such job with name '%s'!", JOB_NAME);
         } catch (final JobInstanceAlreadyCompleteException e) {
             throw new ScanError(e, "Job with name '%s' already completed!", JOB_NAME);
         } catch (final JobExecutionAlreadyRunningException e) {
@@ -67,6 +64,7 @@ final class DefaultScanService implements ScanService {
 
     private JobParameters createJobParameters(final Bucket bucket) {
         return new JobParametersBuilder()
+            .addLong(JobParameterKeys.START_TIME, System.currentTimeMillis())
             .addLong(JobParameterKeys.BUCKET_ID, bucket.getId())
             .addString(JobParameterKeys.BUCKET_DIRECTORY, bucket.getDirectory())
             .toJobParameters();

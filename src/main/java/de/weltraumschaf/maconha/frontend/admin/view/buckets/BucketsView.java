@@ -123,7 +123,12 @@ public final class BucketsView extends SubView {
 
     public void scan(final Button.ClickEvent event) {
         try {
-            scanner.scan(list.asSingleSelect().getValue());
+            final Bucket bucket = list.asSingleSelect().getValue();
+            final Long id = scanner.scan(bucket);
+            Notification.show(
+                "Scan started",
+                String.format("Scan for bucket directory '%s' started with id %d.", bucket.getDirectory(), id),
+                Notification.Type.TRAY_NOTIFICATION);
         } catch (final ScanService.ScanError e) {
             LOGGER.error(e.getMessage(), e);
             Notification.show("Scan failed", e.getMessage(), Notification.Type.ERROR_MESSAGE);

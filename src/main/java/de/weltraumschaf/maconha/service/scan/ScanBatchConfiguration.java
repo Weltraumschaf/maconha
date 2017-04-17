@@ -2,20 +2,26 @@ package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.DatabaseConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
+import jdk.nashorn.internal.scripts.JO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.step.tasklet.SystemCommandTasklet;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
  * This class configures the batch job for {@link ScanService scanning}.
@@ -24,6 +30,7 @@ import org.springframework.context.annotation.Import;
 @Import(DatabaseConfiguration.class) // Provide a datasource for meta dta storage in database to make them persistent.
 public class ScanBatchConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanBatchConfiguration.class);
+    private static final int JOB_LIMIT = 10;
 
     private final JobExecutionListener listener = new JobExecutionListener() {
         @Override
@@ -39,19 +46,37 @@ public class ScanBatchConfiguration {
 
     private final JobBuilderFactory jobs;
     private final StepBuilderFactory steps;
+    private final JobRepository repo;
 
     @Autowired
-    ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps) {
+    ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps, final JobRepository repo) {
         super();
         this.jobs = jobs;
         this.steps = steps;
+        this.repo = repo;
+    }
+
+    @Bean // Name must not be jobLauncher. See https://github.com/spring-projects/spring-boot/issues/1655
+    public JobLauncher asyncJobLauncher() throws Exception {
+        final SimpleJobLauncher launcher = new SimpleJobLauncher();
+        launcher.setJobRepository(repo);
+        launcher.setTaskExecutor(taskExecutor());
+        launcher.afterPropertiesSet();
+        LOGGER.debug("Created job launcher: {}", launcher);
+        return launcher;
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+        final SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("spring_batch");
+        taskExecutor.setConcurrencyLimit(JOB_LIMIT);
+        return taskExecutor;
     }
 
     @Bean(name = ScanService.JOB_NAME)
     public Job scanJob() {
         LOGGER.debug("Create {} bean.", ScanService.JOB_NAME);
         return jobs.get(ScanService.JOB_NAME)
-            .incrementer(new RunIdIncrementer())
             .listener(listener)
             .flow(findFilesStep())
             .next(filterSeenFilesStep())
@@ -86,4 +111,5 @@ public class ScanBatchConfiguration {
             .allowStartIfComplete(true)
             .build();
     }
+
 }
