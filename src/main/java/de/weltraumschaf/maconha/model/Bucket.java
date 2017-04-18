@@ -2,10 +2,7 @@ package de.weltraumschaf.maconha.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,7 +27,7 @@ public class Bucket extends BaseEntity {
     @Column(unique = false, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bucket")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bucket", cascade = CascadeType.ALL)
     private Set<MediaFile> mediaFiles = new HashSet<>();
 
     public String getDirectory() {
@@ -47,6 +44,23 @@ public class Bucket extends BaseEntity {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Set<MediaFile> getMediaFiles() {
+        return new HashSet<>(mediaFiles);
+    }
+
+    public void addKeyword(final MediaFile mediaFile) {
+        if (isAlreadyAdded(mediaFile)) {
+            return;
+        }
+
+        mediaFiles.add(mediaFile);
+        mediaFile.setBucket(this);
+    }
+
+    private boolean isAlreadyAdded(final MediaFile mediaFile) {
+        return isAlreadyAdded(mediaFiles, mediaFile);
     }
 
     @Override

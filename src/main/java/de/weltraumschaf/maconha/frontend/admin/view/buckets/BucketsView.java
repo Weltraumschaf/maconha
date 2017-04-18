@@ -32,13 +32,14 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 @SpringView(name = BucketsView.VIEW_NAME)
 public final class BucketsView extends SubView {
     public static final String VIEW_NAME = "buckets";
+    public static final String TITLE = "Buckets";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BucketsView.class);
     private static final String TITLE_ID = "buckets-title";
 
     private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
         .withProperties("id", "name", "directory")
-        .withColumnHeaders("id", "name", "directory")
+        .withColumnHeaders("ID", "Name", "Directory")
         .withFullWidth();
     private MTextField filterByDirectory = new MTextField()
         .withPlaceholder("Filter by directory");
@@ -49,17 +50,18 @@ public final class BucketsView extends SubView {
     private final Button scan = new MButton(VaadinIcons.COGS, this::scan);
     private final Button schedule = new MButton(VaadinIcons.ALARM, this::schedule);
 
-    @Autowired
-    private ScanService scanner;
-    @Autowired
-    private BucketRepo buckets;
-    @Autowired
-    private BucketForm form;
-    @Autowired
-    private EventBus.UIEventBus events;
+    private final ScanService scanner;
+    private final BucketRepo buckets;
+    private final BucketForm form;
+    private final EventBus.UIEventBus events;
 
-    BucketsView() {
-        super("Buckets", TITLE_ID);
+    @Autowired
+    public BucketsView(final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events) {
+        super(TITLE, TITLE_ID);
+        this.scanner = scanner;
+        this.buckets = buckets;
+        this.form = form;
+        this.events = events;
     }
 
     @Override

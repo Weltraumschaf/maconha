@@ -18,10 +18,11 @@ import javax.annotation.PostConstruct;
 @SpringView(name = DashboardView.VIEW_NAME)
 public final class DashboardView extends SubView {
     public static final String VIEW_NAME = "";
+    public static final String TITLE = "Dashboard";
     private static final String TITLE_ID = "dashboard-title";
 
     DashboardView() {
-        super("Dashboard", TITLE_ID);
+        super(TITLE, TITLE_ID);
     }
 
     @Override

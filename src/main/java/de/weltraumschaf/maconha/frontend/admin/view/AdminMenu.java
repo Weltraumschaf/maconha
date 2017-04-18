@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.frontend.admin.view.buckets.BucketsView;
 import de.weltraumschaf.maconha.frontend.admin.view.dashboard.DashboardView;
+import de.weltraumschaf.maconha.frontend.admin.view.mediafiles.MediaFilesView;
 
 @UIScope
 @SpringComponent
@@ -51,8 +52,9 @@ public final class AdminMenu extends CustomComponent {
     private Component buildMenuItems() {
         final CssLayout menuItemsLayout = new CssLayout();
         menuItemsLayout.addStyleName("valo-menuitems");
-        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.HOME, DashboardView.VIEW_NAME, "Dashboard"));
-        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, BucketsView.VIEW_NAME, "Buckets"));
+        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.HOME, DashboardView.VIEW_NAME, DashboardView.TITLE));
+        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, BucketsView.VIEW_NAME, BucketsView.TITLE));
+        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, MediaFilesView.VIEW_NAME, MediaFilesView.TITLE));
         return menuItemsLayout;
     }
 
