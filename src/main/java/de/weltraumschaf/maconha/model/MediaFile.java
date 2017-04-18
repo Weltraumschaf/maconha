@@ -55,6 +55,7 @@ public class MediaFile extends BaseEntity {
     private Set<Keyword> keywords = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bucket_id")
     private Bucket bucket;
 
     public MediaType getType() {

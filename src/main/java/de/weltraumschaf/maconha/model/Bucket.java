@@ -30,7 +30,7 @@ public class Bucket extends BaseEntity {
     @Column(unique = false, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bucket")
     private Set<MediaFile> mediaFiles = new HashSet<>();
 
     public String getDirectory() {
