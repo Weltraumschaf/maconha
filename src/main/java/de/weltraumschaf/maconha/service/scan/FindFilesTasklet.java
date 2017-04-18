@@ -20,30 +20,19 @@ import java.util.concurrent.TimeUnit;
 final class FindFilesTasklet extends SystemCommandTasklet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterUnseenFilesTasklet.class);
+    private final JobParamRetriever params = new JobParamRetriever();
 
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
-        final String directory = retrieveBucketDirectory(ctx);
-        LOGGER.debug("Find and hash files in directory {} ...", directory);
+        final String bucketDirectory = params.retrieveBucketDirectory(ctx);
+        LOGGER.debug("Find and hash files in bucketDirectory {} ...", bucketDirectory);
         // FIXME Remove absolute path!
-        setCommand("/Users/sst/src/private/maconha-ng/bin/dirhash " + directory);
+        setCommand("/Users/sst/src/private/maconha-ng/bin/dirhash " + bucketDirectory);
         setTimeout(TimeUnit.MINUTES.toMillis(10L));
 
         return super.execute(contribution, ctx);
     }
 
-    private String retrieveBucketDirectory(final ChunkContext ctx) {
-        final Object bucketDir = ctx.getStepContext().getJobParameters().get(JobParameterKeys.BUCKET_DIRECTORY);
 
-        if (bucketDir instanceof String) {
-            return (String) bucketDir;
-        }
-
-        throw new IllegalArgumentException(
-            String.format(
-                "The job parameter '%s' was not a string as expected (was: %s)!",
-                JobParameterKeys.BUCKET_DIRECTORY,
-                bucketDir));
-    }
 
 }

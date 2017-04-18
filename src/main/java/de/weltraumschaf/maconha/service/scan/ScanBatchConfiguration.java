@@ -1,6 +1,8 @@
 package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.DatabaseConfiguration;
+import de.weltraumschaf.maconha.repo.BucketRepo;
+import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,13 +47,17 @@ public class ScanBatchConfiguration {
     private final JobBuilderFactory jobs;
     private final StepBuilderFactory steps;
     private final JobRepository repo;
+    private final BucketRepo buckets;
+    private final MediaFileRepo mediaFiles;
 
     @Autowired
-    ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps, final JobRepository repo) {
+    ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps, final JobRepository repo, final BucketRepo buckets, final MediaFileRepo mediaFiles) {
         super();
         this.jobs = jobs;
         this.steps = steps;
         this.repo = repo;
+        this.buckets = buckets;
+        this.mediaFiles = mediaFiles;
     }
 
     @Bean // Name must not be jobLauncher. See https://github.com/spring-projects/spring-boot/issues/1655
@@ -114,7 +120,7 @@ public class ScanBatchConfiguration {
     public Step metaDataExtractionStep() {
         LOGGER.debug("Create MetaDataExtractionStep bean.");
         return steps.get("MetaDataExtractionStep")
-            .tasklet(new MetaDataExtractionTasklet())
+            .tasklet(new MetaDataExtractionTasklet(buckets, mediaFiles))
             .allowStartIfComplete(true)
             .build();
     }

@@ -42,7 +42,7 @@ public enum FileExtension {
 
     private final String extension;
 
-    private FileExtension(final String extension) {
+    FileExtension(final String extension) {
         this.extension = extension;
     }
 
@@ -75,11 +75,8 @@ public enum FileExtension {
      * @return {@code true} if known, else {@code false}
      */
     public static boolean hasValue(final String fileExtension) {
-        if (null == fileExtension) {
-            return false;
-        }
+        return null != fileExtension && LOOKUP.containsKey(fileExtension.toLowerCase());
 
-        return LOOKUP.containsKey(fileExtension.toLowerCase());
     }
 
     public static FileExtension forValue(final String fileExtension) {
@@ -114,7 +111,7 @@ public enum FileExtension {
      * @param input may be {@code null} or empty
      * @return never {@code null}, as default {@link #NONE#getExtension()}
      */
-    static String extractExtension(final String input) {
+    public static String extractExtension(final String input) {
         if (null == input || input.trim().isEmpty()) {
             return NONE.getExtension();
         }

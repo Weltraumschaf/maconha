@@ -10,7 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +22,6 @@ import java.util.stream.Collectors;
  * </p>
  */
 @Entity
-@SuppressWarnings("PersistenceUnitPresent")
 public class MediaFile extends BaseEntity {
 
     @NotNull
@@ -52,6 +53,9 @@ public class MediaFile extends BaseEntity {
     @ManyToMany(mappedBy = "mediaFiles")
     @SuppressWarnings("FieldMayBeFinal")
     private Set<Keyword> keywords = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Bucket bucket;
 
     public MediaType getType() {
         return type;
@@ -106,13 +110,21 @@ public class MediaFile extends BaseEntity {
         keyword.addMedias(this);
     }
 
+    public Bucket getBucket() {
+        return bucket;
+    }
+
+    public void setBucket(final Bucket bucket) {
+        this.bucket = bucket;
+    }
+
     private boolean isAlreadyAdded(final Keyword newKeyword) {
         return isAlreadyAdded(keywords, newKeyword);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(type, format, relativeFileName, fileHash, lastScanned);
+        return Objects.hash(type, format, relativeFileName, fileHash, lastScanned, bucket);
     }
 
     @Override
@@ -126,7 +138,8 @@ public class MediaFile extends BaseEntity {
             && Objects.equals(format, other.format)
             && Objects.equals(relativeFileName, other.relativeFileName)
             && Objects.equals(fileHash, other.fileHash)
-            && Objects.equals(lastScanned, other.lastScanned);
+            && Objects.equals(lastScanned, other.lastScanned)
+            && Objects.equals(bucket, other.bucket);
     }
 
     @Override
@@ -139,7 +152,8 @@ public class MediaFile extends BaseEntity {
             + "fileHash=" + fileHash + ", "
             + "lastScanned=" + lastScanned + ", "
             // Do not use toString() to prevent endless loop.
-            + "keywords=" + (null == keywords ? "" : keywords.stream().map(k -> k.getLiteral()).collect(Collectors.joining(", ")))
+            + "keywords=" + (null == keywords ? "" : keywords.stream().map(Keyword::getLiteral).collect(Collectors.joining(", "))) + ", "
+            + "bucket=" + bucket
             + '}';
     }
 }

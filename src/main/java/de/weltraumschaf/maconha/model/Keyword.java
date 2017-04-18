@@ -22,7 +22,6 @@ import org.hibernate.validator.constraints.NotEmpty;
  * </p>
  */
 @Entity
-@SuppressWarnings("PersistenceUnitPresent")
 public class Keyword extends BaseEntity {
 
     @NotEmpty

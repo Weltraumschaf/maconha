@@ -21,9 +21,15 @@ public class MediaFileTest {
         keywordOne.setLiteral("foo");
         final Keyword keywordTwo = new Keyword();
         keywordTwo.setLiteral("bar");
+        final Bucket bucketOne = new Bucket();
+        bucketOne.setDirectory("foo");
+        final Bucket bucketTwo = new Bucket();
+        bucketTwo.setDirectory("bar");
+
         EqualsVerifier
             .forClass(MediaFile.class)
             .withPrefabValues(Keyword.class, keywordOne, keywordTwo)
+            .withPrefabValues(Bucket.class, bucketOne, bucketTwo)
             .withIgnoredFields("id", "keywords")
             .verify();
     }
@@ -50,32 +56,32 @@ public class MediaFileTest {
 
         assertThat(
             sut.toString(),
-            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=, bucket=null}"));
 
         assertThat(
             sut.toString(),
-            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=, bucket=null}"));
 
         final Keyword keywordOne = new Keyword();
         keywordOne.setLiteral("foo");
         sut.addKeyword(keywordOne);
         assertThat(
             sut.toString(),
-            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=foo}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=foo, bucket=null}"));
 
         final Keyword keywordTwo = new Keyword();
         keywordTwo.setLiteral("bar");
         sut.addKeyword(keywordTwo);
         assertThat(
             sut.toString(),
-            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=bar, foo}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=bar, foo, bucket=null}"));
 
         final Keyword keywordThree = new Keyword();
         keywordThree.setLiteral("baz");
         sut.addKeyword(keywordThree);
         assertThat(
             sut.toString(),
-            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=bar, foo, baz}"));
+            is("MediaFile{id=23, type=VIDEO, format=MATROSKA_VIDEO_FILE, relativeFileName=title, fileHash=, lastScanned=1970-01-01T01:00:00.000, keywords=bar, foo, baz, bucket=null}"));
     }
 
     @Test

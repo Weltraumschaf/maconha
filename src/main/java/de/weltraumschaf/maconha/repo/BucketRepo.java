@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface BucketRepo extends BaseRepo<Bucket> {
     List<Bucket> findByDirectoryLikeIgnoreCase(String likeFilter);
+
+    Bucket findById(Long aLong);
 }

@@ -18,31 +18,18 @@ import java.util.stream.Collectors;
 final class FilterUnseenFilesTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterUnseenFilesTasklet.class);
     private final HashFileReader reader = new HashFileReader();
+    private final JobParamRetriever params = new JobParamRetriever();
 
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
-        final String directory = retrieveBucketDirectory(ctx);
-        final Path checksums = Paths.get(directory).resolve(".checksums");
+        final String bucketDirectory = params.retrieveBucketDirectory(ctx);
+        final Path checksums = Paths.get(bucketDirectory).resolve(".checksums");
         LOGGER.debug("Reading hashed files from {} ...", checksums);
         final Set<HashedFile> hashedFiles = reader.read(checksums);
         LOGGER.debug("Read {} filenames with hashes.", hashedFiles.size());
         storeResult(ctx, filterFiles(hashedFiles));
 
         return RepeatStatus.FINISHED;
-    }
-
-    private String retrieveBucketDirectory(final ChunkContext ctx) {
-        final Object bucketDir = ctx.getStepContext().getJobParameters().get(JobParameterKeys.BUCKET_DIRECTORY);
-
-        if (bucketDir instanceof String) {
-            return (String) bucketDir;
-        }
-
-        throw new IllegalArgumentException(
-            String.format(
-                "The job parameter '%s' was not a string as expected (was: %s)!",
-                JobParameterKeys.BUCKET_DIRECTORY,
-                bucketDir));
     }
 
     private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles) {

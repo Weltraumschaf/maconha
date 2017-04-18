@@ -14,7 +14,6 @@ import java.util.Objects;
  * </p>
  */
 @Entity
-@SuppressWarnings("PersistenceUnitPresent")
 public final class User extends BaseEntity {
 
     @NotEmpty
