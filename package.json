@@ -2,7 +2,7 @@
   "name": "Maconha",
   "version": "1.0.0",
   "repository": "https://github.com/Weltraumschaf/maconha.git",
-  "license": "Beer-Ware",
+  "license": "Beerware",
   "dependencies": {
     "bower": "~1.7.2",
     "gulp": "^3.9.0"
