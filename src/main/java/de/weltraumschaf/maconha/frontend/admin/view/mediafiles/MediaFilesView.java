@@ -23,6 +23,7 @@ public final class MediaFilesView extends SubView {
 
     private static final String TITLE_ID = "mediafiles-title";
 
+    // https://vaadin.com/docs/-/part/framework/components/components-grid.html
     private final MGrid<MediaFile> list = new MGrid<>(MediaFile.class)
         .withProperties("id", "type", "format", "relativeFileName", "fileHash", "lastScanned")
         .withColumnHeaders("ID", "Type", "Format", "relative File Name", "File Hash", "Last Scanned")
