@@ -22,12 +22,4 @@ public final class MetaDataExtractionTaskletTest {
         assertThat(sut.extractExtension(new HashedFile("hash", "foo.swf")), is(FileExtension.SHOCKWAVE_FLASH_MOVIE));
     }
 
-    @Test
-    public void relativizeFilename() {
-        final Bucket bucket = new Bucket();
-        bucket.setDirectory("/foo/bar");
-        assertThat(
-            sut.relativizeFilename(bucket, new HashedFile("hash", "/foo/bar/baz/snafu.avi")),
-            is("baz/snafu.avi"));
-    }
 }

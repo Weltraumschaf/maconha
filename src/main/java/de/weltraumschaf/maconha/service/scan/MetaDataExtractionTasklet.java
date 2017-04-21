@@ -58,7 +58,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
     }
 
     private void extractMetaData(final Bucket bucket, final HashedFile file) {
-        LOGGER.debug("Extract meta data for: {}", file);
+        LOGGER.debug("Extract meta data for: {}", file.getFile());
         final FileExtension extension;
 
         try {
@@ -72,15 +72,11 @@ final class MetaDataExtractionTasklet implements Tasklet {
         final MediaFile media = new MediaFile();
         media.setType(MediaType.forValue(extension));
         media.setFormat(extension);
-        media.setRelativeFileName(relativizeFilename(bucket, file));
+        media.setRelativeFileName(file.getFile());
         media.setFileHash(file.getHash());
         media.setBucket(bucket);
 
         mediaFiles.save(media);
-    }
-
-    String relativizeFilename(final Bucket bucket, final HashedFile file) {
-        return file.getFile().replace(bucket.getDirectory(), "").substring(1);
     }
 
     FileExtension extractExtension(final HashedFile file) {

@@ -1,5 +1,8 @@
 package de.weltraumschaf.maconha.service.scan;
 
+import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.MediaFile;
+import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
@@ -20,26 +23,57 @@ final class FilterUnseenFilesTasklet implements Tasklet {
     private final HashFileReader reader = new HashFileReader();
     private final JobParamRetriever params = new JobParamRetriever();
 
+    private final MediaFileRepo mediaFiles;
+
+    FilterUnseenFilesTasklet(final MediaFileRepo mediaFiles) {
+        super();
+        this.mediaFiles = mediaFiles;
+    }
+
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
-        final String bucketDirectory = params.retrieveBucketDirectory(ctx);
-        final Path checksums = Paths.get(bucketDirectory).resolve(".checksums");
+        final Bucket bucket = createBucketFromContext(ctx);
+        final Path checksums = Paths.get(bucket.getDirectory()).resolve(".checksums");
         LOGGER.debug("Reading hashed files from {} ...", checksums);
         final Set<HashedFile> hashedFiles = reader.read(checksums);
         LOGGER.debug("Read {} filenames with hashes.", hashedFiles.size());
-        storeResult(ctx, filterFiles(hashedFiles));
+        storeResult(ctx, filterFiles(hashedFiles, bucket));
 
         return RepeatStatus.FINISHED;
     }
 
-    private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles) {
+    private Bucket createBucketFromContext(final ChunkContext ctx) {
+        final Bucket bucket = new Bucket();
+        bucket.setDirectory(params.retrieveBucketDirectory(ctx));
+        bucket.setId(params.retrieveBucketId(ctx));
+        return bucket;
+    }
+
+    private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles, final Bucket bucket) {
         return hashedFiles.stream()
-            .filter(this::isFileUnseen)
+            .map(hashedFile -> relativizeFilenam(hashedFile, bucket))
+            .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
             .collect(Collectors.toSet());
     }
 
-    private boolean isFileUnseen(final HashedFile file) {
-        // TODO Query the DB to see if the file was already added and has the same hash.
+    private HashedFile relativizeFilenam(final HashedFile file, final Bucket bucket) {
+        return new HashedFile(file.getHash(), relativizeFilename(file, bucket));
+    }
+
+    private boolean isFileUnseen(final HashedFile file, final Bucket bucket) {
+        final MediaFile found = mediaFiles.findByRelativeFileNameAndBucket(file.getFile(), bucket);
+
+        if (null == found) {
+            LOGGER.debug("File not scanned yet: {}", file.getFile());
+            return true;
+        }
+
+        if (found.getFileHash().equals(file.getHash())) {
+            LOGGER.debug("File already scanned and hash not changed: {}", file.getFile());
+            return false;
+        }
+
+        LOGGER.debug("File already scanned but hash changed: {}", file.getFile());
         return true;
     }
 
@@ -51,5 +85,10 @@ final class FilterUnseenFilesTasklet implements Tasklet {
             .getExecutionContext()
             .put(ContextKeys.UNSEEN_FILES, unseenFiles);
     }
+
+    String relativizeFilename(final HashedFile file, final Bucket bucket) {
+        return file.getFile().replace(bucket.getDirectory(), "").substring(1);
+    }
+
 
 }

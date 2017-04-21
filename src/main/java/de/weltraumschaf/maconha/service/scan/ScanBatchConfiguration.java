@@ -111,7 +111,7 @@ public class ScanBatchConfiguration {
     public Step filterSeenFilesStep() {
         LOGGER.debug("Create FilterSeenFilesStep bean.");
         return steps.get("FilterSeenFilesStep")
-            .tasklet(new FilterUnseenFilesTasklet())
+            .tasklet(new FilterUnseenFilesTasklet(mediaFiles))
             .allowStartIfComplete(true)
             .build();
     }

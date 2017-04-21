@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.repo;
 
+import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.model.MediaFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,4 +12,6 @@ public interface MediaFileRepo extends BaseRepo<MediaFile> {
 
     @Override
     Page<MediaFile> findAll(Pageable pageable);
+
+    MediaFile findByRelativeFileNameAndBucket(String relativeFileName, Bucket bucket);
 }
