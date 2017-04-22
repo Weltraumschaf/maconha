@@ -17,6 +17,7 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.listener.ExecutionContextPromotionListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -49,6 +50,8 @@ public class ScanBatchConfiguration {
     private final JobRepository repo;
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
+    @Value("${bin.dir}")
+    private String binDir;
 
     @Autowired
     ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps, final JobRepository repo, final BucketRepo buckets, final MediaFileRepo mediaFiles) {
@@ -102,7 +105,7 @@ public class ScanBatchConfiguration {
     public Step findFilesStep() {
         LOGGER.debug("Create FindFilesStep bean.");
         return steps.get("FindFilesStep")
-            .tasklet(new FindFilesTasklet())
+            .tasklet(new FindFilesTasklet(binDir))
             .allowStartIfComplete(true)
             .build();
     }

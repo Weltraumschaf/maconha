@@ -21,13 +21,19 @@ final class FindFilesTasklet extends SystemCommandTasklet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterUnseenFilesTasklet.class);
     private final JobParamRetriever params = new JobParamRetriever();
+    private final String binDir;
+
+    public FindFilesTasklet(final String binDir) {
+        super();
+        this.binDir = binDir;
+    }
 
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
         final String bucketDirectory = params.retrieveBucketDirectory(ctx);
         LOGGER.debug("Find and hash files in bucketDirectory {} ...", bucketDirectory);
-        // FIXME Remove absolute path!
-        setCommand("/Users/sst/src/private/maconha-ng/bin/dirhash " + bucketDirectory);
+        LOGGER.debug("Using bin dir '{}'.", binDir);
+        setCommand(binDir + "/dirhash " + bucketDirectory);
         setTimeout(TimeUnit.MINUTES.toMillis(10L));
 
         return super.execute(contribution, ctx);

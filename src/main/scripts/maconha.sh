@@ -41,5 +41,5 @@ fi
 
 programDirectory=$(dirname "${program}")
 
-exec "$java" ${jvm_options} -jar "${program}" --spring.profiles.active=${profiles} --bin=${programDirectory}
+exec "$java" ${jvm_options} -jar "${program}" --spring.profiles.active=${profiles} --bin.dir=${programDirectory}
 exit 1
