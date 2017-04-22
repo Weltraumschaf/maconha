@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-while IFS='' read -r line || [[ -n "$line" ]]; do
-    echo "${line##*.}"
-done < "$1"
