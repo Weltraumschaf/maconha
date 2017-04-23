@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.service.scan;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,15 +8,26 @@ import org.slf4j.LoggerFactory;
 
 
 /**
+ * Predicate which tests if a keyword is ignored or or not.
  */
 public final class IgnoredKeywords implements Predicate<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IgnoredKeywords.class);
-    private static final Collection<String> IGNORED_KEYWORDS = Arrays.asList(
+    static final Collection<String> IGNORED_KEYWORDS = Arrays.asList(
         "i", "a", "an", "ve", "the", "this", "that", "who");
 
     @Override
     public boolean test(final String keyword) {
+        if (null == keyword) {
+            LOGGER.debug("Ignore null as keyword.");
+            return false;
+        }
+
+        if (keyword.trim().isEmpty()) {
+            LOGGER.debug("Ignore blank keyword.");
+            return false;
+        }
+
         if (IGNORED_KEYWORDS.contains(keyword)) {
             LOGGER.debug("Ignore keyword '{}'.", keyword);
             return false;

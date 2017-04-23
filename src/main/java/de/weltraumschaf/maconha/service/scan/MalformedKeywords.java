@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.service.scan;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;

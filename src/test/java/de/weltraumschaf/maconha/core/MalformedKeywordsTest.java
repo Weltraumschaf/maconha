@@ -1,6 +1,7 @@
 
 package de.weltraumschaf.maconha.core;
 
+import de.weltraumschaf.maconha.service.scan.MalformedKeywords;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
