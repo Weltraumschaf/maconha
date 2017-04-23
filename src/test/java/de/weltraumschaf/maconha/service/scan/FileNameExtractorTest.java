@@ -1,13 +1,14 @@
-package de.weltraumschaf.maconha.core;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.model.FileExtension;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link FileNameExtractor}.

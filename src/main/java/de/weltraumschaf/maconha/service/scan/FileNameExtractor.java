@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.model.FileExtension;
 
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Utility class to extract information from file names.
  */
-public final class FileNameExtractor {
+final class FileNameExtractor {
 
     String relativeToBaseDir(final Path base, final Path absolute) {
         final Path subpath = absolute.subpath(base.getNameCount(), absolute.getNameCount());
@@ -22,17 +22,16 @@ public final class FileNameExtractor {
         return subpath.toString();
     }
 
-    public Collection<String> extractKeywords(final Path base, final Path absolute) {
+    Collection<String> extractKeywords(final Path base, final Path absolute) {
         final String path = relativeToBaseDir(base, absolute);
         final String cleansed = cleanseTitle(
             path.substring(0, path.lastIndexOf('.')).replaceAll("[/\\-_\\.]", " ").trim());
-        return Arrays.asList(cleansed.split("\\s+"))
-            .stream()
+        return Arrays.stream(cleansed.split("\\s+"))
             .map(String::toLowerCase)
             .collect(Collectors.toSet());
     }
 
-    public String extractTitle(final Path inputToExtract) {
+    String extractTitle(final Path inputToExtract) {
         final String absolutePath = inputToExtract.toString();
         return cleanseTitle(absolutePath.substring(
             absolutePath.lastIndexOf('/') + 1,
@@ -57,7 +56,7 @@ public final class FileNameExtractor {
         return input.replaceAll("\\s+", " ");
     }
 
-    protected String splitCamelCase(final String input) {
+    String splitCamelCase(final String input) {
         if (isNullOrEmpty(input)) {
             return "";
         }
@@ -73,7 +72,7 @@ public final class FileNameExtractor {
         );
     }
 
-    protected String replaceAndSplitDashes(final String input) {
+    String replaceAndSplitDashes(final String input) {
         if (isNullOrEmpty(input)) {
             return "";
         }
