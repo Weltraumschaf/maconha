@@ -37,7 +37,7 @@ final class FilterUnseenFilesTasklet implements Tasklet {
         LOGGER.debug("Reading hashed files from {} ...", checksums);
         final Set<HashedFile> hashedFiles = reader.read(checksums);
         LOGGER.debug("Read {} filenames with hashes.", hashedFiles.size());
-        storeResult(ctx, filterFiles(hashedFiles, bucket));
+        params.storeUnseenFiles(ctx, filterFiles(hashedFiles, bucket));
 
         return RepeatStatus.FINISHED;
     }
@@ -75,15 +75,6 @@ final class FilterUnseenFilesTasklet implements Tasklet {
 
         LOGGER.debug("File already scanned but hash changed: {}", file.getFile());
         return true;
-    }
-
-    private void storeResult(final ChunkContext ctx, final Set<HashedFile> unseenFiles) {
-        LOGGER.debug("Store {} unseen files in execution context.", unseenFiles.size());
-        ctx.getStepContext()
-            .getStepExecution()
-            .getJobExecution()
-            .getExecutionContext()
-            .put(ContextKeys.UNSEEN_FILES, unseenFiles);
     }
 
     String relativizeFilename(final HashedFile file, final Bucket bucket) {

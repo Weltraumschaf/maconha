@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.repo.BucketRepo;
+import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import org.junit.Test;
 
@@ -13,7 +14,8 @@ import static org.mockito.Mockito.mock;
  * Tests for {@link MetaDataExtractionTasklet}.
  */
 public final class MetaDataExtractionTaskletTest {
-    private final MetaDataExtractionTasklet sut = new MetaDataExtractionTasklet(mock(BucketRepo.class), mock(MediaFileRepo.class));
+    private final MetaDataExtractionTasklet sut = new MetaDataExtractionTasklet(
+        mock(BucketRepo.class), mock(MediaFileRepo.class), mock(KeywordRepo.class));
 
     @Test
     public void extractExtension() {

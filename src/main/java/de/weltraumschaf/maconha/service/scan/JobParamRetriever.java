@@ -2,6 +2,9 @@ package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.commons.validate.Validate;
 import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.item.ExecutionContext;
+
+import java.util.Set;
 
 /**
  * Helper class to extract particular parameters from {@link ChunkContext job step chunk context}.
@@ -50,7 +53,29 @@ final class JobParamRetriever {
                 bucketId));
     }
 
+    void storeUnseenFiles(final ChunkContext ctx, final Set<HashedFile> unseenFiles) {
+        getExecutionContext(ctx).put(ContextKeys.UNSEEN_FILES, unseenFiles);
+    }
+
+    @SuppressWarnings("unchecked")
+    Set<HashedFile> retrieveUnseenFiles(final ChunkContext ctx) {
+        final Object contextData = getExecutionContext(ctx).get(ContextKeys.UNSEEN_FILES);
+
+        if (contextData instanceof Set) {
+            return (Set<HashedFile>) contextData;
+        }
+
+        throw new IllegalArgumentException("Can not deal with context data: " + contextData);
+    }
+
     private Object retrieveParameter(final ChunkContext ctx, final String parameterKey) {
         return ctx.getStepContext().getJobParameters().get(parameterKey);
+    }
+
+    private ExecutionContext getExecutionContext(final ChunkContext ctx) {
+        return ctx.getStepContext()
+            .getStepExecution()
+            .getJobExecution()
+            .getExecutionContext();
     }
 }

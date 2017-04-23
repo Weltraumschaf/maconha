@@ -1,10 +1,8 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import de.weltraumschaf.maconha.model.FileExtension;
-import de.weltraumschaf.maconha.model.Bucket;
-import de.weltraumschaf.maconha.model.MediaFile;
-import de.weltraumschaf.maconha.model.MediaType;
+import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.BucketRepo;
+import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,44 +14,31 @@ import org.springframework.batch.repeat.RepeatStatus;
 import java.util.Set;
 
 /**
- *
+ * Tasklet to extract metadata from found files.
  */
 final class MetaDataExtractionTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataExtractionTasklet.class);
-    private final JobParamRetriever params = new JobParamRetriever();
 
+    private final JobParamRetriever params = new JobParamRetriever();
+    private final FileNameExtractor extractor = new FileNameExtractor();
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
+    private final KeywordRepo keywords;
 
-    MetaDataExtractionTasklet(final BucketRepo buckets, final MediaFileRepo mediaFiles) {
+    MetaDataExtractionTasklet(final BucketRepo buckets, final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
         super();
         this.buckets = buckets;
         this.mediaFiles = mediaFiles;
+        this.keywords = keywords;
     }
 
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
-        final Set<HashedFile> unseenFiles = retrieveUnseenFiles(ctx);
+        final Set<HashedFile> unseenFiles = params.retrieveUnseenFiles(ctx);
         LOGGER.debug("Received {} hashed files to extract meta data.", unseenFiles.size());
         final Bucket bucket = buckets.findById(params.retrieveBucketId(ctx));
         unseenFiles.forEach(file -> extractMetaData(bucket, file));
         return RepeatStatus.FINISHED;
-    }
-
-    @SuppressWarnings("unchecked")
-    private Set<HashedFile> retrieveUnseenFiles(final ChunkContext ctx) {
-        LOGGER.debug("Retrieve unseen files from execution context.");
-        final Object contextData = ctx.getStepContext()
-            .getStepExecution()
-            .getJobExecution()
-            .getExecutionContext()
-            .get(ContextKeys.UNSEEN_FILES);
-
-        if (contextData instanceof Set) {
-            return (Set<HashedFile>) contextData;
-        }
-
-        throw new IllegalArgumentException("Can not deal with context data: " + contextData);
     }
 
     private void extractMetaData(final Bucket bucket, final HashedFile file) {
@@ -74,6 +59,21 @@ final class MetaDataExtractionTasklet implements Tasklet {
         media.setRelativeFileName(file.getFile());
         media.setFileHash(file.getHash());
         media.setBucket(bucket);
+
+        extractor.extractKeywords(file.getFile()).stream()
+            .filter(new MalformedKeywords())
+            .filter(new IgnoredKeywords())
+            .map(literal -> {
+            Keyword keyword = keywords.findByLiteral(literal);
+
+            if (null == keyword) {
+                keyword = new Keyword();
+                keyword.setLiteral(literal);
+                keywords.save(keyword);
+            }
+
+            return keyword;
+        }).forEach(media::addKeyword);
 
         mediaFiles.save(media);
     }
