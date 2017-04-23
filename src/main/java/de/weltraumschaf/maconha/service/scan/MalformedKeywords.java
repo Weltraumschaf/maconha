@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Checks whether a keyword will be accepted or not.
  */
-public final class MalformedKeywords implements Predicate<String> {
+final class MalformedKeywords implements Predicate<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MalformedKeywords.class);
 
