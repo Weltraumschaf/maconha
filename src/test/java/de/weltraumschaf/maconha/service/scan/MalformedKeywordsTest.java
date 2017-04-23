@@ -1,5 +1,5 @@
 
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.service.scan.MalformedKeywords;
 import org.junit.Test;
