@@ -15,41 +15,24 @@ import static org.junit.Assert.assertThat;
  */
 public class FileNameExtractorTest {
 
-    private final Path baseDir = Paths.get("/Volumes/Blackhole");
-    private final Path fileOne = baseDir.resolve(
-        "Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi");
-    private final Path fileTwo = baseDir.resolve(
-        "Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4");
-    private final Path fileThree = baseDir.resolve(
-        "Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht muede - 020317.rm");
+    private final String fileOne = "Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi";
+    private final String fileTwo = "Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4";
+    private final String fileThree = "Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht muede - 020317.rm";
     private final FileNameExtractor sut = new FileNameExtractor();
 
     @Test
-    public void relativeToBaseDir() {
-        assertThat(
-            sut.relativeToBaseDir(baseDir, fileOne),
-            is("Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi"));
-        assertThat(
-            sut.relativeToBaseDir(baseDir, fileTwo),
-            is("Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4"));
-        assertThat(
-            sut.relativeToBaseDir(baseDir, fileThree),
-            is("Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht muede - 020317.rm"));
-    }
-
-    @Test
     public void extractKeywords() {
-        assertThat(sut.extractKeywords(baseDir, fileOne),
+        assertThat(sut.extractKeywords(fileOne),
             containsInAnyOrder(
                 "filme", "musikvideos", "linkin", "park", "what", "i", "ve", "done", "musikvideo"));
 
         assertThat(
-            sut.extractKeywords(baseDir, fileTwo),
+            sut.extractKeywords(fileTwo),
             containsInAnyOrder(
                 "filme", "kinofilme", "deutsch", "der", "unglaubliche", "hulk"));
 
         assertThat(
-            sut.extractKeywords(baseDir, fileThree),
+            sut.extractKeywords(fileThree),
             containsInAnyOrder(
                 "filme", "dokumentation", "alpha", "centauri", "realmedia", "091", "wird", "licht", "muede", "020317"));
     }
@@ -59,13 +42,6 @@ public class FileNameExtractorTest {
         assertThat(sut.extractTitle(fileOne), is("Linkin Park - What I ve Done Musikvideo"));
         assertThat(sut.extractTitle(fileTwo), is("Der unglaubliche Hulk"));
         assertThat(sut.extractTitle(fileThree), is("Alpha Centauri 091 - Wird Licht muede - 020317"));
-    }
-
-    @Test
-    public void extractExtension() {
-        assertThat(sut.extractExtension(fileOne), is(FileExtension.AUDIO_VIDEO_INTERLEAVE));
-        assertThat(sut.extractExtension(fileTwo), is(FileExtension.MPEG4_VIDEO_FILE));
-        assertThat(sut.extractExtension(fileThree), is(FileExtension.REAL_MEDIA_FILE));
     }
 
     @Test
