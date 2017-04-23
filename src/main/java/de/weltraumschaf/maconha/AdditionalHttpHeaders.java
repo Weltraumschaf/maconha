@@ -31,14 +31,25 @@ public final class AdditionalHttpHeaders implements Filter {
     }
 
     @Override
-    public void doFilter(
-        final ServletRequest request,
-        final ServletResponse response,
-        final FilterChain chain) throws IOException, ServletException {
-//        addCspHeader(request, response);
+    public void doFilter(final ServletRequest request,  final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        addVersionHeader(request, response);
         chain.doFilter(request, response);
     }
 
+    private void addVersionHeader(final ServletRequest request, final ServletResponse response) {
+        final HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setHeader("X-Maconha-Version", "1.0");
+    }
+
+    // May be we need this.
+    private void addCorsHeader(final ServletRequest request, final ServletResponse response) {
+        final HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+        httpResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with, Content-Type");
+
+    }
     private void addCspHeader(final ServletRequest request, final ServletResponse response) {
         // FIXME Vaadin does not work with that!
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
