@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.model;
 
-import de.weltraumschaf.maconha.core.FileExtension;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import de.weltraumschaf.maconha.core.FileExtension;
+import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.model.MediaType;
@@ -12,7 +12,6 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 

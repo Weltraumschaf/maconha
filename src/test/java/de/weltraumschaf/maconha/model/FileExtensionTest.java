@@ -1,10 +1,12 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.model;
+
+import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import static org.hamcrest.Matchers.is;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link FileExtension}.

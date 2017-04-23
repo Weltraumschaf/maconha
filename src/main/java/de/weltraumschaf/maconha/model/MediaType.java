@@ -1,7 +1,5 @@
 package de.weltraumschaf.maconha.model;
 
-import de.weltraumschaf.maconha.core.FileExtension;
-
 import java.util.*;
 
 /**

@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+
+import de.weltraumschaf.maconha.model.FileExtension;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

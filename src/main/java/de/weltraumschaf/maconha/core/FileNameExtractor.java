@@ -1,5 +1,7 @@
 package de.weltraumschaf.maconha.core;
 
+import de.weltraumschaf.maconha.model.FileExtension;
+
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;

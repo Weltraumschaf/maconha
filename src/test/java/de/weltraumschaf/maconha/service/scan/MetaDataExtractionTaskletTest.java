@@ -1,7 +1,6 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import de.weltraumschaf.maconha.core.FileExtension;
-import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import org.junit.Test;
