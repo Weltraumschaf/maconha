@@ -2,8 +2,11 @@ package de.weltraumschaf.maconha.frontend.search.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import de.weltraumschaf.maconha.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,40 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * Top level controller.
+ * Controller to serve the home site.
  */
 @Controller
 public final class IndexController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
+    private final RequestTracer tracer = new RequestTracer();
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String index(final HttpServletRequest request, Map<String, Object> model, final UriComponentsBuilder uri) {
-        return search(request, model, uri);
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String search(final HttpServletRequest request, final Map<String, Object> model, final UriComponentsBuilder uri) {
-        traceRequest(request);
+        tracer.traceRequest(request);
         assignBaseVariables(uri, model);
-        return "search";
-    }
-
-    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String admin(final HttpServletRequest request, final Map<String, Object> model, final UriComponentsBuilder uri) {
-        traceRequest(request);
-        assignBaseVariables(uri, model);
-        return "admin";
-    }
-
-    private void traceRequest(final HttpServletRequest request) {
-        LOGGER.debug("URI {} requested.", getRequestUrl(request));
-    }
-
-    private String getRequestUrl(final HttpServletRequest request) {
-        StringBuffer requestURL = request.getRequestURL();
-
-        return requestURL.toString();
+        return "index";
     }
 
     private void assignBaseVariables(final UriComponentsBuilder uri, final Map<String, Object> model) {
