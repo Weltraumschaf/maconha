@@ -22,7 +22,7 @@ public final class IndexController {
     private final RequestTracer tracer = new RequestTracer();
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String index(final HttpServletRequest request, Map<String, Object> model, final UriComponentsBuilder uri) {
+    public String index(final HttpServletRequest request, final Map<String, Object> model, final UriComponentsBuilder uri) {
         tracer.traceRequest(request);
         assignBaseVariables(uri, model);
         return "index";

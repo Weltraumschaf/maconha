@@ -16,7 +16,7 @@ public enum MediaType {
      */
     AUDIO,
     /**
-     * Everything not coverd by any other enum.
+     * Everything not covered by any other enum.
      */
     OTHER;
 

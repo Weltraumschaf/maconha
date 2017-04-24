@@ -2,6 +2,8 @@ package de.weltraumschaf.maconha.service.scan;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
+import de.weltraumschaf.maconha.core.NotAlphaNumeric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +13,7 @@ import org.slf4j.LoggerFactory;
 final class MalformedKeywords implements Predicate<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MalformedKeywords.class);
-
-    /**
-     * Pattern to find if there is something not a unicode letter or number.
-     *
-     * http://stackoverflow.com/questions/1611979/remove-all-non-word-characters-from-a-string-in-java-leaving-accented-charact
-     */
-    private final Pattern NOT_ALPHA_NUM = Pattern.compile("[^\\p{L}\\p{Nd}]+");
+    private final Predicate<String> notAlphaNum = new NotAlphaNumeric();
 
     @Override
     public boolean test(final String keyword) {
@@ -33,7 +29,7 @@ final class MalformedKeywords implements Predicate<String> {
             return false;
         }
 
-        if (NOT_ALPHA_NUM.matcher(trimmedKeyword).find()) {
+        if (notAlphaNum.test(trimmedKeyword)) {
             LOGGER.debug("Ignore malformed keyword '{}' because it contains non alphanumeric characters.", keyword);
             return false;
         }
