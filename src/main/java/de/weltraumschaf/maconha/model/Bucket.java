@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Bucket extends BaseEntity {
     @Column(unique = false, nullable = false)
     private String name;
 
+    @JsonIgnore // Prevent endless recursion on serialization.
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bucket", cascade = CascadeType.ALL)
     private Set<MediaFile> mediaFiles = new HashSet<>();
 

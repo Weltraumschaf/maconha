@@ -23,7 +23,7 @@ public class Keyword extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String literal;
 
-    @JsonIgnore
+    @JsonIgnore // Prevent endless recursion on serialization.
     @ManyToMany
     @SuppressWarnings("FieldMayBeFinal") // XXX Must not be final?
     @JoinTable(name = "Keyword_MediaFile", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
