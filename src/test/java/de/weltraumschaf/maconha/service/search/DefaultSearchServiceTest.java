@@ -34,6 +34,7 @@ public final class DefaultSearchServiceTest {
     }
 
     @Test
+    @Ignore
     public void forKeywords() {
         final Keyword foo = new Keyword();
         foo.setLiteral("foo");
