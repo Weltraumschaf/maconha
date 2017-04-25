@@ -70,12 +70,14 @@ public class Bucket extends BaseEntity {
         }
 
         final Bucket other = (Bucket) o;
+        // Id is not considered because it is different for new objects and persisted ones.
         return Objects.equals(directory, other.directory) &&
             Objects.equals(name, other.name);
     }
 
     @Override
     public int hashCode() {
+        // Id is not considered because it is different for new objects and persisted ones.
         return Objects.hash(directory, name);
     }
 

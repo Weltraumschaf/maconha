@@ -56,6 +56,8 @@ public class Keyword extends BaseEntity {
 
     @Override
     public final int hashCode() {
+        // Id is not considered because it is different for new objects and persisted ones.
+        // MediaFiles not considered because this would lead to endless recursion.
         return Objects.hash(literal);
     }
 
@@ -66,6 +68,8 @@ public class Keyword extends BaseEntity {
         }
 
         final Keyword other = (Keyword) obj;
+        // Id is not considered because it is different for new objects and persisted ones.
+        // MediaFiles not considered because this would lead to endless recursion.
         return Objects.equals(literal, other.literal);
     }
 

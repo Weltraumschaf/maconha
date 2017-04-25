@@ -124,6 +124,8 @@ public class MediaFile extends BaseEntity {
 
     @Override
     public final int hashCode() {
+        // Id is not considered because it is different for new objects and persisted ones.
+        // Keywords not considered because this would lead to endless recursion.
         return Objects.hash(type, format, relativeFileName, fileHash, lastScanned, bucket);
     }
 
@@ -134,6 +136,8 @@ public class MediaFile extends BaseEntity {
         }
 
         final MediaFile other = (MediaFile) obj;
+        // Id is not considered because it is different for new objects and persisted ones.
+        // Keywords not considered because this would lead to endless recursion.
         return Objects.equals(type, other.type)
             && Objects.equals(format, other.format)
             && Objects.equals(relativeFileName, other.relativeFileName)

@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation.
@@ -50,7 +50,13 @@ final class DefaultSearchService implements SearchService {
 
         LOGGER.debug("Search for {}.", query);
         final Collection<Keyword> found = keywords.findByLiteralIn(query);
-        LOGGER.debug("Found: {}", found);
-        return Collections.emptyList();
+        LOGGER.debug("Keywords found: {}", found);
+        final Set<MediaFile> files = found.stream()
+            .flatMap(k -> k.getMediaFiles().stream())
+            .collect(Collectors.toSet());
+        final List<MediaFile> sorted = new ArrayList<>(files);
+        sorted.sort((a, b) -> Integer.compare(a.getKeywords().size(), b.getKeywords().size()));
+        Collections.reverse(sorted);
+        return sorted;
     }
 }
