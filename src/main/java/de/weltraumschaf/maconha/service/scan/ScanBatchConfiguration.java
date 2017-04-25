@@ -46,30 +46,47 @@ public class ScanBatchConfiguration {
         }
     };
 
-    private final JobBuilderFactory jobs;
-    private final StepBuilderFactory steps;
-    private final JobRepository repo;
-    private final BucketRepo buckets;
-    private final MediaFileRepo mediaFiles;
-    private final KeywordRepo keywords;
+    private final JobBuilderFactory jobBuilders;
+    private final StepBuilderFactory stepBuilders;
+
+    private JobRepository jobs;
+    private BucketRepo buckets;
+    private MediaFileRepo mediaFiles;
+    private KeywordRepo keywords;
     @Value("${bin.dir}")
     private String binDir;
 
     @Autowired
-    ScanBatchConfiguration(final JobBuilderFactory jobs, final StepBuilderFactory steps, final JobRepository repo, final BucketRepo buckets, final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
+    public ScanBatchConfiguration(final JobBuilderFactory jobBuilderss, final StepBuilderFactory stepBuilders) {
         super();
+        this.jobBuilders = jobBuilderss;
+        this.stepBuilders = stepBuilders;
+    }
+
+    @Autowired
+    public void setJobs(final JobRepository jobs) {
         this.jobs = jobs;
-        this.steps = steps;
-        this.repo = repo;
+    }
+
+    @Autowired
+    public void setBuckets(final BucketRepo buckets) {
         this.buckets = buckets;
+    }
+
+    @Autowired
+    public void setMediaFiles(final MediaFileRepo mediaFiles) {
         this.mediaFiles = mediaFiles;
+    }
+
+    @Autowired
+    public void setKeywords(final KeywordRepo keywords) {
         this.keywords = keywords;
     }
 
     @Bean // Name must not be jobLauncher. See https://github.com/spring-projects/spring-boot/issues/1655
     public JobLauncher asyncJobLauncher() throws Exception {
         final SimpleJobLauncher launcher = new SimpleJobLauncher();
-        launcher.setJobRepository(repo);
+        launcher.setJobRepository(jobs);
         launcher.setTaskExecutor(taskExecutor());
         launcher.afterPropertiesSet();
         LOGGER.debug("Created job launcher: {}", launcher);
@@ -95,7 +112,7 @@ public class ScanBatchConfiguration {
     @Bean(name = ScanService.JOB_NAME)
     public Job scanJob() {
         LOGGER.debug("Create {} bean.", ScanService.JOB_NAME);
-        return jobs.get(ScanService.JOB_NAME)
+        return jobBuilders.get(ScanService.JOB_NAME)
             .listener(listener)
             .flow(findFilesStep())
             .next(filterSeenFilesStep())
@@ -107,7 +124,7 @@ public class ScanBatchConfiguration {
     @Bean
     public Step findFilesStep() {
         LOGGER.debug("Create FindFilesStep bean.");
-        return steps.get("FindFilesStep")
+        return stepBuilders.get("FindFilesStep")
             .tasklet(new FindFilesTasklet(binDir))
             .allowStartIfComplete(true)
             .build();
@@ -116,7 +133,7 @@ public class ScanBatchConfiguration {
     @Bean
     public Step filterSeenFilesStep() {
         LOGGER.debug("Create FilterSeenFilesStep bean.");
-        return steps.get("FilterSeenFilesStep")
+        return stepBuilders.get("FilterSeenFilesStep")
             .tasklet(new FilterUnseenFilesTasklet(mediaFiles))
             .allowStartIfComplete(true)
             .build();
@@ -125,7 +142,7 @@ public class ScanBatchConfiguration {
     @Bean
     public Step metaDataExtractionStep() {
         LOGGER.debug("Create MetaDataExtractionStep bean.");
-        return steps.get("MetaDataExtractionStep")
+        return stepBuilders.get("MetaDataExtractionStep")
             .tasklet(new MetaDataExtractionTasklet(buckets, mediaFiles, keywords))
             .allowStartIfComplete(true)
             .build();

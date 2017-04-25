@@ -1,19 +1,13 @@
 package de.weltraumschaf.maconha.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Entity which represent an indexed keyword.
