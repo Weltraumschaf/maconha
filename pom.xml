@@ -75,7 +75,7 @@
         <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
 
         <!-- Dependency versions: -->
-        <springframework.version>1.5.2.RELEASE</springframework.version>
+        <springframework.version>1.5.3.RELEASE</springframework.version>
         <vaadin.version>8.0.5</vaadin.version>
         <vaadin-spring.version>2.0.0.RELEASE</vaadin-spring.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
