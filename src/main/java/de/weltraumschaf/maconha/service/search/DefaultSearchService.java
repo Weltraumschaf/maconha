@@ -49,14 +49,55 @@ final class DefaultSearchService implements SearchService {
         }
 
         LOGGER.debug("Search for {}.", query);
-        final Collection<Keyword> found = keywords.findByLiteralIn(query);
-        LOGGER.debug("Keywords found: {}", found);
-        final Set<MediaFile> files = found.stream()
+        final Collection<Keyword> foundKeywords = keywords.findByLiteralIn(query);
+        LOGGER.debug("found {} keywords.", foundKeywords.size());
+        final Collection<MediaFile> foundFiles = reduce(foundKeywords);
+
+        return rank(foundFiles, foundKeywords);
+    }
+
+
+    private Collection<MediaFile> reduce(final Collection<Keyword> foundKeywords) {
+        final Collection<Long> alreadyAdded = new ArrayList<>();
+        final Collection<MediaFile> foundFiles = new ArrayList<>();
+
+        foundKeywords.stream()
             .flatMap(k -> k.getMediaFiles().stream())
-            .collect(Collectors.toSet());
-        final List<MediaFile> sorted = new ArrayList<>(files);
-        sorted.sort((a, b) -> Integer.compare(a.getKeywords().size(), b.getKeywords().size()));
-        Collections.reverse(sorted);
-        return sorted;
+            .forEach(file -> {
+                if (alreadyAdded.contains(file.getId())) {
+                    return;
+                }
+
+                foundFiles.add(file);
+                alreadyAdded.add(file.getId());
+            });
+
+        return foundFiles;
+    }
+
+    private Collection<MediaFile> rank(final Collection<MediaFile> foundFiles, final Collection<Keyword> foundKeywords) {
+        final List<Result> results = foundFiles.stream()
+            .map(file -> {
+                final int hitCount = foundKeywords.stream()
+                    .mapToInt(keyword -> file.getKeywords().contains(keyword) ? 1 : 0)
+                    .sum();
+                return new Result(file, hitCount);
+            }).collect(Collectors.toList());
+
+        results.sort(Comparator.comparingInt(a -> a.hitCount));
+
+        return results.stream()
+            .map(result -> result.file)
+            .collect(Collectors.toList());
+    }
+
+    private class Result {
+        private final MediaFile file;
+        private final int hitCount;
+
+        Result(final MediaFile file, final int hitCount) {
+            this.file = file;
+            this.hitCount = hitCount;
+        }
     }
 }
