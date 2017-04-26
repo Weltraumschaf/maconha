@@ -12,7 +12,7 @@
         <link href="${baseUrl}/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
     </head>
 
-    <body class="ng-cloak">
+    <body>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -51,6 +51,12 @@
                     <strong>Error!</strong> Can't load search results.
                 </div>
             </div>
+        </div>
+
+        <div class="container">
+            <table id="result" class="table">
+                <tbody/>
+            </table>
         </div>
 
         <script src="${baseUrl}/lib/jquery/dist/jquery.js"></script>
