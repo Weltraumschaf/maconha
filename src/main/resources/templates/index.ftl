@@ -54,13 +54,14 @@
         </div>
 
         <div class="container">
-            <table id="result" class="table">
-                <tbody/>
-            </table>
+            <div id="result" class="list-group"></div>
         </div>
 
         <script src="${baseUrl}/lib/jquery/dist/jquery.js"></script>
         <script src="${baseUrl}/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="${baseUrl}/js/main.js"></script>
+        <script>
+            new Maconha("${baseUrl}").init();
+        </script>
     </body>
 </html>
