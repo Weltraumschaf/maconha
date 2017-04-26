@@ -45,22 +45,16 @@
                         <input name="search" id="search" type="submit" value="search" class="btn btn-lg btn-primary">
                     </p>
                 </form>
+
+                <div id="error" class="alert alert-danger fade in">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>Error!</strong> Can't load search results.
+                </div>
             </div>
         </div>
 
         <script src="${baseUrl}/lib/jquery/dist/jquery.js"></script>
         <script src="${baseUrl}/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script>
-            (function($) {
-                $(function() {
-                    $("form").submit(function(event) {
-                        event.preventDefault();
-                        $.get("${baseUrl}/search", {"q": $("input[name='q']").val()}, function(result) {
-                            console.log(result);
-                        });
-                    });
-                });
-            })(jQuery);
-        </script>
+        <script src="${baseUrl}/js/main.js"></script>
     </body>
 </html>
