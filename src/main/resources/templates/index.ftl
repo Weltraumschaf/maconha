@@ -54,7 +54,7 @@
         </div>
 
         <div class="container">
-            <div id="result" class="list-group"></div>
+            <ul id="result" class="list-group"></ul>
         </div>
 
         <script src="${baseUrl}/lib/jquery/dist/jquery.js"></script>

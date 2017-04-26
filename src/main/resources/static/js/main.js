@@ -8,8 +8,13 @@
                         // TODO Show spinner.
                         $.get(baseUrl + "/search", {"q": $("input[name='q']").val()})
                             .done(function (data) {
-                                // TODO Show table data.
-                                console.log(data);
+                                let $list = $("#result");
+
+                                for (let item of data) {
+                                    $list.append('<li class="list-group-item">' + item.relativeFileName + '</li>');
+                                }
+
+                                $list.show();
                             })
                             .fail(function (data) {
                                 $("#error").show();
