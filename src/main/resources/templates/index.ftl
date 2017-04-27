@@ -61,7 +61,11 @@
         <script src="${baseUrl}/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="${baseUrl}/js/main.js"></script>
         <script>
-            new Maconha("${baseUrl}").init();
+            (function ($, global) {
+                $(function () {
+                    new Maconha("${baseUrl}").init();
+                });
+            })(jQuery, window);
         </script>
     </body>
 </html>
