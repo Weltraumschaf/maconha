@@ -1,3 +1,4 @@
+
 (function ($, global) {
     global.Maconha = function (baseUrl) {
         let $list = $("#result");
@@ -19,8 +20,7 @@
                     html += ', ';
                 }
 
-                // FIXME Does always evaluate to false.
-                let isInQuery = $.inArray(value, query) > -1;
+                let isInQuery = $.inArray(value.literal, query) > -1;
 
                 if (isInQuery) {
                     html += '<strong>';
@@ -44,15 +44,15 @@
                     let html = '<li class="list-group-item">';
 
                     if (value.type === 'VIDEO') {
-                        html += '<span class="glyphicon glyphicon-film"></span>'
+                        html += '<span class="glyphicon glyphicon-film"></span>';
                     } else if (value.type === 'AUDIO') {
-                        html += '<span class="glyphicon glyphicon-music"></span>'
+                        html += '<span class="glyphicon glyphicon-music"></span>';
                     } else {
-                        html += '<span class="glyphicon glyphicon-file"></span>'
+                        html += '<span class="glyphicon glyphicon-file"></span>';
                     }
 
                     html += ' <strong><a href="' + baseUrl +'/files/';
-                    html += value.relativeFileName +'">'
+                    html += value.relativeFileName +'">';
                     html += value.relativeFileName + '</a></strong><br>';
                     html += '<small>(' + value.bucket.directory + ')</small><br>';
                     html += 'Keywords: ' + formatKeywords(value.keywords);
