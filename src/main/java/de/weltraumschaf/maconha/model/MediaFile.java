@@ -156,7 +156,7 @@ public class MediaFile extends BaseEntity {
             + "fileHash=" + fileHash + ", "
             + "lastScanned=" + lastScanned + ", "
             // Do not use toString() to prevent endless loop.
-            + "keywords=" + (null == keywords ? "" : keywords.stream().map(Keyword::getLiteral).collect(Collectors.joining(", "))) + ", "
+            + "keywords=" + keywords.stream().map(Keyword::getLiteral).collect(Collectors.joining(", ")) + ", "
             + "bucket=" + bucket
             + '}';
     }

@@ -30,7 +30,7 @@ public enum FileExtension {
     XVID_ENCODED_VIDEO_FILE("xvid", "video/x-xvid");
     // Audio types:
     // TODO
-    
+
     private static final Map<String, FileExtension> LOOKUP;
 
     static {

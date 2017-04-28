@@ -5,7 +5,7 @@ skinparam componentStyle uml2
 [Filesystem] #White
 :Administrator: #White
 :User: #White
-database SQL
+database SQL #White
 
 
 Administrator ..> Maconha

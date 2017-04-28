@@ -1,5 +1,5 @@
 src/main/resources/static/lib/
-bin/*
+bin/
 node/
 node_modules/
 .envrc

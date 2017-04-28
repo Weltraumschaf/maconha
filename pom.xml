@@ -86,6 +86,7 @@
         <reflections.version>0.9.10</reflections.version>
         <javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
         <rest-assured.version>3.0.1</rest-assured.version>
+        <javax.el>2.2.4</javax.el>
     </properties>
 
     <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html -->
@@ -191,10 +192,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <!--        <dependency>
@@ -208,10 +205,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -256,12 +249,12 @@
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
-            <version>2.2.4</version>
+            <version>${javax.el.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>javax.el</artifactId>
-            <version>2.2.4</version>
+            <version>${javax.el.version}</version>
         </dependency>
 
         <!-- Joda-Time -->
@@ -477,6 +470,7 @@
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+
                 <configuration>
                     <argLine>-Dspring.profiles.active=test</argLine>
                 </configuration>

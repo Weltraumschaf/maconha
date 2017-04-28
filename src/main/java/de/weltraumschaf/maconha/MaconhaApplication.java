@@ -27,7 +27,7 @@ import java.util.Arrays;
 @EnableBatchProcessing(modular = true) // Modular because job configuration is in other class.
 @ComponentScan( {"de.weltraumschaf.maconha"})
 @PropertySource(value = {"classpath:application.properties"})
-public class MaconhaApplication implements CommandLineRunner {
+public class MaconhaApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaApplication.class);
 
@@ -62,11 +62,6 @@ public class MaconhaApplication implements CommandLineRunner {
     public void postConstruct() {
         LOGGER.info("Maconha version: {}", version);
         LOGGER.info("Used profiles: {}", Arrays.toString(environment.getActiveProfiles()));
-    }
-
-    @Override
-    public void run(final String... args) throws Exception {
-        // Here we can do additional things on startup.
     }
 
     @Bean
