@@ -96,6 +96,7 @@ final class DefaultSearchService implements SearchService {
             }).collect(Collectors.toList());
 
         results.sort(Comparator.comparingInt(a -> a.hitCount));
+        Collections.reverse(results);
 
         return results.stream()
             .map(result -> result.file)
