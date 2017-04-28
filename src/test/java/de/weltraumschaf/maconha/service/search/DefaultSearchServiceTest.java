@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.service.search;
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
+import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -21,7 +22,8 @@ import static org.mockito.Mockito.when;
  */
 public final class DefaultSearchServiceTest {
     private final KeywordRepo keywords = mock(KeywordRepo.class);
-    private final DefaultSearchService sut = new DefaultSearchService(keywords);
+    private MediaFileRepo mediaFiles = mock(MediaFileRepo.class);
+    private final DefaultSearchService sut = new DefaultSearchService(keywords, mediaFiles);
 
     @Test(expected = NullPointerException.class)
     public void forKeywords_nullGiven() {

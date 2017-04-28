@@ -51,7 +51,9 @@
                         html += '<span class="glyphicon glyphicon-file"></span>'
                     }
 
-                    html += ' <strong>' + value.relativeFileName + '</strong><br>';
+                    html += ' <strong><a href="' + baseUrl +'/files/';
+                    html += value.relativeFileName +'">'
+                    html += value.relativeFileName + '</a></strong><br>';
                     html += '<small>(' + value.bucket.directory + ')</small><br>';
                     html += 'Keywords: ' + formatKeywords(value.keywords);
                     html += '</li>';

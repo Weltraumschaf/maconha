@@ -13,5 +13,7 @@ public interface MediaFileRepo extends BaseRepo<MediaFile> {
     @Override
     Page<MediaFile> findAll(Pageable pageable);
 
+    MediaFile findByRelativeFileName(String relativeFileName);
+
     MediaFile findByRelativeFileNameAndBucket(String relativeFileName, Bucket bucket);
 }
