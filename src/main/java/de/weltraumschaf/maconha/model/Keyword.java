@@ -16,6 +16,7 @@ import java.util.Set;
  * </p>
  */
 @Entity
+@Table(indexes = {@Index(name = "idx_literal", columnList = "literal")})
 public class Keyword extends BaseEntity {
 
     @NotEmpty

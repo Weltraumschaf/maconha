@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
  * </p>
  */
 @Entity
+@Table(indexes = {
+    @Index(name = "idx_relativeFileName", columnList = "relativeFileName"),
+    @Index(name = "idx_type", columnList = "type"),
+    @Index(name = "idx_fileHash", columnList = "fileHash")
+})
 public class MediaFile extends BaseEntity {
 
     @NotNull
