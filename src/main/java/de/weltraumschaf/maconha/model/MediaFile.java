@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Table(indexes = {
-    @Index(name = "idx_relativeFileName", columnList = "relativeFileName"),
     @Index(name = "idx_type", columnList = "type"),
     @Index(name = "idx_fileHash", columnList = "fileHash")
 })
@@ -54,7 +53,7 @@ public class MediaFile extends BaseEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime lastScanned = new LocalDateTime();
 
-    @ManyToMany(mappedBy = "mediaFiles")
+    @ManyToMany(mappedBy = "mediaFiles", cascade = CascadeType.ALL)
     @SuppressWarnings("FieldMayBeFinal")
     private Set<Keyword> keywords = new HashSet<>();
 

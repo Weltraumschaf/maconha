@@ -109,9 +109,12 @@ public final class BucketsView extends SubView {
     }
 
     public void remove() {
-        buckets.delete(list.asSingleSelect().getValue());
+        final Bucket toDelete = list.asSingleSelect().getValue();
+        LOGGER.debug("Delete bucket {}.", toDelete.getName());
+        buckets.delete(toDelete);
         list.deselectAll();
         listEntities();
+        events.publish(this, new BucketDeleteEvent());
     }
 
     private void edit(final Bucket bucket) {

@@ -5,17 +5,13 @@ import de.weltraumschaf.maconha.model.Bucket;
 import java.io.Serializable;
 
 /**
- *
+ * Event to notify that a bucket was notified.
  */
 final class BucketModifiedEvent implements Serializable {
-    private final Bucket bucket;
 
-    public BucketModifiedEvent(final Bucket bucket) {
+    private static final long serialVersionUID = 1L;
+
+    BucketModifiedEvent() {
         super();
-        this.bucket = bucket;
-    }
-
-    public Bucket getBucket() {
-        return bucket;
     }
 }

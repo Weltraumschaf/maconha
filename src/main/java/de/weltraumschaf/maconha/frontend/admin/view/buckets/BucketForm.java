@@ -32,9 +32,9 @@ final class BucketForm extends AbstractForm<Bucket> {
             // Persist changes.
             buckets.save(bucket);
             // Send the event for other parts of the application.
-            events.publish(this, new BucketModifiedEvent(bucket));
+            events.publish(this, new BucketModifiedEvent());
         });
-        setResetHandler(bucket -> events.publish(this, new BucketModifiedEvent(bucket)));
+        setResetHandler(bucket -> events.publish(this, new BucketModifiedEvent()));
         setSizeUndefined();
     }
 
