@@ -651,7 +651,38 @@
                             </target>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>create-distribution-tarball</id>
+                        <phase>deploy</phase>
+
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
+                        <configuration>
+                            <target>
+                                <tar destfile="${project.build.directory}/${build.finalName}-dsitribution-${project.version}.tar.bz2" compression="bzip2">
+                                    <tarfileset dir="${project.bin.directory}" prefix="${build.finalName}-${project.version}/bin/">
+                                        <include name="*"/>
+                                    </tarfileset>
+
+                                    <tarfileset dir="${project.basedir}/etc" prefix="${build.finalName}-${project.version}/etc/">
+                                        <include name="*"/>
+                                    </tarfileset>
+                                </tar>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <!-- Don ot deploy to central repo by default. -->
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
 
             <plugin>
