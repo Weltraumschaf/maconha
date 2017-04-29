@@ -1,54 +1,34 @@
 package de.weltraumschaf.maconha.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Type of media file.
  */
 public enum MediaType {
-
-    /**
-     * All video media types.
-     */
+    TEXT,
     VIDEO,
-    /**
-     * All audio media types.
-     */
     AUDIO,
-    /**
-     * Everything not covered by any other enum.
-     */
+    IMAGE,
+    APPLICATION,
     OTHER;
 
-    /**
-     * All known file extensions for video file formats.
-     */
-    private static final Collection<FileExtension> VIDEOS = Collections.unmodifiableCollection(Arrays.asList(
-        FileExtension.AUDIO_VIDEO_INTERLEAVE,
-        FileExtension.DIVX_ENCODED_MOVIE_FILE,
-        FileExtension.ITUNES_VIDEO_FILE,
-        FileExtension.MATROSKA_VIDEO_FILE,
-        FileExtension.APPLE_QUICKTIME_MOVIE,
-        FileExtension.MPEG4_VIDEO_FILE,
-        FileExtension.MPEG_MOVIE,
-        FileExtension.MPEG_VIDEO_FILE,
-        FileExtension.OGG_MEDIA_FILE,
-        FileExtension.REAL_MEDIA_FILE,
-        FileExtension.SHOCKWAVE_FLASH,
-        FileExtension.WINDOWS_MEDIA_VIDEO_FILE,
-        FileExtension.XVID_ENCODED_VIDEO_FILE
-    ));
-    /**
-     * All known file extensions for audio file formats.
-     */
-    private static final Collection<FileExtension> AUDIOS = Collections.unmodifiableCollection(Collections.emptyList());
+    private static final Collection<FileExtension> TEXTS = collectByMimeGroup("text/");
+    private static final Collection<FileExtension> VIDEOS = collectByMimeGroup("video/");
+    private static final Collection<FileExtension> AUDIOS = collectByMimeGroup("audio/");
+    private static final Collection<FileExtension> IMAGES = collectByMimeGroup("image/");
+    private static final Collection<FileExtension> APPLICATIONS = collectByMimeGroup("application/");
 
     private static final Map<MediaType, Collection<FileExtension>> LOOKUP;
 
     static {
         final Map<MediaType, Collection<FileExtension>> tmp = new HashMap<>();
+        tmp.put(TEXT, TEXTS);
         tmp.put(VIDEO, VIDEOS);
         tmp.put(AUDIO, AUDIOS);
+        tmp.put(IMAGE, IMAGES);
+        tmp.put(APPLICATION, APPLICATIONS);
         LOOKUP = Collections.unmodifiableMap(tmp);
     }
 
@@ -64,5 +44,12 @@ public enum MediaType {
         }
 
         return OTHER;
+    }
+
+    private static Collection<FileExtension> collectByMimeGroup(final String group) {
+        return Collections.unmodifiableList(
+            Arrays.stream(FileExtension.values())
+                .filter(extension -> extension.getMimeType().startsWith(group))
+                .collect(Collectors.toList()));
     }
 }

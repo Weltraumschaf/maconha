@@ -19,7 +19,7 @@ public final class MetaDataExtractionTaskletTest {
 
     @Test
     public void extractExtension() {
-        assertThat(sut.extractExtension(new HashedFile("hash", "foo.mkv")), is(FileExtension.MATROSKA_VIDEO_FILE));
+        assertThat(sut.extractExtension(new HashedFile("hash", "foo.mkv")), is(FileExtension.MATROSKA_VIDEO));
         assertThat(sut.extractExtension(new HashedFile("hash", "foo.swf")), is(FileExtension.SHOCKWAVE_FLASH));
     }
 
