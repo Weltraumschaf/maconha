@@ -18,7 +18,7 @@ import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 /**
- * Vie to manage {@link MediaFile media files}.
+ * View to manage {@link MediaFile media files}.
  */
 @UIScope
 @SpringComponent
@@ -53,9 +53,7 @@ public final class MediaFilesView extends SubView {
     }
 
     private Component buildContent() {
-        final MVerticalLayout content = new MVerticalLayout(
-            list
-        ).expand(list);
+        final MVerticalLayout content = new MVerticalLayout(list).expand(list);
         listEntities();
 
         return content;

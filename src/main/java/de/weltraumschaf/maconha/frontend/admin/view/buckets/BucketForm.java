@@ -13,6 +13,8 @@ import org.vaadin.viritin.form.AbstractForm;
 import org.vaadin.viritin.layouts.MFormLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
+import javax.annotation.PostConstruct;
+
 @UIScope
 @SpringComponent
 final class BucketForm extends AbstractForm<Bucket> {
@@ -26,7 +28,10 @@ final class BucketForm extends AbstractForm<Bucket> {
         super(Bucket.class);
         this.buckets = buckets;
         this.events = events;
+    }
 
+    @PostConstruct
+    public void init() {
         // On save & cancel, publish events that other parts of the UI can listen.
         setSavedHandler(bucket -> {
             // Persist changes.
@@ -41,9 +46,7 @@ final class BucketForm extends AbstractForm<Bucket> {
     @Override
     protected Component createContent() {
         return new MVerticalLayout(
-            new MFormLayout(
-                name, directory
-            ).withWidth(""),
+            new MFormLayout(name, directory).withWidth(""),
             getToolbar()
         ).withWidth("");
 

@@ -14,19 +14,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 
+import javax.annotation.PostConstruct;
+
+/**
+ * The login UI.
+ */
 @UIScope
 @SpringComponent
 public final class LoginView extends VerticalLayout {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 
+    private final EventBus.UIEventBus events;
+
     @Autowired
-    private EventBus.UIEventBus events;
-
-    public LoginView() {
+    public LoginView(final EventBus.UIEventBus events) {
         super();
-        setSizeFull();
+        this.events = events;
+    }
 
+    @PostConstruct
+    public void init() {
+        setSizeFull();
         final Component loginForm = buildLoginForm();
         addComponent(loginForm);
         setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
