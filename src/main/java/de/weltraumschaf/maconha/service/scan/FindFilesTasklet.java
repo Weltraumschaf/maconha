@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 final class FindFilesTasklet extends SystemCommandTasklet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterUnseenFilesTasklet.class);
+    private static final long TIMEOUT = TimeUnit.HOURS.toMillis(3L);
+
     private final JobParamRetriever params = new JobParamRetriever();
     private final String binDir;
 
@@ -34,7 +36,7 @@ final class FindFilesTasklet extends SystemCommandTasklet {
         LOGGER.debug("Find and hash files in bucketDirectory {} ...", bucketDirectory);
         LOGGER.debug("Using bin dir '{}'.", binDir);
         setCommand(binDir + "/dirhash " + bucketDirectory);
-        setTimeout(TimeUnit.MINUTES.toMillis(10L));
+        setTimeout(TIMEOUT);
 
         return super.execute(contribution, ctx);
     }
