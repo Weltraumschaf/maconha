@@ -1,6 +1,23 @@
 # Maconha
 
-A search engine for my NAS.
+A search engine with frontend for my NAS.
+
+* [project documentation](https://ci.weltraumschaf.de/job/maconha/site/)
+* [distribution to download](https://ci.weltraumschaf.de/job/maconha/lastSuccessfulBuild/artifact/target/maconha-dsitribution-1.0.0-SNAPSHOT.tar.bz2)
+
+## Prerequisite
+
+You need:
+
+* Java 8 JRE installed
+* SQL database such as MySQL installed
+
+## Installation
+
+Unzip the downloaded distribution file and adapt the database configuration in `etc/config.properties.sample`.
+Then you can start the application with the command:
+
+    $> ./bin/maconha --spring.config.location=etc/config.properties.sample
 
 ## Links
 
@@ -17,8 +34,3 @@ A search engine for my NAS.
     - [Vaadin & Spring](https://vaadin.com/spring)
 - DB Testing
     - [DBUnit Rules](https://rpestano.wordpress.com/2016/06/20/ruling-database-testing-with-dbunit-rules/)
-
-## Helpful Shell Commands
-
-    $> find /Volumes/Blackhole/Filme/ | sed 's|/Volumes/Blackhole/||'
-    
