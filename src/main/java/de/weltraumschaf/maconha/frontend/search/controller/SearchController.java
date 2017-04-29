@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,8 +56,9 @@ public final class SearchController {
     @RequestMapping(value = "/files/**", method = RequestMethod.GET)
     public void download(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         tracer.traceRequest(request);
-        final String filename = request.getRequestURI().replace("/files/", "");
-        search.downloadFile(filename, response);
+        final String strippedFilename = request.getRequestURI().replace("/files/", "");
+        final String decodedFilename = URLDecoder.decode(strippedFilename, StandardCharsets.UTF_8.name());
+        search.downloadFile(decodedFilename, response);
     }
 
 }
