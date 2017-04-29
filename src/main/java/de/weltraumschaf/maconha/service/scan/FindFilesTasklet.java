@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 final class FindFilesTasklet extends SystemCommandTasklet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterUnseenFilesTasklet.class);
-    private static final long TIMEOUT = TimeUnit.HOURS.toMillis(3L);
+    private static final long TIMEOUT = TimeUnit.HOURS.toMillis(5L);
 
     private final JobParamRetriever params = new JobParamRetriever();
     private final String binDir;
