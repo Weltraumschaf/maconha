@@ -86,7 +86,7 @@
         <reflections.version>0.9.10</reflections.version>
         <javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
         <rest-assured.version>3.0.1</rest-assured.version>
-        <javax.el>2.2.4</javax.el>
+        <javax.el.version>2.2.4</javax.el.version>
     </properties>
 
     <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html -->
