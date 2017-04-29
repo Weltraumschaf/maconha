@@ -25,7 +25,7 @@ final class FindFilesTasklet extends SystemCommandTasklet {
     private final JobParamRetriever params = new JobParamRetriever();
     private final String binDir;
 
-    public FindFilesTasklet(final String binDir) {
+    FindFilesTasklet(final String binDir) {
         super();
         this.binDir = binDir;
     }
