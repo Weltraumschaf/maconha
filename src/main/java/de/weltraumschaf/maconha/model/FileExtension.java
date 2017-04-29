@@ -25,7 +25,6 @@ public enum FileExtension {
     MPEG_VIDEO_FILE("mpg", "video/mpeg"),
     OGG_MEDIA_FILE("ogm", "video/ogg"),
     REAL_MEDIA_FILE("rm", "application/vnd.rn-realmedia"),
-    SHOCKWAVE_FLASH_MOVIE("swf", "application/x-shockwave-flash"),
     WINDOWS_MEDIA_VIDEO_FILE("wmv", "video/wmv"),
     XVID_ENCODED_VIDEO_FILE("xvid", "video/x-xvid"),
     // New

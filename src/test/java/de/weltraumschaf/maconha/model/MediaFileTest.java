@@ -97,7 +97,7 @@ public class MediaFileTest {
         assertThat(MediaType.forValue(FileExtension.MPEG_VIDEO_FILE), is(MediaType.VIDEO));
         assertThat(MediaType.forValue(FileExtension.OGG_MEDIA_FILE), is(MediaType.VIDEO));
         assertThat(MediaType.forValue(FileExtension.REAL_MEDIA_FILE), is(MediaType.VIDEO));
-        assertThat(MediaType.forValue(FileExtension.SHOCKWAVE_FLASH_MOVIE), is(MediaType.VIDEO));
+        assertThat(MediaType.forValue(FileExtension.SHOCKWAVE_FLASH), is(MediaType.VIDEO));
         assertThat(MediaType.forValue(FileExtension.WINDOWS_MEDIA_VIDEO_FILE), is(MediaType.VIDEO));
         assertThat(MediaType.forValue(FileExtension.XVID_ENCODED_VIDEO_FILE), is(MediaType.VIDEO));
     }

@@ -34,7 +34,7 @@ public enum MediaType {
         FileExtension.MPEG_VIDEO_FILE,
         FileExtension.OGG_MEDIA_FILE,
         FileExtension.REAL_MEDIA_FILE,
-        FileExtension.SHOCKWAVE_FLASH_MOVIE,
+        FileExtension.SHOCKWAVE_FLASH,
         FileExtension.WINDOWS_MEDIA_VIDEO_FILE,
         FileExtension.XVID_ENCODED_VIDEO_FILE
     ));
