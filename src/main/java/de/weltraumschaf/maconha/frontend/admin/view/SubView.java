@@ -9,7 +9,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import javax.annotation.PostConstruct;
 
 /**
- *
+ * Shared functionality for all view panels.
  */
 public abstract class SubView extends Panel implements View {
 
@@ -24,8 +24,8 @@ public abstract class SubView extends Panel implements View {
     }
 
     @Override
-    public final void enter(final ViewChangeListener.ViewChangeEvent event) {
-        // This view is constructed in the init() method.
+    public void enter(final ViewChangeListener.ViewChangeEvent event) {
+        // Empty default implementation because this view is constructed in the init() method.
     }
 
     @PostConstruct

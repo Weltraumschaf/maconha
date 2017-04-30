@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.admin.view.mediafiles;
 
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -50,6 +51,11 @@ public final class MediaFilesView extends SubView {
     protected void subInit() {
         root.addComponent(buildContent());
         events.subscribe(this);
+    }
+
+    @Override
+    public void enter(final ViewChangeListener.ViewChangeEvent event) {
+        listEntities();
     }
 
     private Component buildContent() {

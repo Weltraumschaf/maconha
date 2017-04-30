@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.admin.view.scans;
 
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -41,6 +42,11 @@ public final class ScansView extends SubView {
     @Override
     protected void subInit() {
         root.addComponent(buildContent());
+    }
+
+    @Override
+    public void enter(final ViewChangeListener.ViewChangeEvent event) {
+        listEntities();
     }
 
     private Component buildContent() {
