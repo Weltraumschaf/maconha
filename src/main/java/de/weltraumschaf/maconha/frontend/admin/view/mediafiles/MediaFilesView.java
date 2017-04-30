@@ -5,6 +5,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import de.weltraumschaf.maconha.frontend.admin.view.SubView;
 import de.weltraumschaf.maconha.frontend.admin.view.buckets.BucketDeleteEvent;
 import de.weltraumschaf.maconha.model.MediaFile;
@@ -16,7 +17,10 @@ import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.viritin.grid.MGrid;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
+
+import java.util.List;
 
 /**
  * View to manage {@link MediaFile media files}.
@@ -31,7 +35,9 @@ public final class MediaFilesView extends SubView {
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFilesView.class);
     private static final String TITLE_ID = "mediafiles-title";
 
-    // https://vaadin.com/docs/-/part/framework/components/components-grid.html
+    private static final String TOTAL_NUMBER_OF_FOUND_MEDIA_FILES = "Total number of found media files: %s";
+
+    private Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_MEDIA_FILES, 0));
     private final MGrid<MediaFile> list = new MGrid<>(MediaFile.class)
         .withProperties("id", "type", "format", "relativeFileName", "fileHash", "lastScanned")
         .withColumnHeaders("ID", "Type", "Format", "relative File Name", "File Hash", "Last Scanned")
@@ -59,7 +65,9 @@ public final class MediaFilesView extends SubView {
     }
 
     private Component buildContent() {
-        final MVerticalLayout content = new MVerticalLayout(list).expand(list);
+        final MVerticalLayout content = new MVerticalLayout(
+            totalNumber,
+            list).expand(list);
         listEntities();
 
         return content;
@@ -67,8 +75,9 @@ public final class MediaFilesView extends SubView {
 
     private void listEntities() {
         LOGGER.debug("List media file entities.");
-        list.deselectAll();
-        list.setRows(mediaFiles.findAll());
+        final List<MediaFile> found = mediaFiles.findAll();
+        list.setRows(found);
+        totalNumber.setValue(String.format(TOTAL_NUMBER_OF_FOUND_MEDIA_FILES, found.size()));
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)

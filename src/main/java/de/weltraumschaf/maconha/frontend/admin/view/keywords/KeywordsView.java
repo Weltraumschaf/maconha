@@ -33,13 +33,13 @@ public final class KeywordsView extends SubView {
     private static final String TITLE_ID = "keywords-title";
     private static final String TOTAL_NUMBER_OF_FOUND_KEYWORDS = "Total number of found keywords: %s";
 
+    private Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, 0));
+    private MTextField filterByLiteral = new MTextField()
+        .withPlaceholder("Filter by literal");
     private final MGrid<Keyword> list = new MGrid<>(Keyword.class)
         .withProperties("id", "literal")
         .withColumnHeaders("ID", "Literal")
         .withFullWidth();
-    private Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, 0));
-    private MTextField filterByLiteral = new MTextField()
-        .withPlaceholder("Filter by literal");
     private final KeywordRepo keywords;
 
     @Autowired
@@ -60,7 +60,8 @@ public final class KeywordsView extends SubView {
 
     private Component buildContent() {
         final MVerticalLayout content = new MVerticalLayout(
-            new MHorizontalLayout(filterByLiteral), totalNumber,
+            new MHorizontalLayout(filterByLiteral),
+            totalNumber,
             list
         ).expand(list);
         listEntities();
