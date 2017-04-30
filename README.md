@@ -29,6 +29,7 @@ Then you can start the application with the command:
     - [Spring Boot Digest Authentication](http://stackoverflow.com/questions/33918432/digest-auth-in-spring-security-with-rest-and-javaconfig)
     - [Spring Batch](http://projects.spring.io/spring-batch/)
     - [Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2)
+    - [Task Execution and Scheduling](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/scheduling.html#scheduling-annotation-support-scheduled)
 - Vaadin
     - <http://vaadin.github.io/spring-tutorial/>
     - <https://vaadin.com/docs/-/part/framework/tutorial.html>
