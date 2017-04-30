@@ -11,6 +11,7 @@ import de.weltraumschaf.maconha.frontend.admin.view.buckets.BucketsView;
 import de.weltraumschaf.maconha.frontend.admin.view.dashboard.DashboardView;
 import de.weltraumschaf.maconha.frontend.admin.view.keywords.KeywordsView;
 import de.weltraumschaf.maconha.frontend.admin.view.mediafiles.MediaFilesView;
+import de.weltraumschaf.maconha.frontend.admin.view.scans.ScansView;
 import de.weltraumschaf.maconha.model.Keyword;
 
 @UIScope
@@ -58,6 +59,7 @@ public final class AdminMenu extends CustomComponent {
         menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, BucketsView.VIEW_NAME, BucketsView.TITLE));
         menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, MediaFilesView.VIEW_NAME, MediaFilesView.TITLE));
         menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, KeywordsView.VIEW_NAME, KeywordsView.TITLE));
+        menuItemsLayout.addComponent(createNavigationButton(VaadinIcons.TABLE, ScansView.VIEW_NAME, ScansView.TITLE));
         return menuItemsLayout;
     }
 

@@ -15,6 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Default implementation.
  * <p>
@@ -26,6 +32,7 @@ import org.springframework.stereotype.Service;
 final class DefaultScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
 
+    private final Map<Long, ScanStatus> scans = new ConcurrentHashMap<>();
     private final JobLauncher launcher;
     private final JobOperator operator;
     private final JobExplorer explorer;
@@ -41,13 +48,15 @@ final class DefaultScanService implements ScanService {
     }
 
     @Override
-    public Long scan(final Bucket bucket) throws ScanError {
+    public Long scan(final Bucket bucket)  {
         Validate.notNull(bucket, "bucket");
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
 
         try {
             final JobParameters parameters = createJobParameters(bucket);
-            return launcher.run(job, parameters).getId();
+            final ScanStatus status = new ScanStatus(launcher.run(job, parameters).getId());
+            scans.put(status.getId(), status);
+            return status.getId();
         } catch (final JobInstanceAlreadyCompleteException e) {
             throw new ScanError(e, "Job with name '%s' already completed!", JOB_NAME);
         } catch (final JobExecutionAlreadyRunningException e) {
@@ -69,7 +78,7 @@ final class DefaultScanService implements ScanService {
     }
 
     @Override
-    public boolean stop(final long executionId) throws ScanError {
+    public boolean stop(final long executionId)  {
         LOGGER.debug("Stop JobExecution with id: " + executionId);
         try {
             return operator.stop(executionId);
@@ -81,14 +90,22 @@ final class DefaultScanService implements ScanService {
     }
 
     @Override
-    public String getStatus(final long executionId) throws ScanError {
-        LOGGER.debug("Get ExitCode for JobExecution with id: " + executionId + ".");
-        final JobExecution jobExecution = explorer.getJobExecution(executionId);
+    public List<ScanStatus> overview() {
+        scans.values().forEach(status -> {
+            status.setStatus(getStatus(status.getId()));
+        });
+        return Collections.unmodifiableList(new ArrayList<>(scans.values()));
+    }
+
+    @Override
+    public ExitStatus getStatus(final long id)  {
+        LOGGER.debug("Get ExitCode for JobExecution with id: " + id + ".");
+        final JobExecution jobExecution = explorer.getJobExecution(id);
 
         if (jobExecution != null) {
-            return jobExecution.getExitStatus().getExitCode();
+            return jobExecution.getExitStatus();
         } else {
-            throw new ScanError("JobExecution with id %d not found!", executionId);
+            throw new ScanError("JobExecution with id %d not found!", id);
         }
     }
 }
