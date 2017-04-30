@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.service;
 import de.weltraumschaf.maconha.model.Bucket;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
+import org.joda.time.Seconds;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
@@ -62,7 +63,7 @@ public interface ScanService {
                     .printZeroAlways().minimumPrintedDigits(2).appendSeconds()
                     .toFormatter();
 
-            return format.print(Minutes.minutesBetween(startTime, DateTime.now()));
+            return format.print(Seconds.secondsBetween(startTime, DateTime.now()));
         }
 
         public String getStatusCode() {
