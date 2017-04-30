@@ -11,7 +11,9 @@ import de.weltraumschaf.maconha.repo.KeywordRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.grid.MGrid;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 /**
@@ -31,6 +33,8 @@ public final class KeywordsView extends SubView {
         .withProperties("id", "literal")
         .withColumnHeaders("ID", "Literal")
         .withFullWidth();
+    private MTextField filterByLiteral = new MTextField()
+        .withPlaceholder("Filter by literal");
     private final KeywordRepo keywords;
 
     @Autowired
@@ -51,16 +55,28 @@ public final class KeywordsView extends SubView {
 
     private Component buildContent() {
         final MVerticalLayout content = new MVerticalLayout(
+            new MHorizontalLayout(filterByLiteral),
             list
         ).expand(list);
         listEntities();
-
+        filterByLiteral.addValueChangeListener(e -> listEntities(e.getValue()));
         return content;
     }
 
     private void listEntities() {
-        LOGGER.debug("List keyword entities.");
-        list.deselectAll();
-        list.setRows(keywords.findAll());
+        listEntities(filterByLiteral.getValue());
+    }
+
+    private void listEntities(final String literalFilter) {
+        final String normalizedFilter = literalFilter.trim().toLowerCase();
+
+        if (normalizedFilter.isEmpty()) {
+            LOGGER.debug("List all keyword entities.");
+            list.setRows(keywords.findAll());
+        } else {
+            final String likeFilter = "%" + normalizedFilter + "%";
+            LOGGER.debug("List all keyword entities like {}.", likeFilter);
+            list.setRows(keywords.findByLiteralLike(likeFilter));
+        }
     }
 }

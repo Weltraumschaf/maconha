@@ -67,7 +67,7 @@ public final class BucketsView extends SubView {
     @Override
     protected void subInit() {
         root.addComponent(buildContent());
-        // Listen to change events emitted by PersonForm see onEvent method
+        // Listen to change events emitted by PersonForm see onEvent method.
         events.subscribe(this);
     }
 
@@ -87,7 +87,7 @@ public final class BucketsView extends SubView {
     }
 
     private void listEntities(final String nameFilter) {
-        String likeFilter = "%" + nameFilter + "%";
+        final String likeFilter = "%" + nameFilter + "%";
         list.setRows(buckets.findByDirectoryLikeIgnoreCase(likeFilter));
         adjustActionButtonState();
     }
