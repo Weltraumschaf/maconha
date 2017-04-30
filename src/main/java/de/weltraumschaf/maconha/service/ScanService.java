@@ -2,12 +2,12 @@ package de.weltraumschaf.maconha.service;
 
 import de.weltraumschaf.maconha.model.Bucket;
 import org.joda.time.DateTime;
-import org.joda.time.Minutes;
 import org.joda.time.Seconds;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 
 import java.util.List;
@@ -32,12 +32,14 @@ public interface ScanService {
 
     List<ScanStatus> overview();
 
-    ExitStatus getStatus(long id);
+    ExitStatus getExitStatus(long id);
+    BatchStatus getBatchStatus(long id);
 
     final class ScanStatus {
         private final Long id;
         private final DateTime startTime = DateTime.now();
-        private ExitStatus status = ExitStatus.UNKNOWN;
+        private ExitStatus exitStatus = ExitStatus.UNKNOWN;
+        private BatchStatus batchStatus = BatchStatus.UNKNOWN;
 
         public ScanStatus(final Long id) {
             super();
@@ -56,26 +58,32 @@ public interface ScanService {
         public String getElapsedTime() {
             final PeriodFormatter format =
                 new PeriodFormatterBuilder()
-                    .printZeroAlways().minimumPrintedDigits(2).appendHours()
+                    .printZeroAlways()
+                    .minimumPrintedDigits(2)
+                    .appendHours()
                     .appendSeparator(":")
-                    .printZeroAlways().minimumPrintedDigits(2).appendMinutes()
+                    .appendMinutes()
                     .appendSeparator(":")
-                    .printZeroAlways().minimumPrintedDigits(2).appendSeconds()
+                    .appendSeconds()
                     .toFormatter();
-
+            // FIXME Do not calculate if stopped.
             return format.print(Seconds.secondsBetween(startTime, DateTime.now()));
         }
 
-        public String getStatusCode() {
-            return status.getExitCode();
+        public String getExitStatus() {
+            return exitStatus.getExitCode();
         }
 
-        public String getExitDescription() {
-            return status.getExitDescription();
+        public void setExitStatus(final ExitStatus exitStatus) {
+            this.exitStatus = exitStatus;
         }
 
-        public void setStatus(final ExitStatus status) {
-            this.status = status;
+        public String getBatchStatus() {
+            return batchStatus.toString();
+        }
+
+        public void setBatchStatus(final BatchStatus batchStatus) {
+            this.batchStatus = batchStatus;
         }
 
         @Override
@@ -84,15 +92,16 @@ public interface ScanService {
                 return false;
             }
 
-            final ScanStatus status1 = (ScanStatus) o;
-            return Objects.equals(id, status1.id) &&
-                Objects.equals(startTime, status1.startTime) &&
-                Objects.equals(status, status1.status);
+            final ScanStatus other = (ScanStatus) o;
+            return Objects.equals(id, other.id) &&
+                Objects.equals(startTime, other.startTime) &&
+                Objects.equals(exitStatus, other.exitStatus) &&
+                Objects.equals(batchStatus, other.batchStatus);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, startTime, status);
+            return Objects.hash(id, startTime, exitStatus, batchStatus);
         }
 
         @Override
@@ -100,7 +109,8 @@ public interface ScanService {
             return "ScanStatus{" +
                 "id=" + id +
                 ", startTime=" + startTime +
-                ", status=" + status +
+                ", exitStatus=" + exitStatus +
+                ", batchStatus=" + batchStatus +
                 '}';
         }
     }

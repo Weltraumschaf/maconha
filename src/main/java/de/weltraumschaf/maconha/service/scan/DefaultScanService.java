@@ -85,25 +85,39 @@ final class DefaultScanService implements ScanService {
         } catch (final NoSuchJobExecutionException e) {
             throw new ScanError(e, "No job execution present for id %d!", executionId);
         } catch (final JobExecutionNotRunningException e) {
-            throw new ScanError(e, "Jo execution for id %d not running!", executionId);
+            throw new ScanError(e, "Job execution for id %d not running!", executionId);
         }
     }
 
     @Override
     public List<ScanStatus> overview() {
         scans.values().forEach(status -> {
-            status.setStatus(getStatus(status.getId()));
+            status.setExitStatus(getExitStatus(status.getId()));
+            status.setBatchStatus(getBatchStatus(status.getId()));
         });
         return Collections.unmodifiableList(new ArrayList<>(scans.values()));
     }
 
     @Override
-    public ExitStatus getStatus(final long id)  {
-        LOGGER.debug("Get ExitCode for JobExecution with id: " + id + ".");
+    public ExitStatus getExitStatus(long id) {
+        LOGGER.debug("Get exit status for job execution with id: " + id + ".");
         final JobExecution jobExecution = explorer.getJobExecution(id);
 
         if (jobExecution != null) {
             return jobExecution.getExitStatus();
+        } else {
+            throw new ScanError("JobExecution with id %d not found!", id);
+        }
+
+    }
+
+    @Override
+    public BatchStatus getBatchStatus(final long id)  {
+        LOGGER.debug("Get batch status for job execution with id: " + id + ".");
+        final JobExecution jobExecution = explorer.getJobExecution(id);
+
+        if (jobExecution != null) {
+            return jobExecution.getStatus();
         } else {
             throw new ScanError("JobExecution with id %d not found!", id);
         }

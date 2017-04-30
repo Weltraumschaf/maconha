@@ -37,10 +37,6 @@ public final class BucketsView extends SubView {
     private static final Logger LOGGER = LoggerFactory.getLogger(BucketsView.class);
     private static final String TITLE_ID = "buckets-title";
 
-    private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
-        .withProperties("id", "name", "directory")
-        .withColumnHeaders("ID", "Name", "Directory")
-        .withFullWidth();
     private MTextField filterByDirectory = new MTextField()
         .withPlaceholder("Filter by directory");
     private final Button addNew = new MButton(VaadinIcons.PLUS, this::add);
@@ -49,6 +45,10 @@ public final class BucketsView extends SubView {
         "Are you sure you want to delete the entry?", this::remove);
     private final Button scan = new MButton(VaadinIcons.COGS, this::scan);
     private final Button schedule = new MButton(VaadinIcons.ALARM, this::schedule);
+    private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
+        .withProperties("id", "name", "directory")
+        .withColumnHeaders("ID", "Name", "Directory")
+        .withFullWidth();
 
     private final ScanService scanner;
     private final BucketRepo buckets;
@@ -76,9 +76,11 @@ public final class BucketsView extends SubView {
                 new MHorizontalLayout(filterByDirectory, addNew, edit, delete, scan, schedule),
                 list
             ).expand(list);
+
         listEntities();
         list.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
         filterByDirectory.addValueChangeListener(e -> listEntities(e.getValue()));
+
         return content;
     }
 
