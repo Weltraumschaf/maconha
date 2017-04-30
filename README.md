@@ -22,12 +22,13 @@ Then you can start the application with the command:
 ## Links
 
 - Spring
-    - [Spring & Angular Tutorial](http://websystique.com/springmvc/spring-mvc-4-angularjs-example/)
+    - [Spring Boot Reference Guide](http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/)
     - [Spring & Hibernate](http://websystique.com/springmvc/spring-4-mvc-and-hibernate4-integration-example-using-annotations/)
     - [Spring Security 4: JDBC Authentication and Authorization in MySQL](https://dzone.com/articles/spring-security-4-authenticate-and-authorize-users)
     - [Spring Boot Samples](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples)
     - [Spring Boot Digest Authentication](http://stackoverflow.com/questions/33918432/digest-auth-in-spring-security-with-rest-and-javaconfig)
-    - [Batch](http://projects.spring.io/spring-batch/)
+    - [Spring Batch](http://projects.spring.io/spring-batch/)
+    - [Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2)
 - Vaadin
     - <http://vaadin.github.io/spring-tutorial/>
     - <https://vaadin.com/docs/-/part/framework/tutorial.html>
