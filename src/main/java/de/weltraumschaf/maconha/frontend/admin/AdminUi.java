@@ -18,7 +18,7 @@ import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventBusListener;
 
 /**
- * https://github.com/mstahv/spring-data-vaadin-crud
+ * This is the root of the administrative backend UI.
  */
 @Theme("valo")
 @Title("Maconha - Admin")
@@ -38,7 +38,6 @@ public final class AdminUi extends UI implements EventBusListener<User> {
         this.main = main;
         this.login = login;
     }
-
 
     @Override
     protected void init(final VaadinRequest request) {
