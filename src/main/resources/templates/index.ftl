@@ -38,6 +38,14 @@
                     <p class="text-right">
                         <input name="search" id="search" type="submit" value="search" class="btn btn-lg btn-primary">
                     </p>
+                    <p class="text-center">
+                        <label class="checkbox-inline"><input type="checkbox" name="type[]" value="all">All</label>
+                        <label class="checkbox-inline"><input type="checkbox" name="type[]" value="video">Video</label>
+                        <label class="checkbox-inline"><input type="checkbox" name="type[]" value="audio">Audio</label>
+                        <label class="checkbox-inline"><input type="checkbox" name="type[]" value="image">Image</label>
+                        <label class="checkbox-inline"><input type="checkbox" name="type[]" value="text">Text</label>
+                        <label class="checkbox-inline"><input type="checkbox" name="type[]" value="application">Application</label>
+                    </p>
                 </form>
 
                 <div id="error" class="alert alert-danger fade in">

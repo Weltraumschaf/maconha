@@ -69,7 +69,7 @@
                 $form.submit(function (event) {
                     event.preventDefault();
                     $list.hide().empty();
-                    $.get(baseUrl + "/search", {"q": $query.val()})
+                    $.get(baseUrl + "/search", $form.serialize())
                         .done(showResults)
                         .fail(onError);
                 });
