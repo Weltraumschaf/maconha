@@ -28,7 +28,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -185,7 +187,13 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
         final Notification notification = notification(caption, description, args);
         final Execution execution = getExecution(jobId);
         final UI ui = execution.currentUi.getUI();
-        ui.access(() -> notification.show(ui.getPage()));
+
+        if (ui == null) {
+            // FIXME This should not be null, but is null if the user navigates away from the buckets view.
+            LOGGER.warn("Currents UI null! Can't notify client about job with id {}.", jobId);
+        } else {
+            ui.access(() -> notification.show(ui.getPage()));
+        }
     }
 
     private Execution getExecution(final Long jobId) {
