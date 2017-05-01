@@ -5,6 +5,8 @@
         let $form = $("form");
         let $error = $("#error");
         let $query = $("input[name='q']");
+        let $allCheckbox = $("#all");
+        let $otherCheckboxes = $("input[type='checkbox']").not("#all");
 
         function onError(data) {
             $error.show();
@@ -73,6 +75,13 @@
                         .done(showResults)
                         .fail(onError);
                 });
+                $allCheckbox.prop('checked', true);
+                $allCheckbox.on('click', function() {
+                    $otherCheckboxes.prop('checked', false);
+                });
+                $otherCheckboxes.on('click', function () {
+                    $allCheckbox.prop('checked', false);
+                })
             }
         }
     };
