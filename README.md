@@ -14,11 +14,16 @@ You need:
 
 ## Installation
 
-Unzip the downloaded distribution file and adapt the database configuration in `etc/config.properties.sample`.
+Run the command:
+```
+/bin/sh <$(curl -fsSL https://raw.githubusercontent.com/Weltraumschaf/maconha/master/tools/install.sh)
+```
+
+and adapt the database configuration in `etc/maconha.properties.sample`.
 Then you can start the application with the command:
 
 ```
-$> ./bin/maconha --spring.config.location=etc/config.properties.sample
+$> ./bin/maconha --spring.config.location=etc/maconha.properties.sample
 ```
     
 ### Modify Serialized Context Size
