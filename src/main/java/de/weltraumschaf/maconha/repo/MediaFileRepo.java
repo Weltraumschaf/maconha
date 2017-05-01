@@ -5,6 +5,8 @@ import de.weltraumschaf.maconha.model.MediaFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Auto implemented by Spring.
  */
@@ -16,4 +18,6 @@ public interface MediaFileRepo extends BaseRepo<MediaFile> {
     MediaFile findByRelativeFileName(String relativeFileName);
 
     MediaFile findByRelativeFileNameAndBucket(String relativeFileName, Bucket bucket);
+
+    List<MediaFile> findByRelativeFileNameLikeIgnoreCase(String likeFilter);
 }

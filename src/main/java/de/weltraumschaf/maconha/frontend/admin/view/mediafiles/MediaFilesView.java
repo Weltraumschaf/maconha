@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
+import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -37,6 +38,8 @@ public final class MediaFilesView extends SubView {
 
     private static final String TOTAL_NUMBER_OF_FOUND_MEDIA_FILES = "Total number of found media files: %s";
 
+    private MTextField filterByRelativeFileName = new MTextField()
+        .withPlaceholder("relative File Name");
     private Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_MEDIA_FILES, 0));
     private final MGrid<MediaFile> list = new MGrid<>(MediaFile.class)
         .withProperties("id", "type", "format", "relativeFileName", "fileHash", "lastScanned")
@@ -66,16 +69,24 @@ public final class MediaFilesView extends SubView {
 
     private Component buildContent() {
         final MVerticalLayout content = new MVerticalLayout(
+            new MHorizontalLayout(filterByRelativeFileName),
             totalNumber,
             list).expand(list);
         listEntities();
+        filterByRelativeFileName.addValueChangeListener(e -> listEntities(e.getValue()));
 
         return content;
     }
 
+
     private void listEntities() {
+        listEntities(filterByRelativeFileName.getValue());
+    }
+
+    private void listEntities(final String relativeFileNameFilter) {
         LOGGER.debug("List media file entities.");
-        final List<MediaFile> found = mediaFiles.findAll();
+        final String likeFilter = "%" + relativeFileNameFilter + "%";
+        final List<MediaFile> found = mediaFiles.findByRelativeFileNameLikeIgnoreCase(likeFilter);
         list.setRows(found);
         totalNumber.setValue(String.format(TOTAL_NUMBER_OF_FOUND_MEDIA_FILES, found.size()));
     }
