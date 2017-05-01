@@ -85,7 +85,7 @@ public final class ScansView extends SubView {
             if (scanner.stop(status.getId())) {
                 Notification.show(
                     "Scan stopped",
-                    String.format("Scan fid %d stopped.", status.getId()),
+                    String.format("Scan with id %d stopped.", status.getId()),
                     Notification.Type.TRAY_NOTIFICATION);
             } else {
                 Notification.show("Stop failed", "Send stop message failed", Notification.Type.WARNING_MESSAGE);
