@@ -22,7 +22,13 @@ public interface MediaFileRepo extends BaseRepo<MediaFile>, JpaSpecificationExec
 
     MediaFile findByRelativeFileNameAndBucket(String relativeFileName, Bucket bucket);
 
-    // https://www.petrikainulainen.net/programming/spring-framework/spring-data-jpa-tutorial-part-four-jpa-criteria-queries/
+    /**
+     * Class to create search specifications to find {@link MediaFile}.
+     * <p>
+     * Based on <a href="https://www.petrikainulainen.net/programming/spring-framework/spring-data-jpa-tutorial-part-four-jpa-criteria-queries/">
+     * this tutorial</a>.
+     * </p>
+     */
     final class MediaFileSpecifications {
 
         private MediaFileSpecifications() {
