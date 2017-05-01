@@ -85,7 +85,7 @@ public class MediaFileTest {
 
     @Test
     public void MediaType_forValue() {
-        assertThat(MediaType.forValue(null), is(MediaType.OTHER));
+        assertThat(MediaType.forValue((FileExtension) null), is(MediaType.OTHER));
         assertThat(MediaType.forValue(FileExtension.NONE), is(MediaType.OTHER));
 
         assertThat(MediaType.forValue(FileExtension.AUDIO_VIDEO_INTERLEAVE), is(MediaType.VIDEO));
