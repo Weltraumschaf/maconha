@@ -8,11 +8,11 @@ version="1.0.0-SNAPSHOT"
 prefix="${1-/usr/local}"
 distUrl="https://ci.weltraumschaf.de/job/maconha/lastSuccessfulBuild/artifact/target"
 dist="maconha-${version}"
-tarball="maconha-dsitribution-${version}.tar.bz2"
+tarball="maconha-dsitribution-${version}.tar"
 
 echo "Downloading distribution ..."
 wget --no-check-certificate "${distUrl}/${tarball}"
-tar xjvf "${tarball}"
+tar jvf "${tarball}"
 rm -fv "${tarball}"
 
 echo "Install into ${prefix} ..."

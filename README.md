@@ -3,7 +3,7 @@
 A search engine with frontend for my NAS.
 
 * [project documentation](https://ci.weltraumschaf.de/job/maconha/site/)
-* [distribution to download](https://ci.weltraumschaf.de/job/maconha/lastSuccessfulBuild/artifact/target/maconha-dsitribution-1.0.0-SNAPSHOT.tar.bz2)
+* [distribution to download](https://ci.weltraumschaf.de/job/maconha/lastSuccessfulBuild/artifact/target/maconha-dsitribution-1.0.0-SNAPSHOT.tar)
 
 ## Prerequisite
 

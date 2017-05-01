@@ -666,7 +666,7 @@
 
                         <configuration>
                             <target>
-                                <tar destfile="${project.build.directory}/${build.finalName}-dsitribution-${project.version}.tar.bz2" compression="bzip2">
+                                <tar destfile="${project.build.directory}/${build.finalName}-dsitribution-${project.version}.tar" compression="none">
                                     <tarfileset dir="${project.bin.directory}" prefix="${build.finalName}-${project.version}/bin/">
                                         <include name="*"/>
                                     </tarfileset>
