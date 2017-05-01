@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.model;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +21,7 @@ public enum MediaType {
     private static final Collection<FileExtension> IMAGES = collectByMimeGroup("image/");
     private static final Collection<FileExtension> APPLICATIONS = collectByMimeGroup("application/");
 
-    private static final Map<MediaType, Collection<FileExtension>> LOOKUP;
+    private static final Map<MediaType, Collection<FileExtension>> FILE_EXTENSION_LOOKUP;
 
     static {
         final Map<MediaType, Collection<FileExtension>> tmp = new HashMap<>();
@@ -29,7 +30,16 @@ public enum MediaType {
         tmp.put(AUDIO, AUDIOS);
         tmp.put(IMAGE, IMAGES);
         tmp.put(APPLICATION, APPLICATIONS);
-        LOOKUP = Collections.unmodifiableMap(tmp);
+        FILE_EXTENSION_LOOKUP = Collections.unmodifiableMap(tmp);
+    }
+
+    private static final Map<String, MediaType> MEDIA_TYPE_LOOKUP;
+
+    static {
+        MEDIA_TYPE_LOOKUP = Collections.unmodifiableMap(
+            Arrays.stream(values())
+                .collect(Collectors.toMap(m -> m.name().toUpperCase(), Function.identity()))
+        );
     }
 
     public static MediaType forValue(final FileExtension extension) {
@@ -37,10 +47,24 @@ public enum MediaType {
             return OTHER;
         }
 
-        for (final Map.Entry<MediaType, Collection<FileExtension>> pair : LOOKUP.entrySet()) {
+        for (final Map.Entry<MediaType, Collection<FileExtension>> pair : FILE_EXTENSION_LOOKUP.entrySet()) {
             if (pair.getValue().contains(extension)) {
                 return pair.getKey();
             }
+        }
+
+        return OTHER;
+    }
+
+    public static MediaType forValue(final String mediaType) {
+        if (null == mediaType || mediaType.trim().isEmpty()) {
+            return OTHER;
+        }
+
+        final String normalizedMediaType = mediaType.trim().toUpperCase();
+
+        if (MEDIA_TYPE_LOOKUP.containsKey(normalizedMediaType)) {
+            return MEDIA_TYPE_LOOKUP.get(normalizedMediaType);
         }
 
         return OTHER;

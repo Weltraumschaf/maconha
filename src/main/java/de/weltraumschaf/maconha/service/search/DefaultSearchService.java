@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.service.search;
 
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.MediaFile;
+import de.weltraumschaf.maconha.model.MediaType;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.SearchService;
@@ -53,22 +54,23 @@ final class DefaultSearchService implements SearchService {
     }
 
     @Override
-    public Collection<MediaFile> forKeywords(final Collection<String> query) {
+    public Collection<MediaFile> forKeywords(final Collection<String> query, final Collection<MediaType> types) {
         Validate.notNull(query, "query");
+        Validate.notNull(types, "types");
 
         if (query.isEmpty()) {
             return Collections.emptyList();
         }
 
-        LOGGER.debug("Search for {}.", query);
+        LOGGER.debug("Search for: {}.", query);
         final Collection<Keyword> foundKeywords = keywords.findByLiteralIn(query);
         LOGGER.debug("found {} keywords.", foundKeywords.size());
-        final Collection<MediaFile> foundFiles = reduce(foundKeywords);
+        final Collection<MediaFile> foundFiles = reduce(foundKeywords, types);
 
         return rank(foundFiles, foundKeywords);
     }
 
-    private Collection<MediaFile> reduce(final Collection<Keyword> foundKeywords) {
+    private Collection<MediaFile> reduce(final Collection<Keyword> foundKeywords, final Collection<MediaType> types) {
         final Collection<Long> alreadyAdded = new ArrayList<>();
         final Collection<MediaFile> foundFiles = new ArrayList<>();
 
@@ -79,8 +81,10 @@ final class DefaultSearchService implements SearchService {
                     return;
                 }
 
-                foundFiles.add(file);
-                alreadyAdded.add(file.getId());
+                if (types.contains(file.getType())) {
+                    foundFiles.add(file);
+                    alreadyAdded.add(file.getId());
+                }
             });
 
         return foundFiles;

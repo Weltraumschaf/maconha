@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.frontend.search.controller;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
+import de.weltraumschaf.maconha.core.ServedContentTypes;
 import de.weltraumschaf.maconha.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public final class IndexController {
 
     private final RequestTracer tracer = new RequestTracer();
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = ServedContentTypes.TEXT_HTML)
     public String index(final HttpServletRequest request, final UriComponentsBuilder uri, final Map<String, Object> model) {
         tracer.traceRequest(request);
         assignBaseVariables(uri, model);

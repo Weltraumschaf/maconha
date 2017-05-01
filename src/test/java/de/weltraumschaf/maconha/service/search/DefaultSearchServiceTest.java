@@ -27,12 +27,12 @@ public final class DefaultSearchServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void forKeywords_nullGiven() {
-        sut.forKeywords(null);
+        sut.forKeywords(null, Collections.emptyList());
     }
 
     @Test
     public void forKeywords_emptyGiven() {
-        assertThat(sut.forKeywords(Collections.emptyList()), is(empty()));
+        assertThat(sut.forKeywords(Collections.emptyList(), Collections.emptyList()), is(empty()));
     }
 
     @Test
@@ -78,7 +78,7 @@ public final class DefaultSearchServiceTest {
         when(keywords.findByLiteralIn(query)).thenReturn(Arrays.asList(foo, bar, baz));
 
         assertThat(
-            sut.forKeywords(query),
+            sut.forKeywords(query, Collections.emptyList()),
             is(Arrays.asList(file1, file2, file3, file4, file5)));
     }
 }

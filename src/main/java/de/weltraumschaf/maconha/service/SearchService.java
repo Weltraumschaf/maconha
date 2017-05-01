@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.service;
 
 import de.weltraumschaf.maconha.model.MediaFile;
+import de.weltraumschaf.maconha.model.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public interface SearchService {
      * @param keywords not {@code null}
      * @return never {@code null}, maybe empty
      */
-    Collection<MediaFile> forKeywords(Collection<String> keywords);
+    Collection<MediaFile> forKeywords(Collection<String> keywords, Collection<MediaType> types);
 
     /**
      * Download a file by its relative name.

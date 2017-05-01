@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.repo;
 
 import de.weltraumschaf.maconha.model.Keyword;
+import de.weltraumschaf.maconha.model.MediaType;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,4 +15,5 @@ public interface KeywordRepo extends BaseRepo<Keyword> {
     List<Keyword> findByLiteralLike(String literal);
 
     Collection<Keyword> findByLiteralIn(Collection<String> literals);
+
 }
