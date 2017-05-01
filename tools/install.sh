@@ -5,7 +5,8 @@ set -u
 
 version="1.0.0-SNAPSHOT"
 
-prefix="${1-/usr/local}"
+prefix="${MACONHA_PREFIX-/usr/local}"
+
 distUrl="https://ci.weltraumschaf.de/job/maconha/lastSuccessfulBuild/artifact/target"
 dist="maconha-${version}"
 tarball="maconha-dsitribution-${version}.tar"

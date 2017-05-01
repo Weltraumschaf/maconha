@@ -11,6 +11,7 @@ You need:
 
 * Java 8 JRE installed
 * SQL database such as MySQL installed
+* either the command line tool `sha256` or `shasum
 
 ## Installation
 
@@ -19,11 +20,14 @@ Run the command:
 /bin/sh <$(curl -fsSL https://raw.githubusercontent.com/Weltraumschaf/maconha/master/tools/install.sh)
 ```
 
-and adapt the database configuration in `etc/maconha.properties.sample`.
+By default this script install the files into the path prefix `/usr/local`. If you want another location export
+the variable `MACONHA_PREFIX`.
+
+The adapt the database configuration in `PREFIX/etc/maconha.properties.sample`.
 Then you can start the application with the command:
 
 ```
-$> ./bin/maconha --spring.config.location=etc/maconha.properties.sample
+$> PREFIX//bin/maconha --spring.config.location=etc/maconha.properties.sample
 ```
     
 ### Modify Serialized Context Size
