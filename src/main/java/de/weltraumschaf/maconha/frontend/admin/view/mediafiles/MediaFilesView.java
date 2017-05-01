@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.admin.view.mediafiles;
 
+import com.vaadin.data.HasValue;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
@@ -16,6 +17,7 @@ import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -24,6 +26,7 @@ import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -77,25 +80,49 @@ public final class MediaFilesView extends SubView {
     private Component buildContent() {
         filterByMediaType.setItems(EnumSet.allOf(MediaType.class));
         filterByFileExtension.setItems(EnumSet.allOf(FileExtension.class));
+
         final MVerticalLayout content = new MVerticalLayout(
             new MHorizontalLayout(filterByRelativeFileName, filterByMediaType, filterByFileExtension),
             totalNumber,
             list).expand(list);
         listEntities();
-        filterByRelativeFileName.addValueChangeListener(e -> listEntities(e.getValue()));
 
+        filterByRelativeFileName.addValueChangeListener(this::listEntities);
+        filterByMediaType.addValueChangeListener(this::listEntities);
+        filterByFileExtension.addValueChangeListener(this::listEntities);
         return content;
     }
 
-
     private void listEntities() {
-        listEntities(filterByRelativeFileName.getValue());
+        listEntities(null);
     }
 
-    private void listEntities(final String relativeFileNameFilter) {
-        LOGGER.debug("List media file entities.");
-        final String likeFilter = "%" + relativeFileNameFilter + "%";
-        final List<MediaFile> found = mediaFiles.findByRelativeFileNameLikeIgnoreCase(likeFilter);
+    private void listEntities(final HasValue.ValueChangeEvent<?> event) {
+        final List<MediaFile> found;
+
+        if (event == null) {
+            found = mediaFiles.findAll();
+        } else {
+            final String relativeFileNameFilter = filterByRelativeFileName.getValue().trim();
+            final MediaType mediaTypeFilter = filterByMediaType.getValue();
+            final FileExtension fileExtensionFilter = filterByFileExtension.getValue();
+            LOGGER.debug("Filter media files by '{}' and '{}' and '{}'.",
+                relativeFileNameFilter, mediaTypeFilter, fileExtensionFilter);
+
+            if (relativeFileNameFilter.isEmpty() && mediaTypeFilter == null && fileExtensionFilter == null) {
+                found = mediaFiles.findAll();
+            } else {
+                LOGGER.debug("Use specification to search media files.");
+                final Specification<MediaFile> specification = MediaFileRepo.MediaFileSpecifications
+                    .relativeFileNameIgnoreCaseAndTypeAndFormat(
+                        relativeFileNameFilter,
+                        mediaTypeFilter,
+                        fileExtensionFilter);
+                found = mediaFiles.findAll(specification);
+            }
+        }
+
+        LOGGER.debug("Found {} media files.", found.size());
         list.setRows(found);
         totalNumber.setValue(String.format(TOTAL_NUMBER_OF_FOUND_MEDIA_FILES, found.size()));
     }
