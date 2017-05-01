@@ -48,3 +48,5 @@ ALTER TABLE BATCH_STEP_EXECUTION_CONTEXT MODIFY SERIALIZED_CONTEXT MEDIUMTEXT;
     - [Vaadin & Spring](https://vaadin.com/spring)
 - DB Testing
     - [DBUnit Rules](https://rpestano.wordpress.com/2016/06/20/ruling-database-testing-with-dbunit-rules/)
+- CLI Tools
+    [fdupes](https://github.com/adrianlopezroche/fdupes) to find duplicates
