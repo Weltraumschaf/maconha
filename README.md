@@ -17,7 +17,19 @@ You need:
 Unzip the downloaded distribution file and adapt the database configuration in `etc/config.properties.sample`.
 Then you can start the application with the command:
 
-    $> ./bin/maconha --spring.config.location=etc/config.properties.sample
+```
+$> ./bin/maconha --spring.config.location=etc/config.properties.sample
+```
+    
+### Modify Serialized Context Size
+ 
+After the first start of the application and before the first scna job is started, it is necessary to increase the size
+for serialized context data of the batch jobs (at the moment this does not happen automatically):
+
+```
+ALTER TABLE BATCH_JOB_EXECUTION_CONTEXT MODIFY SERIALIZED_CONTEXT MEDIUMTEXT;
+ALTER TABLE BATCH_STEP_EXECUTION_CONTEXT MODIFY SERIALIZED_CONTEXT MEDIUMTEXT;
+```
 
 ## Links
 
