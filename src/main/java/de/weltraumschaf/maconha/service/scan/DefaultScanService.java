@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import com.vaadin.server.ClientConnector;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.commons.validate.Validate;
@@ -80,7 +80,7 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
     }
 
     @Override
-    public Long scan(final Bucket bucket, final ClientConnector currentUi) {
+    public Long scan(final Bucket bucket, final UI currentUi) {
         Validate.notNull(bucket, "bucket");
         Validate.notNull(currentUi, "currentUi");
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
@@ -186,13 +186,20 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
     private void notifyClient(final Long jobId, final String caption, final String description, final Object... args) {
         final Notification notification = notification(caption, description, args);
         final Execution execution = getExecution(jobId);
-        final UI ui = execution.currentUi.getUI();
+        final UI ui = execution.currentUi;
 
         if (ui == null) {
-            // FIXME This should not be null, but is null if the user navigates away from the buckets view.
             LOGGER.warn("Currents UI null! Can't notify client about job with id {}.", jobId);
         } else {
-            ui.access(() -> notification.show(ui.getPage()));
+            ui.access(() -> {
+                final Page page = ui.getPage();
+
+                if (page == null) {
+                    LOGGER.warn("Currents page null! Can't notify client about job with id {}.", jobId);
+                } else {
+                    notification.show(page);
+                }
+            });
         }
     }
 
@@ -214,9 +221,9 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
     private final class Execution {
         private Long id;
         private final Bucket bucket;
-        private ClientConnector currentUi;
+        private UI currentUi;
 
-        Execution(final Long id, final Bucket bucket, final ClientConnector currentUi) {
+        Execution(final Long id, final Bucket bucket, final UI currentUi) {
             super();
             this.id = id;
             this.bucket = bucket;
@@ -230,14 +237,12 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
             }
 
             final Execution execution = (Execution) o;
-            return Objects.equals(id, execution.id) &&
-                Objects.equals(bucket, execution.bucket) &&
-                Objects.equals(currentUi, execution.currentUi);
+            return Objects.equals(id, execution.id);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, bucket, currentUi);
+            return Objects.hash(id);
         }
 
         @Override

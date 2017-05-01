@@ -133,7 +133,7 @@ public final class BucketsView extends SubView {
         this.getUI();
         try {
             final Bucket bucket = list.asSingleSelect().getValue();
-            final Long id = scanner.scan(bucket, this);
+            final Long id = scanner.scan(bucket, getUI());
         } catch (final ScanService.ScanError e) {
             LOGGER.error(e.getMessage(), e);
             Notification.show("Scan failed", e.getMessage(), Notification.Type.ERROR_MESSAGE);

@@ -1,17 +1,7 @@
 package de.weltraumschaf.maconha.service;
 
-import com.vaadin.server.ClientConnector;
-import com.vaadin.server.Page;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.model.Bucket;
-import org.joda.time.DateTime;
-import org.joda.time.Seconds;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.ExitStatus;
 
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +20,7 @@ public interface ScanService {
      * @return the id of the underling scan job
      * @throws ScanError if the scan fails for any reason
      */
-    Long scan(Bucket bucket, ClientConnector currentUi);
+    Long scan(Bucket bucket, UI currentUi);
 
     boolean stop(long executionId);
 
