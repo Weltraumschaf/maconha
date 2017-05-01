@@ -12,7 +12,7 @@ tarball="maconha-dsitribution-${version}.tar"
 
 echo "Downloading distribution ..."
 wget --no-check-certificate "${distUrl}/${tarball}"
-tar jvf "${tarball}"
+tar xvf "${tarball}"
 rm -fv "${tarball}"
 
 echo "Install into ${prefix} ..."
