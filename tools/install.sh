@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -e
 set -u
@@ -19,11 +19,11 @@ echo "Install into ${prefix} ..."
 targetEtcDir="${prefix}/etc"
 targetBinDir="${prefix}/bin"
 
-if [[ ! -e "${targetEtcDir}" ]]; then
+if [ ! -e "${targetEtcDir}" ]; then
     mkdir -pv "${targetEtcDir}"
 fi
 
-if [[ ! -e "${targetBinDir}" ]]; then
+if [ ! -e "${targetBinDir}" ]; then
     mkdir -pv "${targetBinDir}"
 fi
 
