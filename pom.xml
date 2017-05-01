@@ -172,6 +172,10 @@
             <groupId>org.vaadin.teemu</groupId>
             <artifactId>switch</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-push</artifactId>
+        </dependency>
 
         <!-- Spring -->
         <dependency>

@@ -1,5 +1,8 @@
 package de.weltraumschaf.maconha.service;
 
+import com.vaadin.server.ClientConnector;
+import com.vaadin.server.Page;
+import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.model.Bucket;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
@@ -23,67 +26,77 @@ public interface ScanService {
      * Scan the media files found in the given bucket
      *
      * @param bucket must not be {@code null}
+     * @param currentUi must not be {@code null}
      * @return the id of the underling scan job
      * @throws ScanError if the scan fails for any reason
      */
-    Long scan(Bucket bucket);
+    Long scan(Bucket bucket, ClientConnector currentUi);
 
     boolean stop(long executionId);
 
     List<ScanStatus> overview();
 
-    ExitStatus getExitStatus(long id);
-    BatchStatus getBatchStatus(long id);
-
+    /**
+     * Immutable data structure to describe the current status of a job.
+     */
     final class ScanStatus {
         private final Long id;
-        private final DateTime startTime = DateTime.now();
-        private ExitStatus exitStatus = ExitStatus.UNKNOWN;
-        private BatchStatus batchStatus = BatchStatus.UNKNOWN;
+        private final String bucketName;
+        private final String creationTime;
+        private final String startTime;
+        private final String endTime;
+        private final String duration;
+        private final String jobStatus;
+        private final String jobExitCode;
+        private final List<Throwable> allFailureExceptions;
 
-        public ScanStatus(final Long id) {
+        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus, final String jobExitCode, final List<Throwable> allFailureExceptions) {
             super();
             this.id = id;
+            this.bucketName = bucketName;
+            this.creationTime = creationTime;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.duration = duration;
+            this.jobStatus = jobStatus;
+            this.jobExitCode = jobExitCode;
+            this.allFailureExceptions = allFailureExceptions;
         }
 
         public Long getId() {
             return id;
         }
 
+        public String getBucketName() {
+            return bucketName;
+        }
+
+        public String getCreationTime() {
+            return creationTime;
+        }
+
         public String getStartTime() {
-            final DateTimeFormatter format = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yyyy");
-            return format.print(startTime);
+            return startTime;
         }
 
-        public String getElapsedTime() {
-            final PeriodFormatter format =
-                new PeriodFormatterBuilder()
-                    .printZeroAlways()
-                    .minimumPrintedDigits(2)
-                    .appendHours()
-                    .appendSeparator(":")
-                    .appendMinutes()
-                    .appendSeparator(":")
-                    .appendSeconds()
-                    .toFormatter();
-            // FIXME Do not calculate if stopped.
-            return format.print(Seconds.secondsBetween(startTime, DateTime.now()));
+        public String getEndTime() {
+            return endTime;
         }
 
-        public String getExitStatus() {
-            return exitStatus.getExitCode();
+        public String getDuration() {
+            return duration;
         }
 
-        public void setExitStatus(final ExitStatus exitStatus) {
-            this.exitStatus = exitStatus;
+        public String getJobStatus() {
+            return jobStatus;
         }
 
-        public String getBatchStatus() {
-            return batchStatus.toString();
+        public String getJobExitCode() {
+            return jobExitCode;
         }
 
-        public void setBatchStatus(final BatchStatus batchStatus) {
-            this.batchStatus = batchStatus;
+        public List<Throwable> getAllFailureExceptions() {
+            return allFailureExceptions;
         }
 
         @Override
@@ -92,25 +105,35 @@ public interface ScanService {
                 return false;
             }
 
-            final ScanStatus other = (ScanStatus) o;
-            return Objects.equals(id, other.id) &&
-                Objects.equals(startTime, other.startTime) &&
-                Objects.equals(exitStatus, other.exitStatus) &&
-                Objects.equals(batchStatus, other.batchStatus);
+            final ScanStatus status = (ScanStatus) o;
+            return Objects.equals(id, status.id) &&
+                Objects.equals(bucketName, status.bucketName) &&
+                Objects.equals(creationTime, status.creationTime) &&
+                Objects.equals(startTime, status.startTime) &&
+                Objects.equals(endTime, status.endTime) &&
+                Objects.equals(duration, status.duration) &&
+                Objects.equals(jobStatus, status.jobStatus) &&
+                Objects.equals(jobExitCode, status.jobExitCode) &&
+                Objects.equals(allFailureExceptions, status.allFailureExceptions);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, startTime, exitStatus, batchStatus);
+            return Objects.hash(id, bucketName, creationTime, startTime, endTime, duration, jobStatus, jobExitCode, allFailureExceptions);
         }
 
         @Override
         public String toString() {
             return "ScanStatus{" +
                 "id=" + id +
-                ", startTime=" + startTime +
-                ", exitStatus=" + exitStatus +
-                ", batchStatus=" + batchStatus +
+                ", bucketName='" + bucketName + '\'' +
+                ", creationTime='" + creationTime + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", duration='" + duration + '\'' +
+                ", jobStatus='" + jobStatus + '\'' +
+                ", jobExitCode='" + jobExitCode + '\'' +
+                ", allFailureExceptions=" + allFailureExceptions +
                 '}';
         }
     }

@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.admin;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.Responsive;
@@ -8,14 +9,16 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
-import de.weltraumschaf.maconha.model.User;
 import de.weltraumschaf.maconha.frontend.admin.view.LoginView;
 import de.weltraumschaf.maconha.frontend.admin.view.MainView;
+import de.weltraumschaf.maconha.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventBusListener;
+
+import static com.vaadin.shared.ui.ui.Transport.LONG_POLLING;
 
 /**
  * This is the root of the administrative backend UI.
@@ -23,6 +26,7 @@ import org.vaadin.spring.events.EventBusListener;
 @Theme("valo")
 @Title("Maconha - Admin")
 @SpringUI(path = "/admin")
+@Push(transport = LONG_POLLING)
 public final class AdminUi extends UI implements EventBusListener<User> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminUi.class);

@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.vaadin.spring.annotation.EnableVaadinExtensions;
+import org.vaadin.spring.events.annotation.EnableEventBus;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;

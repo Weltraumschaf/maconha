@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.frontend.admin.view.buckets;
 
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -129,13 +130,10 @@ public final class BucketsView extends SubView {
     }
 
     public void scan(final Button.ClickEvent event) {
+        this.getUI();
         try {
             final Bucket bucket = list.asSingleSelect().getValue();
-            final Long id = scanner.scan(bucket);
-            Notification.show(
-                "Scan started",
-                String.format("Scan for bucket directory '%s' started with id %d.", bucket.getDirectory(), id),
-                Notification.Type.TRAY_NOTIFICATION);
+            final Long id = scanner.scan(bucket, this);
         } catch (final ScanService.ScanError e) {
             LOGGER.error(e.getMessage(), e);
             Notification.show("Scan failed", e.getMessage(), Notification.Type.ERROR_MESSAGE);

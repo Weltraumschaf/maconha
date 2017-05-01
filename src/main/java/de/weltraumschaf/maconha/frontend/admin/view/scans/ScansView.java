@@ -34,8 +34,8 @@ public final class ScansView extends SubView {
 
     private final Button stop = new MButton(VaadinIcons.STOP_COG, this::stop);
     private final MGrid<ScanStatus> list = new MGrid<>(ScanStatus.class)
-        .withProperties("id", "startTime", "elapsedTime", "batchStatus", "exitStatus")
-        .withColumnHeaders("ID", "Started", "Elapsed Time", "Batch Status", "Exit Status")
+        .withProperties("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus", "jobExitCode")
+        .withColumnHeaders("ID", "Bucket Name", "Created", "Started", "Finished", "Duration", "Status", "Exit Code")
         .withFullWidth();
     private final ScanService scanner;
 

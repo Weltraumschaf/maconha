@@ -8,8 +8,6 @@ import de.weltraumschaf.maconha.service.ScanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -34,18 +32,7 @@ public class ScanBatchConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanBatchConfiguration.class);
     private static final int JOB_LIMIT = 10;
 
-    private final JobExecutionListener listener = new JobExecutionListener() {
-        @Override
-        public void beforeJob(final JobExecution jobExecution) {
-            LOGGER.debug("<<before job>>");
-        }
-
-        @Override
-        public void afterJob(final JobExecution jobExecution) {
-            LOGGER.debug("<<after job>>");
-        }
-    };
-
+    private final ScanJobExecutionListener listener;
     private final JobBuilderFactory jobBuilders;
     private final StepBuilderFactory stepBuilders;
 
@@ -57,8 +44,9 @@ public class ScanBatchConfiguration {
     private String binDir;
 
     @Autowired
-    public ScanBatchConfiguration(final JobBuilderFactory jobBuilderss, final StepBuilderFactory stepBuilders) {
+    public ScanBatchConfiguration(final ScanJobExecutionListener listener, final JobBuilderFactory jobBuilderss, final StepBuilderFactory stepBuilders) {
         super();
+        this.listener = listener;
         this.jobBuilders = jobBuilderss;
         this.stepBuilders = stepBuilders;
     }
