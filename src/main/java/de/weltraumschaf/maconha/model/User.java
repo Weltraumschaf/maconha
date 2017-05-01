@@ -18,8 +18,18 @@ public final class User extends BaseEntity {
 
     @NotEmpty
     @Size(min = 1, max = 256)
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
+
+    @NotEmpty
+    @Size(min = 1, max = 256)
+    @Column(nullable = false)
+    private String password;
+
+    @NotEmpty
+    @Size(min = 1, max = 256)
+    @Column(nullable = false)
+    private String salt;
 
     @Column(nullable = false)
     private boolean admin;
@@ -32,6 +42,22 @@ public final class User extends BaseEntity {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(final String salt) {
+        this.salt = salt;
+    }
+
     public boolean isAdmin() {
         return admin;
     }
@@ -41,26 +67,29 @@ public final class User extends BaseEntity {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public final boolean equals(final Object o) {
         if (!(o instanceof User)) {
             return false;
         }
 
         final User user = (User) o;
         return admin == user.admin &&
-            Objects.equals(name, user.name);
+            Objects.equals(name, user.name) &&
+            Objects.equals(password, user.password) &&
+            Objects.equals(salt, user.salt);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, admin);
+    public final int hashCode() {
+        return Objects.hash(name, password, salt, admin);
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "User{" +
-            "id=" + getId() + ", " +
             "name='" + name + '\'' +
+            ", password='" + password + '\'' +
+            ", salt='" + salt + '\'' +
             ", admin=" + admin +
             '}';
     }
