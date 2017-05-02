@@ -12,6 +12,7 @@ dist="maconha-${version}"
 tarball="maconha-dsitribution-${version}.tar"
 
 echo "Downloading distribution ..."
+# FIXME Use curl here so only one tool is needed
 wget --no-check-certificate "${distUrl}/${tarball}"
 tar xvf "${tarball}"
 rm -fv "${tarball}"
@@ -29,6 +30,7 @@ if [ ! -e "${targetBinDir}" ]; then
 fi
 
 cp -rv "${dist}/etc/"* "${targetEtcDir}"
+chmod a+x "${dist}/bin/"*
 cp -rv "${dist}/bin/"* "${targetBinDir}"
 rm -rv "${dist}"
 

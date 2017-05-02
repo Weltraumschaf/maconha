@@ -25,11 +25,11 @@ done
 program=$(realpath "${program}")
 
 java=java
-if [[ -n "${JAVA_HOME}" ]]; then
+if [ -n "${JAVA_HOME}" ]; then
     java="${JAVA_HOME}/bin/java"
 fi
 
-if [[ -n "${MACONHA_DEBUG}" ]] && [[ "" != "${MACONHA_DEBUG}" ]] ; then
+if [ -n "${MACONHA_DEBUG}" ] && [ "" != "${MACONHA_DEBUG}" ] ; then
     jvm_options=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 fi
 
