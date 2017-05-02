@@ -17,7 +17,7 @@ You need:
 
 Run the command:
 ```
-/bin/sh <$(curl -fsSL https://raw.githubusercontent.com/Weltraumschaf/maconha/master/tools/install.sh)
+curl -fsSL https://raw.githubusercontent.com/Weltraumschaf/maconha/master/tools/install.sh | /bin/sh
 ```
 
 By default this script install the files into the path prefix `/usr/local`. If you want another location export

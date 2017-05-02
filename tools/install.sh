@@ -12,8 +12,7 @@ dist="maconha-${version}"
 tarball="maconha-dsitribution-${version}.tar"
 
 echo "Downloading distribution ..."
-# FIXME Use curl here so only one tool is needed
-wget --no-check-certificate "${distUrl}/${tarball}"
+curl -kfsSL "${distUrl}/${tarball}" > "${tarball}"
 tar xvf "${tarball}"
 rm -fv "${tarball}"
 
