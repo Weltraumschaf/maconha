@@ -697,12 +697,12 @@
 
                         <configuration>
                             <target>
-                                <tar destfile="${project.build.directory}/${build.finalName}-dsitribution-${project.version}.tar" compression="none">
-                                    <tarfileset dir="${project.bin.directory}" prefix="${build.finalName}-${project.version}/bin/">
+                                <tar destfile="${project.build.directory}/${project.build.finalName}-dsitribution-${project.version}.tar" compression="none">
+                                    <tarfileset dir="${project.bin.directory}" prefix="${project.build.finalName}-${project.version}/bin/">
                                         <include name="*"/>
                                     </tarfileset>
 
-                                    <tarfileset dir="${project.basedir}/etc" prefix="${build.finalName}-${project.version}/etc/">
+                                    <tarfileset dir="${project.basedir}/etc" prefix="${project.build.finalName}-${project.version}/etc/">
                                         <include name="*"/>
                                     </tarfileset>
                                 </tar>
