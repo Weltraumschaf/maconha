@@ -23,9 +23,9 @@ import static com.vaadin.shared.ui.ui.Transport.LONG_POLLING;
 /**
  * This is the root of the administrative backend UI.
  */
-@Theme("valo")
 @Title("Maconha - Admin")
 @SpringUI(path = "/admin")
+@Theme(ValoTheme.THEME_NAME)
 @Push(transport = LONG_POLLING)
 public final class AdminUi extends UI implements EventBusListener<User> {
 
