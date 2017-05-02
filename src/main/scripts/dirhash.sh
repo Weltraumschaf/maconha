@@ -46,5 +46,6 @@ find "${basedir}" -type f ! -iname ".*" -print0 | \
     > "${checksumFile}"
 
 echo "Checksums written to ${checksumFile}."
+# FIXME does not work with /bin/sh
 elapsedTime=$(($SECONDS - $startTime))
 echo "Done in ${elapsedTime} seconds :-)"
