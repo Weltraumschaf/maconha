@@ -16,19 +16,34 @@ You need:
 ## Installation
 
 Run the command:
+
 ```
-curl -fsSL https://raw.githubusercontent.com/Weltraumschaf/maconha/master/tools/install.sh | /bin/sh
+$> curl -fsSL https://raw.githubusercontent.com/Weltraumschaf/maconha/master/tools/install.sh | /bin/sh
 ```
 
 By default this script install the files into the path prefix `/usr/local`. If you want another location export
 the variable `MACONHA_PREFIX`.
 
-The adapt the database configuration in `PREFIX/etc/maconha.properties.sample`.
+### Inital Database Setup
+
+```
+CREATE DATABASE maconha;
+CREATE USER 'maconha'@'%' IDENTIFIED BY 'new_password';
+GRANT ALL ON maconha.* TO 'maconha'@'%';
+FLUSH PRIVILEGES;
+```
+
+Then adapt the database configuration in `PREFIX/etc/maconha.properties.sample` with the MySQL password.
 Then you can start the application with the command:
 
 ```
-$> PREFIX//bin/maconha --spring.config.location=etc/maconha.properties.sample
+$> PREFIX/bin/maconha --spring.config.location=PREFIX/etc/maconha.properties --spring.profiles.active=prod
 ```
+
+Maybe you need to set JAVA_HOME with the right path (below are FreeBSD paths):
+
+- csh: setenv JAVA_HOME /usr/local/openjdk8-jre
+- bash: export JAVA_HOME=/usr/local/openjdk8-jre
     
 ### Modify Serialized Context Size
  
