@@ -12,7 +12,7 @@ make install
 make clean
 rehash
 
-portmaster editors/nano sysutils/tmux java/openjdk8-jre databases/mysql57-server
+portmaster ftp/curl editors/nano sysutils/tmux java/openjdk8-jre databases/mysql57-server
 sysrc mysql_enable=yes
 service mysql-server start
 mysql_secure_installation
