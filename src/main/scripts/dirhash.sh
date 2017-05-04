@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 
 set -e
+set -u
 
 usage="Usage: dirhash <BASEDIR>"
-basedir="${1}"
-startTime=$SECONDS
+basedir="${1-}"
 hashCmd=""
 
 if [ "$(which sha256)" != "" ] ; then
@@ -46,6 +46,3 @@ find "${basedir}" -type f ! -iname ".*" -print0 | \
     > "${checksumFile}"
 
 echo "Checksums written to ${checksumFile}."
-# FIXME does not work with /bin/sh
-elapsedTime=$(($SECONDS - $startTime))
-echo "Done in ${elapsedTime} seconds :-)"
