@@ -8,7 +8,7 @@ basedir="${1-}"
 hashCmd=""
 
 if [ "$(which sha256)" != "" ] ; then
-    hashCmd="sha256"
+    hashCmd="sha256 -r"
 elif [ "$(which shasum)" != "" ] ; then
     hashCmd="shasum -a 256"
 else
