@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +48,7 @@ public final class SearchController {
         final @RequestParam(name = "type[]", defaultValue = "") String[] types) {
         tracer.traceRequest(request);
         LOGGER.debug("Search q={} type={}", query, types);
-        return search.forKeywords(sanitizeQuery(query), sanitizeTypes(types));
+        return search.forKeywords(sanitizeQuery(query), sanitizeTypes(Arrays.asList(types)));
     }
 
 
@@ -61,8 +62,19 @@ public final class SearchController {
             .collect(Collectors.toList());
     }
 
-    private Collection<MediaType> sanitizeTypes(final String[] types) {
-        return Arrays.stream(types)
+    Collection<MediaType> sanitizeTypes(final Collection<String> types) {
+        if (types == null || types.isEmpty()) {
+            return EnumSet.allOf(MediaType.class);
+        }
+
+        for (final String type : types) {
+            if ("all".equalsIgnoreCase(type.trim())) {
+                return EnumSet.allOf(MediaType.class);
+            }
+        }
+
+        return types.stream()
+            .map(String::trim)
             .map(MediaType::forValue)
             .collect(Collectors.toList());
     }

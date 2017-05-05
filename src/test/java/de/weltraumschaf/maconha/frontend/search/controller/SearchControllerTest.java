@@ -1,10 +1,12 @@
 package de.weltraumschaf.maconha.frontend.search.controller;
 
+import de.weltraumschaf.maconha.model.MediaType;
 import de.weltraumschaf.maconha.service.SearchService;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,5 +37,15 @@ public final class SearchControllerTest {
     @Test
     public void sanitizeQuery() {
         assertThat(sut.sanitizeQuery(" foo  bar     baz"), is(Arrays.asList("foo", "bar", "baz")));
+    }
+
+    @Test
+    public void sanitizeTypes() {
+        assertThat(sut.sanitizeTypes(null), is(EnumSet.allOf(MediaType.class)));
+        assertThat(sut.sanitizeTypes(Collections.emptyList()), is(EnumSet.allOf(MediaType.class)));
+
+        assertThat(sut.sanitizeTypes(Collections.singleton("all")), is(EnumSet.allOf(MediaType.class)));
+        assertThat(sut.sanitizeTypes(Arrays.asList("video", "audio")), is(Arrays.asList(MediaType.VIDEO, MediaType.AUDIO)));
+        assertThat(sut.sanitizeTypes(Arrays.asList("video", "all",  "audio")), is(EnumSet.allOf(MediaType.class)));
     }
 }
