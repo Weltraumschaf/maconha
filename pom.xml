@@ -649,6 +649,34 @@
 
                 <executions>
                     <execution>
+                        <id>remove-unnecessary-bower-files</id>
+                        <phase>process-resources</phase>
+
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
+                        <configuration>
+                            <target>
+                                <property name="lib.dir" value="${project.build.directory}/classes/static/lib"/>
+                                <delete includeemptydirs="true">
+                                    <!-- Cleaning the Bootstrap Bower package and just leave the distribution files. -->
+                                    <fileset dir="${lib.dir}/bootstrap" includes="fonts/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap" includes="grunt/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap" includes="js/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap" includes="less/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap" includes="nuget/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap" includes="*"/>
+                                    <!-- Cleaning the Bootstrap Bower package and just leave the distribution files. -->
+                                    <fileset dir="${lib.dir}/jquery" includes="external/**/*"/>
+                                    <fileset dir="${lib.dir}/jquery" includes="src/**/*"/>
+                                    <fileset dir="${lib.dir}/jquery" includes="*"/>
+                                </delete>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>copy-scripts-for-install</id>
                         <phase>install</phase>
 
