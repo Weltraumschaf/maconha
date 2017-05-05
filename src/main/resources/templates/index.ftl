@@ -23,6 +23,8 @@
                     <ul class="nav navbar-nav">
                         <li id="admin"><a href="${baseUrl}/admin">Admin</a></li>
                     </ul>
+
+                    <span class="navbar-text">Number of indexed files: #{numberOfIndexedFiles}</span>
                 </div>
             </div>
         </nav>
