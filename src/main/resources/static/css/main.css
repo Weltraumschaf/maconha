@@ -13,6 +13,10 @@ h1 {
     display: none;
 }
 
-#result {
+#resultContainer {
     display: none;
+}
+
+#numberOfResults {
+    font-weight: bold;
 }

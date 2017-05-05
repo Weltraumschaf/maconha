@@ -7,6 +7,8 @@
         let $query = $("input[name='q']");
         let $allCheckbox = $("#all");
         let $otherCheckboxes = $("input[type='checkbox']").not("#all");
+        let $numberOfResults = $("#numberOfResults");
+        let $resultContainer = $("#resultContainer");
 
         function onError(data) {
             $error.show();
@@ -40,8 +42,10 @@
 
         function showResults(result) {
             if (result.length === 0) {
+                $numberOfResults.text(0);
                 $list.append('<li class="list-group-item">Nothing found :-(</li>');
             } else {
+                $numberOfResults.text(result.length);
                 $.each(result, function(index, value) {
                     let html = '<li class="list-group-item">';
 
@@ -63,14 +67,16 @@
                 });
             }
 
-            $list.show();
+            $resultContainer.show();
         }
 
         return {
             init: function () {
                 $form.submit(function (event) {
                     event.preventDefault();
-                    $list.hide().empty();
+                    $resultContainer.hide();
+                    $list.empty();
+                    $numberOfResults.empty();
                     $.get(baseUrl + "/search", $form.serialize())
                         .done(showResults)
                         .fail(onError);

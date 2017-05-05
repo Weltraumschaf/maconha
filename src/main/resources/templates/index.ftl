@@ -57,7 +57,8 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container" id="resultContainer">
+            <p>Found <span id="numberOfResults"></span> media file.</p>
             <ul id="result" class="list-group"></ul>
         </div>
 
