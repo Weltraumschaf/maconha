@@ -54,7 +54,7 @@
                     }
 
                     html += ' <strong><a href="' + baseUrl +'/files/';
-                    html += value.relativeFileName +'">';
+                    html += value.relativeFileName +'" target="_blank">';
                     html += value.relativeFileName + '</a></strong><br>';
                     html += '<small>(' + value.bucket.directory + ')</small><br>';
                     html += 'Keywords: ' + formatKeywords(value.keywords);
