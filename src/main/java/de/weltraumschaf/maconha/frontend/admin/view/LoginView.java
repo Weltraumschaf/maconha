@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.model.User;
+import de.weltraumschaf.maconha.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,13 @@ public final class LoginView extends VerticalLayout {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginView.class);
 
     private final EventBus.UIEventBus events;
+    private final UserService users;
 
     @Autowired
-    public LoginView(final EventBus.UIEventBus events) {
+    public LoginView(final EventBus.UIEventBus events, final UserService users) {
         super();
         this.events = events;
+        this.users = users;
     }
 
     @PostConstruct
@@ -93,13 +96,10 @@ public final class LoginView extends VerticalLayout {
         fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
 
         signin.addClickListener((Button.ClickListener) event -> {
-            if ("admin".equals(username.getValue()) && "maconha".equals(password.getValue())) {
-                final User user = new User();
-                user.setName(username.getValue());
-                user.setAdmin(true);
-                events.publish(LoginView.this, user);
-            } else {
-                LOGGER.warn("Login failed for username {}!", username.getValue());
+            try {
+                events.publish(LoginView.this, users.authenticate(username.getValue(), password.getValue()));
+            } catch (final UserService.AuthenticationFailed e) {
+                LOGGER.warn(e.getMessage());
             }
         });
 
