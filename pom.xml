@@ -87,6 +87,9 @@
         <javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
         <rest-assured.version>3.0.1</rest-assured.version>
         <javax.el.version>2.2.4</javax.el.version>
+
+        <!-- Avoid Maven errors "[ERROR] Unable to determine if resource ..." which slow downs the build on CI. -->
+        <dependency.locations.enabled>false</dependency.locations.enabled>
     </properties>
 
     <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html -->
