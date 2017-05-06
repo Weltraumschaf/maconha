@@ -6,35 +6,22 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="${baseUrl}/">Maconha</a>
-        </div>
-
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li id="admin"><a href="${baseUrl}/admin">Admin</a></li>
-            </ul>
-
-            <span class="navbar-text">Number of indexed files: #{numberOfIndexedFiles}</span>
-        </div>
-    </div>
-</nav>
+<#include "inc/nav.ftl">
 
 <div class="container">
     <div class="jumbotron">
         <h1 class="text-center">¡Fuder par à paz do mundo!</h1>
 
         <form action="${baseUrl}/search">
-            <p>
+            <div class="input-group">
                 <input name="q" id="q" type="text" class="form-control" placeholder="What U look for?" required
                        autofocus>
-            </p>
-            <p class="text-right">
-                <input name="search" id="search" type="submit" value="search" class="btn btn-lg btn-primary">
-            </p>
-            <p class="text-center">
+                <span class="input-group-btn">
+                    <input name="search" id="search" type="submit" value="search" class="btn btn-default">
+                </span>
+            </div>
+
+            <div class="form-group text-center">
                 <label class="checkbox-inline"><input type="checkbox" name="type[]" id="all" value="all">All</label>
                 <label class="checkbox-inline"><input type="checkbox" name="type[]" value="video">Video</label>
                 <label class="checkbox-inline"><input type="checkbox" name="type[]" value="audio">Audio</label>
@@ -42,7 +29,7 @@
                 <label class="checkbox-inline"><input type="checkbox" name="type[]" value="text">Text</label>
                 <label class="checkbox-inline"><input type="checkbox" name="type[]"
                                                       value="application">Application</label>
-            </p>
+            </div>
         </form>
 
         <div id="error" class="alert alert-danger fade in">

@@ -5,16 +5,28 @@
 <#include "inc/head.ftl">
 </head>
 
-<body>
+<body cz-shortcut-listen="true">
+<#include "inc/nav.ftl">
 
-<div class="container">
-    <h1 class="text-center">Installation</h1>
+<div class="container" role="main">
+    <div class="jumbotron">
+        <h1 class="text-center">Installation</h1>
+
+    <#if installationDone>
+        <p>You can go now to the <a href="${baseUrl}/admin">admin console</a> to scan your files.</p>
+    <#else>
+        <p>It is necessary to create the very first administrative user.</p>
+    </#if>
+    </div>
 
 <#if installationDone>
-    <p>Installation successfully done.</p>
-    <p>You can go now to the <a href="${baseUrl}/admin">admin console</a> to scan your files.</p>
+    <div class="alert alert-success" role="alert">
+        <p>Installation successfully done.</p>
+    </div>
 <#else>
-    <p>Create an administrative user:</p>
+    <div class="page-header">
+        <h2>Create an administrative user</h2>
+    </div>
 
     <form action="${baseUrl}/install" method="post">
         <div class="form-group">
