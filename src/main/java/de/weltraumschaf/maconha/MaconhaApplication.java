@@ -36,6 +36,8 @@ public class MaconhaApplication {
     private final Environment environment;
     @Value("${maconha.version}")
     private String version;
+    @Value("${maconha.debug}")
+    private String debug = "";
 
     @Autowired
     public MaconhaApplication(final Environment environment) {
@@ -64,6 +66,10 @@ public class MaconhaApplication {
     public void postConstruct() {
         LOGGER.info("Maconha version: {}", version);
         LOGGER.info("Used profiles: {}", Arrays.toString(environment.getActiveProfiles()));
+
+        if (!debug.trim().isEmpty()) {
+            LOGGER.warn("Debugging is enabled by environment variable MACONHA_DEBUG! Should not be enabled in production.");
+        }
     }
 
     @Bean
