@@ -30,7 +30,7 @@ if [ -n "${JAVA_HOME}" ]; then
 fi
 
 if [ -n "${MACONHA_DEBUG}" ] && [ "" != "${MACONHA_DEBUG}" ] ; then
-    jvm_options=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+    jvm_options=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 fi
 
 programDirectory=$(dirname "${program}")
