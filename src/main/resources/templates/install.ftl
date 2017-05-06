@@ -10,8 +10,11 @@
 <div class="container">
     <h1 class="text-center">Installation</h1>
 
-<#if createAdminUser>
-    <p>Create an administartiv user:</p>
+<#if installationDone>
+    <p>Installation successfully done.</p>
+    <p>You can go now to the <a href="${baseUrl}/admin">admin console</a> to scan your files.</p>
+<#else>
+    <p>Create an administrative user:</p>
 
     <form action="${baseUrl}/install" method="post">
         <div class="form-group">
@@ -28,8 +31,6 @@
 
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
-<#else>
-    <p>Nothing to do!</p>
 </#if>
 </div>
 
