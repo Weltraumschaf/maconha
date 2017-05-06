@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.service.search;
 
+import de.weltraumschaf.maconha.core.NotFound;
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.model.MediaType;
@@ -11,14 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -108,33 +104,16 @@ final class DefaultSearchService implements SearchService {
     }
 
     @Override
-    public void downloadFile(final String relativeFilename, final HttpServletResponse response) throws IOException {
+    public Download downloadFile(final String relativeFilename) throws IOException {
         LOGGER.debug("Download file {}", relativeFilename);
         final MediaFile file = mediaFiles.findByRelativeFileName(relativeFilename);
 
         if (file == null) {
-            response.sendError(HttpStatus.NOT_FOUND.value(), "There is no file " + relativeFilename);
-            return;
+            throw new NotFound("There is no such file '%s' to download!", relativeFilename);
         }
 
         final Path absoluteLocalPath = Paths.get(file.getBucket().getDirectory()).resolve(file.getRelativeFileName());
-
-        try (final InputStream in = Files.newInputStream(absoluteLocalPath)) {
-            copy(in, response.getOutputStream());
-        }
-
-        response.setContentType(file.getFormat().getMimeType());
-        response.flushBuffer();
-    }
-
-    private void copy(final InputStream in, final OutputStream out) throws IOException {
-        final byte[] buffer = new byte[1024];
-        int len = in.read(buffer);
-
-        while (len != -1) {
-            out.write(buffer, 0, len);
-            len = in.read(buffer);
-        }
+        return new Download(absoluteLocalPath, file.getFormat());
     }
 
     private class Result {
@@ -146,4 +125,5 @@ final class DefaultSearchService implements SearchService {
             this.hitCount = hitCount;
         }
     }
+
 }

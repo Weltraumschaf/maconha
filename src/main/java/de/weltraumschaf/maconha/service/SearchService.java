@@ -1,10 +1,12 @@
 package de.weltraumschaf.maconha.service;
 
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.model.MediaType;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 
 /**
@@ -26,8 +28,46 @@ public interface SearchService {
      * </p>
      *
      * @param relativeFilename not {@code null} or empty
-     * @param response not {@code null}
+     * @return never {@code null}
      * @throws IOException if file can't be read local or written to response
      */
-    void downloadFile(String relativeFilename, HttpServletResponse response) throws IOException;
+    Download downloadFile(String relativeFilename) throws IOException;
+
+    /**
+     * Downloadable file.
+     */
+    final class Download {
+        private final Path file;
+        private final FileExtension format;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param file must not be {@code null}
+         * @param format must not be {@code null}
+         */
+        public Download(final Path file, final FileExtension format) {
+            super();
+            this.file = Validate.notNull(file, "file");
+            this.format = Validate.notNull(format, "format");
+        }
+
+        /**
+         * Get the file to download.
+         *
+         * @return never {@code null}
+         */
+        public Path getFile() {
+            return file;
+        }
+
+        /**
+         * Get the file format.
+         *
+         * @return never {@code null}
+         */
+        public FileExtension getFormat() {
+            return format;
+        }
+    }
 }

@@ -8,6 +8,9 @@ import de.weltraumschaf.maconha.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.PathResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -80,11 +85,19 @@ public final class SearchController {
     }
 
     @RequestMapping(value = "/files/**", method = RequestMethod.GET)
-    public void download(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    public HttpEntity<PathResource> download(final HttpServletRequest request) throws IOException {
         tracer.traceRequest(request);
         final String strippedFilename = request.getRequestURI().replace("/files/", "");
         final String decodedFilename = URLDecoder.decode(strippedFilename, StandardCharsets.UTF_8.name());
-        search.downloadFile(decodedFilename, response);
+
+        final SearchService.Download download = search.downloadFile(decodedFilename);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, download.getFormat().getMimeType());
+        final String basename = download.getFile().getFileName().toString();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + URLEncoder.encode(basename, StandardCharsets.UTF_8.name()));
+        headers.setContentLength(download.getFile().toFile().length());
+
+        return new HttpEntity<>(new PathResource(download.getFile()), headers);
     }
 
 }
