@@ -5,4 +5,4 @@ spring.datasource.url                = jdbc:mysql://localhost:3306/maconha?autoR
 spring.datasource.username           = maconha
 spring.datasource.password
 
-maconha.passwordstrength    = 10
+maconha.title               = Fuder par a paz do mundo!

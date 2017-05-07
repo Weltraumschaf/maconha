@@ -6,6 +6,7 @@ import de.weltraumschaf.maconha.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,9 @@ public final class IndexController extends BaseWebController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
+    @Value("${maconha.title}")
+    private String title = "";
+
     @Lazy
     @Autowired
     public IndexController(final MediaFileRepo files, final UserService users) {
@@ -37,6 +41,7 @@ public final class IndexController extends BaseWebController {
             return new ModelAndView("redirect:/install");
         }
 
+        model.put("title", title);
         return new ModelAndView("index", model);
     }
 

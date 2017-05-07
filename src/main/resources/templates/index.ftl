@@ -10,7 +10,7 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h1 class="text-center">¡Fuder par à paz do mundo!</h1>
+        <h1 class="text-center">${title}</h1>
 
         <form action="${baseUrl}/search">
             <div class="input-group">
