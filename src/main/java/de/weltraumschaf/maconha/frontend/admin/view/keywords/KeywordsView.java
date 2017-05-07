@@ -31,10 +31,10 @@ public final class KeywordsView extends SubView {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KeywordsView.class);
     private static final String TITLE_ID = "keywords-title";
-    private static final String TOTAL_NUMBER_OF_FOUND_KEYWORDS = "Total number of found keywords: %s";
+    private static final String TOTAL_NUMBER_OF_FOUND_KEYWORDS = "Total number of found keywords: %d";
 
-    private Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, 0));
-    private MTextField filterByLiteral = new MTextField()
+    private final Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, 0));
+    private final MTextField filterByLiteral = new MTextField()
         .withPlaceholder("Filter by literal");
     private final MGrid<Keyword> list = new MGrid<>(Keyword.class)
         .withProperties("id", "literal")
@@ -43,7 +43,7 @@ public final class KeywordsView extends SubView {
     private final KeywordRepo keywords;
 
     @Autowired
-    KeywordsView(final KeywordRepo keywords) {
+    public KeywordsView(final KeywordRepo keywords) {
         super(TITLE, TITLE_ID);
         this.keywords = keywords;
     }

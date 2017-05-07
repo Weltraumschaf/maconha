@@ -43,7 +43,7 @@ public final class MediaFilesView extends SubView {
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaFilesView.class);
     private static final String TITLE_ID = "mediafiles-title";
 
-    private static final String TOTAL_NUMBER_OF_FOUND_MEDIA_FILES = "Total number of found media files: %s";
+    private static final String TOTAL_NUMBER_OF_FOUND_MEDIA_FILES = "Total number of found media files: %d";
 
     private MTextField filterByRelativeFileName = new MTextField()
         .withCaption("Filter by relative file name")
