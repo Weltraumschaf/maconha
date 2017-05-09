@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import de.weltraumschaf.maconha.DatabaseConfiguration;
+import de.weltraumschaf.maconha.config.DatabaseConfiguration;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
