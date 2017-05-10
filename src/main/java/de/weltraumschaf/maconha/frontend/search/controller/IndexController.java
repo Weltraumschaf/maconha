@@ -7,7 +7,6 @@ import de.weltraumschaf.maconha.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +24,10 @@ public final class IndexController extends BaseWebController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
-    private final MaconhaConfiguration config;
-
     @Lazy
     @Autowired
-    public IndexController(final MediaFileRepo files, final UserService users, final MaconhaConfiguration config) {
-        super(files, users);
-        this.config = config;
+    public IndexController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
+        super(files, config, users);
     }
 
     @GetMapping(value = "/", produces = ServedContentTypes.TEXT_HTML)
@@ -43,6 +39,7 @@ public final class IndexController extends BaseWebController {
         }
 
         model.put("title", config.getTitle());
+
         return new ModelAndView("index", model);
     }
 

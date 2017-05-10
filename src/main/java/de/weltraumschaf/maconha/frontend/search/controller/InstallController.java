@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.search.controller;
 
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.core.ServedContentTypes;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.UserService;
@@ -26,8 +27,8 @@ public final class InstallController extends BaseWebController {
 
     @Lazy
     @Autowired
-    public InstallController(final MediaFileRepo files, final UserService users) {
-        super(files, users);
+    public InstallController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
+        super(files, config, users);
     }
 
     @GetMapping(value = "/install", produces = ServedContentTypes.TEXT_HTML)

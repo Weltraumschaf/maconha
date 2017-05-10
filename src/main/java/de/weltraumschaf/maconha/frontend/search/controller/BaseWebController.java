@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.search.controller;
 
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.UserService;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,11 +14,13 @@ import java.util.Map;
 abstract class BaseWebController {
     private final RequestTracer tracer = new RequestTracer();
     private final MediaFileRepo files;
+    final MaconhaConfiguration config;
     final UserService users;
 
-    BaseWebController(final MediaFileRepo files, final UserService users) {
+    BaseWebController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
         super();
         this.files = files;
+        this.config = config;
         this.users = users;
     }
 
@@ -29,5 +32,6 @@ abstract class BaseWebController {
     private void assignBaseVariables(final UriComponentsBuilder uri, final Map<String, Object> model) {
         model.put("baseUrl", uri.toUriString());
         model.put("numberOfIndexedFiles", files.count());
+        model.put("version", config.getVersion());
     }
 }
