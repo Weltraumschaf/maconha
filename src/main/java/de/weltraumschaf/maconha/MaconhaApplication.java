@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha;
 
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.service.scan.ScanBatchConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,17 +8,14 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.vaadin.spring.annotation.EnableVaadinExtensions;
-import org.vaadin.spring.events.annotation.EnableEventBus;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -28,21 +26,21 @@ import java.util.Arrays;
 @SpringBootApplication
 @EnableBatchProcessing(modular = true) // Modular because job configuration is in other class.
 @ComponentScan( {"de.weltraumschaf.maconha"})
+@EnableConfigurationProperties(MaconhaConfiguration.class)
 @PropertySource(value = {"classpath:application.properties"})
 public class MaconhaApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaApplication.class);
 
     private final Environment environment;
-    @Value("${maconha.version}")
-    private String version;
-    @Value("${maconha.debug}")
-    private String debug = "";
+
+    private final MaconhaConfiguration config;
 
     @Autowired
-    public MaconhaApplication(final Environment environment) {
+    public MaconhaApplication(final Environment environment, final MaconhaConfiguration config) {
         super();
         this.environment = environment;
+        this.config = config;
     }
 
     /**
@@ -64,10 +62,10 @@ public class MaconhaApplication {
 
     @PostConstruct
     public void postConstruct() {
-        LOGGER.info("Maconha version: {}", version);
+        LOGGER.info("Maconha version: {}", config.getVersion());
         LOGGER.info("Used profiles: {}", Arrays.toString(environment.getActiveProfiles()));
 
-        if (!debug.trim().isEmpty()) {
+        if (config.isDebug()) {
             LOGGER.warn("Debugging is enabled by environment variable MACONHA_DEBUG! Should not be enabled in production.");
         }
     }

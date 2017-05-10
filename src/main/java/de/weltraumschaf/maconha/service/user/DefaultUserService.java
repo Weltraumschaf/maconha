@@ -1,11 +1,11 @@
 package de.weltraumschaf.maconha.service.user;
 
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.core.BCrypt;
 import de.weltraumschaf.maconha.model.User;
 import de.weltraumschaf.maconha.repo.UserRepo;
 import de.weltraumschaf.maconha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 final class DefaultUserService implements UserService {
 
     private final UserRepo users;
-    @Value("${maconha.passwordstrength}")
-    private String passwordstrength = "10";
+    private final MaconhaConfiguration config;
 
     @Lazy
     @Autowired
-    DefaultUserService(final UserRepo users) {
+    DefaultUserService(final UserRepo users, final MaconhaConfiguration config) {
         super();
         this.users = users;
+        this.config = config;
     }
 
     @Override
@@ -63,7 +63,7 @@ final class DefaultUserService implements UserService {
     }
 
     private String generateSalt() {
-        return BCrypt.gensalt(Integer.valueOf(passwordstrength));
+        return BCrypt.gensalt(config.getPasswordStrength());
     }
 
     @Override

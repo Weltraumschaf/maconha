@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.frontend.search.controller;
 
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.core.ServedContentTypes;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.UserService;
@@ -24,13 +25,13 @@ public final class IndexController extends BaseWebController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
-    @Value("${maconha.title}")
-    private String title = "";
+    private final MaconhaConfiguration config;
 
     @Lazy
     @Autowired
-    public IndexController(final MediaFileRepo files, final UserService users) {
+    public IndexController(final MediaFileRepo files, final UserService users, final MaconhaConfiguration config) {
         super(files, users);
+        this.config = config;
     }
 
     @GetMapping(value = "/", produces = ServedContentTypes.TEXT_HTML)
@@ -41,7 +42,7 @@ public final class IndexController extends BaseWebController {
             return new ModelAndView("redirect:/install");
         }
 
-        model.put("title", title);
+        model.put("title", config.getTitle());
         return new ModelAndView("index", model);
     }
 

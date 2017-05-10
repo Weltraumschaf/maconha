@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha;
 
-import org.springframework.beans.factory.annotation.Value;
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -26,8 +27,13 @@ public final class AdditionalHttpHeaders implements Filter {
      */
     private static final String CSP_POLICY = "default-src 'self'; object-src 'none'";
 
-    @Value("${maconha.version}")
-    private String version;
+    private final MaconhaConfiguration config;
+
+    @Autowired
+    public AdditionalHttpHeaders(final MaconhaConfiguration config) {
+        super();
+        this.config = config;
+    }
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
@@ -42,7 +48,7 @@ public final class AdditionalHttpHeaders implements Filter {
 
     private void addVersionHeader(final ServletRequest request, final ServletResponse response) {
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setHeader("X-Maconha-Version", version);
+        httpResponse.setHeader("X-Maconha-Version", config.getVersion());
     }
 
     // May be we need this.
