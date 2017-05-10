@@ -7,6 +7,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.Seconds;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -139,13 +140,14 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
                 formattedEndTime = dateTimeFormat.print(endTime);
             }
 
+            final Duration duration = new Duration(startTime, endTime);
             return new ScanStatus(
                 execution.id,
                 execution.bucket.getName(),
                 dateTimeFormat.print(new DateTime(jobExecution.getCreateTime())),
                 dateTimeFormat.print(startTime),
                 formattedEndTime,
-                secondsFormat.print(Seconds.secondsBetween(startTime, endTime)),
+                secondsFormat.print(duration.toPeriod()),
                 jobExecution.getStatus().name(),
                 jobExecution.getExitStatus().getExitCode(),
                 jobExecution.getAllFailureExceptions()
@@ -174,7 +176,7 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
         final Bucket bucket = getExecution(jobId).bucket;
         final DateTime startTime = new DateTime(jobExecution.getStartTime());
         final DateTime endTime = new DateTime(jobExecution.getEndTime());
-        final String duration = secondsFormat.print(Seconds.secondsBetween(startTime, endTime));
+        final String duration = secondsFormat.print(new Duration(startTime, endTime).toPeriod());
 
         notifyClient(
             jobId,
