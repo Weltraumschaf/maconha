@@ -47,7 +47,7 @@ Maybe you need to set JAVA_HOME with the right path (below are FreeBSD paths):
     
 ### Modify Serialized Context Size
  
-After the first start of the application and before the first scna job is started, it is necessary to increase the size
+After the first start of the application and before the first scan job is started, it is necessary to increase the size
 for serialized context data of the batch jobs (at the moment this does not happen automatically):
 
 ```
