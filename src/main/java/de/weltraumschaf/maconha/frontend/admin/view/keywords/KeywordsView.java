@@ -38,7 +38,7 @@ public final class KeywordsView extends SubView {
     private static final String TOTAL_NUMBER_OF_FOUND_KEYWORDS = "Total number of found keywords: %d";
 
     private final Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, 0));
-    private final Button showFiles = new MButton(VaadinIcons.BULLETS, "Show files with this keyword", this::showFiles);
+    private final Button showFiles = new MButton(VaadinIcons.BULLETS, "Show files", this::showFiles);
     private final MTextField filterByLiteral = new MTextField()
         .withPlaceholder("Filter by literal");
     private final MGrid<Keyword> list = new MGrid<>(Keyword.class)
