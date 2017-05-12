@@ -1,17 +1,17 @@
 package de.weltraumschaf.maconha.frontend.admin.view.dashboard;
 
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
 import de.weltraumschaf.maconha.frontend.admin.view.SubView;
-import de.weltraumschaf.maconha.frontend.admin.view.buckets.BucketsView;
+import de.weltraumschaf.maconha.repo.KeywordRepo;
+import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.viritin.layouts.MVerticalLayout;
 
-import javax.annotation.PostConstruct;
+import java.text.NumberFormat;
 
 @UIScope
 @SpringComponent
@@ -21,13 +21,49 @@ public final class DashboardView extends SubView {
     public static final String TITLE = "Dashboard";
     private static final String TITLE_ID = "dashboard-title";
 
-    DashboardView() {
+    private final MediaFileRepo files;
+    private final KeywordRepo keywords;
+
+    @Autowired
+    public DashboardView(final MediaFileRepo files, final KeywordRepo keywords) {
         super(TITLE, TITLE_ID);
+        this.files = files;
+        this.keywords = keywords;
     }
 
     @Override
     protected void subInit() {
-        root.addComponent(new Label("Hello, world!"));
+        final GridLayout content = new GridLayout();
+        content.setColumns(2);
+        content.setRows(4);
+        content.setMargin(true);
+        content.setSpacing(true);
+
+        final NumberFormat nf = NumberFormat.getInstance();
+        content.addComponent(new Label("Number of indexed files:"));
+        content.addComponent(new Label(nf.format(files.count())));
+
+        content.addComponent(new Label("Number of duplicate files:"));
+        content.addComponent(new Label(nf.format(files.countDuplicates())));
+
+        content.addComponent(new Label("Number of found keywords:"));
+        content.addComponent(new Label(nf.format(keywords.count())));
+
+//        content.addComponent(new Label("Top 10 keywords:"));
+//        final MVerticalLayout topTenKeywords = new MVerticalLayout(
+//            new Label("keyword1"),
+//            new Label("keyword2"),
+//            new Label("keyword3"),
+//            new Label("keyword4"),
+//            new Label("keyword5"),
+//            new Label("keyword6"),
+//            new Label("keyword7"),
+//            new Label("keyword8"),
+//            new Label("keyword9"),
+//            new Label("keyword10"));
+//        content.addComponent(topTenKeywords);
+
+        root.addComponent(content);
     }
 
 }
