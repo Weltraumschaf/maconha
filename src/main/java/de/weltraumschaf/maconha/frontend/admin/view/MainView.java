@@ -6,8 +6,12 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * This i the main view which has a menu on the left side and a content panel right side of the menu.
+ */
 @UIScope
 @SpringComponent
 @SpringViewDisplay
@@ -19,9 +23,8 @@ public final class MainView extends HorizontalLayout implements ViewDisplay {
     public MainView(final AdminMenu menu) {
         super();
         setSizeFull();
-        addStyleName("mainview");
         addComponent(menu);
-        content.addStyleName("view-content");
+        content.addStyleName(ValoTheme.PANEL_BORDERLESS);
         content.setSizeFull();
         addComponent(content);
         setExpandRatio(content, 1.0f);

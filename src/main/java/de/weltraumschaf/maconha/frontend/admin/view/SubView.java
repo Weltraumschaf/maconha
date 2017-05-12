@@ -30,6 +30,7 @@ public abstract class SubView extends Panel implements View {
 
     @PostConstruct
     public final void init() {
+        addStyleName(ValoTheme.PANEL_BORDERLESS);
         root.setSizeFull();
         root.setSpacing(false);
         setContent(root);

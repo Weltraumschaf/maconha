@@ -40,12 +40,12 @@ public final class BucketsView extends SubView {
 
     private MTextField filterByDirectory = new MTextField()
         .withPlaceholder("Filter by directory");
-    private final Button addNew = new MButton(VaadinIcons.PLUS, this::add);
-    private final Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
-    private final Button delete = new ConfirmButton(VaadinIcons.TRASH,
+    private final Button addNew = new MButton(VaadinIcons.PLUS, "Add new bucket", this::add);
+    private final Button edit = new MButton(VaadinIcons.PENCIL, "Edit bucket", this::edit);
+    private final Button delete = new ConfirmButton(VaadinIcons.TRASH, "Delete bucket",
         "Are you sure you want to delete the entry?", this::remove);
-    private final Button scan = new MButton(VaadinIcons.COGS, this::scan);
-    private final Button schedule = new MButton(VaadinIcons.ALARM, this::schedule);
+    private final Button scan = new MButton(VaadinIcons.COGS, "Scan bucket", this::scan);
+    private final Button schedule = new MButton(VaadinIcons.ALARM, "Schedule scan for bucket", this::schedule);
     private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
         .withProperties("id", "name", "directory")
         .withColumnHeaders("ID", "Name", "Directory")
