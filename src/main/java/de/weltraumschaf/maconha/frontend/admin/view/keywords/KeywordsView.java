@@ -124,6 +124,7 @@ public final class KeywordsView extends SubView {
                 ContentMode.HTML),
             fileList
         );
+        content.setMargin(true);
 
         final Window window = new Window("Files");
         window.setWidth(70, Unit.PERCENTAGE);
