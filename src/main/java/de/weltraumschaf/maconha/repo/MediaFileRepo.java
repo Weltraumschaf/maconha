@@ -27,6 +27,8 @@ public interface MediaFileRepo extends BaseRepo<MediaFile>, JpaSpecificationExec
     @Query("select m1 from MediaFile m1 where m1.fileHash in (select m2.fileHash from MediaFile m2 group by m2.fileHash having count(m2) > 1) ORDER BY m1.fileHash")
     List<MediaFile> findDuplicates();
 
+    List<MediaFile> findByKeywords(Keyword value);
+
     /**
      * Class to create search specifications to find {@link MediaFile}.
      * <p>
