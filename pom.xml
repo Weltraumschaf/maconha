@@ -307,6 +307,18 @@
             <version>${reflections.version}</version>
         </dependency>
 
+        <!-- http://tika.apache.org/ -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers</artifactId>
+            <version>1.14</version>
+        </dependency>
+
         <!-- Provided from container -->
         <dependency>
             <groupId>javax.servlet</groupId>
