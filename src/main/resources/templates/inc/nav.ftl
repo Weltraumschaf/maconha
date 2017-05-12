@@ -17,7 +17,8 @@
             </ul>
 
             <p class="navbar-text navbar-right">
-                Number of indexed files: #{numberOfIndexedFiles}
+                <#-- http://freemarker.org/docs/ref_builtins_number.html#ref_builtin_string_for_number -->
+                Number of indexed files: ${numberOfIndexedFiles?string.number}
             </p>
         </div>
     </div>
