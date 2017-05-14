@@ -28,7 +28,8 @@ public final class IgnoredKeywords implements Predicate<String> {
             return false;
         }
 
-        if (IGNORED_KEYWORDS.contains(keyword)) {
+        final String normalized = keyword.trim().toLowerCase();
+        if (IGNORED_KEYWORDS.contains(normalized)) {
             LOGGER.debug("Ignore keyword '{}'.", keyword);
             return false;
         }
