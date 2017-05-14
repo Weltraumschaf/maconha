@@ -88,8 +88,8 @@ public final class User extends BaseEntity {
     public final String toString() {
         return "User{" +
             "name='" + name + '\'' +
-            ", password='" + password + '\'' +
-            ", salt='" + salt + '\'' +
+            ", password='****'" + 
+            ", salt='****'" + 
             ", admin=" + admin +
             '}';
     }
