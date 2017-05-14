@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 /**
  * Utility class to extract information from file names.
  */
-public final class FileNameExtractor implements KeywordExtractor {
+public final class FileNameExtractor implements KeywordExtractor<Collection<String>> {
 
     private final StringManipulator manipulator = new StringManipulator();
 

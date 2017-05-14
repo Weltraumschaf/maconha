@@ -13,6 +13,7 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -22,7 +23,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataExtractionTasklet.class);
 
     private final JobParamRetriever params = new JobParamRetriever();
-    private final KeywordExtractor extractor = new FileNameExtractor();
+    private final KeywordExtractor<Collection<String>> extractor = new FileNameExtractor();
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
     private final KeywordRepo keywords;
@@ -62,21 +63,25 @@ final class MetaDataExtractionTasklet implements Tasklet {
         media.setFileHash(file.getHash());
         media.setBucket(bucket);
 
-        extractor.extract(file.getFile())
-            .stream()
-            .filter(new MalformedKeywords())
-            .filter(new IgnoredKeywords())
-            .map(literal -> {
-                Keyword keyword = keywords.findByLiteral(literal);
+        try {
+            extractor.extract(file.getFile())
+                .stream()
+                .filter(new MalformedKeywords())
+                .filter(new IgnoredKeywords())
+                .map(literal -> {
+                    Keyword keyword = keywords.findByLiteral(literal);
 
-                if (null == keyword) {
-                    keyword = new Keyword();
-                    keyword.setLiteral(literal);
-                    keywords.save(keyword);
-                }
+                    if (null == keyword) {
+                        keyword = new Keyword();
+                        keyword.setLiteral(literal);
+                        keywords.save(keyword);
+                    }
 
-                return keyword;
-            }).forEach(media::addKeyword);
+                    return keyword;
+                }).forEach(media::addKeyword);
+        } catch (final Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
 
         mediaFiles.save(media);
     }
