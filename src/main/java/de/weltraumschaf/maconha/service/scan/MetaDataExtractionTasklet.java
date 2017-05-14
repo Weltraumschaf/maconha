@@ -60,20 +60,21 @@ final class MetaDataExtractionTasklet implements Tasklet {
         media.setFileHash(file.getHash());
         media.setBucket(bucket);
 
-        extractor.extractKeywords(file.getFile()).stream()
+        extractor.extractKeywords(file.getFile())
+            .stream()
             .filter(new MalformedKeywords())
             .filter(new IgnoredKeywords())
             .map(literal -> {
-            Keyword keyword = keywords.findByLiteral(literal);
+                Keyword keyword = keywords.findByLiteral(literal);
 
-            if (null == keyword) {
-                keyword = new Keyword();
-                keyword.setLiteral(literal);
-                keywords.save(keyword);
-            }
+                if (null == keyword) {
+                    keyword = new Keyword();
+                    keyword.setLiteral(literal);
+                    keywords.save(keyword);
+                }
 
-            return keyword;
-        }).forEach(media::addKeyword);
+                return keyword;
+            }).forEach(media::addKeyword);
 
         mediaFiles.save(media);
     }
