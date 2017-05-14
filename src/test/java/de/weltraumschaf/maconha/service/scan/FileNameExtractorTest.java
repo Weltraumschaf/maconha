@@ -18,6 +18,11 @@ public class FileNameExtractorTest {
     private final String fileOne = "Filme/Musikvideos/Linkin_Park_-_What_I_ve_Done__Musikvideo_.avi";
     private final String fileTwo = "Filme/Kinofilme/Deutsch/Der_unglaubliche_Hulk.mp4";
     private final String fileThree = "Filme/Dokumentation/Alpha Centauri/Realmedia/Alpha Centauri 091 - Wird Licht muede - 020317.rm";
+    private final String fileFour = "Musik/Artists/Queensryche/Mindcrime At The Moore/24-Queensrÿche-Re-Arrange_You.mp3";
+    private final String fileFive = "Musik/Artists/Heroes Del Silencio/1998 - rarezas/09 - acústica.mp3";
+    private final String fileSix = "Musik/Artists/Control Machete/Control Machete - Si Señor.mp3";
+    private final String fileSeven = "Commedy/Tresenlesen/Tresenlesen - Das Auge liest mit/101 Auftakt durch Begrüßung.mp3";
+
     private final FileNameExtractor sut = new FileNameExtractor();
 
     @Test
@@ -55,6 +60,9 @@ public class FileNameExtractorTest {
         assertThat(sut.splitCamelCase("Foo"), is("Foo"));
         assertThat(sut.splitCamelCase("FOOBar"), is("FOO Bar"));
         assertThat(sut.splitCamelCase("Foo42"), is("Foo 42"));
+        assertThat(sut.splitCamelCase("Queensrÿche"), is("Queensrÿche"));
+        assertThat(sut.splitCamelCase("Señor"), is("Señor"));
+        assertThat(sut.splitCamelCase("Begrüßung"), is("Begrüßung"));
     }
 
     @Test
