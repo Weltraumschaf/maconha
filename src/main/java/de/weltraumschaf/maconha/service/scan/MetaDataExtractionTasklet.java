@@ -4,6 +4,8 @@ import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.scan.extraction.FileNameExtractor;
+import de.weltraumschaf.maconha.service.scan.extraction.KeywordExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
@@ -20,7 +22,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataExtractionTasklet.class);
 
     private final JobParamRetriever params = new JobParamRetriever();
-    private final FileNameExtractor extractor = new FileNameExtractor();
+    private final KeywordExtractor extractor = new FileNameExtractor();
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
     private final KeywordRepo keywords;
@@ -60,7 +62,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
         media.setFileHash(file.getHash());
         media.setBucket(bucket);
 
-        extractor.extractKeywords(file.getFile())
+        extractor.extract(file.getFile())
             .stream()
             .filter(new MalformedKeywords())
             .filter(new IgnoredKeywords())
