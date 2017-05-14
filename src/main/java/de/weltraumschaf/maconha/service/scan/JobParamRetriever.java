@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ExecutionContext;
 

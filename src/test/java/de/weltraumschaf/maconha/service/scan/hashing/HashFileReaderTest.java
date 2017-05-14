@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.hashing;
 
 import java.io.IOException;
 import java.net.URI;

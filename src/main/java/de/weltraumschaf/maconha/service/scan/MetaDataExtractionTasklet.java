@@ -6,6 +6,7 @@ import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.scan.extraction.FileNameExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordExtractor;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;

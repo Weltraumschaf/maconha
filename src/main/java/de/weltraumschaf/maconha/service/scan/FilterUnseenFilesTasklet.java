@@ -3,6 +3,8 @@ package de.weltraumschaf.maconha.service.scan;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;

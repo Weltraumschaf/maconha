@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.hashing;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * 3a77f9b6e3aa5fed770f94b3aadcd284c8d1f8dc0ced62a018ab6671ab73c8f9  Animation/animusic/Animusic-AquaHarp.wmv
  * </pre>
  */
-final class HashFileReader {
+public final class HashFileReader {
 
     /**
      * Read in a checksum file.

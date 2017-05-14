@@ -1,8 +1,8 @@
 package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.model.Bucket;
-import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;

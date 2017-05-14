@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.hashing;
 
 import de.weltraumschaf.commons.validate.Validate;
 
@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Represents a file with a hash of its content.
  */
-final class HashedFile implements Serializable {
+public final class HashedFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ final class HashedFile implements Serializable {
      * @param hash must not be {@code null} or empty
      * @param file must not be {@code null} or empty
      */
-    HashedFile(final String hash, final String file) {
+    public HashedFile(final String hash, final String file) {
         super();
         this.hash = Validate.notEmpty(hash, "hash");
         this.file = Validate.notEmpty(file, "file");

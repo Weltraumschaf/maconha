@@ -4,6 +4,7 @@ import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
