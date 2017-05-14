@@ -6,11 +6,11 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 /**
- * Tests for {@link FileNameExtractor}.
+ * Tests for {@link KeywordsFromFileNameExtractor}.
  */
-public class FileNameExtractorTest {
+public class KeywordsFromFileNameExtractorTest {
 
-    private final FileNameExtractor sut = new FileNameExtractor();
+    private final KeywordsFromFileNameExtractor sut = new KeywordsFromFileNameExtractor();
 
     @Test
     public void extract_fileOne() {

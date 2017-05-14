@@ -4,7 +4,7 @@ import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
-import de.weltraumschaf.maconha.service.scan.extraction.FileNameExtractor;
+import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordExtractor;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataExtractionTasklet.class);
 
     private final JobParamRetriever params = new JobParamRetriever();
-    private final KeywordExtractor<Collection<String>> extractor = new FileNameExtractor();
+    private final KeywordExtractor<Collection<String>> extractor = new KeywordsFromFileNameExtractor();
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
     private final KeywordRepo keywords;
