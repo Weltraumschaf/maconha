@@ -20,7 +20,7 @@ final class StringManipulator {
     /**
      * Regex used to match special characters.
      */
-    private static final String REGEX_SPECIAL_CHARS = "[/\\\\\\-_.,:;+*&%$?{}()\\[\\]']";
+    private static final String REGEX_SPECIAL_CHARS = "[/\\\\\\-_.,:;+*&%$?{}()\\[\\]']=<>|~#^";
     /**
      * Regex character class for unicode upper case letters.
      */
