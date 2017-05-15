@@ -23,7 +23,7 @@ public class HashFileReaderTest {
 
     @Test
     public void read() throws IOException, URISyntaxException {
-        final URI fixture = getClass().getResource("/de/weltraumschaf/maconha/service/scan/checksums").toURI();
+        final URI fixture = getClass().getResource("/de/weltraumschaf/maconha/service/scan/hashing/checksums").toURI();
 
         final Set<HashedFile> result = sut.read(Paths.get(fixture));
 
