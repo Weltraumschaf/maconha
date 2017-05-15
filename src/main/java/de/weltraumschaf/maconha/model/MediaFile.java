@@ -32,10 +32,9 @@ public class MediaFile extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MediaType type = MediaType.OTHER;
 
-    @NotNull
+    @NotEmpty
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private FileExtension format = FileExtension.NONE;
+    private String format = "";
 
     @NotEmpty
     @Size(min = 1, max = 4096)
@@ -69,11 +68,11 @@ public class MediaFile extends BaseEntity {
         this.type = type;
     }
 
-    public FileExtension getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat(final FileExtension format) {
+    public void setFormat(final String format) {
         this.format = format;
     }
 

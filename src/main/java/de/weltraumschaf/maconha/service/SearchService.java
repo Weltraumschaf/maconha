@@ -38,7 +38,7 @@ public interface SearchService {
      */
     final class Download {
         private final Path file;
-        private final FileExtension format;
+        private final String format;
 
         /**
          * Dedicated constructor.
@@ -46,7 +46,7 @@ public interface SearchService {
          * @param file must not be {@code null}
          * @param format must not be {@code null}
          */
-        public Download(final Path file, final FileExtension format) {
+        public Download(final Path file, final String format) {
             super();
             this.file = Validate.notNull(file, "file");
             this.format = Validate.notNull(format, "format");
@@ -66,7 +66,7 @@ public interface SearchService {
          *
          * @return never {@code null}
          */
-        public FileExtension getFormat() {
+        public String getFormat() {
             return format;
         }
     }

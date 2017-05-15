@@ -92,7 +92,7 @@ public final class SearchController {
 
         final SearchService.Download download = search.downloadFile(decodedFilename);
         final HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, download.getFormat().getMimeType());
+        headers.set(HttpHeaders.CONTENT_TYPE, download.getFormat());
         final String basename = download.getFile().getFileName().toString();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + URLEncoder.encode(basename, StandardCharsets.UTF_8.name()));
         headers.setContentLength(download.getFile().toFile().length());

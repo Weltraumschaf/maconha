@@ -4,8 +4,7 @@ import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
-import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
-import de.weltraumschaf.maconha.service.scan.extraction.KeywordExtractor;
+import de.weltraumschaf.maconha.service.scan.extraction.*;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,7 +24,6 @@ final class MetaDataExtractionTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataExtractionTasklet.class);
 
     private final JobParamRetriever params = new JobParamRetriever();
-    private final KeywordExtractor extractor = new KeywordsFromFileNameExtractor();
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
     private final KeywordRepo keywords;
@@ -57,16 +56,24 @@ final class MetaDataExtractionTasklet implements Tasklet {
             return;
         }
 
-        final MediaFile media = new MediaFile();
-        media.setType(MediaType.forValue(extension));
-        media.setFormat(extension);
-        media.setRelativeFileName(file.getFile());
-        media.setFileHash(file.getHash());
-        media.setBucket(bucket);
-
         try {
-            extractor.extract(file.getFile())
-                .stream()
+            final MetaDataExtractor metaDataExtractor = new MetaDataExtractor();
+            final FileMetaData fileMetaData = metaDataExtractor.extract(file.getFile());
+
+            final MediaFile media = new MediaFile();
+            media.setType(MediaType.forValue(extension));
+            media.setFormat(fileMetaData.getMime());
+            media.setRelativeFileName(file.getFile());
+            media.setFileHash(file.getHash());
+            media.setBucket(bucket);
+
+            final KeywordExtractor fileNameKeywordsExtractor = new KeywordsFromFileNameExtractor();
+            final KeywordExtractor metaDataKeywordsExtractor = new KeywordsFromMetaDataExtractor();
+            final Collection<String> foundKeywords = new HashSet<>();
+
+            foundKeywords.addAll(fileNameKeywordsExtractor.extract(file.getFile()));
+            foundKeywords.addAll(metaDataKeywordsExtractor.extract(fileMetaData.getData()));
+            foundKeywords.stream()
                 .filter(new MalformedKeywords())
                 .filter(new IgnoredKeywords())
                 .map(literal -> {
@@ -80,11 +87,11 @@ final class MetaDataExtractionTasklet implements Tasklet {
 
                     return keyword;
                 }).forEach(media::addKeyword);
+
+            mediaFiles.save(media);
         } catch (final Exception e) {
             LOGGER.warn(e.getMessage(), e);
         }
-
-        mediaFiles.save(media);
     }
 
     FileExtension extractExtension(final HashedFile file) {

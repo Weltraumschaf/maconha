@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 /**
  * Extracts keywords from a {@link FileMetaData#getData() meta data string}.
  */
-final class KeywordsFromMetaDataExtractor implements KeywordExtractor {
+public final class KeywordsFromMetaDataExtractor implements KeywordExtractor {
 
     private final StringManipulator manipulator = new StringManipulator();
 
