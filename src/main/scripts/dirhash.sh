@@ -2,7 +2,7 @@
 
 set -e
 set -u
-exit 0 # FIXME Only for debugging.
+
 usage="Usage: dirhash <BASEDIR>"
 basedir="${1-}"
 hashCmd=""
