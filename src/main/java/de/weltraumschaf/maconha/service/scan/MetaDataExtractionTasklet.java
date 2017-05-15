@@ -13,6 +13,8 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +60,8 @@ final class MetaDataExtractionTasklet implements Tasklet {
 
         try {
             final MetaDataExtractor metaDataExtractor = new MetaDataExtractor();
-            final FileMetaData fileMetaData = metaDataExtractor.extract(file.getFile());
+            final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
+            final FileMetaData fileMetaData = metaDataExtractor.extract(absoluteFile.toString());
 
             final MediaFile media = new MediaFile();
             media.setType(MediaType.forValue(extension));
