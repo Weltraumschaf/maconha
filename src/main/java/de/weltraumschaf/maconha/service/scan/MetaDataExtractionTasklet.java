@@ -71,8 +71,14 @@ final class MetaDataExtractionTasklet implements Tasklet {
             final KeywordExtractor metaDataKeywordsExtractor = new KeywordsFromMetaDataExtractor();
             final Collection<String> foundKeywords = new HashSet<>();
 
-            foundKeywords.addAll(fileNameKeywordsExtractor.extract(file.getFile()));
-            foundKeywords.addAll(metaDataKeywordsExtractor.extract(fileMetaData.getData()));
+            Collection<String> extracted = fileNameKeywordsExtractor.extract(file.getFile());
+            LOGGER.debug("Extracted {} keywords from file name.", extracted.size());
+            foundKeywords.addAll(extracted);
+            extracted = metaDataKeywordsExtractor.extract(fileMetaData.getData());
+            LOGGER.debug("Extracted {} keywords from file meta data.", extracted.size());
+            foundKeywords.addAll(extracted);
+
+            LOGGER.debug("Filter and store {} keywords.", foundKeywords.size());
             foundKeywords.stream()
                 .filter(new MalformedKeywords())
                 .filter(new IgnoredKeywords())
@@ -80,6 +86,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
                     Keyword keyword = keywords.findByLiteral(literal);
 
                     if (null == keyword) {
+                        LOGGER.debug("Save new keyword '{}'.", literal);
                         keyword = new Keyword();
                         keyword.setLiteral(literal);
                         keywords.save(keyword);
