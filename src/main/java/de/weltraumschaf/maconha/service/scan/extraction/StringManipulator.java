@@ -1,5 +1,9 @@
 package de.weltraumschaf.maconha.service.scan.extraction;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * Helper class to make useful string manipulations to extract keywords.
  */
@@ -16,7 +20,7 @@ final class StringManipulator {
     /**
      * Regex used to match special characters.
      */
-    private static final String REGEX_SPECIAL_CHARS = "[/\\\\\\-_.]";
+    private static final String REGEX_SPECIAL_CHARS = "[/\\\\\\-_.,:;+*&%$?{}()\\[\\]']";
     /**
      * Regex character class for unicode upper case letters.
      */
@@ -131,6 +135,22 @@ final class StringManipulator {
         }
 
         return input.replaceAll(SPLIT_CAMEL_CASE, " ");
+    }
+
+    Collection<String> splitIntoLines(final String input) {
+        if (isNullOrBlank(input)) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(input.split("\\r?\\n"));
+    }
+
+    Collection<String> splitIntoWords(final String input) {
+        if (isNullOrBlank(input)) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(input.trim().split("\\s"));
     }
 
     private boolean isNullOrBlank(final String input) {

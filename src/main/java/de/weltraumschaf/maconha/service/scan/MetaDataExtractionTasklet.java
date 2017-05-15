@@ -24,7 +24,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaDataExtractionTasklet.class);
 
     private final JobParamRetriever params = new JobParamRetriever();
-    private final KeywordExtractor<Collection<String>> extractor = new KeywordsFromFileNameExtractor();
+    private final KeywordExtractor extractor = new KeywordsFromFileNameExtractor();
     private final BucketRepo buckets;
     private final MediaFileRepo mediaFiles;
     private final KeywordRepo keywords;

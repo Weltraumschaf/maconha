@@ -10,9 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- *
+ * Extracts {@link FileMetaData meta data} from the file content.
  */
-final class MetaDataExtractor implements KeywordExtractor<FileMetaData> {
+final class MetaDataExtractor implements Extractor<FileMetaData> {
 
     private final Tika tika;
 

@@ -4,10 +4,8 @@ import java.util.Collection;
 
 /**
  * Implementations extracts keywords from given strings.
- *
- * @param <T> type of extracted data
  */
-public interface KeywordExtractor<T> {
+public interface KeywordExtractor extends Extractor<Collection<String>> {
 
     /**
      * Extracts keywords from given input string.
@@ -18,6 +16,6 @@ public interface KeywordExtractor<T> {
      * @param input maybe {@code null} or empty
      * @return never {@code null}, maybe empty
      */
-    T extract(final String input) throws Exception;
+    Collection<String> extract(final String input) throws Exception;
 
 }
