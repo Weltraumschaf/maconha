@@ -11,7 +11,7 @@ public final class KeywordsFromMetaDataExtractor implements KeywordExtractor {
     private final StringManipulator manipulator = new StringManipulator();
 
     @Override
-    public Collection<String> extract(final String input) throws Exception {
+    public Collection<String> extract(final String input) {
         return manipulator.splitIntoLines(input).stream()
             .map(this::processLine)
             .flatMap(Collection::stream)

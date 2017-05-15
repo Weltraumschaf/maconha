@@ -9,7 +9,6 @@ public interface Extractor<T> {
      *
      * @param input maybe {@code null} or blank
      * @return never {@code null} returns a reasonable default if nothing can't be extracted or throws an exception
-     * @throws Exception if the extraction failed in any way
      */
-    T extract(final String input) throws Exception;
+    T extract(final String input);
 }
