@@ -8,7 +8,7 @@ set -e
 
 # JVM settings.
 jvm_min_heap_space="128m"
-jvm_max_heap_space="256m"
+jvm_max_heap_space="1024m"
 jvm_options="-Xms${jvm_min_heap_space} -Xmx${jvm_max_heap_space}"
 
 program="${0}"
