@@ -4,7 +4,10 @@ import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
-import de.weltraumschaf.maconha.service.scan.extraction.*;
+import de.weltraumschaf.maconha.service.scan.extraction.FileMetaData;
+import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
+import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromMetaDataExtractor;
+import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,53 +61,44 @@ final class MetaDataExtractionTasklet implements Tasklet {
             return;
         }
 
-        try {
-            final MetaDataExtractor metaDataExtractor = new MetaDataExtractor();
-            final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
-            final FileMetaData fileMetaData = metaDataExtractor.extract(absoluteFile.toString());
+        final FileMetaData fileMetaData = extractFileMetaData(bucket, file);
 
-            final MediaFile media = new MediaFile();
-            media.setType(MediaType.forValue(extension));
-            media.setFormat(fileMetaData.getMime());
-            media.setRelativeFileName(file.getFile());
-            media.setFileHash(file.getHash());
-            media.setBucket(bucket);
+        final MediaFile media = new MediaFile();
+        media.setType(MediaType.forValue(extension));
+        media.setFormat(fileMetaData.getMime());
+        media.setRelativeFileName(file.getFile());
+        media.setFileHash(file.getHash());
+        media.setBucket(bucket);
 
-            final KeywordExtractor fileNameKeywordsExtractor = new KeywordsFromFileNameExtractor();
-            final KeywordExtractor metaDataKeywordsExtractor = new KeywordsFromMetaDataExtractor();
-            final Collection<String> foundKeywords = new HashSet<>();
+        final Collection<String> foundKeywords = new HashSet<>();
+        foundKeywords.addAll(new KeywordsFromFileNameExtractor().extract(file.getFile()));
+        foundKeywords.addAll(new KeywordsFromMetaDataExtractor().extract(fileMetaData.getData()));
 
-            Collection<String> extracted = fileNameKeywordsExtractor.extract(file.getFile());
-            LOGGER.debug("Extracted {} keywords from file name.", extracted.size());
-            foundKeywords.addAll(extracted);
-            extracted = metaDataKeywordsExtractor.extract(fileMetaData.getData());
-            LOGGER.debug("Extracted {} keywords from file meta data.", extracted.size());
-            foundKeywords.addAll(extracted);
+        foundKeywords.stream()
+            .filter(new MalformedKeywords())
+            .filter(new IgnoredKeywords())
+            .map(literal -> {
+                Keyword keyword = keywords.findByLiteral(literal);
 
-            LOGGER.debug("Filter and store {} keywords.", foundKeywords.size());
-            foundKeywords.stream()
-                .filter(new MalformedKeywords())
-                .filter(new IgnoredKeywords())
-                .map(literal -> {
-                    Keyword keyword = keywords.findByLiteral(literal);
+                if (null == keyword) {
+                    LOGGER.debug("Save new keyword '{}'.", literal);
+                    keyword = new Keyword();
+                    keyword.setLiteral(literal);
+                    keywords.save(keyword);
+                }
 
-                    if (null == keyword) {
-                        LOGGER.debug("Save new keyword '{}'.", literal);
-                        keyword = new Keyword();
-                        keyword.setLiteral(literal);
-                        keywords.save(keyword);
-                    }
+                return keyword;
+            }).forEach(media::addKeyword);
 
-                    return keyword;
-                }).forEach(media::addKeyword);
-
-            mediaFiles.save(media);
-        } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
-        }
+        mediaFiles.save(media);
     }
 
     FileExtension extractExtension(final HashedFile file) {
         return FileExtension.forValue(FileExtension.extractExtension(file.getFile()));
+    }
+
+    private FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {
+        final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
+        return new MetaDataExtractor().extract(absoluteFile.toString());
     }
 }
