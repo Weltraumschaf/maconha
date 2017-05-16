@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public final class FileMetaData {
 
-    public static final FileMetaData NOTHING = new FileMetaData("", "");
+    public static final FileMetaData NOTHING = new FileMetaData("unknown", "");
 
     private final String mime;
     private final String data;
@@ -17,12 +17,12 @@ public final class FileMetaData {
     /**
      * Dedicated constructor.
      *
-     * @param mime must not b {@code null}
-     * @param data must not b {@code null}
+     * @param mime must not be {@code null} nor empty
+     * @param data must not be {@code null}
      */
     FileMetaData(final String mime, final String data) {
         super();
-        this.mime = Validate.notNull(mime, "mime");
+        this.mime = Validate.notEmpty(mime, "mime");
         this.data = Validate.notNull(data, "data");
     }
 
