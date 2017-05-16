@@ -33,9 +33,5 @@ if [ -n "${MACONHA_DEBUG}" ] && [ "true" == "${MACONHA_DEBUG}" ] ; then
     jvm_options=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 fi
 
-programDirectory=$(dirname "${program}")
-
-exec "$java" ${jvm_options} -jar "${program}" \
-    --bin.dir=${programDirectory} \
-    "$@"
+exec "$java" ${jvm_options} -jar "${program}" "$@"
 exit 1

@@ -7,3 +7,5 @@ spring.datasource.password
 
 maconha.title               = Fuder par a paz do mundo!
 maconha.passwordstrength    = 10
+maconha.bindir              = /usr/local/bin
+maconha.homedir             = /usr/local/var/maconha

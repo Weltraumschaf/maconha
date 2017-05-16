@@ -1,5 +1,8 @@
-src/main/resources/static/lib/
+.envrc
 bin/
+etc/maconha.properties
 node/
 node_modules/
-.envrc
+run-dev.sh
+src/main/resources/static/lib/
+var/

@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.service.scan;
 
 import de.weltraumschaf.maconha.config.DatabaseConfiguration;
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
@@ -16,7 +17,6 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.listener.ExecutionContextPromotionListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,20 +35,20 @@ public class ScanBatchConfiguration {
     private final ScanJobExecutionListener listener;
     private final JobBuilderFactory jobBuilders;
     private final StepBuilderFactory stepBuilders;
+    private final MaconhaConfiguration config;
 
     private JobRepository jobs;
     private BucketRepo buckets;
     private MediaFileRepo mediaFiles;
     private KeywordRepo keywords;
-    @Value("${bin.dir}")
-    private String binDir;
 
     @Autowired
-    public ScanBatchConfiguration(final ScanJobExecutionListener listener, final JobBuilderFactory jobBuilderss, final StepBuilderFactory stepBuilders) {
+    public ScanBatchConfiguration(final ScanJobExecutionListener listener, final JobBuilderFactory jobBuilderss, final StepBuilderFactory stepBuilders, final MaconhaConfiguration config) {
         super();
         this.listener = listener;
         this.jobBuilders = jobBuilderss;
         this.stepBuilders = stepBuilders;
+        this.config = config;
     }
 
     @Autowired
@@ -113,7 +113,7 @@ public class ScanBatchConfiguration {
     public Step findFilesStep() {
         LOGGER.debug("Create FindFilesStep bean.");
         return stepBuilders.get("FindFilesStep")
-            .tasklet(new FindFilesTasklet(binDir))
+            .tasklet(new FindFilesTasklet(config.getBindir()))
             .allowStartIfComplete(true)
             .build();
     }

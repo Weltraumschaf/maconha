@@ -30,6 +30,14 @@ public class MaconhaConfiguration {
     @SuppressWarnings("FieldCanBeLocal")
     private String title = "¡Fuder par à paz do mundo!";
 
+    @NotBlank
+    @SuppressWarnings("unused")
+    private String bindir;
+
+    @NotBlank
+    @SuppressWarnings("unused")
+    private String homedir;
+
     /**
      * Get the applications semantic version.
      *
@@ -117,8 +125,44 @@ public class MaconhaConfiguration {
         this.title = title;
     }
 
+    /**
+     * Get the main distributions binary executables directory.
+     *
+     * @return never {@code null} nor blank
+     */
+    public String getBindir() {
+        return bindir;
+    }
+
+    /**
+     * Set the main distributions binary executables directory.
+     *
+     * @param bindir must not be {@code null} nor blank
+     */
+    public void setBindir(final String bindir) {
+        this.bindir = bindir;
+    }
+
+    /**
+     * Get the main data directory.
+     *
+     * @return never {@code null} nor blank
+     */
+    public String getHomedir() {
+        return homedir;
+    }
+
+    /**
+     * Set the main data directory.
+     *
+     * @param homedir must not be {@code null} nor blank
+     */
+    public void setHomedir(final String homedir) {
+        this.homedir = homedir;
+    }
+
     @Override
-    public final boolean equals(final Object o) {
+    public boolean equals(final Object o) {
         if (!(o instanceof MaconhaConfiguration)) {
             return false;
         }
@@ -127,21 +171,25 @@ public class MaconhaConfiguration {
         return debug == that.debug &&
             passwordStrength == that.passwordStrength &&
             Objects.equals(version, that.version) &&
-            Objects.equals(title, that.title);
+            Objects.equals(title, that.title) &&
+            Objects.equals(bindir, that.bindir) &&
+            Objects.equals(homedir, that.homedir);
     }
 
     @Override
-    public final int hashCode() {
-        return Objects.hash(version, debug, passwordStrength, title);
+    public int hashCode() {
+        return Objects.hash(version, debug, passwordStrength, title, bindir, homedir);
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "MaconhaConfiguration{" +
             "version='" + version + '\'' +
             ", debug=" + debug +
             ", passwordStrength=" + passwordStrength +
             ", title='" + title + '\'' +
+            ", bindir='" + bindir + '\'' +
+            ", homedir='" + homedir + '\'' +
             '}';
     }
 }
