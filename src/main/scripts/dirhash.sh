@@ -42,7 +42,7 @@ fi
 echo "Start checksumming. May take a while ..."
 # Find all files but not hidden files (start with .).
 find "${basedir}" -type f ! -iname ".*" -print0 | \
-    xargs -0 -n1 -P4 $hashCmd \
+    xargs -0 -n1 -P8 $hashCmd \
     > "${checksumFile}"
 
 echo "Checksums written to ${checksumFile}."
