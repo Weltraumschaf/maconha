@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public final class FileMetaData {
 
-    static final FileMetaData NOTHING = new FileMetaData("", "");
+    public static final FileMetaData NOTHING = new FileMetaData("", "");
 
     private final String mime;
     private final String data;

@@ -98,7 +98,12 @@ final class MetaDataExtractionTasklet implements Tasklet {
     }
 
     private FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {
-        final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
-        return new MetaDataExtractor().extract(absoluteFile.toString());
+        try {
+            final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
+            return new MetaDataExtractor().extract(absoluteFile.toString());
+        } catch (final Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            return FileMetaData.NOTHING;
+        }
     }
 }
