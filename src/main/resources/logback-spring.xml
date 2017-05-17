@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+    https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
+    http://www.mkyong.com/logging/logback-xml-example/
+    http://logback.qos.ch/manual/appenders.html
+    -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+</configuration>
