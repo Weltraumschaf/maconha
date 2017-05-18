@@ -1,14 +1,16 @@
 package de.weltraumschaf.maconha.service.scan;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Seconds;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
@@ -29,10 +31,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import javax.annotation.PreDestroy;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -58,26 +67,74 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
             .toFormatter();
     private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
 
+    private final Collection<ScanStatus> statuses = new CopyOnWriteArrayList<>();
     private final Map<Long, Execution> scans = new ConcurrentHashMap<>();
     private final JobLauncher launcher;
     private final JobOperator operator;
     private final JobExplorer explorer;
     private final Job job;
     private final ScanJobExecutionListener listener;
+    private final MaconhaConfiguration config;
 
     @Autowired
-    DefaultScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener) {
+    DefaultScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener, final MaconhaConfiguration config) {
         super();
         this.launcher = launcher;
         this.operator = operator;
         this.explorer = explorer;
         this.job = job;
         this.listener = listener;
+        this.config = config;
     }
 
     @PostConstruct
-    public void registerOnListener() {
+    public void init() {
         listener.register(this);
+        final Path stausFile = resolveStausFile();
+
+        if (Files.exists(stausFile)) {
+            try (final Reader reader = Files.newBufferedReader(stausFile)) {
+                LOGGER.debug("Loading stored statuses.");
+                final Type type = new TypeToken<ArrayList<ScanStatus>>() {
+                }.getType();
+                statuses.addAll(new Gson().fromJson(reader, type));
+            } catch (final IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+            }
+        } else {
+            LOGGER.debug("There is no such status file '{}' to load.", stausFile);
+        }
+    }
+
+
+    @PreDestroy
+    public void deinit() {
+        final Path stausDir = resolveStausDir();
+
+        if (!Files.exists(stausDir)) {
+            LOGGER.debug("Create directory '{}' to store status file.", stausDir);
+
+            try {
+                Files.createDirectories(stausDir);
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+            }
+        }
+
+        try (final BufferedWriter writer = Files.newBufferedWriter(resolveStausFile())) {
+            LOGGER.debug("Store statuses.");
+            new Gson().toJson(statuses, writer);
+        } catch (final IOException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
+    }
+
+    private Path resolveStausFile() {
+        return resolveStausDir().resolve("statuses.json");
+    }
+
+    private Path resolveStausDir() {
+        return Paths.get(config.getHomedir()).resolve("scans");
     }
 
     @Override
@@ -126,33 +183,12 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
 
     @Override
     public List<ScanStatus> overview() {
-        return scans.values().stream().map(execution -> {
+        final List<ScanStatus> running = scans.values().stream().map(execution -> {
             final JobExecution jobExecution = explorer.getJobExecution(execution.id);
-            final DateTime startTime = new DateTime(jobExecution.getStartTime());
-            final DateTime endTime;
-            final String formattedEndTime;
-
-            if (jobExecution.getEndTime() == null) {
-                endTime = DateTime.now();
-                formattedEndTime = "-";
-            } else {
-                endTime = new DateTime(jobExecution.getEndTime());
-                formattedEndTime = dateTimeFormat.print(endTime);
-            }
-
-            final Duration duration = new Duration(startTime, endTime);
-            return new ScanStatus(
-                execution.id,
-                execution.bucket.getName(),
-                dateTimeFormat.print(new DateTime(jobExecution.getCreateTime())),
-                dateTimeFormat.print(startTime),
-                formattedEndTime,
-                secondsFormat.print(duration.toPeriod()),
-                jobExecution.getStatus().name(),
-                jobExecution.getExitStatus().getExitCode(),
-                jobExecution.getAllFailureExceptions()
-            );
+            return convert(jobExecution);
         }).collect(Collectors.toList());
+        running.addAll(statuses);
+        return running;
     }
 
     @Override
@@ -183,6 +219,36 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
             "Scan job finished",
             "Scan job for bucket '%s' in directory '%s' with id %d finished in %s.",
             bucket.getName(), bucket.getDirectory(), jobId, duration);
+
+        statuses.add(convert(jobExecution));
+        scans.remove(jobId);
+    }
+
+    private ScanStatus convert(final JobExecution jobExecution) {
+        final DateTime startTime = new DateTime(jobExecution.getStartTime());
+        final DateTime endTime;
+        final String formattedEndTime;
+
+        if (jobExecution.getEndTime() == null) {
+            endTime = DateTime.now();
+            formattedEndTime = "-";
+        } else {
+            endTime = new DateTime(jobExecution.getEndTime());
+            formattedEndTime = dateTimeFormat.print(endTime);
+        }
+
+        final Duration duration = new Duration(startTime, endTime);
+        return new ScanStatus(
+            jobExecution.getJobId(),
+            scans.get(jobExecution.getJobId()).bucket.getName(),
+            dateTimeFormat.print(new DateTime(jobExecution.getCreateTime())),
+            dateTimeFormat.print(startTime),
+            formattedEndTime,
+            secondsFormat.print(duration.toPeriod()),
+            jobExecution.getStatus().name(),
+            jobExecution.getExitStatus().getExitCode(),
+            jobExecution.getAllFailureExceptions()
+        );
     }
 
     private void notifyClient(final Long jobId, final String caption, final String description, final Object... args) {
