@@ -74,3 +74,11 @@ ALTER TABLE BATCH_STEP_EXECUTION_CONTEXT MODIFY SERIALIZED_CONTEXT MEDIUMTEXT;
     - [DBUnit Rules](https://rpestano.wordpress.com/2016/06/20/ruling-database-testing-with-dbunit-rules/)
 - CLI Tools
     [fdupes](https://github.com/adrianlopezroche/fdupes) to find duplicates
+    
+## Dirhashing
+
+- /blackhole/Filme
+    - P8
+        - sha256: 7408.905u 440.381s 1:50:22.36 118.5%    25+167k 7935156+2510io 44pf+1w
+        - sha1:   3401.796u 413.182s 1:31:19.30 69.6%     25+167k 7923041+2510io 66pf+4w
+    - P16
