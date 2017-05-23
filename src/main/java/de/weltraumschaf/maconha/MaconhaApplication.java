@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 /**
  * Main entry point of the Spring boot application.
  */
+@EnableAsync
 @SpringBootApplication
 @EnableBatchProcessing(modular = true) // Modular because job configuration is in other class.
 @ComponentScan( {"de.weltraumschaf.maconha"})

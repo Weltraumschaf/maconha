@@ -17,10 +17,9 @@ public interface ScanService {
      *
      * @param bucket must not be {@code null}
      * @param currentUi must not be {@code null}
-     * @return the id of the underling scan job
      * @throws ScanError if the scan fails for any reason
      */
-    Long scan(Bucket bucket, UI currentUi);
+    void scan(Bucket bucket, UI currentUi);
 
     boolean stop(long executionId);
 

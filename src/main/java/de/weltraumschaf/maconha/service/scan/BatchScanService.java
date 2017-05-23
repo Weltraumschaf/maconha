@@ -53,19 +53,9 @@ import java.util.stream.Collectors;
  * </p>
  */
 @Service(ScanServiceFactory.BATCH)
-final class BatchScanService implements ScanService, ScanJobExecutionListener.CallBack {
+final class BatchScanService extends BaseScanService implements ScanService, ScanJobExecutionListener.CallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchScanService.class);
 
-    private final PeriodFormatter secondsFormat =
-        new PeriodFormatterBuilder()
-            .printZeroAlways()
-            .minimumPrintedDigits(2)
-            .appendHours()
-            .appendSeparator(":")
-            .appendMinutes()
-            .appendSeparator(":")
-            .appendSeconds()
-            .toFormatter();
     private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
 
     private final Collection<ScanStatus> statuses = new CopyOnWriteArrayList<>();
@@ -140,7 +130,7 @@ final class BatchScanService implements ScanService, ScanJobExecutionListener.Ca
     }
 
     @Override
-    public Long scan(final Bucket bucket, final UI currentUi) {
+    public void scan(final Bucket bucket, final UI currentUi) {
         Validate.notNull(bucket, "bucket");
         Validate.notNull(currentUi, "currentUi");
         LOGGER.debug("Scan bucket with id {} and directory {} ...", bucket.getId(), bucket.getDirectory());
@@ -150,7 +140,6 @@ final class BatchScanService implements ScanService, ScanJobExecutionListener.Ca
 
             final Execution execution = new Execution(launcher.run(job, parameters).getId(), bucket, currentUi);
             scans.put(execution.id, execution);
-            return execution.id;
         } catch (final JobInstanceAlreadyCompleteException e) {
             throw new ScanError(e, "Job with name '%s' already completed!", JOB_NAME);
         } catch (final JobExecutionAlreadyRunningException e) {
@@ -202,7 +191,7 @@ final class BatchScanService implements ScanService, ScanJobExecutionListener.Ca
         notifyClient(
             jobId,
             "Scan job started",
-            "Scan job for bucket '%s' in directory '%s' with id %d started.",
+            "Scan for bucket '%s' in directory '%s' with id %d started.",
             bucket.getName(), bucket.getDirectory(), jobId);
     }
 
@@ -219,7 +208,7 @@ final class BatchScanService implements ScanService, ScanJobExecutionListener.Ca
         notifyClient(
             jobId,
             "Scan job finished",
-            "Scan job for bucket '%s' in directory '%s' with id %d finished in %s.",
+            "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
             bucket.getName(), bucket.getDirectory(), jobId, duration);
 
         statuses.add(convert(jobExecution));
@@ -255,22 +244,7 @@ final class BatchScanService implements ScanService, ScanJobExecutionListener.Ca
 
     private void notifyClient(final Long jobId, final String caption, final String description, final Object... args) {
         final Notification notification = notification(caption, description, args);
-        final Execution execution = getExecution(jobId);
-        final UI ui = execution.currentUi;
-
-        if (ui == null) {
-            LOGGER.warn("Currents UI null! Can't notify client about job with id {}.", jobId);
-        } else {
-            ui.access(() -> {
-                final Page page = ui.getPage();
-
-                if (page == null) {
-                    LOGGER.warn("Currents page null! Can't notify client about job with id {}.", jobId);
-                } else {
-                    notification.show(page);
-                }
-            });
-        }
+        notifyClient(jobId, notification, getExecution(jobId).currentUi);
     }
 
     private Execution getExecution(final Long jobId) {
@@ -279,10 +253,6 @@ final class BatchScanService implements ScanService, ScanJobExecutionListener.Ca
         }
 
         throw new ScanError("There's no such job with id %d!", jobId);
-    }
-
-    private Notification notification(final String caption, final String description, final Object... args) {
-        return new Notification(caption, String.format(description, args), Notification.Type.TRAY_NOTIFICATION);
     }
 
     /**
