@@ -9,6 +9,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.ScanService;
+import de.weltraumschaf.maconha.service.ScanServiceFactory;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
@@ -45,15 +46,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
- * Default implementation.
+ * Batch job based implementation.
  * <p>
  * This class is package private because it must not be used directly from outside. Use the DI of Spring to get an
  * instance.
  * </p>
  */
-@Service
-final class DefaultScanService implements ScanService, ScanJobExecutionListener.CallBack {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanService.class);
+@Service(ScanServiceFactory.BATCH)
+final class BatchScanService implements ScanService, ScanJobExecutionListener.CallBack {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BatchScanService.class);
 
     private final PeriodFormatter secondsFormat =
         new PeriodFormatterBuilder()
@@ -77,7 +78,7 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
     private final MaconhaConfiguration config;
 
     @Autowired
-    DefaultScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener, final MaconhaConfiguration config) {
+    BatchScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener, final MaconhaConfiguration config) {
         super();
         this.launcher = launcher;
         this.operator = operator;
@@ -89,6 +90,7 @@ final class DefaultScanService implements ScanService, ScanJobExecutionListener.
 
     @PostConstruct
     public void init() {
+        LOGGER.debug("Initialize batch based scan service.");
         listener.register(this);
         final Path stausFile = resolveStausFile();
 

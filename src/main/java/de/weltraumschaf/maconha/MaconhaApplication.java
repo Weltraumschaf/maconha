@@ -1,13 +1,16 @@
 package de.weltraumschaf.maconha;
 
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
+import de.weltraumschaf.maconha.service.ScanServiceFactory;
 import de.weltraumschaf.maconha.service.scan.ScanBatchConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
 import org.springframework.batch.core.configuration.support.GenericApplicationContextFactory;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -75,4 +78,12 @@ public class MaconhaApplication {
         // Provide a context factory for the scan job so the job registry will be populated with the job.
         return new GenericApplicationContextFactory(ScanBatchConfiguration.class);
     }
+
+    @Bean
+    public FactoryBean serviceLocatorFactoryBean() {
+        final ServiceLocatorFactoryBean bean = new ServiceLocatorFactoryBean();
+        bean.setServiceLocatorInterface(ScanServiceFactory.class);
+        return bean;
+    }
+
 }

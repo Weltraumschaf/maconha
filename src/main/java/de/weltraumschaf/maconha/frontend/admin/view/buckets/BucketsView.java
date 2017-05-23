@@ -1,17 +1,18 @@
 package de.weltraumschaf.maconha.frontend.admin.view.buckets;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.frontend.admin.view.SubView;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.service.ScanService;
+import de.weltraumschaf.maconha.service.ScanServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,22 +52,26 @@ public final class BucketsView extends SubView {
         .withColumnHeaders("ID", "Name", "Directory")
         .withFullWidth();
 
-    private final ScanService scanner;
+    private final ScanServiceFactory scanners;
     private final BucketRepo buckets;
     private final BucketForm form;
     private final EventBus.UIEventBus events;
+    private final MaconhaConfiguration config;
+    private ScanService scanner;
 
     @Autowired
-    public BucketsView(final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events) {
+    public BucketsView(final ScanServiceFactory scanners, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events, final MaconhaConfiguration config) {
         super(TITLE, TITLE_ID);
-        this.scanner = scanner;
+        this.scanners = scanners;
         this.buckets = buckets;
         this.form = form;
         this.events = events;
+        this.config = config;
     }
 
     @Override
     protected void subInit() {
+        scanner = scanners.create(config.getScanner());
         root.addComponent(buildContent());
         // Listen to change events emitted by PersonForm see onEvent method.
         events.subscribe(this);

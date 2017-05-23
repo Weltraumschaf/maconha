@@ -8,9 +8,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
+import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.frontend.admin.view.SubView;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanService.ScanStatus;
+import de.weltraumschaf.maconha.service.ScanServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +39,20 @@ public final class ScansView extends SubView {
         .withProperties("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus", "jobExitCode")
         .withColumnHeaders("ID", "Bucket Name", "Created", "Started", "Finished", "Duration", "Status", "Exit Code")
         .withFullWidth();
-    private final ScanService scanner;
+    private final ScanServiceFactory scanners;
+    private final MaconhaConfiguration config;
+    private ScanService scanner;
 
     @Autowired
-    ScansView(final ScanService scanner) {
+    ScansView(final ScanServiceFactory scanners, final MaconhaConfiguration config) {
         super(TITLE, TITLE_ID);
-        this.scanner = scanner;
+        this.scanners = scanners;
+        this.config = config;
     }
 
     @Override
     protected void subInit() {
+        scanner = scanners.create(config.getScanner());
         root.addComponent(buildContent());
     }
 
