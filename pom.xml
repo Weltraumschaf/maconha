@@ -696,6 +696,32 @@
                     </execution>
 
                     <execution>
+                        <id>copy-scripts-for-test</id>
+                        <phase>process-test-resources</phase>
+
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/test-classes">
+                                    <fileset dir="${project.scripts.directory}">
+                                        <include name="dirhash.sh"/>
+                                    </fileset>
+                                    <mapper type="glob" from="*.sh" to="*"/>
+                                </copy>
+
+                                <chmod perm="ugo+rx">
+                                    <fileset dir="${project.build.directory}/test-classes">
+                                        <include name="dirhash"/>
+                                    </fileset>
+                                </chmod>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>copy-scripts-for-install</id>
                         <phase>install</phase>
 

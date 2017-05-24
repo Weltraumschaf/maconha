@@ -10,6 +10,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -40,16 +41,18 @@ public class DirhashTest {
 
     @Test
     public void execute() throws IOException, InterruptedException, URISyntaxException {
-        final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/shell/checksums").toURI();
-        final Path target = tmp.getRoot().toPath().resolve("filesToHash");
+        final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/shell/dirhash_fixtures").toURI();
+        Path target = tmp.getRoot().toPath().resolve("filesToHash");
         FileUtils.copyDirectory(Paths.get(fixtures).toFile(), target.toFile());
+        target = target.toRealPath();
+
         final Result result = new de.weltraumschaf.maconha.shell.Dirhash(
             Paths.get(getClass().getResource("/").toURI()), target
         ).execute();
 
         assertThat(result.isSuccessful(), is(true));
-        assertThat(result.getStdout().isEmpty(), is(true));
-        assertThat(result.getStderr().isEmpty(), is(true));
+        assertThat("STDOUT must not be empty!", result.getStdout().isEmpty(), is(false));
+        assertThat("STDER must be empty!", result.getStderr().isEmpty(), is(true));
 
         assertThat(new HashFileReader().read(target.resolve(".checksums")), containsInAnyOrder(
             new HashedFile(
