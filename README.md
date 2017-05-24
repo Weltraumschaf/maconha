@@ -78,6 +78,8 @@ ALTER TABLE BATCH_STEP_EXECUTION_CONTEXT MODIFY SERIALIZED_CONTEXT MEDIUMTEXT;
 ## Dirhashing
 
 - /blackhole/Filme
+    - P1
+        - sha256:   5108.082u 384.947s 1:36:19.36 95.0%     25+167k 7939957+2510io 6pf+0w
     - P4
         - sha1:     3254.415u 408.382s 1:57:41.61 51.8%     25+167k 7921287+2510io 37pf+1w
         - sha256:   9891.475u 523.210s 59:40.43 290.8%      25+167k 7945364+2510io 57pf+3w
