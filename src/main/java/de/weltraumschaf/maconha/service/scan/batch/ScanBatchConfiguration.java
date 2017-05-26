@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.batch;
 
 import de.weltraumschaf.maconha.config.DatabaseConfiguration;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;

@@ -2,7 +2,7 @@ package de.weltraumschaf.maconha;
 
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
-import de.weltraumschaf.maconha.service.scan.ScanBatchConfiguration;
+import de.weltraumschaf.maconha.service.scan.batch.ScanBatchConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

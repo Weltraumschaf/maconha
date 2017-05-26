@@ -1,4 +1,6 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.batch;
+
+import de.weltraumschaf.maconha.service.scan.batch.FilterUnseenFilesTasklet;
 
 /**
  * Provides keys used to store and retrieve data in job/step/task contexts.

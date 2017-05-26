@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.batch;
 
 import de.weltraumschaf.commons.validate.Validate;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * This lister calls all registered call backs before and after a job.
  */
 @Component
-final class ScanJobExecutionListener implements JobExecutionListener {
+public final class ScanJobExecutionListener implements JobExecutionListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScanJobExecutionListener.class);
     private final Collection<CallBack> callbacks = new CopyOnWriteArrayList<>();
 
@@ -35,7 +35,7 @@ final class ScanJobExecutionListener implements JobExecutionListener {
      *
      * @param callback must not be {@code null}
      */
-    void register(final CallBack callback) {
+    public void register(final CallBack callback) {
         Validate.notNull(callback, "callback");
         callbacks.add(callback);
     }
@@ -43,7 +43,7 @@ final class ScanJobExecutionListener implements JobExecutionListener {
     /**
      * Clients which want to be called back must implement this interface.
      */
-    interface CallBack {
+    public interface CallBack {
         /**
          * Will be invoked before a job starts.
          *

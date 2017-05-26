@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.batch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,5 @@ final class FindFilesTasklet extends SystemCommandTasklet {
 
         return super.execute(contribution, ctx);
     }
-
-
 
 }

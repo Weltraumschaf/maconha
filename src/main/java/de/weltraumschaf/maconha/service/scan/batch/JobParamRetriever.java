@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scan.batch;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
