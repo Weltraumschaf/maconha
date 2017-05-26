@@ -21,8 +21,10 @@ import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -49,6 +51,7 @@ final class ThreadScanService extends BaseScanService implements ScanService {
     private final KeywordRepo keywords;
     private Commands cmds;
 
+    @Lazy
     @Autowired
     ThreadScanService(final MaconhaConfiguration config, final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
         super();
@@ -65,6 +68,7 @@ final class ThreadScanService extends BaseScanService implements ScanService {
 
     @Async
     @Override
+    @Transactional
     public void scan(final Bucket bucket, final UI currentUi) {
         long id = 0L;
         Notification notification = notification(
@@ -108,6 +112,7 @@ final class ThreadScanService extends BaseScanService implements ScanService {
             return;
         }
 
+        LOGGER.debug(result.getStdout());
         new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums")).stream()
             .map(hashedFile -> relativizeFilename(hashedFile, bucket))
             .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
