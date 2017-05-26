@@ -21,6 +21,6 @@ public final class FilterUnseenFilesTaskletTest {
         bucket.setDirectory("/foo/bar");
         assertThat(
             sut.relativizeFilename(new HashedFile("hash", "/foo/bar/baz/snafu.avi"), bucket),
-            is("baz/snafu.avi"));
+            is(new HashedFile("hash", "baz/snafu.avi")));
     }
 }

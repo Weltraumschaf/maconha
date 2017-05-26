@@ -30,13 +30,13 @@ public class DirhashTest {
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructor_pathMustNotBeNull() {
-        new de.weltraumschaf.maconha.shell.Dirhash(null, mock(Path.class));
+        new Dirhash(null, mock(Path.class));
     }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructor_baseDirMustNotBeNull() {
-        new de.weltraumschaf.maconha.shell.Dirhash(mock(Path.class), null);
+        new Dirhash(mock(Path.class), null);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class DirhashTest {
         FileUtils.copyDirectory(Paths.get(fixtures).toFile(), target.toFile());
         target = target.toRealPath();
 
-        final Result result = new de.weltraumschaf.maconha.shell.Dirhash(
+        final Result result = new Dirhash(
             Paths.get(getClass().getResource("/").toURI()), target
         ).execute();
 

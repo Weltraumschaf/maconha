@@ -53,16 +53,18 @@ final class FilterUnseenFilesTasklet implements Tasklet {
 
     private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles, final Bucket bucket) {
         return hashedFiles.stream()
-            .map(hashedFile -> relativizeFilenam(hashedFile, bucket))
+            .map(hashedFile -> relativizeFilename(hashedFile, bucket))
             .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
             .collect(Collectors.toSet());
     }
 
-    private HashedFile relativizeFilenam(final HashedFile file, final Bucket bucket) {
-        return new HashedFile(file.getHash(), relativizeFilename(file, bucket));
+    HashedFile relativizeFilename(final HashedFile file, final Bucket bucket) {
+        // TODO Remove duplicated code.
+        return new HashedFile(file.getHash(), file.getFile().replace(bucket.getDirectory(), "").substring(1));
     }
 
     private boolean isFileUnseen(final HashedFile file, final Bucket bucket) {
+        // TODO Remove duplicated code.
         final MediaFile found = mediaFiles.findByRelativeFileNameAndBucket(file.getFile(), bucket);
 
         if (null == found) {
@@ -78,10 +80,5 @@ final class FilterUnseenFilesTasklet implements Tasklet {
         LOGGER.debug("File already scanned but hash changed: {}", file.getFile());
         return true;
     }
-
-    String relativizeFilename(final HashedFile file, final Bucket bucket) {
-        return file.getFile().replace(bucket.getDirectory(), "").substring(1);
-    }
-
 
 }

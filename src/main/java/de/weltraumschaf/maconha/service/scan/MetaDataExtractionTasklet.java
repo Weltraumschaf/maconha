@@ -50,6 +50,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
     }
 
     private void extractMetaData(final Bucket bucket, final HashedFile file) {
+        // TODO Remove duplicated code.
         LOGGER.debug("Extract meta data for: {}", file.getFile());
         final FileExtension extension;
 
@@ -94,10 +95,12 @@ final class MetaDataExtractionTasklet implements Tasklet {
     }
 
     FileExtension extractExtension(final HashedFile file) {
+        // TODO Remove duplicated code.
         return FileExtension.forValue(FileExtension.extractExtension(file.getFile()));
     }
 
     private FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {
+        // TODO Remove duplicated code.
         try {
             final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
             return new MetaDataExtractor().extract(absoluteFile.toString());
