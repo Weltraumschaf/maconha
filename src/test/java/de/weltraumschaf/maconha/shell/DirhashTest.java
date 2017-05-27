@@ -14,8 +14,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -50,9 +49,9 @@ public class DirhashTest {
             Paths.get(getClass().getResource("/").toURI()), target
         ).execute();
 
-        assertThat(result.isSuccessful(), is(true));
-        assertThat("STDOUT must not be empty!", result.getStdout().isEmpty(), is(false));
-        assertThat("STDER must be empty!", result.getStderr().isEmpty(), is(true));
+        assertThat("STDOUT must not be empty!", result.getStdout(), not(isEmptyString()));
+        assertThat("STDERr must be empty!", result.getStderr(), isEmptyString());
+        assertThat("Result was not successful!", result.isSuccessful(), is(true));
 
         assertThat(new HashFileReader().read(target.resolve(".checksums")), containsInAnyOrder(
             new HashedFile(
