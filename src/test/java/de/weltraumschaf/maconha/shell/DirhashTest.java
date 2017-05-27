@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -53,7 +54,9 @@ public class DirhashTest {
         assertThat("STDOUT must not be empty!", result.getStdout(), not(isEmptyString()));
         assertThat("Result was not successful!", result.isSuccessful(), is(true));
 
-        assertThat(new HashFileReader().read(target.resolve(".checksums")), containsInAnyOrder(
+        final Set<HashedFile> hashedFiles = new HashFileReader().read(target.resolve(".checksums"));
+        assertThat(hashedFiles, hasSize(13));
+        assertThat(hashedFiles, containsInAnyOrder(
             new HashedFile(
                 "37055372aa9ab1679aeab43d9534fe65d0b217c84679b1ff43274e2b4a58a308",
                 target + "/Animation/animusic/Animusic-AcousticCurves.wmv"),
@@ -93,7 +96,6 @@ public class DirhashTest {
             new HashedFile(
                 "bdec11ab87443f2182a71635b405e7a04e38324dd0b3092469be56862228ca93",
                 target + "/Comedy/Volker_Pispers/bis_neulich_2007.mp4")));
-
     }
 
 }
