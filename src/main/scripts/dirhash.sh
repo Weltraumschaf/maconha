@@ -16,7 +16,7 @@ else
     exit 1
 fi
 
-if [ "" == "${basedir}" ] ; then
+if [ "" = "${basedir}" ] ; then
     echo "No base dir given!"
     echo "${usage}"
     exit 2
