@@ -49,8 +49,8 @@ public class DirhashTest {
             Paths.get(getClass().getResource("/").toURI()), target
         ).execute();
 
+        assertThat("STDERR must be empty!", result.getStderr(), isEmptyString());
         assertThat("STDOUT must not be empty!", result.getStdout(), not(isEmptyString()));
-        assertThat("STDERr must be empty!", result.getStderr(), isEmptyString());
         assertThat("Result was not successful!", result.isSuccessful(), is(true));
 
         assertThat(new HashFileReader().read(target.resolve(".checksums")), containsInAnyOrder(
