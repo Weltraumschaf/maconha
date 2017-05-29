@@ -114,14 +114,9 @@ final class ThreadScanService extends BaseScanService implements ScanService {
 
         LOGGER.debug(result.getStdout());
         new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums")).stream()
-            .map(hashedFile -> relativizeFilename(hashedFile, bucket))
+            .map(hashedFile -> hashedFile.relativizeFilename(bucket))
             .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
             .forEach(hashedFile -> extractMetaData(bucket, hashedFile));
-    }
-
-    private HashedFile relativizeFilename(final HashedFile file, final Bucket bucket) {
-        // TODO Remove duplicated code.
-        return new HashedFile(file.getHash(), file.getFile().replace(bucket.getDirectory(), "").substring(1));
     }
 
     private boolean isFileUnseen(final HashedFile file, final Bucket bucket) {

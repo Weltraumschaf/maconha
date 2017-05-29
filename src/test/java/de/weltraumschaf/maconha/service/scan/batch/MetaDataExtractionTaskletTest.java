@@ -5,6 +5,7 @@ import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -19,9 +20,8 @@ public final class MetaDataExtractionTaskletTest {
         mock(BucketRepo.class), mock(MediaFileRepo.class), mock(KeywordRepo.class));
 
     @Test
-    public void extractExtension() {
-        assertThat(sut.extractExtension(new HashedFile("hash", "foo.mkv")), is(FileExtension.MATROSKA_VIDEO));
-        assertThat(sut.extractExtension(new HashedFile("hash", "foo.swf")), is(FileExtension.SHOCKWAVE_FLASH));
+    @Ignore("TODO Write some tests.")
+    public void todo() {
     }
 
 }

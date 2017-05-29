@@ -1,6 +1,8 @@
 package de.weltraumschaf.maconha.service.scan.hashing;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.FileExtension;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -43,6 +45,28 @@ public final class HashedFile implements Serializable {
      */
     public String getFile() {
         return file;
+    }
+
+    /**
+     * Extracts the file extension.
+     *
+     * @return never {@code null}, maybe {@link FileExtension#NONE} if unknown
+     */
+    public FileExtension extractExtension() {
+        return FileExtension.forValue(FileExtension.extractExtension(getFile()));
+    }
+
+    /**
+     * Make the filename relative to the bucket direcotry.
+     *
+     * @param bucket must not be {@code null}
+     * @return never {@code null}, new instance
+     */
+    public HashedFile relativizeFilename(final Bucket bucket) {
+        Validate.notNull(bucket, "bucket");
+        return new HashedFile(
+            getHash(),
+            getFile().replace(bucket.getDirectory(), "").substring(1));
     }
 
     @Override

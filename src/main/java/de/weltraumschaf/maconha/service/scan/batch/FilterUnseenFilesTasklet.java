@@ -53,14 +53,9 @@ final class FilterUnseenFilesTasklet implements Tasklet {
 
     private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles, final Bucket bucket) {
         return hashedFiles.stream()
-            .map(hashedFile -> relativizeFilename(hashedFile, bucket))
+            .map(hashedFile -> hashedFile.relativizeFilename(bucket))
             .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
             .collect(Collectors.toSet());
-    }
-
-    HashedFile relativizeFilename(final HashedFile file, final Bucket bucket) {
-        // TODO Remove duplicated code.
-        return new HashedFile(file.getHash(), file.getFile().replace(bucket.getDirectory(), "").substring(1));
     }
 
     private boolean isFileUnseen(final HashedFile file, final Bucket bucket) {

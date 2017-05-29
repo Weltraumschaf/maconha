@@ -178,20 +178,29 @@ public enum FileExtension {
 
     }
 
+    /**
+     * Finds the extension for a given string representation.
+     * <p>
+     * May return {@link #NONE} if the extension is not known.
+     * </p>
+     *
+     * @param fileExtension may be {@code null} or empty
+     * @return never {@code null}
+     */
     public static FileExtension forValue(final String fileExtension) {
         if (hasValue(fileExtension)) {
             return LOOKUP.get(fileExtension.toLowerCase());
         }
 
-        throw new IllegalArgumentException(String.format("Unknown extension '%s'!", fileExtension));
+        return NONE;
     }
 
     /**
      * Extracts the extension from a given path.
      *
-     * @see #extractExtension(java.lang.String)
      * @param input may be {@code null}
      * @return never {@code null}, as default {@link #NONE#getExtension()}
+     * @see #extractExtension(java.lang.String)
      */
     public static String extractExtension(final Path input) {
         if (null == input) {

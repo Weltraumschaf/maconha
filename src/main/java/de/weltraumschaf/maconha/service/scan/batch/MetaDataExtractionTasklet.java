@@ -57,7 +57,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
         final FileExtension extension;
 
         try {
-            extension = extractExtension(file);
+            extension = file.extractExtension();
         } catch (final IllegalArgumentException e) {
             LOGGER.warn(e.getMessage());
             LOGGER.warn("Skipping file {}", file.getFile());
@@ -94,11 +94,6 @@ final class MetaDataExtractionTasklet implements Tasklet {
             }).forEach(media::addKeyword);
 
         mediaFiles.save(media);
-    }
-
-    FileExtension extractExtension(final HashedFile file) {
-        // TODO Remove duplicated code.
-        return FileExtension.forValue(FileExtension.extractExtension(file.getFile()));
     }
 
     private FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {

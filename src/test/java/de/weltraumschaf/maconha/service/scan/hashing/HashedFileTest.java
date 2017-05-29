@@ -1,8 +1,13 @@
 
 package de.weltraumschaf.maconha.service.scan.hashing;
 
+import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.FileExtension;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link HashedFile}.
@@ -36,5 +41,23 @@ public class HashedFileTest {
     @Test
     public void equalsAndHashCode() {
         EqualsVerifier.forClass(HashedFile.class).verify();
+    }
+
+    @Test
+    public void extractExtension() {
+        assertThat(
+            new HashedFile("hash", "/foo/bar/snafu.avi").extractExtension(),
+            is(FileExtension.AUDIO_VIDEO_INTERLEAVE));
+    }
+
+    @Test
+    public void relativizeFilename() {
+        final Bucket bucket = new Bucket();
+        bucket.setDirectory("/foo/bar");
+
+        final HashedFile result = new HashedFile("hash", "/foo/bar/baz/snafu.avi").relativizeFilename(bucket);
+
+        assertThat(result.getHash(), is("hash"));
+        assertThat(result.getFile(), is("baz/snafu.avi"));
     }
 }
