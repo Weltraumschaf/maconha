@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.service.scan.batch;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
@@ -25,9 +26,9 @@ final class FilterUnseenFilesTasklet implements Tasklet {
     private final HashFileReader reader = new HashFileReader();
     private final JobParamRetriever params = new JobParamRetriever();
 
-    private final MediaFileRepo mediaFiles;
+    private final MediaFileService mediaFiles;
 
-    FilterUnseenFilesTasklet(final MediaFileRepo mediaFiles) {
+    FilterUnseenFilesTasklet(final MediaFileService mediaFiles) {
         super();
         this.mediaFiles = mediaFiles;
     }
@@ -54,26 +55,8 @@ final class FilterUnseenFilesTasklet implements Tasklet {
     private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles, final Bucket bucket) {
         return hashedFiles.stream()
             .map(hashedFile -> hashedFile.relativizeFilename(bucket))
-            .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
+            .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
             .collect(Collectors.toSet());
-    }
-
-    private boolean isFileUnseen(final HashedFile file, final Bucket bucket) {
-        // TODO Remove duplicated code.
-        final MediaFile found = mediaFiles.findByRelativeFileNameAndBucket(file.getFile(), bucket);
-
-        if (null == found) {
-            LOGGER.debug("File not scanned yet: {}", file.getFile());
-            return true;
-        }
-
-        if (found.getFileHash().equals(file.getHash())) {
-            LOGGER.debug("File already scanned and hash not changed: {}", file.getFile());
-            return false;
-        }
-
-        LOGGER.debug("File already scanned but hash changed: {}", file.getFile());
-        return true;
     }
 
 }

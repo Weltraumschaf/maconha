@@ -1,0 +1,67 @@
+package de.weltraumschaf.maconha.service.mediafile;
+
+import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.MediaFile;
+import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+/**
+ * Tests for {@link DefaultMediaFileService}.
+ */
+public final class DefaultMediaFileServiceTest {
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+    private final HashedFile file = new HashedFile("foo", "bar");
+    private final Bucket bucket = new Bucket();
+
+    private MediaFileRepo repo = mock(MediaFileRepo.class);
+    private final DefaultMediaFileService sut = new DefaultMediaFileService(repo);
+
+    @Test
+    public void isFileUnseen_fileMustNotBeNull() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("file");
+
+        sut.isFileUnseen(null, bucket);
+    }
+
+    @Test
+    public void isFileUnseen_bucketMustNotBeNull() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("bucket");
+
+        sut.isFileUnseen(file, null);
+    }
+
+    @Test
+    public void isFileUnseen_noPersistedMediaFile() {
+        assertThat(sut.isFileUnseen(file, bucket), is(true));
+    }
+
+    @Test
+    public void isFileUnseen_persistedMediaFileWithSameHash() {
+        final MediaFile media = new MediaFile();
+        media.setFileHash(file.getHash());
+        when(repo.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
+
+        assertThat(sut.isFileUnseen(file, bucket), is(false));
+    }
+
+    @Test
+    public void isFileUnseen_persistedMediaFileWithDifferentHash() {
+        final MediaFile media = new MediaFile();
+        media.setFileHash("snafu");
+        when(repo.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
+
+        assertThat(sut.isFileUnseen(file, bucket), is(true));
+
+    }
+}

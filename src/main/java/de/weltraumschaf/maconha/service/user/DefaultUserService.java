@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Default implementation.
  */
 @Service
 final class DefaultUserService implements UserService {

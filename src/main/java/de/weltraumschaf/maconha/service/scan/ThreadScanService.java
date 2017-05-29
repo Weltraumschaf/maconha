@@ -6,6 +6,7 @@ import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
 import de.weltraumschaf.maconha.service.scan.extraction.FileMetaData;
@@ -47,17 +48,20 @@ final class ThreadScanService extends BaseScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
     private final MaconhaConfiguration config;
-    private final MediaFileRepo mediaFiles;
+    @Deprecated // TODO Move into MediaFileService.
+    private final MediaFileRepo mediaFileRepo;
     private final KeywordRepo keywords;
+    private final MediaFileService mediaFiles;
     private Commands cmds;
 
     @Lazy
     @Autowired
-    ThreadScanService(final MaconhaConfiguration config, final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
+    ThreadScanService(final MaconhaConfiguration config, final MediaFileRepo mediaFileRepo, final KeywordRepo keywords, final MediaFileService mediaFiles) {
         super();
         this.config = config;
-        this.mediaFiles = mediaFiles;
+        this.mediaFileRepo = mediaFileRepo;
         this.keywords = keywords;
+        this.mediaFiles = mediaFiles;
     }
 
     @PostConstruct
@@ -115,26 +119,8 @@ final class ThreadScanService extends BaseScanService implements ScanService {
         LOGGER.debug(result.getStdout());
         new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums")).stream()
             .map(hashedFile -> hashedFile.relativizeFilename(bucket))
-            .filter(hashedFile -> isFileUnseen(hashedFile, bucket))
+            .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
             .forEach(hashedFile -> extractMetaData(bucket, hashedFile));
-    }
-
-    private boolean isFileUnseen(final HashedFile file, final Bucket bucket) {
-        // TODO Remove duplicated code.
-        final MediaFile found = mediaFiles.findByRelativeFileNameAndBucket(file.getFile(), bucket);
-
-        if (null == found) {
-            LOGGER.debug("File not scanned yet: {}", file.getFile());
-            return true;
-        }
-
-        if (found.getFileHash().equals(file.getHash())) {
-            LOGGER.debug("File already scanned and hash not changed: {}", file.getFile());
-            return false;
-        }
-
-        LOGGER.debug("File already scanned but hash changed: {}", file.getFile());
-        return true;
     }
 
     private void extractMetaData(final Bucket bucket, final HashedFile file) {
@@ -179,7 +165,7 @@ final class ThreadScanService extends BaseScanService implements ScanService {
                 return keyword;
             }).forEach(media::addKeyword);
 
-        mediaFiles.save(media);
+        mediaFileRepo.save(media);
     }
 
     FileExtension extractExtension(final HashedFile file) {
