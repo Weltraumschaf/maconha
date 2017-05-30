@@ -1,7 +1,6 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.mediafile;
 
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 import de.weltraumschaf.maconha.core.NotAlphaNumeric;
 import org.slf4j.Logger;
@@ -10,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Checks whether a keyword will be accepted or not.
  */
-public final class MalformedKeywords implements Predicate<String> {
+final class MalformedKeywords implements Predicate<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MalformedKeywords.class);
     private final Predicate<String> notAlphaNum = new NotAlphaNumeric();

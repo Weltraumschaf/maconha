@@ -1,7 +1,6 @@
 
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.mediafile;
 
-import de.weltraumschaf.maconha.service.scan.MalformedKeywords;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;

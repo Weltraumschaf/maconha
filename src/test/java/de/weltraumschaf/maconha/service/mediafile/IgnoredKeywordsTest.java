@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.mediafile;
 
 import org.junit.Test;
 

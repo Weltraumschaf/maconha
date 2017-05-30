@@ -5,8 +5,6 @@ import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.MediaFileService;
-import de.weltraumschaf.maconha.service.scan.IgnoredKeywords;
-import de.weltraumschaf.maconha.service.scan.MalformedKeywords;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromMetaDataExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
