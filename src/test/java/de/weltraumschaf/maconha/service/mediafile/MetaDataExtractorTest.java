@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.service.mediafile;
 
 import de.weltraumschaf.maconha.model.FileMetaData;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public final class MetaDataExtractorTest {
 
     private String findPath(final String basename) throws URISyntaxException {
         final URL resource = getClass()
-            .getResource("/de/weltraumschaf/maconha/service/scan/extraction/" + basename);
+            .getResource("/de/weltraumschaf/maconha/service/mediafile/" + basename);
         final Path file = Paths.get(resource.toURI());
 
         return file.toString();

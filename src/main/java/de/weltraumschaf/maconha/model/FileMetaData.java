@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.model;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
+import de.weltraumschaf.maconha.service.mediafile.MetaDataExtractor;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.service.mediafile;
 
 import de.weltraumschaf.maconha.model.FileMetaData;
 

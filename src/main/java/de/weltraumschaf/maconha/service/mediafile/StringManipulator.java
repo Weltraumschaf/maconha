@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.service.mediafile;
 
 import java.util.Arrays;
 import java.util.Collection;

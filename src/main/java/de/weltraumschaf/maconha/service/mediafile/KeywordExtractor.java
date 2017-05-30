@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.service.mediafile;
 
 import java.util.Collection;
 
@@ -8,6 +8,6 @@ import java.util.Collection;
  * The resulting collection does not contain duplicates.
  * </p>
  */
-public interface KeywordExtractor extends Extractor<Collection<String>> {
+interface KeywordExtractor extends Extractor<Collection<String>> {
 
 }

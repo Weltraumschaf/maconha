@@ -1,6 +1,5 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.service.mediafile;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;

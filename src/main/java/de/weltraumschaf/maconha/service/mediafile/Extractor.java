@@ -1,9 +1,9 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.service.mediafile;
 
 /**
  * Extracts data from a given string.
  */
-public interface Extractor<T> {
+interface Extractor<T> {
     /**
      * Extracts metadata from given string in ny way.
      *
