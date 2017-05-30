@@ -4,6 +4,7 @@ import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -62,6 +63,9 @@ public final class DefaultMediaFileServiceTest {
         when(repo.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
 
         assertThat(sut.isFileUnseen(file, bucket), is(true));
-
     }
+
+    @Test
+    @Ignore("TODO Write test")
+    public void extractFileMetaData() {}
 }

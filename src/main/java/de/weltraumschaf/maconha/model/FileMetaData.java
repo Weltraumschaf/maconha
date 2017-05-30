@@ -1,6 +1,7 @@
-package de.weltraumschaf.maconha.service.scan.extraction;
+package de.weltraumschaf.maconha.model;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
 
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public final class FileMetaData {
      * @param mime must not be {@code null} nor empty
      * @param data must not be {@code null}
      */
-    FileMetaData(final String mime, final String data) {
+    public FileMetaData(final String mime, final String data) {
         super();
         this.mime = Validate.notEmpty(mime, "mime");
         this.data = Validate.notNull(data, "data");

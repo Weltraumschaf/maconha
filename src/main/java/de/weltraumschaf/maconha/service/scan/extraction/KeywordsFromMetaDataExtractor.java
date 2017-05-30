@@ -1,5 +1,7 @@
 package de.weltraumschaf.maconha.service.scan.extraction;
 
+import de.weltraumschaf.maconha.model.FileMetaData;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
 

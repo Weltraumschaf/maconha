@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.service.scan.extraction;
 
+import de.weltraumschaf.maconha.model.FileMetaData;
 import org.junit.Test;
 
 import java.net.URISyntaxException;

@@ -4,12 +4,12 @@ import de.weltraumschaf.maconha.model.*;
 import de.weltraumschaf.maconha.repo.BucketRepo;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.scan.IgnoredKeywords;
 import de.weltraumschaf.maconha.service.scan.MalformedKeywords;
-import de.weltraumschaf.maconha.service.scan.extraction.FileMetaData;
+import de.weltraumschaf.maconha.model.FileMetaData;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromMetaDataExtractor;
-import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +18,6 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,14 +30,17 @@ final class MetaDataExtractionTasklet implements Tasklet {
 
     private final JobParamRetriever params = new JobParamRetriever();
     private final BucketRepo buckets;
-    private final MediaFileRepo mediaFiles;
+    @Deprecated // TODO Move into MediaFileService.
+    private final MediaFileRepo mediaFileRepo;
     private final KeywordRepo keywords;
+    private final MediaFileService mediaFile;
 
-    MetaDataExtractionTasklet(final BucketRepo buckets, final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
+    MetaDataExtractionTasklet(final BucketRepo buckets, final MediaFileRepo mediaFileRepo, final KeywordRepo keywords, final MediaFileService mediaFile) {
         super();
         this.buckets = buckets;
-        this.mediaFiles = mediaFiles;
+        this.mediaFileRepo = mediaFileRepo;
         this.keywords = keywords;
+        this.mediaFile = mediaFile;
     }
 
     @Override
@@ -64,7 +65,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
             return;
         }
 
-        final FileMetaData fileMetaData = extractFileMetaData(bucket, file);
+        final FileMetaData fileMetaData = mediaFile.extractFileMetaData(bucket, file);
 
         final MediaFile media = new MediaFile();
         media.setType(MediaType.forValue(extension));
@@ -93,17 +94,7 @@ final class MetaDataExtractionTasklet implements Tasklet {
                 return keyword;
             }).forEach(media::addKeyword);
 
-        mediaFiles.save(media);
+        mediaFileRepo.save(media);
     }
 
-    private FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {
-        // TODO Remove duplicated code.
-        try {
-            final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
-            return new MetaDataExtractor().extract(absoluteFile.toString());
-        } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
-            return FileMetaData.NOTHING;
-        }
-    }
 }

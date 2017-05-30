@@ -138,7 +138,7 @@ public class ScanBatchConfiguration {
     public Step metaDataExtractionStep() {
         LOGGER.debug("Create MetaDataExtractionStep bean.");
         return stepBuilders.get("MetaDataExtractionStep")
-            .tasklet(new MetaDataExtractionTasklet(buckets, mediaFileRepo, keywords))
+            .tasklet(new MetaDataExtractionTasklet(buckets, mediaFileRepo, keywords, mediaFiles))
             .allowStartIfComplete(true)
             .build();
     }

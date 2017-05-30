@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.service.scan.extraction;
 
+import de.weltraumschaf.maconha.model.FileMetaData;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;

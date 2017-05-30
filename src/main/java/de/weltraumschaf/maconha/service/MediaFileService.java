@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.service;
 
 import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.FileMetaData;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 
@@ -20,4 +21,6 @@ public interface MediaFileService {
      * @return {@code true} if never seen, else {@code false}
      */
     boolean isFileUnseen(final HashedFile file, final Bucket bucket);
+
+    FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file);
 }

@@ -9,7 +9,7 @@ import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
-import de.weltraumschaf.maconha.service.scan.extraction.FileMetaData;
+import de.weltraumschaf.maconha.model.FileMetaData;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromMetaDataExtractor;
 import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
@@ -129,14 +129,14 @@ final class ThreadScanService extends BaseScanService implements ScanService {
         final FileExtension extension;
 
         try {
-            extension = extractExtension(file);
+            extension = file.extractExtension();
         } catch (final IllegalArgumentException e) {
             LOGGER.warn(e.getMessage());
             LOGGER.warn("Skipping file {}", file.getFile());
             return;
         }
 
-        final FileMetaData fileMetaData = extractFileMetaData(bucket, file);
+        final FileMetaData fileMetaData = mediaFiles.extractFileMetaData(bucket, file);
 
         final MediaFile media = new MediaFile();
         media.setType(MediaType.forValue(extension));
@@ -166,22 +166,6 @@ final class ThreadScanService extends BaseScanService implements ScanService {
             }).forEach(media::addKeyword);
 
         mediaFileRepo.save(media);
-    }
-
-    FileExtension extractExtension(final HashedFile file) {
-        // TODO Remove duplicated code.
-        return FileExtension.forValue(FileExtension.extractExtension(file.getFile()));
-    }
-
-    private FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {
-        // TODO Remove duplicated code.
-        try {
-            final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
-            return new MetaDataExtractor().extract(absoluteFile.toString());
-        } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
-            return FileMetaData.NOTHING;
-        }
     }
 
     @Override
