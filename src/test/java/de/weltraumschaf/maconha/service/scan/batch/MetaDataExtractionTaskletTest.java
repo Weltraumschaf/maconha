@@ -18,8 +18,6 @@ public final class MetaDataExtractionTaskletTest {
 
     private final MetaDataExtractionTasklet sut = new MetaDataExtractionTasklet(
         mock(BucketRepo.class),
-        mock(MediaFileRepo.class),
-        mock(KeywordRepo.class),
         mock(MediaFileService.class));
 
     @Test

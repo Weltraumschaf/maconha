@@ -4,17 +4,10 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.model.*;
-import de.weltraumschaf.maconha.repo.KeywordRepo;
-import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
-import de.weltraumschaf.maconha.model.FileMetaData;
-import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromFileNameExtractor;
-import de.weltraumschaf.maconha.service.scan.extraction.KeywordsFromMetaDataExtractor;
-import de.weltraumschaf.maconha.service.scan.extraction.MetaDataExtractor;
 import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
-import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.shell.Commands;
 import de.weltraumschaf.maconha.shell.Result;
 import org.joda.time.DateTime;
@@ -29,11 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -48,19 +38,14 @@ final class ThreadScanService extends BaseScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
     private final MaconhaConfiguration config;
-    @Deprecated // TODO Move into MediaFileService.
-    private final MediaFileRepo mediaFileRepo;
-    private final KeywordRepo keywords;
     private final MediaFileService mediaFiles;
     private Commands cmds;
 
     @Lazy
     @Autowired
-    ThreadScanService(final MaconhaConfiguration config, final MediaFileRepo mediaFileRepo, final KeywordRepo keywords, final MediaFileService mediaFiles) {
+    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles) {
         super();
         this.config = config;
-        this.mediaFileRepo = mediaFileRepo;
-        this.keywords = keywords;
         this.mediaFiles = mediaFiles;
     }
 
@@ -120,52 +105,7 @@ final class ThreadScanService extends BaseScanService implements ScanService {
         new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums")).stream()
             .map(hashedFile -> hashedFile.relativizeFilename(bucket))
             .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
-            .forEach(hashedFile -> extractMetaData(bucket, hashedFile));
-    }
-
-    private void extractMetaData(final Bucket bucket, final HashedFile file) {
-        // TODO Remove duplicated code.
-        LOGGER.debug("Extract meta data for: {}", file.getFile());
-        final FileExtension extension;
-
-        try {
-            extension = file.extractExtension();
-        } catch (final IllegalArgumentException e) {
-            LOGGER.warn(e.getMessage());
-            LOGGER.warn("Skipping file {}", file.getFile());
-            return;
-        }
-
-        final FileMetaData fileMetaData = mediaFiles.extractFileMetaData(bucket, file);
-
-        final MediaFile media = new MediaFile();
-        media.setType(MediaType.forValue(extension));
-        media.setFormat(fileMetaData.getMime());
-        media.setRelativeFileName(file.getFile());
-        media.setFileHash(file.getHash());
-        media.setBucket(bucket);
-
-        final Collection<String> foundKeywords = new HashSet<>();
-        foundKeywords.addAll(new KeywordsFromFileNameExtractor().extract(file.getFile()));
-        foundKeywords.addAll(new KeywordsFromMetaDataExtractor().extract(fileMetaData.getData()));
-
-        foundKeywords.stream()
-            .filter(new MalformedKeywords())
-            .filter(new IgnoredKeywords())
-            .map(literal -> {
-                Keyword keyword = keywords.findByLiteral(literal);
-
-                if (null == keyword) {
-                    LOGGER.debug("Save new keyword '{}'.", literal);
-                    keyword = new Keyword();
-                    keyword.setLiteral(literal);
-                    keywords.save(keyword);
-                }
-
-                return keyword;
-            }).forEach(media::addKeyword);
-
-        mediaFileRepo.save(media);
+            .forEach(hashedFile -> mediaFiles.extractAndStoreMetaData(bucket, hashedFile));
     }
 
     @Override

@@ -23,4 +23,6 @@ public interface MediaFileService {
     boolean isFileUnseen(final HashedFile file, final Bucket bucket);
 
     FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file);
+
+    void extractAndStoreMetaData(final Bucket bucket, final HashedFile file);
 }

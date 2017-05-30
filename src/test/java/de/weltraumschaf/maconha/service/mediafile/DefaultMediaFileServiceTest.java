@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.service.mediafile;
 
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.model.MediaFile;
+import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import org.junit.Ignore;
@@ -23,8 +24,9 @@ public final class DefaultMediaFileServiceTest {
     private final HashedFile file = new HashedFile("foo", "bar");
     private final Bucket bucket = new Bucket();
 
-    private MediaFileRepo repo = mock(MediaFileRepo.class);
-    private final DefaultMediaFileService sut = new DefaultMediaFileService(repo);
+    private final MediaFileRepo mediaFiles = mock(MediaFileRepo.class);
+    private final KeywordRepo keywords = mock(KeywordRepo.class);
+    private final DefaultMediaFileService sut = new DefaultMediaFileService(mediaFiles, keywords);
 
     @Test
     public void isFileUnseen_fileMustNotBeNull() {
@@ -51,7 +53,7 @@ public final class DefaultMediaFileServiceTest {
     public void isFileUnseen_persistedMediaFileWithSameHash() {
         final MediaFile media = new MediaFile();
         media.setFileHash(file.getHash());
-        when(repo.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
+        when(mediaFiles.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
 
         assertThat(sut.isFileUnseen(file, bucket), is(false));
     }
@@ -60,7 +62,7 @@ public final class DefaultMediaFileServiceTest {
     public void isFileUnseen_persistedMediaFileWithDifferentHash() {
         final MediaFile media = new MediaFile();
         media.setFileHash("snafu");
-        when(repo.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
+        when(mediaFiles.findByRelativeFileNameAndBucket(file.getFile(), bucket)).thenReturn(media);
 
         assertThat(sut.isFileUnseen(file, bucket), is(true));
     }
