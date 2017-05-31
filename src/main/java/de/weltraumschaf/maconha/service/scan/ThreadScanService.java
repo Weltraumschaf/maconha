@@ -38,7 +38,6 @@ import java.util.List;
 final class ThreadScanService extends BaseScanService implements ScanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
-    private final MaconhaConfiguration config;
     private final MediaFileService mediaFiles;
     private final TaskExecutor executor;
     private Commands cmds;
@@ -46,17 +45,17 @@ final class ThreadScanService extends BaseScanService implements ScanService {
     @Lazy
     @Autowired
     ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor) {
-        super();
-        this.config = config;
+        super(config);
         this.mediaFiles = mediaFiles;
         this.executor = executor;
     }
 
-    @PostConstruct
-    public void init() {
+    void initHook() {
         LOGGER.debug("Initialize thread based scan service.");
         cmds = new Commands(Paths.get(config.getBindir()));
     }
+
+    void deinitHook() {}
 
     @Async
     @Override

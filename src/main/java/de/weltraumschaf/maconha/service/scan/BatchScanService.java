@@ -1,7 +1,5 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.commons.validate.Validate;
@@ -30,18 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -57,76 +44,28 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
 
     private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
 
-    private final Collection<ScanStatus> statuses = new CopyOnWriteArrayList<>();
-    private final Map<Long, Execution> scans = new ConcurrentHashMap<>();
     private final JobLauncher launcher;
     private final JobOperator operator;
     private final JobExplorer explorer;
     private final Job job;
     private final ScanJobExecutionListener listener;
-    private final MaconhaConfiguration config;
 
     @Autowired
     BatchScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener, final MaconhaConfiguration config) {
-        super();
+        super(config);
         this.launcher = launcher;
         this.operator = operator;
         this.explorer = explorer;
         this.job = job;
         this.listener = listener;
-        this.config = config;
     }
 
-    @PostConstruct
-    public void init() {
+    void initHook() {
         LOGGER.debug("Initialize batch based scan service.");
         listener.register(this);
-        final Path stausFile = resolveStausFile();
-
-        if (Files.exists(stausFile)) {
-            try (final Reader reader = Files.newBufferedReader(stausFile)) {
-                LOGGER.debug("Loading stored statuses.");
-                final Type type = new TypeToken<ArrayList<ScanStatus>>() {
-                }.getType();
-                statuses.addAll(new Gson().fromJson(reader, type));
-            } catch (final IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-            }
-        } else {
-            LOGGER.debug("There is no such status file '{}' to load.", stausFile);
-        }
     }
 
-
-    @PreDestroy
-    public void deinit() {
-        final Path stausDir = resolveStausDir();
-
-        if (!Files.exists(stausDir)) {
-            LOGGER.debug("Create directory '{}' to store status file.", stausDir);
-
-            try {
-                Files.createDirectories(stausDir);
-            } catch (IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-            }
-        }
-
-        try (final BufferedWriter writer = Files.newBufferedWriter(resolveStausFile())) {
-            LOGGER.debug("Store statuses.");
-            new Gson().toJson(statuses, writer);
-        } catch (final IOException e) {
-            LOGGER.warn(e.getMessage(), e);
-        }
-    }
-
-    private Path resolveStausFile() {
-        return resolveStausDir().resolve("statuses.json");
-    }
-
-    private Path resolveStausDir() {
-        return Paths.get(config.getHomedir()).resolve("scans");
-    }
+    void deinitHook() {}
 
     @Override
     public void scan(final Bucket bucket, final UI currentUi) {
