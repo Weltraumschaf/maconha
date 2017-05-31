@@ -138,7 +138,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
             final JobParameters parameters = createJobParameters(bucket);
 
             final Execution execution = new Execution(launcher.run(job, parameters).getId(), bucket, currentUi);
-            scans.put(execution.id, execution);
+            scans.put(execution.getId(), execution);
         } catch (final JobInstanceAlreadyCompleteException e) {
             throw new ScanError(e, "Job with name '%s' already completed!", JOB_NAME);
         } catch (final JobExecutionAlreadyRunningException e) {
@@ -174,7 +174,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
     @Override
     public List<ScanStatus> overview() {
         final List<ScanStatus> running = scans.values().stream().map(execution -> {
-            final JobExecution jobExecution = explorer.getJobExecution(execution.id);
+            final JobExecution jobExecution = explorer.getJobExecution(execution.getId());
             return convert(jobExecution);
         }).collect(Collectors.toList());
         running.addAll(statuses);
@@ -185,7 +185,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
     public void beforeJob(final JobExecution jobExecution) {
         final Long jobId = jobExecution.getJobId();
         LOGGER.debug("Service called back before job execution with id {}.", jobId);
-        final Bucket bucket = getExecution(jobId).bucket;
+        final Bucket bucket = getExecution(jobId).getBucket();
 
         notifyClient(
             jobId,
@@ -199,7 +199,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
         final Long jobId = jobExecution.getJobId();
         LOGGER.debug("Service called back after job execution with id {}.", jobId);
 
-        final Bucket bucket = getExecution(jobId).bucket;
+        final Bucket bucket = getExecution(jobId).getBucket();
         final DateTime startTime = new DateTime(jobExecution.getStartTime());
         final DateTime endTime = new DateTime(jobExecution.getEndTime());
         final String duration = secondsFormat.print(new Duration(startTime, endTime).toPeriod());
@@ -230,7 +230,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
         final Duration duration = new Duration(startTime, endTime);
         return new ScanStatus(
             jobExecution.getJobId(),
-            scans.get(jobExecution.getJobId()).bucket.getName(),
+            scans.get(jobExecution.getJobId()).getBucket().getName(),
             dateTimeFormat.print(new DateTime(jobExecution.getCreateTime())),
             dateTimeFormat.print(startTime),
             formattedEndTime,
@@ -243,7 +243,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
 
     private void notifyClient(final Long jobId, final String caption, final String description, final Object... args) {
         final Notification notification = notification(caption, description, args);
-        notifyClient(jobId, notification, getExecution(jobId).currentUi);
+        notifyClient(jobId, notification, getExecution(jobId).getCurrentUi());
     }
 
     private Execution getExecution(final Long jobId) {
@@ -254,43 +254,4 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
         throw new ScanError("There's no such job with id %d!", jobId);
     }
 
-    /**
-     * Data structure to remember started scan jobs.
-     */
-    private final class Execution {
-        private Long id;
-        private final Bucket bucket;
-        private UI currentUi;
-
-        Execution(final Long id, final Bucket bucket, final UI currentUi) {
-            super();
-            this.id = id;
-            this.bucket = bucket;
-            this.currentUi = currentUi;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (!(o instanceof Execution)) {
-                return false;
-            }
-
-            final Execution execution = (Execution) o;
-            return Objects.equals(id, execution.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
-        }
-
-        @Override
-        public String toString() {
-            return "Execution{" +
-                "id=" + id +
-                ", bucket=" + bucket +
-                ", currentUi=" + currentUi +
-                '}';
-        }
-    }
 }

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Common functionality for scan services.
  */
 abstract class BaseScanService {
 
@@ -30,7 +30,7 @@ abstract class BaseScanService {
         return new Notification(caption, String.format(description, args), Notification.Type.TRAY_NOTIFICATION);
     }
 
-    void notifyClient(final Long jobId, final Notification notification, final UI ui) {
+    final void notifyClient(final Long jobId, final Notification notification, final UI ui) {
         if (ui == null) {
             LOGGER.warn("Currents UI null! Can't notify client about job with id {}.", jobId);
         } else {

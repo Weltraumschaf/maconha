@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,14 +40,16 @@ final class ThreadScanService extends BaseScanService implements ScanService {
 
     private final MaconhaConfiguration config;
     private final MediaFileService mediaFiles;
+    private final TaskExecutor executor;
     private Commands cmds;
 
     @Lazy
     @Autowired
-    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles) {
+    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor) {
         super();
         this.config = config;
         this.mediaFiles = mediaFiles;
+        this.executor = executor;
     }
 
     @PostConstruct
@@ -69,6 +72,7 @@ final class ThreadScanService extends BaseScanService implements ScanService {
 
         try {
             scanImpl(id, bucket, currentUi);
+//            executor.execute(new ScanTask());
         } catch (final IOException | InterruptedException e) {
             LOGGER.warn(e.getMessage(), e);
             notification = notification(
@@ -116,5 +120,13 @@ final class ThreadScanService extends BaseScanService implements ScanService {
     @Override
     public List<ScanStatus> overview() {
         return Collections.emptyList();
+    }
+
+    private static class ScanTask implements Runnable {
+
+        @Override
+        public void run() {
+
+        }
     }
 }
