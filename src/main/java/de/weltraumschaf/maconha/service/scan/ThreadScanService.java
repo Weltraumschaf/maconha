@@ -3,11 +3,13 @@ package de.weltraumschaf.maconha.service.scan;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
-import de.weltraumschaf.maconha.model.*;
+import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
 import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
+import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.shell.Command;
 import de.weltraumschaf.maconha.shell.Commands;
 import de.weltraumschaf.maconha.shell.Result;
 import org.joda.time.DateTime;
@@ -21,11 +23,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Thread executor based implementation.
@@ -35,7 +37,7 @@ import java.util.List;
  * </p>
  */
 @Service(ScanServiceFactory.THREAD)
-final class ThreadScanService extends BaseScanService implements ScanService {
+final class ThreadScanService extends BaseScanService implements ScanService, ScanCallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
     private final MediaFileService mediaFiles;
@@ -55,60 +57,17 @@ final class ThreadScanService extends BaseScanService implements ScanService {
         cmds = new Commands(Paths.get(config.getBindir()));
     }
 
-    void deinitHook() {}
-
     @Async
     @Override
     @Transactional
     public void scan(final Bucket bucket, final UI currentUi) {
-        long id = 0L;
-        Notification notification = notification(
-            "Scan job started",
-            "Scan for bucket '%s' in directory '%s' with id %d started.",
-            bucket.getName(), bucket.getDirectory(), id);
-        notifyClient(id, notification, currentUi);
-        final DateTime startTime = DateTime.now();
+        long id = 0L; // FIXME Use nex id.
 
-        try {
-            scanImpl(id, bucket, currentUi);
-//            executor.execute(new ScanTask());
-        } catch (final IOException | InterruptedException e) {
-            LOGGER.warn(e.getMessage(), e);
-            notification = notification(
-                "Scan job failed",
-                "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                bucket.getName(), bucket.getDirectory(), e.getMessage());
-            notifyClient(id, notification, currentUi);
-            return;
-        }
-
-        final DateTime endTime = DateTime.now();
-        final String duration = secondsFormat.print(new Duration(startTime, endTime).toPeriod());
-        notification = notification(
-            "Scan job finished",
-            "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
-            bucket.getName(), bucket.getDirectory(), id, duration);
-        notifyClient(id, notification, currentUi);
-    }
-
-    private void scanImpl(final long id, final Bucket bucket, final UI currentUi) throws IOException, InterruptedException {
-        final Result result = cmds.dirhash(Paths.get(bucket.getDirectory())).execute();
-
-        if (result.isFailed()) {
-            LOGGER.warn("Scan job with id {} failed with exit code {} and STDERR: {}", id, result.getExitCode(), result.getStderr());
-            final Notification notification = notification(
-                "Scan job failed",
-                "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                bucket.getName(), bucket.getDirectory(), result.getStderr());
-            notifyClient(id, notification, currentUi);
-            return;
-        }
-
-        LOGGER.debug(result.getStdout());
-        new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums")).stream()
-            .map(hashedFile -> hashedFile.relativizeFilename(bucket))
-            .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
-            .forEach(hashedFile -> mediaFiles.extractAndStoreMetaData(bucket, hashedFile));
+        final Command dirhash = cmds.dirhash(Paths.get(bucket.getDirectory()));
+        final ScanTask task = new ScanTask(id, bucket, currentUi, dirhash, mediaFiles, this);
+        final Execution execution = new Execution(id, bucket, currentUi, task);
+        executor.execute(task);
+        scans.put(id, execution);
     }
 
     @Override
@@ -121,11 +80,97 @@ final class ThreadScanService extends BaseScanService implements ScanService {
         return Collections.emptyList();
     }
 
+    @Override
+    public void beforeScan(final long id) {
+        final Execution execution = getExecution(id);
+        execution.start();
+        Notification notification = UiNotifier.notification(
+            "Scan job started",
+            "Scan for bucket '%s' in directory '%s' with id %d started.",
+            execution.getBucket().getName(), execution.getBucket().getDirectory(), id);
+        UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
+    }
+
+    @Override
+    public void afterScan(final long id) {
+        final Execution execution = getExecution(id);
+        execution.stop();
+        final String duration = secondsFormat.print(new Duration(execution.getStartTime(), execution.getStopTime()).toPeriod());
+        final Notification notification = UiNotifier.notification(
+            "Scan job finished",
+            "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
+            execution.getBucket().getName(), execution.getBucket().getDirectory(), id, duration);
+        UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
+    }
+
     private static class ScanTask implements Runnable {
+
+        private final Long id;
+        private final Bucket bucket;
+        private final UI currentUi;
+        private final Command dirhash;
+        private final MediaFileService mediaFiles;
+        private final ScanCallBack callback;
+
+        ScanTask(final Long id, final Bucket bucket, final UI currentUi, final Command dirhash, final MediaFileService mediaFiles, final ScanCallBack callback) {
+            super();
+            this.id = id;
+            this.bucket = bucket;
+            this.currentUi = currentUi;
+            this.dirhash = dirhash;
+            this.mediaFiles = mediaFiles;
+            this.callback = callback;
+        }
 
         @Override
         public void run() {
+            callback.beforeScan(id);
+            final Result result;
 
+            try {
+                result = dirhash.execute();
+            } catch (IOException | InterruptedException e) {
+                LOGGER.warn(e.getMessage(), e);
+                final Notification notification = UiNotifier.notification(
+                    "Scan job failed",
+                    "Scan for bucket '%s' in directory '%s' failed with error: %s",
+                    bucket.getName(), bucket.getDirectory(), e.getMessage());
+                UiNotifier.notifyClient(id, notification, currentUi);
+                return;
+            }
+
+            if (result.isFailed()) {
+                LOGGER.warn(
+                    "Scan job with id {} failed with exit code {} and STDERR: {}",
+                    id, result.getExitCode(), result.getStderr());
+                final Notification notification = UiNotifier.notification(
+                    "Scan job failed",
+                    "Scan for bucket '%s' in directory '%s' failed with error: %s",
+                    bucket.getName(), bucket.getDirectory(), result.getStderr());
+                UiNotifier.notifyClient(id, notification, currentUi);
+                return;
+            }
+
+            LOGGER.debug(result.getStdout());
+            final Set<HashedFile> hashedFiles;
+
+            try {
+                hashedFiles = new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums"));
+            } catch (final IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+                final Notification notification = UiNotifier.notification(
+                    "Scan job failed",
+                    "Scan for bucket '%s' in directory '%s' failed with error: %s",
+                    bucket.getName(), bucket.getDirectory(), e.getMessage());
+                UiNotifier.notifyClient(id, notification, currentUi);
+                return;
+            }
+
+            hashedFiles.stream()
+                .map(hashedFile -> hashedFile.relativizeFilename(bucket))
+                .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
+                .forEach(hashedFile -> mediaFiles.extractAndStoreMetaData(bucket, hashedFile));
+            callback.afterScan(id);
         }
     }
 }

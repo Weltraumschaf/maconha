@@ -132,6 +132,15 @@ public interface ScanService {
      */
     final class ScanError extends RuntimeException {
         /**
+         * Convenience constructor to change any throwable into a {@link ScanError}.
+         *
+         * @param t must not be {@code null}
+         */
+        public ScanError(final Throwable t) {
+            this(t, t.getMessage());
+        }
+
+        /**
          * Convenience constructor w/o cause.
          *
          * @param message format string, must not be {@code null}

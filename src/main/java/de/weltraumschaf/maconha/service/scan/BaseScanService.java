@@ -60,7 +60,7 @@ abstract class BaseScanService {
         initHook();
     }
 
-    abstract void initHook();
+    void initHook() {}
 
     @PreDestroy
     public void deinit() {
@@ -68,38 +68,18 @@ abstract class BaseScanService {
         deinitHook();
     }
 
-    abstract void deinitHook();
+    void deinitHook() {}
 
-    Notification notification(final String caption, final String description, final Object... args) {
-        return new Notification(caption, String.format(description, args), Notification.Type.TRAY_NOTIFICATION);
+    private Path resolveStatusFile() {
+        return resolveStatusDir().resolve("statuses.json");
     }
 
-    final void notifyClient(final Long jobId, final Notification notification, final UI ui) {
-        if (ui == null) {
-            LOGGER.warn("Currents UI null! Can't notify client about job with id {}.", jobId);
-        } else {
-            ui.access(() -> {
-                final Page page = ui.getPage();
-
-                if (page == null) {
-                    LOGGER.warn("Currents page null! Can't notify client about job with id {}.", jobId);
-                } else {
-                    notification.show(page);
-                }
-            });
-        }
-    }
-
-    private Path resolveStausFile() {
-        return resolveStausDir().resolve("statuses.json");
-    }
-
-    private Path resolveStausDir() {
+    private Path resolveStatusDir() {
         return Paths.get(config.getHomedir()).resolve("scans");
     }
 
     private void readStatuses() {
-        final Path stausFile = resolveStausFile();
+        final Path stausFile = resolveStatusFile();
 
         if (Files.exists(stausFile)) {
             try (final Reader reader = Files.newBufferedReader(stausFile)) {
@@ -116,7 +96,7 @@ abstract class BaseScanService {
     }
 
     private void storeStatuses() {
-        final Path stausDir = resolveStausDir();
+        final Path stausDir = resolveStatusDir();
 
         if (!Files.exists(stausDir)) {
             LOGGER.debug("Create directory '{}' to store status file.", stausDir);
@@ -128,7 +108,7 @@ abstract class BaseScanService {
             }
         }
 
-        try (final BufferedWriter writer = Files.newBufferedWriter(resolveStausFile())) {
+        try (final BufferedWriter writer = Files.newBufferedWriter(resolveStatusFile())) {
             LOGGER.debug("Store statuses.");
             new Gson().toJson(statuses, writer);
         } catch (final IOException e) {
@@ -136,4 +116,11 @@ abstract class BaseScanService {
         }
     }
 
+    final Execution getExecution(final Long id) {
+        if (scans.containsKey(id)) {
+            return scans.get(id);
+        }
+
+        throw new ScanService.ScanError("There's no such job with id %d!", id);
+    }
 }

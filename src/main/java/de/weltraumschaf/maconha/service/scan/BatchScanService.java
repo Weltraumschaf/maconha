@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * </p>
  */
 @Service(ScanServiceFactory.BATCH)
-final class BatchScanService extends BaseScanService implements ScanService, ScanJobExecutionListener.CallBack {
+final class BatchScanService extends BaseScanService implements ScanService, ScanCallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchScanService.class);
 
     private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
@@ -65,8 +65,6 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
         listener.register(this);
     }
 
-    void deinitHook() {}
-
     @Override
     public void scan(final Bucket bucket, final UI currentUi) {
         Validate.notNull(bucket, "bucket");
@@ -75,9 +73,8 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
 
         try {
             final JobParameters parameters = createJobParameters(bucket);
-
-            final Execution execution = new Execution(launcher.run(job, parameters).getId(), bucket, currentUi);
-            scans.put(execution.getId(), execution);
+            final Long id = launcher.run(job, parameters).getId();
+            scans.put(id, new Execution(id, bucket, currentUi));
         } catch (final JobInstanceAlreadyCompleteException e) {
             throw new ScanError(e, "Job with name '%s' already completed!", JOB_NAME);
         } catch (final JobExecutionAlreadyRunningException e) {
@@ -121,36 +118,35 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
     }
 
     @Override
-    public void beforeJob(final JobExecution jobExecution) {
-        final Long jobId = jobExecution.getJobId();
-        LOGGER.debug("Service called back before job execution with id {}.", jobId);
-        final Bucket bucket = getExecution(jobId).getBucket();
+    public void beforeScan(final long id) {
+        LOGGER.debug("Service called back before job execution with id {}.", id);
+        final Bucket bucket = getExecution(id).getBucket();
 
         notifyClient(
-            jobId,
+            id,
             "Scan job started",
             "Scan for bucket '%s' in directory '%s' with id %d started.",
-            bucket.getName(), bucket.getDirectory(), jobId);
+            bucket.getName(), bucket.getDirectory(), id);
     }
 
     @Override
-    public void afterJob(final JobExecution jobExecution) {
-        final Long jobId = jobExecution.getJobId();
-        LOGGER.debug("Service called back after job execution with id {}.", jobId);
+    public void afterScan(final long id) {
+        final JobExecution jobExecution = explorer.getJobExecution(id);
+        LOGGER.debug("Service called back after job execution with id {}.", id);
 
-        final Bucket bucket = getExecution(jobId).getBucket();
+        final Bucket bucket = getExecution(id).getBucket();
         final DateTime startTime = new DateTime(jobExecution.getStartTime());
         final DateTime endTime = new DateTime(jobExecution.getEndTime());
         final String duration = secondsFormat.print(new Duration(startTime, endTime).toPeriod());
 
         notifyClient(
-            jobId,
+            id,
             "Scan job finished",
             "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
-            bucket.getName(), bucket.getDirectory(), jobId, duration);
+            bucket.getName(), bucket.getDirectory(), id, duration);
 
         statuses.add(convert(jobExecution));
-        scans.remove(jobId);
+        scans.remove(id);
     }
 
     private ScanStatus convert(final JobExecution jobExecution) {
@@ -181,16 +177,8 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
     }
 
     private void notifyClient(final Long jobId, final String caption, final String description, final Object... args) {
-        final Notification notification = notification(caption, description, args);
-        notifyClient(jobId, notification, getExecution(jobId).getCurrentUi());
-    }
-
-    private Execution getExecution(final Long jobId) {
-        if (scans.containsKey(jobId)) {
-            return scans.get(jobId);
-        }
-
-        throw new ScanError("There's no such job with id %d!", jobId);
+        final Notification notification = UiNotifier.notification(caption, description, args);
+        UiNotifier.notifyClient(jobId, notification, getExecution(jobId).getCurrentUi());
     }
 
 }
