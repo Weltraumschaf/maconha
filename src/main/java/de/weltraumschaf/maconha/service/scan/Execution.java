@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import com.github.rjeschke.txtmark.Run;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.model.Bucket;
 import org.joda.time.DateTime;
@@ -21,6 +20,7 @@ final class Execution {
     private final Bucket bucket;
     private final UI currentUi;
     private final Runnable thread;
+    private final DateTime creationTime;
     private DateTime startTime;
     private DateTime stopTime;
 
@@ -34,6 +34,7 @@ final class Execution {
         this.bucket = bucket;
         this.currentUi = currentUi;
         this.thread = thread;
+        this.creationTime = DateTime.now();
     }
 
     Long getId() {
@@ -48,40 +49,54 @@ final class Execution {
         return currentUi;
     }
 
+    Runnable getThread() {
+        return thread;
+    }
+
+    DateTime getCreationTime() {
+        return creationTime;
+    }
+
     void start() {
-        if (null != startTime) {
+        if (hasStartTime()) {
             throw new IllegalStateException("Already started! The method start() should be called only once.");
         }
 
         startTime = DateTime.now();
     }
 
+
+    DateTime getStartTime() {
+        if (hasStartTime()) {
+            return startTime;
+        }
+
+        throw new IllegalStateException("Not started yet! The method start() must be called first.");
+    }
+
+    boolean hasStartTime() {
+        return null != startTime;
+    }
+
     void stop() {
-        if (null != stopTime) {
+        if (hasStopTime()) {
             throw new IllegalStateException("Already stopped! The method stop() should be called only once.");
         }
 
         stopTime = DateTime.now();
     }
 
-    Runnable getThread() {
-        return thread;
-    }
-
-    DateTime getStartTime() {
-        if (null == startTime) {
-            throw new IllegalStateException("Not started yet! The method start() must be called first.");
-        }
-
-        return startTime;
-    }
 
     DateTime getStopTime() {
-        if (null == startTime) {
-            throw new IllegalStateException("Not stopped yet! The method stop() must be called first.");
+        if (hasStopTime()) {
+            return stopTime;
         }
 
-        return stopTime;
+        throw new IllegalStateException("Not stopped yet! The method stop() must be called first.");
+    }
+
+    boolean hasStopTime() {
+        return null != stopTime;
     }
 
     @Override
@@ -95,13 +110,14 @@ final class Execution {
             Objects.equals(bucket, execution.bucket) &&
             Objects.equals(currentUi, execution.currentUi) &&
             Objects.equals(thread, execution.thread) &&
+            Objects.equals(creationTime, execution.creationTime) &&
             Objects.equals(startTime, execution.startTime) &&
             Objects.equals(stopTime, execution.stopTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bucket, currentUi, thread, startTime, stopTime);
+        return Objects.hash(id, bucket, currentUi, thread, creationTime, startTime, stopTime);
     }
 
     @Override
@@ -111,6 +127,7 @@ final class Execution {
             ", bucket=" + bucket +
             ", currentUi=" + currentUi +
             ", thread=" + thread +
+            ", creationTime=" + creationTime +
             ", startTime=" + startTime +
             ", stopTime=" + stopTime +
             '}';

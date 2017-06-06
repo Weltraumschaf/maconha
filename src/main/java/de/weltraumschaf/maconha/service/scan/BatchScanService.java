@@ -42,8 +42,6 @@ import java.util.stream.Collectors;
 final class BatchScanService extends BaseScanService implements ScanService, ScanCallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchScanService.class);
 
-    private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
-
     private final JobLauncher launcher;
     private final JobOperator operator;
     private final JobExplorer explorer;
@@ -109,12 +107,12 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
 
     @Override
     public List<ScanStatus> overview() {
-        final List<ScanStatus> running = scans.values().stream().map(execution -> {
+        final List<ScanStatus> allScans = scans.values().stream().map(execution -> {
             final JobExecution jobExecution = explorer.getJobExecution(execution.getId());
             return convert(jobExecution);
         }).collect(Collectors.toList());
-        running.addAll(statuses);
-        return running;
+        allScans.addAll(statuses);
+        return allScans;
     }
 
     @Override

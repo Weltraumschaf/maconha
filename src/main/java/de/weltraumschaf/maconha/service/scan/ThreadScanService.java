@@ -16,6 +16,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.task.TaskExecutor;
@@ -28,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Thread executor based implementation.
@@ -72,12 +74,17 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
 
     @Override
     public boolean stop(final long executionId) {
-        return false;
+        throw new UnsupportedOperationException("Not implemented yet!");
     }
 
     @Override
     public List<ScanStatus> overview() {
-        return Collections.emptyList();
+        final List<ScanStatus> allScans = scans.values()
+            .stream()
+            .map(this::convert)
+            .collect(Collectors.toList());
+        allScans.addAll(statuses);
+        return allScans;
     }
 
     @Override
@@ -96,11 +103,45 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
         final Execution execution = getExecution(id);
         execution.stop();
         final String duration = secondsFormat.print(new Duration(execution.getStartTime(), execution.getStopTime()).toPeriod());
+
         final Notification notification = UiNotifier.notification(
             "Scan job finished",
             "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
             execution.getBucket().getName(), execution.getBucket().getDirectory(), id, duration);
         UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
+
+        final ScanStatus status = new ScanStatus(
+            id,
+            execution.getBucket().getName(),
+            dateTimeFormat.print(execution.getCreationTime()),
+            dateTimeFormat.print(execution.getStartTime()),
+            dateTimeFormat.print(execution.getStopTime()),
+            duration);
+        statuses.add(status);
+        scans.remove(id);
+    }
+
+    private ScanStatus convert(final Execution execution) {
+        final DateTime startTime = execution.getStartTime();
+        final DateTime endTime;
+        final String formattedEndTime;
+
+        if (execution.hasStopTime()) {
+            endTime = execution.getStopTime();
+            formattedEndTime = dateTimeFormat.print(endTime);
+        } else {
+            endTime = DateTime.now();
+            formattedEndTime = "-";
+        }
+
+        final Duration duration = new Duration(startTime, endTime);
+        return new ScanStatus(
+            execution.getId(),
+            execution.getBucket().getName(),
+            dateTimeFormat.print(execution.getCreationTime()),
+            dateTimeFormat.print(execution.getStartTime()),
+            formattedEndTime,
+            secondsFormat.print(duration.toPeriod()));
     }
 
     private static class ScanTask implements Runnable {

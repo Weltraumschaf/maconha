@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.service;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.model.Bucket;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +39,10 @@ public interface ScanService {
         private final String jobStatus;
         private final String jobExitCode;
         private final List<Throwable> allFailureExceptions;
+
+        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration) {
+            this(id,bucketName, creationTime, startTime, endTime, duration, "n/a", "n/a", Collections.emptyList());
+        }
 
         public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus, final String jobExitCode, final List<Throwable> allFailureExceptions) {
             super();

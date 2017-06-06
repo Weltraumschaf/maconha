@@ -7,6 +7,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
@@ -44,6 +46,7 @@ abstract class BaseScanService {
             .appendSeparator(":")
             .appendSeconds()
             .toFormatter();
+    final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
 
     final MaconhaConfiguration config;
     final Collection<ScanService.ScanStatus> statuses = new CopyOnWriteArrayList<>();
