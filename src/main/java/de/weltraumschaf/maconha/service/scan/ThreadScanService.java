@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -105,13 +104,16 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             execution.getBucket().getName(), execution.getBucket().getDirectory(), id, duration);
         UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
 
+        // TODO Duplicate code, use convert().
         final ScanStatus status = new ScanStatus(
             id,
             execution.getBucket().getName(),
             dateTimeFormat.print(execution.getCreationTime()),
             dateTimeFormat.print(execution.getStartTime()),
             dateTimeFormat.print(execution.getStopTime()),
-            duration);
+            duration,
+            "COMPLETED",
+            ScanServiceFactory.THREAD);
         statuses.add(status);
         scans.remove(id);
     }
@@ -130,13 +132,16 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
         }
 
         final Duration duration = new Duration(startTime, endTime);
+        // TODO Duplicate code.
         return new ScanStatus(
             execution.getId(),
             execution.getBucket().getName(),
             dateTimeFormat.print(execution.getCreationTime()),
             dateTimeFormat.print(execution.getStartTime()),
             formattedEndTime,
-            secondsFormat.print(duration.toPeriod()));
+            secondsFormat.print(duration.toPeriod()),
+            execution.hasStartTime()? "RUNNING" : "CREATED",
+            ScanServiceFactory.THREAD);
     }
 
     private static class ScanTask implements Runnable {

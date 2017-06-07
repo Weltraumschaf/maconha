@@ -39,12 +39,13 @@ public interface ScanService {
         private final String jobStatus;
         private final String jobExitCode;
         private final List<Throwable> allFailureExceptions;
+        private final String type;
 
-        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration) {
-            this(id,bucketName, creationTime, startTime, endTime, duration, "n/a", "n/a", Collections.emptyList());
+        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus, final String type) {
+            this(id,bucketName, creationTime, startTime, endTime, duration, jobStatus, jobStatus, Collections.emptyList(), type);
         }
 
-        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus, final String jobExitCode, final List<Throwable> allFailureExceptions) {
+        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus, final String jobExitCode, final List<Throwable> allFailureExceptions, final String type) {
             super();
             this.id = id;
             this.bucketName = bucketName;
@@ -55,6 +56,7 @@ public interface ScanService {
             this.jobStatus = jobStatus;
             this.jobExitCode = jobExitCode;
             this.allFailureExceptions = allFailureExceptions;
+            this.type = type;
         }
 
         public Long getId() {
@@ -93,6 +95,10 @@ public interface ScanService {
             return allFailureExceptions;
         }
 
+        public String getType() {
+            return type;
+        }
+
         @Override
         public boolean equals(final Object o) {
             if (!(o instanceof ScanStatus)) {
@@ -108,12 +114,13 @@ public interface ScanService {
                 Objects.equals(duration, status.duration) &&
                 Objects.equals(jobStatus, status.jobStatus) &&
                 Objects.equals(jobExitCode, status.jobExitCode) &&
-                Objects.equals(allFailureExceptions, status.allFailureExceptions);
+                Objects.equals(allFailureExceptions, status.allFailureExceptions) &&
+                Objects.equals(type, status.type);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, bucketName, creationTime, startTime, endTime, duration, jobStatus, jobExitCode, allFailureExceptions);
+            return Objects.hash(id, bucketName, creationTime, startTime, endTime, duration, jobStatus, jobExitCode, allFailureExceptions, type);
         }
 
         @Override
@@ -128,6 +135,7 @@ public interface ScanService {
                 ", jobStatus='" + jobStatus + '\'' +
                 ", jobExitCode='" + jobExitCode + '\'' +
                 ", allFailureExceptions=" + allFailureExceptions +
+                ", type='" + type + '\'' +
                 '}';
         }
     }

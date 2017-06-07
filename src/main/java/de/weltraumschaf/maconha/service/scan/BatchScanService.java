@@ -11,8 +11,6 @@ import de.weltraumschaf.maconha.service.scan.batch.JobParameterKeys;
 import de.weltraumschaf.maconha.service.scan.batch.ScanJobExecutionListener;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
@@ -170,8 +168,8 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
             secondsFormat.print(duration.toPeriod()),
             jobExecution.getStatus().name(),
             jobExecution.getExitStatus().getExitCode(),
-            jobExecution.getAllFailureExceptions()
-        );
+            jobExecution.getAllFailureExceptions(),
+            ScanServiceFactory.BATCH);
     }
 
     private void notifyClient(final Long jobId, final String caption, final String description, final Object... args) {

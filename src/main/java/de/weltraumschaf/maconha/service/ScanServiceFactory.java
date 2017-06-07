@@ -4,7 +4,13 @@ package de.weltraumschaf.maconha.service;
  * Used to create concrete implementation based on a configured id.
  */
 public interface ScanServiceFactory {
+    /**
+     * Spring batch based implementation.
+     */
     String BATCH = "batch";
+    /**
+     * Thread task executor based implementation.
+     */
     String THREAD = "thread";
 
     /**
