@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,6 +70,7 @@ final class DefaultMediaFileService implements MediaFileService {
     }
 
     @Override
+    @Transactional
     public void extractAndStoreMetaData(final Bucket bucket, final HashedFile file) {
         LOGGER.debug("Extract meta data for: {}", file.getFile());
         final FileExtension extension;

@@ -16,17 +16,14 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,9 +56,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
         cmds = new Commands(Paths.get(config.getBindir()));
     }
 
-    @Async
     @Override
-    @Transactional
     public void scan(final Bucket bucket, final UI currentUi) {
         long id = 0L; // FIXME Use nex id.
 
