@@ -10,7 +10,7 @@ import java.util.Objects;
  * Data structure to remember started scan jobs.
  */
 final class Execution {
-    static final Runnable NO_THREAD = new Runnable() {
+    private static final Runnable NO_THREAD = new Runnable() {
         @Override
         public void run() {
 
@@ -65,7 +65,6 @@ final class Execution {
         startTime = DateTime.now();
     }
 
-
     DateTime getStartTime() {
         if (hasStartTime()) {
             return startTime;
@@ -97,27 +96,6 @@ final class Execution {
 
     boolean hasStopTime() {
         return null != stopTime;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (!(o instanceof Execution)) {
-            return false;
-        }
-
-        final Execution execution = (Execution) o;
-        return Objects.equals(id, execution.id) &&
-            Objects.equals(bucket, execution.bucket) &&
-            Objects.equals(currentUi, execution.currentUi) &&
-            Objects.equals(thread, execution.thread) &&
-            Objects.equals(creationTime, execution.creationTime) &&
-            Objects.equals(startTime, execution.startTime) &&
-            Objects.equals(stopTime, execution.stopTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, bucket, currentUi, thread, creationTime, startTime, stopTime);
     }
 
     @Override
