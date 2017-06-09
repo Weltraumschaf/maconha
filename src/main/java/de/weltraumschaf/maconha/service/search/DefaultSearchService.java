@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.service.search;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.core.NotFound;
 import de.weltraumschaf.maconha.model.Keyword;
 import de.weltraumschaf.maconha.model.MediaFile;
@@ -7,7 +8,6 @@ import de.weltraumschaf.maconha.model.MediaType;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.SearchService;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

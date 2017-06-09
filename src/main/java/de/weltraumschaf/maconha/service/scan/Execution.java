@@ -4,8 +4,6 @@ import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.model.Bucket;
 import org.joda.time.DateTime;
 
-import java.util.Objects;
-
 /**
  * Data structure to remember started scan jobs.
  */
@@ -84,7 +82,6 @@ final class Execution {
 
         stopTime = DateTime.now();
     }
-
 
     DateTime getStopTime() {
         if (hasStopTime()) {

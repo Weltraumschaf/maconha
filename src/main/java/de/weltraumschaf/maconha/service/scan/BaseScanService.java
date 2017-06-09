@@ -1,10 +1,5 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.vaadin.server.Page;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
 import org.joda.time.format.DateTimeFormat;
@@ -19,11 +14,9 @@ import javax.annotation.PreDestroy;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,9 +41,10 @@ abstract class BaseScanService {
             .toFormatter();
     final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
 
-    final MaconhaConfiguration config;
     final Collection<ScanService.ScanStatus> statuses = new CopyOnWriteArrayList<>();
     final Map<Long, Execution> scans = new ConcurrentHashMap<>();
+    final MaconhaConfiguration config;
+    private final StatusSerializer serializer = new StatusSerializer();
 
     BaseScanService(final MaconhaConfiguration config) {
         super();
@@ -59,6 +53,7 @@ abstract class BaseScanService {
 
     @PostConstruct
     public void init() {
+        LOGGER.debug("Initialize service.");
         readStatuses();
         initHook();
     }
@@ -67,6 +62,7 @@ abstract class BaseScanService {
 
     @PreDestroy
     public void deinit() {
+        LOGGER.debug("Deinitialize service.");
         storeStatuses();
         deinitHook();
     }
@@ -82,14 +78,13 @@ abstract class BaseScanService {
     }
 
     private void readStatuses() {
+        LOGGER.debug("Restore statuses from file.");
         final Path stausFile = resolveStatusFile();
 
         if (Files.exists(stausFile)) {
             try (final Reader reader = Files.newBufferedReader(stausFile)) {
                 LOGGER.debug("Loading stored statuses.");
-                final Type type = new TypeToken<ArrayList<ScanService.ScanStatus>>() {
-                }.getType();
-                statuses.addAll(new Gson().fromJson(reader, type));
+                statuses.addAll(serializer.deserialize(reader));
             } catch (final IOException e) {
                 LOGGER.warn(e.getMessage(), e);
             }
@@ -99,21 +94,24 @@ abstract class BaseScanService {
     }
 
     private void storeStatuses() {
-        final Path stausDir = resolveStatusDir();
+        LOGGER.warn("Persist statuses.");
+        final Path statusDir = resolveStatusDir();
 
-        if (!Files.exists(stausDir)) {
-            LOGGER.debug("Create directory '{}' to store status file.", stausDir);
+        if (!Files.exists(statusDir)) {
+            LOGGER.debug("Create directory '{}' to store status file.", statusDir);
 
             try {
-                Files.createDirectories(stausDir);
+                Files.createDirectories(statusDir);
             } catch (IOException e) {
                 LOGGER.warn(e.getMessage(), e);
+                return;
             }
         }
 
-        try (final BufferedWriter writer = Files.newBufferedWriter(resolveStatusFile())) {
-            LOGGER.debug("Store statuses.");
-            new Gson().toJson(statuses, writer);
+        final Path statusFile = resolveStatusFile();
+        try (final BufferedWriter writer = Files.newBufferedWriter(statusFile)) {
+            LOGGER.debug("Store statuses in file {}.", statusFile);
+            serializer.serialize(statuses, writer);
         } catch (final IOException e) {
             LOGGER.warn(e.getMessage(), e);
         }
