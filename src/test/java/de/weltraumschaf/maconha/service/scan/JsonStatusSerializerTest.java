@@ -20,13 +20,13 @@ import static org.junit.Assert.assertThat;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 /**
- * Tests for {@link StatusSerializer}.
+ * Tests for {@link JsonStatusSerializer}.
  */
-public final class StatusSerializerTest {
+public final class JsonStatusSerializerTest {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
 
-    private final StatusSerializer sut = new StatusSerializer();
+    private final JsonStatusSerializer sut = new JsonStatusSerializer();
 
     @Test
     public void serialize_emptyCollection() throws IOException, JSONException {

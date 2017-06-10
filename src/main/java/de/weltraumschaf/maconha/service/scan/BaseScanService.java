@@ -44,27 +44,34 @@ abstract class BaseScanService {
     final Collection<ScanService.ScanStatus> statuses = new CopyOnWriteArrayList<>();
     final Map<Long, Execution> scans = new ConcurrentHashMap<>();
     final MaconhaConfiguration config;
-    private final StatusSerializer serializer = new StatusSerializer();
+    private final StatusSerializer serializer;
 
     BaseScanService(final MaconhaConfiguration config) {
+        this(config, new JsonStatusSerializer());
+    }
+
+    BaseScanService(final MaconhaConfiguration config, final StatusSerializer serializer) {
         super();
         this.config = config;
+        this.serializer = serializer;
     }
 
     @PostConstruct
-    public void init() {
+    public final void init() {
         LOGGER.debug("Initialize service.");
         readStatuses();
         initHook();
+        LOGGER.debug("Service initialized.");
     }
 
     void initHook() {}
 
     @PreDestroy
-    public void deinit() {
+    public final void deinit() {
         LOGGER.debug("Deinitialize service.");
         storeStatuses();
         deinitHook();
+        LOGGER.debug("Service deinitialized.");
     }
 
     void deinitHook() {}
