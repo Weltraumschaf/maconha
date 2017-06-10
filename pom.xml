@@ -834,11 +834,12 @@
                     <generateSitemap>false</generateSitemap>
                     <relativizeDecorationLinks>true</relativizeDecorationLinks>
                     <locales>de</locales>
-                    <inputEncoding>UTF-8</inputEncoding>
-                    <outputEncoding>UTF-8</outputEncoding>
 
-                    <asciidoc>
-                        <!-- optional site-wide AsciiDoc attributes -->
+                    <!--
+                        https://github.com/asciidoctor/asciidoctor-maven-plugin
+                        http://asciidoctor.org/docs/asciidoctor-maven-plugin/
+                    -->
+                    <asciidoc><!-- IntelliJ complains that this is wrong, but w/o this tag e.g. syntax highlighting does not work. -->
                         <attributes>
                             <icons>font</icons>
                             <source-highlighter>coderay</source-highlighter>
@@ -847,23 +848,6 @@
                         </attributes>
                     </asciidoc>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctor-maven-plugin</artifactId>
-                        <version>1.5.3</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jruby</groupId>
-                        <artifactId>jruby-complete</artifactId>
-                        <version>1.7.25</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctorj</artifactId>
-                        <version>1.5.4.1</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
