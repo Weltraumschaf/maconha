@@ -824,31 +824,6 @@
                     <outputDirectory>${project.build.directory}/site/images</outputDirectory>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-
-                <configuration>
-                    <generateReports>true</generateReports>
-                    <generateSitemap>false</generateSitemap>
-                    <relativizeDecorationLinks>true</relativizeDecorationLinks>
-                    <locales>de</locales>
-
-                    <!--
-                        https://github.com/asciidoctor/asciidoctor-maven-plugin
-                        http://asciidoctor.org/docs/asciidoctor-maven-plugin/
-                    -->
-                    <asciidoc><!-- IntelliJ complains that this is wrong, but w/o this tag e.g. syntax highlighting does not work. -->
-                        <attributes>
-                            <icons>font</icons>
-                            <source-highlighter>coderay</source-highlighter>
-                            <coderay-css>style</coderay-css>
-                            <toclevels>2</toclevels>
-                        </attributes>
-                    </asciidoc>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>

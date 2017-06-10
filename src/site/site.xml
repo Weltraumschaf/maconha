@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 
-     <bannerLeft>
-         <name>Maconha</name>
-     </bannerLeft>
+    <bannerLeft>
+        <name>Maconha</name>
+    </bannerLeft>
 
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
-        <version>1.5</version>
+        <version>1.6</version>
     </skin>
 
     <custom>
@@ -23,20 +23,26 @@
     <body>
         <links>
             <item name="arc42" href="http://www.arc42.de/"/>
-            <item name="AsciiDoc" href="http://asciidoctor.org/docs/asciidoc-writers-guide/"/>
+            <item name="AsciiDoc"
+                  href="http://asciidoctor.org/docs/asciidoc-writers-guide/"/>
             <item name="PlantUML" href="http://plantuml.com/"/>
         </links>
 
         <menu name="Requirements">
             <item href="functional_requirements.html" name="Functional"/>
-            <item href="non_functional_requirements.html" name="Non Functional"/>
+            <item href="non_functional_requirements.html"
+                  name="Non Functional"/>
         </menu>
         <menu name="Architecture">
-            <item href="01_introduction_and_goals.html" name="Introduction and Goals"/>
-            <item href="02_architecture_constraints.html" name="Architecture Constraints"/>
-            <item href="03_system_scope_and_context.html" name="System Scope and Context"/>
+            <item href="01_introduction_and_goals.html"
+                  name="Introduction and Goals"/>
+            <item href="02_architecture_constraints.html"
+                  name="Architecture Constraints"/>
+            <item href="03_system_scope_and_context.html"
+                  name="System Scope and Context"/>
             <item href="04_solution_strategy.html" name="Solution Strategy"/>
-            <item href="05_building_block_view.html" name="Building Block View"/>
+            <item href="05_building_block_view.html"
+                  name="Building Block View"/>
             <item href="06_runtime_view.html" name="Runtime View"/>
             <item href="07_deployment_view.html" name="Deployment View"/>
             <item href="08_concepts.html" name="Concepts"/>
