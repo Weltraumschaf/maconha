@@ -6,4 +6,17 @@
     http://logback.qos.ch/manual/appenders.html
     -->
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="MACONHA" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!-- Coloring: https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html -->
+            <Pattern>
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){blue} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="de.weltraumschaf.maconha" level="debug" additivity="false">
+        <appender-ref ref="MACONHA"/>
+    </logger>
 </configuration>
