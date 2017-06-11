@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.service.scan;
 
-import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.service.ScanService;
+import de.weltraumschaf.maconha.service.ScanStatusService;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
@@ -17,10 +17,8 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Common functionality for scan services.
@@ -41,87 +39,11 @@ abstract class BaseScanService {
             .toFormatter();
     final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
 
-    final Collection<ScanService.ScanStatus> statuses = new CopyOnWriteArrayList<>();
     final Map<Long, Execution> scans = new ConcurrentHashMap<>();
-    final MaconhaConfiguration config;
-    private final StatusSerializer serializer;
+    final ScanStatusService statuses;
 
-    BaseScanService(final MaconhaConfiguration config) {
-        this(config, new JsonStatusSerializer());
-    }
-
-    BaseScanService(final MaconhaConfiguration config, final StatusSerializer serializer) {
-        super();
-        this.config = config;
-        this.serializer = serializer;
-    }
-
-    @PostConstruct
-    public final void init() {
-        LOGGER.debug("Initialize service.");
-        readStatuses();
-        initHook();
-        LOGGER.debug("Service initialized.");
-    }
-
-    void initHook() {}
-
-    @PreDestroy
-    public final void deinit() {
-        LOGGER.debug("Deinitialize service.");
-        storeStatuses();
-        deinitHook();
-        LOGGER.debug("Service deinitialized.");
-    }
-
-    void deinitHook() {}
-
-    private Path resolveStatusFile() {
-        return resolveStatusDir().resolve("statuses.json");
-    }
-
-    private Path resolveStatusDir() {
-        return Paths.get(config.getHomedir()).resolve("scans");
-    }
-
-    private void readStatuses() {
-        LOGGER.debug("Restore statuses from file.");
-        final Path stausFile = resolveStatusFile();
-
-        if (Files.exists(stausFile)) {
-            try (final Reader reader = Files.newBufferedReader(stausFile)) {
-                LOGGER.debug("Loading stored statuses.");
-                statuses.addAll(serializer.deserialize(reader));
-            } catch (final IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-            }
-        } else {
-            LOGGER.debug("There is no such status file '{}' to load.", stausFile);
-        }
-    }
-
-    private void storeStatuses() {
-        LOGGER.warn("Persist statuses.");
-        final Path statusDir = resolveStatusDir();
-
-        if (!Files.exists(statusDir)) {
-            LOGGER.debug("Create directory '{}' to store status file.", statusDir);
-
-            try {
-                Files.createDirectories(statusDir);
-            } catch (IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-                return;
-            }
-        }
-
-        final Path statusFile = resolveStatusFile();
-        try (final BufferedWriter writer = Files.newBufferedWriter(statusFile)) {
-            LOGGER.debug("Store statuses in file {}.", statusFile);
-            serializer.serialize(statuses, writer);
-        } catch (final IOException e) {
-            LOGGER.warn(e.getMessage(), e);
-        }
+    BaseScanService(final ScanStatusService statuses) {
+        this.statuses = statuses;
     }
 
     final Execution getExecution(final Long id) {

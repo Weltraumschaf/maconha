@@ -422,9 +422,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <groupId>com.googlecode.multithreadedtc</groupId>
+            <artifactId>multithreadedtc</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -1,9 +1,10 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scanstatus;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.service.ScanService.ScanStatus;
+import de.weltraumschaf.maconha.service.scanstatus.StatusSerializer;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -14,7 +15,7 @@ import java.util.Collections;
 /**
  * JSON based implementation.
  */
-final class JsonStatusSerializer implements StatusSerializer {
+public final class JsonStatusSerializer implements StatusSerializer {
 
     private final Gson json = new Gson();
     private final Type genericType = new TypeToken<ArrayList<ScanStatus>>() {
@@ -32,8 +33,8 @@ final class JsonStatusSerializer implements StatusSerializer {
         Validate.notNull(reader, "reader");
         final Collection<ScanStatus> statuses = json.fromJson(reader, genericType);
         return statuses == null
-            ? Collections.emptyList()
-            : Collections.unmodifiableCollection(statuses);
+            ? new ArrayList<>()
+            : statuses;
     }
 
 }

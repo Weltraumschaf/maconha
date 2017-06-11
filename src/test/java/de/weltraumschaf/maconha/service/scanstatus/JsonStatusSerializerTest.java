@@ -1,6 +1,7 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scanstatus;
 
 import de.weltraumschaf.maconha.service.ScanService.ScanStatus;
+import de.weltraumschaf.maconha.service.scanstatus.JsonStatusSerializer;
 import org.json.JSONException;
 import org.junit.Rule;
 import org.junit.Test;

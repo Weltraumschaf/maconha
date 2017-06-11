@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.service.scan;
+package de.weltraumschaf.maconha.service.scanstatus;
 
 import de.weltraumschaf.maconha.service.ScanService.ScanStatus;
 
@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Helper to de-/serialize statuses.
  */
-interface StatusSerializer {
+public interface StatusSerializer {
     /**
      * Serializes the given collection of statuses to a given writer.
      *
@@ -21,7 +21,7 @@ interface StatusSerializer {
      * Deserialize statuses from given reader.
      *
      * @param reader must not be {@code null}
-     * @return never {@code null}, unmodifiable
+     * @return never {@code null}
      */
     Collection<ScanStatus> deserialize(final Reader reader);
 }

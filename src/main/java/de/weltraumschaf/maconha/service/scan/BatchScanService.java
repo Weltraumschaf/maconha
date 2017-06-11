@@ -7,6 +7,7 @@ import de.weltraumschaf.maconha.config.MaconhaConfiguration;
 import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
+import de.weltraumschaf.maconha.service.ScanStatusService;
 import de.weltraumschaf.maconha.service.scan.batch.JobParameterKeys;
 import de.weltraumschaf.maconha.service.scan.batch.ScanJobExecutionListener;
 import org.joda.time.DateTime;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +49,8 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
     private final ScanJobExecutionListener listener;
 
     @Autowired
-    BatchScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener, final MaconhaConfiguration config) {
-        super(config);
+    BatchScanService(@Qualifier("asyncJobLauncher") final JobLauncher launcher, final JobOperator operator, final JobExplorer explorer, @Qualifier(JOB_NAME) final Job job, final ScanJobExecutionListener listener, final ScanStatusService statuses) {
+        super(statuses);
         this.launcher = launcher;
         this.operator = operator;
         this.explorer = explorer;
@@ -56,7 +58,8 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
         this.listener = listener;
     }
 
-    void initHook() {
+    @PostConstruct
+    public void initHook() {
         LOGGER.debug("Initialize batch based scan service.");
         listener.register(this);
     }
@@ -109,7 +112,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
             final JobExecution jobExecution = explorer.getJobExecution(execution.getId());
             return convert(jobExecution);
         }).collect(Collectors.toList());
-        allScans.addAll(statuses);
+        allScans.addAll(statuses.allStatuses());
         return allScans;
     }
 
@@ -141,7 +144,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
             "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
             bucket.getName(), bucket.getDirectory(), id, duration);
 
-        statuses.add(convert(jobExecution));
+        statuses.storeStatus(convert(jobExecution));
         scans.remove(id);
     }
 

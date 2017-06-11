@@ -7,6 +7,7 @@ import de.weltraumschaf.maconha.model.Bucket;
 import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanServiceFactory;
+import de.weltraumschaf.maconha.service.ScanStatusService;
 import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.shell.Command;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
@@ -38,19 +40,22 @@ import java.util.stream.Collectors;
 final class ThreadScanService extends BaseScanService implements ScanService, ScanCallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
+    private final MaconhaConfiguration config;
     private final MediaFileService mediaFiles;
     private final TaskExecutor executor;
     private Commands cmds;
 
     @Lazy
     @Autowired
-    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor) {
-        super(config);
+    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor,final ScanStatusService statuses) {
+        super(statuses);
+        this.config = config;
         this.mediaFiles = mediaFiles;
         this.executor = executor;
     }
 
-    void initHook() {
+    @PostConstruct
+    public void initHook() {
         LOGGER.debug("Initialize thread based scan service.");
         cmds = new Commands(Paths.get(config.getBindir()));
     }
@@ -77,7 +82,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             .stream()
             .map(this::convert)
             .collect(Collectors.toList());
-        allScans.addAll(statuses);
+        allScans.addAll(statuses.allStatuses());
         return allScans;
     }
 
@@ -114,7 +119,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             duration,
             "COMPLETED",
             ScanServiceFactory.THREAD);
-        statuses.add(status);
+        statuses.storeStatus(status);
         scans.remove(id);
     }
 
