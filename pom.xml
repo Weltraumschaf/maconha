@@ -75,8 +75,8 @@
         <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
 
         <!-- Dependency versions: -->
-        <springframework.version>1.5.3.RELEASE</springframework.version>
-        <vaadin.version>8.0.5</vaadin.version>
+        <springframework.version>1.5.4.RELEASE</springframework.version>
+        <vaadin.version>8.0.6</vaadin.version>
         <vaadin-spring.version>2.0.0.RELEASE</vaadin-spring.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <dbunit.version>2.5.3</dbunit.version>
@@ -502,7 +502,6 @@
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
-                <version>2.2.4</version>
 
                 <executions>
                     <execution>
@@ -530,6 +529,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
 
@@ -541,15 +541,6 @@
             <plugin>
                 <!-- http://maven.apache.org/surefire/maven-failsafe-plugin/usage.html -->
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>2.19.1</version>
-                    </dependency>
-                </dependencies>
 
                 <executions>
                     <execution>
@@ -603,7 +594,7 @@
                         Will be fixed in failsafe plugin 2.19.2
                     -->
                     <classifier>exec</classifier>
-                    <fork>true</fork>
+                    <fork>false</fork>
                     <executable>true</executable>
                     <!-- For debugging: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -->
                     <jvmArguments>
@@ -630,7 +621,6 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.4</version>
 
                 <configuration>
                     <nodeVersion>v6.10.2</nodeVersion>
@@ -792,37 +782,6 @@
             <plugin>
                 <groupId>com.github.jeluard</groupId>
                 <artifactId>plantuml-maven-plugin</artifactId>
-                <version>1.2</version>
-
-                <executions>
-                    <execution>
-                        <id>generate-uml-model-site</id>
-                        <phase>pre-site</phase>
-
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sourceforge.plantuml</groupId>
-                        <artifactId>plantuml</artifactId>
-                        <version>8059</version>
-                    </dependency>
-                </dependencies>
-
-                <configuration>
-                    <sourceFiles>
-                        <directory>${basedir}/src/site/resources/plantuml</directory>
-                        <includes>
-                            <include>**/*.puml</include>
-                        </includes>
-                    </sourceFiles>
-
-                    <outputDirectory>${project.build.directory}/site/images</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>
