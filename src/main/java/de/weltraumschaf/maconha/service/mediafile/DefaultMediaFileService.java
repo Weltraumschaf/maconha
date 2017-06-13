@@ -64,7 +64,7 @@ final class DefaultMediaFileService implements MediaFileService {
             final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
             return new MetaDataExtractor().extract(absoluteFile.toString());
         } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
+            LOGGER.warn("Caught exception during file meta data extraction: {}", e.getMessage(), e);
             return FileMetaData.NOTHING;
         }
     }

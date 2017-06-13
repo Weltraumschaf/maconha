@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.service.scan;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.UIDetachedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,15 +25,19 @@ final class UiNotifier {
         if (ui == null) {
             LOGGER.warn("Currents UI null! Can't notify client about job with id {}.", jobId);
         } else {
-            ui.access(() -> {
-                final Page page = ui.getPage();
+            try {
+                ui.access(() -> {
+                    final Page page = ui.getPage();
 
-                if (page == null) {
-                    LOGGER.warn("Currents page null! Can't notify client about job with id {}.", jobId);
-                } else {
-                    notification.show(page);
-                }
-            });
+                    if (page == null) {
+                        LOGGER.warn("Currents page null! Can't notify client about job with id {}.", jobId);
+                    } else {
+                        notification.show(page);
+                    }
+                });
+            } catch (final UIDetachedException e) {
+                LOGGER.warn("The UI was detached!", e);
+            }
         }
     }
 }
