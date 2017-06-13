@@ -62,8 +62,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
 
     @Override
     public void scan(final Bucket bucket, final UI currentUi) {
-        long id = 0L; // FIXME Use nex id.
-
+        final long id = statuses.nextId();
         final Command dirhash = cmds.dirhash(Paths.get(bucket.getDirectory()));
         final ScanTask task = new ScanTask(id, bucket, currentUi, dirhash, mediaFiles, this);
         final Execution execution = new Execution(id, bucket, currentUi, task);

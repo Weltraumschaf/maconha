@@ -2,7 +2,7 @@ package de.weltraumschaf.maconha.service.scanstatus;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.config.MaconhaConfiguration;
-import de.weltraumschaf.maconha.service.ScanService;
+import de.weltraumschaf.maconha.service.ScanService.ScanStatus;
 import de.weltraumschaf.maconha.service.ScanStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.OptionalLong;
 
 /**
  * Default implementation.
@@ -50,21 +51,29 @@ final class DefaultScanStatusService implements ScanStatusService {
     }
 
     @Override
-    public synchronized Collection<ScanService.ScanStatus> allStatuses() {
+    public synchronized Collection<ScanStatus> allStatuses() {
         return Collections.unmodifiableCollection(readStatusFile());
     }
 
     @Override
-    public synchronized void storeStatus(final ScanService.ScanStatus status) {
+    public synchronized void storeStatus(final ScanStatus status) {
         Validate.notNull(status, "status");
-        final Collection<ScanService.ScanStatus> statuses = new ArrayList<>();
+        final Collection<ScanStatus> statuses = new ArrayList<>();
         statuses.addAll(readStatusFile());
         statuses.add(status);
         storeStatusesToFile(statuses);
     }
 
+    @Override
+    public synchronized long nextId() {
+        return readStatusFile()
+            .stream()
+            .mapToLong(ScanStatus::getId)
+            .max()
+            .orElse(0L) + 1;
+    }
 
-    private Collection<ScanService.ScanStatus> readStatusFile() {
+    private Collection<ScanStatus> readStatusFile() {
         final Path statusFile = resolveStatusFile();
         LOGGER.debug("Read statuses from file {}.", statusFile);
 
@@ -82,7 +91,7 @@ final class DefaultScanStatusService implements ScanStatusService {
         return new ArrayList<>();
     }
 
-    private void storeStatusesToFile(final Collection<ScanService.ScanStatus> statuses) {
+    private void storeStatusesToFile(final Collection<ScanStatus> statuses) {
         LOGGER.warn("Persist statuses.");
         final Path statusDir = resolveStatusDir();
 

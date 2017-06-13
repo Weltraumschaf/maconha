@@ -106,8 +106,7 @@ public final class DefaultScanStatusServiceTest {
             "status",
             "type"
         );
-        //noinspection ArraysAsListWithZeroOrOneArgument
-        when(serializer.deserialize(any(Reader.class))).thenReturn(Arrays.asList(strored));
+        when(serializer.deserialize(any(Reader.class))).thenReturn(Collections.singletonList(strored));
         final ScanService.ScanStatus newStatus = new ScanService.ScanStatus(
             43L,
             "bucket",
@@ -121,8 +120,43 @@ public final class DefaultScanStatusServiceTest {
 
         sut.storeStatus(newStatus);
 
-        //noinspection ArraysAsListWithZeroOrOneArgument
         verify(serializer, times(1))
             .serialize(eq(Arrays.asList(strored, newStatus)), any(Appendable.class));
+    }
+
+    @Test
+    public void nextId_noStatusesStoredYet() throws IOException {
+        createStatusesFile();
+        when(serializer.deserialize(any(Reader.class))).thenReturn(Collections.emptyList());
+
+        assertThat(sut.nextId(), is(1L));
+    }
+
+    @Test
+    public void nextId() throws IOException {
+        createStatusesFile();
+        final ScanService.ScanStatus one = new ScanService.ScanStatus(
+            42L,
+            "bucket",
+            "created",
+            "started",
+            "ended",
+            "duration",
+            "status",
+            "type"
+        );
+        final ScanService.ScanStatus two = new ScanService.ScanStatus(
+            23L,
+            "bucket",
+            "created",
+            "started",
+            "ended",
+            "duration",
+            "status",
+            "type"
+        );
+        when(serializer.deserialize(any(Reader.class))).thenReturn(Arrays.asList(one, two));
+
+        assertThat(sut.nextId(), is(43L));
     }
 }

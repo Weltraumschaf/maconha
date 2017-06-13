@@ -26,4 +26,11 @@ public interface ScanStatusService {
      * @param status must not be {@code null}
      */
     void storeStatus(ScanService.ScanStatus status);
+
+    /**
+     * Returns the next usable status ID.
+     *
+     * @return greater 0
+     */
+    long nextId();
 }
