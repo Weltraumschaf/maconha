@@ -65,8 +65,7 @@ final class DefaultUserService implements UserService {
         final User user = new User();
 
         user.setName(name);
-        final String salt = generateSalt();
-        user.setPassword(crypt.hashpw(password, salt));
+        user.setPassword(crypt.hashpw(password, generateSalt()));
 
         return user;
     }
@@ -77,6 +76,8 @@ final class DefaultUserService implements UserService {
 
     @Override
     public User authenticate(final String name, final String password) {
+        Validate.notEmpty(name, "name");
+        Validate.notEmpty(password, "password");
         final User user = users.findByName(name);
 
         if (null == user) {
@@ -84,7 +85,7 @@ final class DefaultUserService implements UserService {
         }
 
         if (!crypt.checkpw(password, user.getPassword())) {
-            throw new AuthenticationFailed("Password wrong for user '%s'!", user);
+            throw new AuthenticationFailed("Authentication failed for user %s!", user.getName());
         }
 
         return user;
