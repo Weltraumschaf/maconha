@@ -26,11 +26,6 @@ public final class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @NotEmpty
-    @Size(min = 1, max = 256)
-    @Column(nullable = false)
-    private String salt;
-
     @Column(nullable = false)
     private boolean admin;
 
@@ -50,14 +45,6 @@ public final class User extends BaseEntity {
         this.password = password;
     }
 
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(final String salt) {
-        this.salt = salt;
-    }
-
     public boolean isAdmin() {
         return admin;
     }
@@ -75,13 +62,12 @@ public final class User extends BaseEntity {
         final User user = (User) o;
         return admin == user.admin &&
             Objects.equals(name, user.name) &&
-            Objects.equals(password, user.password) &&
-            Objects.equals(salt, user.salt);
+            Objects.equals(password, user.password);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(name, password, salt, admin);
+        return Objects.hash(name, password, admin);
     }
 
     @Override
@@ -89,7 +75,6 @@ public final class User extends BaseEntity {
         return "User{" +
             "name='" + name + '\'' +
             ", password='****'" + 
-            ", salt='****'" + 
             ", admin=" + admin +
             '}';
     }
