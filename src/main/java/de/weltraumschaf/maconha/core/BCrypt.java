@@ -56,7 +56,7 @@ import java.security.SecureRandom;
  *
  * @author Damien Miller
  */
-public final class BCrypt {
+public final class BCrypt implements Crypt {
     // BCrypt parameters
 
     private static final int GENSALT_DEFAULT_LOG2_ROUNDS = 10;
@@ -240,16 +240,16 @@ public final class BCrypt {
         0x1948c25c, 0x02fb8a8c, 0x01c36ae4, 0xd6ebe1f9, 0x90d4f869, 0xa65cdea0,
         0x3f09252d, 0xc208e69f, 0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6 };
     // bcrypt IV: "OrpheanBeholderScryDoubt"
-    static private final int bf_crypt_ciphertext[] = { 0x4f727068, 0x65616e42,
+    private static  final int bf_crypt_ciphertext[] = { 0x4f727068, 0x65616e42,
         0x65686f6c, 0x64657253, 0x63727944, 0x6f756274 };
     // Table for Base64 encoding
-    static private final char base64_code[] = { '.', '/', 'A', 'B', 'C', 'D', 'E', 'F',
+    private static  final char base64_code[] = { '.', '/', 'A', 'B', 'C', 'D', 'E', 'F',
         'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
         'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
         'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
         'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     // Table for Base64 decoding
-    static private final byte index_64[] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    private static  final byte index_64[] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 54, 55,
         56, 57, 58, 59, 60, 61, 62, 63, -1, -1, -1, -1, -1, -1, -1, 2, 3, 4, 5, 6, 7,
@@ -272,7 +272,7 @@ public final class BCrypt {
      * @param rs the destination buffer for the base64-encoded string
      * @exception IllegalArgumentException if the length is invalid
      */
-    private static void encode_base64(byte d[], int len, StringBuilder rs)
+    private void encode_base64(byte d[], int len, StringBuilder rs)
         throws IllegalArgumentException {
         int off = 0;
         int c1, c2;
@@ -310,7 +310,7 @@ public final class BCrypt {
      * @param x the base64-encoded value
      * @return the decoded value of x
      */
-    private static byte char64(char x) {
+    private  byte char64(char x) {
         if (x > index_64.length) {
             return -1;
         }
@@ -325,7 +325,7 @@ public final class BCrypt {
      * @return an array containing the decoded bytes
      * @throws IllegalArgumentException if maxolen is invalid
      */
-    private static byte[] decode_base64(String s, int maxolen) throws IllegalArgumentException {
+    private  byte[] decode_base64(String s, int maxolen) throws IllegalArgumentException {
         ByteArrayOutputStream out = new ByteArrayOutputStream(maxolen);
         int off = 0, slen = s.length(), olen = 0;
         byte c1, c2, c3, c4, o;
@@ -400,7 +400,7 @@ public final class BCrypt {
      * @param offp a "pointer" (as a one-entry array) to the current offset into data
      * @return the next word of material from data
      */
-    private static int streamtoword(byte data[], int offp[]) {
+    private int streamtoword(byte data[], int offp[]) {
         int i;
         int word = 0;
         int off = offp[0];
@@ -533,8 +533,8 @@ public final class BCrypt {
      * @return the hashed password
      * @throws IllegalArgumentException if invalid salt is passed
      */
-    public static String hashpw(String password, String salt) throws IllegalArgumentException {
-        BCrypt B;
+    @Override
+    public String hashpw(String password, String salt) throws IllegalArgumentException {
         String real_salt;
         byte passwordb[], saltb[], hashed[];
         char minor = (char) 0;
@@ -585,8 +585,7 @@ public final class BCrypt {
 
         saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
 
-        B = new BCrypt();
-        hashed = B.crypt_raw(passwordb, saltb, rounds);
+        hashed = crypt_raw(passwordb, saltb, rounds);
 
         rs.append("$2");
         if (minor >= 'a') {
@@ -610,7 +609,7 @@ public final class BCrypt {
      * @param random an instance of SecureRandom to use
      * @return an encoded salt value
      */
-    private static String gensalt(int log_rounds, SecureRandom random) {
+    private String gensalt(int log_rounds, SecureRandom random) {
         if (log_rounds < MIN_LOG_ROUNDS || log_rounds > MAX_LOG_ROUNDS) {
             throw new IllegalArgumentException("Bad number of rounds");
         }
@@ -635,7 +634,8 @@ public final class BCrypt {
      * factor therefore increases as 2**log_rounds. Minimum 4, maximum 31.
      * @return an encoded salt value
      */
-    public static String gensalt(int log_rounds) {
+    @Override
+    public String gensalt(int log_rounds) {
         return gensalt(log_rounds, new SecureRandom());
     }
 
@@ -644,7 +644,7 @@ public final class BCrypt {
      * default for the number of hashing rounds to apply
      * @return an encoded salt value
      */
-    public static String gensalt() {
+    public String gensalt() {
         return gensalt(GENSALT_DEFAULT_LOG2_ROUNDS);
     }
 
@@ -654,11 +654,12 @@ public final class BCrypt {
      * @param hashed the previously-hashed password
      * @return true if the passwords match, false otherwise
      */
-    public static boolean checkpw(String plaintext, String hashed) {
+    @Override
+    public boolean checkpw(String plaintext, String hashed) {
         return equalsNoEarlyReturn(hashed, hashpw(plaintext, hashed));
     }
 
-    private static boolean equalsNoEarlyReturn(String a, String b) {
+    private boolean equalsNoEarlyReturn(String a, String b) {
         char[] caa = a.toCharArray();
         char[] cab = b.toCharArray();
 
