@@ -272,7 +272,7 @@ public final class BCrypt {
      * @param rs the destination buffer for the base64-encoded string
      * @exception IllegalArgumentException if the length is invalid
      */
-    static void encode_base64(byte d[], int len, StringBuilder rs)
+    private static void encode_base64(byte d[], int len, StringBuilder rs)
         throws IllegalArgumentException {
         int off = 0;
         int c1, c2;
@@ -325,7 +325,7 @@ public final class BCrypt {
      * @return an array containing the decoded bytes
      * @throws IllegalArgumentException if maxolen is invalid
      */
-    static byte[] decode_base64(String s, int maxolen) throws IllegalArgumentException {
+    private static byte[] decode_base64(String s, int maxolen) throws IllegalArgumentException {
         ByteArrayOutputStream out = new ByteArrayOutputStream(maxolen);
         int off = 0, slen = s.length(), olen = 0;
         byte c1, c2, c3, c4, o;
@@ -371,7 +371,7 @@ public final class BCrypt {
      * @param lr an array containing the two 32-bit half blocks
      * @param off the position in the array of the blocks
      */
-    private final void encipher(int lr[], int off) {
+    private void encipher(int lr[], int off) {
         int i, n, l = lr[off], r = lr[off + 1];
 
         l ^= P[0];
@@ -418,8 +418,8 @@ public final class BCrypt {
      * Initialise the Blowfish key schedule
      */
     private void init_key() {
-        P = (int[]) P_orig.clone();
-        S = (int[]) S_orig.clone();
+        P = P_orig.clone();
+        S = S_orig.clone();
     }
 
     /**
@@ -482,7 +482,7 @@ public final class BCrypt {
         }
     }
 
-    static long roundsForLogRounds(int log_rounds) {
+    private static long roundsForLogRounds(int log_rounds) {
         if (log_rounds < 4 || log_rounds > 31) {
             throw new IllegalArgumentException("Bad number of rounds");
         }
@@ -497,7 +497,7 @@ public final class BCrypt {
      * @return an array containing the binary hashed password
      */
     private byte[] crypt_raw(byte password[], byte salt[], int log_rounds) {
-        int cdata[] = (int[]) bf_crypt_ciphertext.clone();
+        int cdata[] = bf_crypt_ciphertext.clone();
         int clen = cdata.length;
         byte ret[];
 
@@ -538,7 +538,7 @@ public final class BCrypt {
         String real_salt;
         byte passwordb[], saltb[], hashed[];
         char minor = (char) 0;
-        int rounds, off = 0;
+        int rounds, off;
         StringBuilder rs = new StringBuilder();
 
         if (salt == null) {
@@ -610,7 +610,7 @@ public final class BCrypt {
      * @param random an instance of SecureRandom to use
      * @return an encoded salt value
      */
-    public static String gensalt(int log_rounds, SecureRandom random) {
+    private static String gensalt(int log_rounds, SecureRandom random) {
         if (log_rounds < MIN_LOG_ROUNDS || log_rounds > MAX_LOG_ROUNDS) {
             throw new IllegalArgumentException("Bad number of rounds");
         }
@@ -658,7 +658,7 @@ public final class BCrypt {
         return equalsNoEarlyReturn(hashed, hashpw(plaintext, hashed));
     }
 
-    static boolean equalsNoEarlyReturn(String a, String b) {
+    private static boolean equalsNoEarlyReturn(String a, String b) {
         char[] caa = a.toCharArray();
         char[] cab = b.toCharArray();
 
