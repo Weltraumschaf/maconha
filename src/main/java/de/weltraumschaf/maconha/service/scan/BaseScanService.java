@@ -37,7 +37,7 @@ abstract class BaseScanService {
             .appendSeparator(":")
             .appendSeconds()
             .toFormatter();
-    final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss MM.dd.yy");
+    final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss dd.MM.yyyy");
 
     final Map<Long, Execution> scans = new ConcurrentHashMap<>();
     final ScanStatusService statuses;
