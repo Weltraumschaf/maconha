@@ -32,9 +32,11 @@ final class MetaDataExtractionTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
         final Set<HashedFile> unseenFiles = params.retrieveUnseenFiles(ctx);
+
         LOGGER.debug("Received {} hashed files to extract meta data.", unseenFiles.size());
         final Bucket bucket = buckets.findById(params.retrieveBucketId(ctx));
         unseenFiles.forEach(file -> mediaFiles.extractAndStoreMetaData(bucket, file));
+
         return RepeatStatus.FINISHED;
     }
 

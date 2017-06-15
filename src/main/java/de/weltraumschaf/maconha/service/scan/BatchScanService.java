@@ -136,7 +136,7 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
         final Bucket bucket = getExecution(id).getBucket();
         final DateTime startTime = new DateTime(jobExecution.getStartTime());
         final DateTime endTime = new DateTime(jobExecution.getEndTime());
-        final String duration = secondsFormat.print(new Duration(startTime, endTime).toPeriod());
+        final String duration = formatDuration(startTime, endTime);
 
         notifyClient(
             id,
@@ -158,17 +158,16 @@ final class BatchScanService extends BaseScanService implements ScanService, Sca
             formattedEndTime = "-";
         } else {
             endTime = new DateTime(jobExecution.getEndTime());
-            formattedEndTime = dateTimeFormat.print(endTime);
+            formattedEndTime = formatDateTime(endTime);
         }
 
-        final Duration duration = new Duration(startTime, endTime);
         return new ScanStatus(
             jobExecution.getJobId(),
             scans.get(jobExecution.getJobId()).getBucket().getName(),
-            dateTimeFormat.print(new DateTime(jobExecution.getCreateTime())),
-            dateTimeFormat.print(startTime),
+            formatDateTime(jobExecution.getCreateTime()),
+            formatDateTime(startTime),
             formattedEndTime,
-            secondsFormat.print(duration.toPeriod()),
+            formatDuration(startTime, endTime),
             jobExecution.getStatus().name(),
             jobExecution.getExitStatus().getExitCode(),
             jobExecution.getAllFailureExceptions(),

@@ -15,12 +15,12 @@ final class JobParamRetriever {
     /**
      * Retrieve the bucket directory to scan.
      *
-     * @param ctx must not be {@code null}
+     * @param context must not be {@code null}
      * @return never {@code null}
      */
-    String retrieveBucketDirectory(final ChunkContext ctx) {
-        Validate.notNull(ctx, "ctx");
-        final Object bucketDir = retrieveParameter(ctx, JobParameterKeys.BUCKET_DIRECTORY);
+    String retrieveBucketDirectory(final ChunkContext context) {
+        Validate.notNull(context, "context");
+        final Object bucketDir = retrieveParameter(context, JobParameterKeys.BUCKET_DIRECTORY);
 
         if (bucketDir instanceof String) {
             return (String) bucketDir;
@@ -36,12 +36,12 @@ final class JobParamRetriever {
     /**
      * Retrieve the bucket id to scan.
      *
-     * @param ctx must not be {@code null}
+     * @param context must not be {@code null}
      * @return never {@code null}
      */
-    Long retrieveBucketId(final ChunkContext ctx) {
-        Validate.notNull(ctx, "ctx");
-        final Object bucketId = retrieveParameter(ctx, JobParameterKeys.BUCKET_ID);
+    Long retrieveBucketId(final ChunkContext context) {
+        Validate.notNull(context, "context");
+        final Object bucketId = retrieveParameter(context, JobParameterKeys.BUCKET_ID);
 
         if (bucketId instanceof Long) {
             return (Long) bucketId;
@@ -54,13 +54,13 @@ final class JobParamRetriever {
                 bucketId));
     }
 
-    void storeUnseenFiles(final ChunkContext ctx, final Set<HashedFile> unseenFiles) {
-        getExecutionContext(ctx).put(ContextKeys.UNSEEN_FILES, unseenFiles);
+    void storeUnseenFiles(final ChunkContext context, final Set<HashedFile> unseenFiles) {
+        getExecutionContext(context).put(ContextKeys.UNSEEN_FILES, unseenFiles);
     }
 
     @SuppressWarnings("unchecked")
-    Set<HashedFile> retrieveUnseenFiles(final ChunkContext ctx) {
-        final Object contextData = getExecutionContext(ctx).get(ContextKeys.UNSEEN_FILES);
+    Set<HashedFile> retrieveUnseenFiles(final ChunkContext context) {
+        final Object contextData = getExecutionContext(context).get(ContextKeys.UNSEEN_FILES);
 
         if (contextData instanceof Set) {
             return (Set<HashedFile>) contextData;
@@ -69,12 +69,12 @@ final class JobParamRetriever {
         throw new IllegalArgumentException("Can not deal with context data: " + contextData);
     }
 
-    private Object retrieveParameter(final ChunkContext ctx, final String parameterKey) {
-        return ctx.getStepContext().getJobParameters().get(parameterKey);
+    private Object retrieveParameter(final ChunkContext context, final String parameterName) {
+        return context.getStepContext().getJobParameters().get(parameterName);
     }
 
-    private ExecutionContext getExecutionContext(final ChunkContext ctx) {
-        return ctx.getStepContext()
+    private ExecutionContext getExecutionContext(final ChunkContext context) {
+        return context.getStepContext()
             .getStepExecution()
             .getJobExecution()
             .getExecutionContext();

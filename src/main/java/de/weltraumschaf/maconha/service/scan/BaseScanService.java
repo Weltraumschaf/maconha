@@ -1,7 +1,10 @@
 package de.weltraumschaf.maconha.service.scan;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.service.ScanService;
 import de.weltraumschaf.maconha.service.ScanStatusService;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
@@ -17,6 +20,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +31,9 @@ abstract class BaseScanService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseScanService.class);
 
-    final PeriodFormatter secondsFormat =
+    final Map<Long, Execution> scans = new ConcurrentHashMap<>();
+    final ScanStatusService statuses;
+    private final PeriodFormatter secondsFormat =
         new PeriodFormatterBuilder()
             .printZeroAlways()
             .minimumPrintedDigits(2)
@@ -37,10 +43,7 @@ abstract class BaseScanService {
             .appendSeparator(":")
             .appendSeconds()
             .toFormatter();
-    final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss dd.MM.yyyy");
-
-    final Map<Long, Execution> scans = new ConcurrentHashMap<>();
-    final ScanStatusService statuses;
+    private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss dd.MM.yyyy");
 
     BaseScanService(final ScanStatusService statuses) {
         this.statuses = statuses;
@@ -52,5 +55,20 @@ abstract class BaseScanService {
         }
 
         throw new ScanService.ScanError("There's no such job with id %d!", id);
+    }
+
+    final String formatDuration(final DateTime startTime, final DateTime endTime ) {
+        Validate.notNull(startTime, "startTime");
+        Validate.notNull(endTime, "endTime");
+        return secondsFormat.print(new Duration(startTime, endTime).toPeriod());
+    }
+
+    final String formatDateTime(final Date date) {
+        return formatDateTime(new DateTime(date));
+    }
+
+    final String formatDateTime(final DateTime dateTime) {
+        Validate.notNull(dateTime, "dateTime");
+        return dateTimeFormat.print(dateTime);
     }
 }

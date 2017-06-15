@@ -100,7 +100,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
     public void afterScan(final long id) {
         final Execution execution = getExecution(id);
         execution.stop();
-        final String duration = secondsFormat.print(new Duration(execution.getStartTime(), execution.getStopTime()).toPeriod());
+        final String duration = formatDuration(execution.getStartTime(), execution.getStopTime());
 
         final Notification notification = UiNotifier.notification(
             "Scan job finished",
@@ -112,9 +112,9 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
         final ScanStatus status = new ScanStatus(
             id,
             execution.getBucket().getName(),
-            dateTimeFormat.print(execution.getCreationTime()),
-            dateTimeFormat.print(execution.getStartTime()),
-            dateTimeFormat.print(execution.getStopTime()),
+            formatDateTime(execution.getCreationTime()),
+            formatDateTime(execution.getStartTime()),
+            formatDateTime(execution.getStopTime()),
             duration,
             "COMPLETED",
             ScanServiceFactory.THREAD);
@@ -129,21 +129,20 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
 
         if (execution.hasStopTime()) {
             endTime = execution.getStopTime();
-            formattedEndTime = dateTimeFormat.print(endTime);
+            formattedEndTime = formatDateTime(endTime);
         } else {
             endTime = DateTime.now();
             formattedEndTime = "-";
         }
 
-        final Duration duration = new Duration(startTime, endTime);
         // TODO Duplicate code.
         return new ScanStatus(
             execution.getId(),
             execution.getBucket().getName(),
-            dateTimeFormat.print(execution.getCreationTime()),
-            dateTimeFormat.print(execution.getStartTime()),
+            formatDateTime(execution.getCreationTime()),
+            formatDateTime(execution.getStartTime()),
             formattedEndTime,
-            secondsFormat.print(duration.toPeriod()),
+            formatDuration(startTime, endTime),
             execution.hasStartTime()? "RUNNING" : "CREATED",
             ScanServiceFactory.THREAD);
     }
