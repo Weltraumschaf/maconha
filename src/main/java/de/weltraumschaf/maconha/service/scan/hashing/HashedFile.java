@@ -64,9 +64,10 @@ public final class HashedFile implements Serializable {
      */
     public HashedFile relativizeFilename(final Bucket bucket) {
         Validate.notNull(bucket, "bucket");
+        final String relative = getFile().replace(bucket.getDirectory(), "");
         return new HashedFile(
             getHash(),
-            getFile().replace(bucket.getDirectory(), "").substring(1));
+            relative.charAt(0) == '/' ? relative.substring(1) : relative);
     }
 
     @Override

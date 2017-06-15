@@ -1,8 +1,6 @@
 package de.weltraumschaf.maconha.service.scan.batch;
 
 import de.weltraumschaf.maconha.model.Bucket;
-import de.weltraumschaf.maconha.model.MediaFile;
-import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.MediaFileService;
 import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
@@ -45,17 +43,17 @@ final class FilterUnseenFilesTasklet implements Tasklet {
         return RepeatStatus.FINISHED;
     }
 
-    private Bucket createBucketFromContext(final ChunkContext ctx) {
+    Bucket createBucketFromContext(final ChunkContext ctx) {
         final Bucket bucket = new Bucket();
         bucket.setDirectory(params.retrieveBucketDirectory(ctx));
         bucket.setId(params.retrieveBucketId(ctx));
         return bucket;
     }
 
-    private Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles, final Bucket bucket) {
+    Set<HashedFile> filterFiles(final Set<HashedFile> hashedFiles, final Bucket bucket) {
         return hashedFiles.stream()
             .map(hashedFile -> hashedFile.relativizeFilename(bucket))
-            .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
+            .filter(relativeHashedFile -> mediaFiles.isFileUnseen(relativeHashedFile, bucket))
             .collect(Collectors.toSet());
     }
 

@@ -51,9 +51,20 @@ public class HashedFileTest {
     }
 
     @Test
-    public void relativizeFilename() {
+    public void relativizeFilename_withoutTrailingSlash() {
         final Bucket bucket = new Bucket();
         bucket.setDirectory("/foo/bar");
+
+        final HashedFile result = new HashedFile("hash", "/foo/bar/baz/snafu.avi").relativizeFilename(bucket);
+
+        assertThat(result.getHash(), is("hash"));
+        assertThat(result.getFile(), is("baz/snafu.avi"));
+    }
+
+    @Test
+    public void relativizeFilename_withTrailingSlash() {
+        final Bucket bucket = new Bucket();
+        bucket.setDirectory("/foo/bar/");
 
         final HashedFile result = new HashedFile("hash", "/foo/bar/baz/snafu.avi").relativizeFilename(bucket);
 
