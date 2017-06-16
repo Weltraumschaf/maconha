@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
  * This tasklet filters the files which are not seen yet.
  */
 final class FilterUnseenFilesTasklet implements Tasklet {
+    static final String CHECKSUMS_FILENAME = ".checksums";
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterUnseenFilesTasklet.class);
+
     private final HashFileReader reader = new HashFileReader();
     private final JobParamRetriever params = new JobParamRetriever();
 
@@ -34,7 +36,7 @@ final class FilterUnseenFilesTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(final StepContribution contribution, final ChunkContext ctx) throws Exception {
         final Bucket bucket = createBucketFromContext(ctx);
-        final Path checksums = Paths.get(bucket.getDirectory()).resolve(".checksums");
+        final Path checksums = Paths.get(bucket.getDirectory()).resolve(CHECKSUMS_FILENAME);
         LOGGER.debug("Reading hashed files from {} ...", checksums);
         final Set<HashedFile> hashedFiles = reader.read(checksums);
         LOGGER.debug("Read {} filenames with hashes.", hashedFiles.size());
