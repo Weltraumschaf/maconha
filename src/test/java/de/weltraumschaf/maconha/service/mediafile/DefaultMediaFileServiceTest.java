@@ -1,11 +1,11 @@
 package de.weltraumschaf.maconha.service.mediafile;
 
 import de.weltraumschaf.maconha.model.Bucket;
+import de.weltraumschaf.maconha.model.FileMetaData;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.repo.KeywordRepo;
 import de.weltraumschaf.maconha.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -26,7 +26,9 @@ public final class DefaultMediaFileServiceTest {
 
     private final MediaFileRepo mediaFiles = mock(MediaFileRepo.class);
     private final KeywordRepo keywords = mock(KeywordRepo.class);
-    private final DefaultMediaFileService sut = new DefaultMediaFileService(mediaFiles, keywords);
+    @SuppressWarnings("unchecked")
+    private Extractor<FileMetaData> extractor = mock(Extractor.class);
+    private final DefaultMediaFileService sut = new DefaultMediaFileService(mediaFiles, keywords, extractor);
 
     @Test
     public void isFileUnseen_fileMustNotBeNull() {
@@ -68,6 +70,14 @@ public final class DefaultMediaFileServiceTest {
     }
 
     @Test
-    @Ignore("TODO Write test")
-    public void extractFileMetaData() {}
+    public void extractFileMetaData() {
+        final Bucket bucket = new Bucket();
+        bucket.setDirectory("/foo/bar");
+        final FileMetaData expected = new FileMetaData("mime", "data");
+        when(extractor.extract("/foo/bar/file")).thenReturn(expected);
+
+        assertThat(
+            sut.extractFileMetaData(bucket, new HashedFile("hash", "file")),
+            is(expected));
+    }
 }

@@ -28,13 +28,19 @@ final class DefaultMediaFileService implements MediaFileService {
 
     private final MediaFileRepo mediaFiles;
     private final KeywordRepo keywords;
+    private final Extractor<FileMetaData> extractor;
 
     @Lazy
     @Autowired
     DefaultMediaFileService(final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
+        this(mediaFiles, keywords, new MetaDataExtractor());
+    }
+
+    DefaultMediaFileService(final MediaFileRepo mediaFiles, final KeywordRepo keywords, final Extractor<FileMetaData> extractor) {
         super();
         this.mediaFiles = mediaFiles;
         this.keywords = keywords;
+        this.extractor = extractor;
     }
 
     @Override
@@ -62,7 +68,7 @@ final class DefaultMediaFileService implements MediaFileService {
     public FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file) {
         try {
             final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(file.getFile());
-            return new MetaDataExtractor().extract(absoluteFile.toString());
+            return extractor.extract(absoluteFile.toString());
         } catch (final Exception e) {
             LOGGER.warn("Caught exception during file meta data extraction: {}", e.getMessage(), e);
             return FileMetaData.NOTHING;
