@@ -580,7 +580,7 @@
 
                 <configuration>
                     <excludes>
-                        <exclude>de/weltraumschaf/maconha/model/*_.class</exclude>
+                        <exclude>de/weltraumschaf/maconha/model/*_.*</exclude>
                     </excludes>
                 </configuration>
 
