@@ -21,28 +21,23 @@ import java.security.SecureRandom;
  * BCrypt implements OpenBSD-style Blowfish password hashing using the scheme described in
  * "A Future-Adaptable Password Scheme" by Niels Provos and David Mazieres.
  * <p>
- * <p>
  * This password hashing system tries to thwart off-line password cracking using a
  * computationally-intensive hashing algorithm, based on Bruce Schneier's Blowfish cipher.
  * The work factor of the algorithm is parametrised, so it can be increased as computers
  * get faster.
  * </p>
  * <p>
- * <p>
  * Usage is really simple. To hash a password for the first time, call the {@link #hashPassword(String, String)}
  * method with a random salt, like this:
  * </p>
- * <p>
  * <pre>{@code
  * Crypt crypt = new BCrypt();
  * String pw_hash = crypt.hashPassword(plain_password, crypt.generateSalt());
  * }</pre>
  * <p>
- * <p>
  * To check whether a plaintext password matches one that has been hashed previously, use
  * the {@link #checkPassword(String, String)} method:
  * </p>
- * <p>
  * <pre>{@code
  * Crypt crypt = new BCrypt();
  *
@@ -53,17 +48,14 @@ import java.security.SecureRandom;
  * }
  * }</pre>
  * <p>
- * <p>
- * The {@link #generateSalt()} method takes an optional parameter (log_rounds) that determines the
+ * The {@link #generateSalt(int)} method takes an optional parameter (log_rounds) that determines the
  * computational complexity of the hashing:
  * </p>
- * <p>
  * <pre>{@code
  * Crypt crypt = new BCrypt();
  * String strong_salt = crypt.generateSalt(10);
  * String stronger_salt = crypt.generateSalt(12);
  * }</pre>
- * <p>
  * <p>
  * The amount of work increases exponentially (2**log_rounds), so each increment is twice
  * as much work. The default log_rounds is 10, and the valid range is 4 to 31.

@@ -1,7 +1,6 @@
 package de.weltraumschaf.maconha.service;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.model.MediaFile;
 import de.weltraumschaf.maconha.model.MediaType;
 
@@ -17,6 +16,7 @@ public interface SearchService {
      * Find media files by keywords.
      *
      * @param keywords not {@code null}
+     * @param types not {@code null}
      * @return never {@code null}, maybe empty
      */
     Collection<MediaFile> forKeywords(Collection<String> keywords, Collection<MediaType> types);
@@ -43,7 +43,7 @@ public interface SearchService {
         /**
          * Dedicated constructor.
          *
-         * @param file must not be {@code null}
+         * @param file   must not be {@code null}
          * @param format must not be {@code null}
          */
         public Download(final Path file, final String format) {

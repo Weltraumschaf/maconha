@@ -13,7 +13,7 @@ public interface StatusSerializer {
      * Serializes the given collection of statuses to a given writer.
      *
      * @param statuses must not be {@code null}
-     * @param writer   must not be {@code null
+     * @param writer   must not be {@code null}
      */
     void serialize(final Collection<ScanStatus> statuses, final Appendable writer);
 

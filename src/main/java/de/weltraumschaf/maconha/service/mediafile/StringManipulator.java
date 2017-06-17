@@ -59,14 +59,14 @@ final class StringManipulator {
      * <p>
      * Examples:
      * </p>
-     * <pre>
+     * <pre>{@literal
      * null          -> ""
      * ""            -> ""
      * "   "         -> ""
      * "foo"         -> "foo"
      * "foo.bar"     -> "foo"
      * "foo.bar.baz" -> "foo.bar"
-     * </pre>
+     * }</pre>
      *
      * @param input may be {@code null} or blank
      * @return never {@code null}

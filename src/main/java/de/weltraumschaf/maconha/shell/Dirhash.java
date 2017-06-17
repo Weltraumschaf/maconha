@@ -18,7 +18,7 @@ final class Dirhash extends BaseCommand {
      * Dedicated constructor.
      *
      * @param path must not be {@code null}
-     * @param baseDir must not be {@link null}
+     * @param baseDir must not be {@code null}
      */
     Dirhash(final Path path, final Path baseDir) {
         super(path, CMD, Validate.notNull(baseDir, "baseDir").toString());

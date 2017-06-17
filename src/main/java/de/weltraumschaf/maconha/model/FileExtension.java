@@ -199,7 +199,7 @@ public enum FileExtension {
      * Extracts the extension from a given path.
      *
      * @param input may be {@code null}
-     * @return never {@code null}, as default {@link #NONE#getExtension()}
+     * @return never {@code null}, as default the {@link #getExtension() extension} of {@link #NONE}
      * @see #extractExtension(java.lang.String)
      */
     public static String extractExtension(final Path input) {
@@ -217,7 +217,7 @@ public enum FileExtension {
      * </p>
      *
      * @param input may be {@code null} or empty
-     * @return never {@code null}, as default {@link #NONE#getExtension()}
+     * @return never {@code null}, as default {@link #getExtension() extension} of {@link #NONE}
      */
     public static String extractExtension(final String input) {
         if (null == input || input.trim().isEmpty()) {
