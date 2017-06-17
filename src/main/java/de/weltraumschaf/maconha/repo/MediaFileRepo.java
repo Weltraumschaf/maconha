@@ -7,7 +7,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -45,11 +48,21 @@ public interface MediaFileRepo extends BaseRepo<MediaFile>, JpaSpecificationExec
             super();
         }
 
-        static public Specification<MediaFile> relativeFileNameIgnoreCaseAndTypeAndFormat(final String relativeFileName, final MediaType type, final FileExtension format) {
+        /**
+         * Creates a prepared lambda of {@link Specification#toPredicate(Root, CriteriaQuery, CriteriaBuilder)}.
+         *
+         * @param relativeFileName may be {@code null} or empty
+         * @param type may be {@code null}
+         * @param format may be {@code null}
+         * @return never {@code null}
+         */
+        public static Specification<MediaFile> relativeFileNameIgnoreCaseAndTypeAndFormat(final String relativeFileName, final MediaType type, final FileExtension format) {
             return (root, query, cb) -> {
-                final String containsLikePattern = getContainsLikePattern(relativeFileName);
                 final Collection<Predicate> predicates = new ArrayList<>();
-                predicates.add(cb.like(cb.lower(root.get(MediaFile_.relativeFileName)), containsLikePattern));
+                predicates.add(
+                    cb.like(
+                        cb.lower(root.get(MediaFile_.relativeFileName)),
+                        createContainsLikePattern(relativeFileName)));
 
                 if (type != null) {
                     predicates.add(cb.equal(root.get(MediaFile_.type), type));
@@ -63,7 +76,7 @@ public interface MediaFileRepo extends BaseRepo<MediaFile>, JpaSpecificationExec
             };
         }
 
-        static private String getContainsLikePattern(String searchTerm) {
+        static String createContainsLikePattern(final String searchTerm) {
             if (searchTerm == null || searchTerm.trim().isEmpty()) {
                 return "%";
             } else {
