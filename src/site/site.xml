@@ -28,6 +28,7 @@
             <item name="PlantUML" href="http://plantuml.com/"/>
         </links>
 
+        <menu ref="reports" inherit="top"/>
         <menu name="Requirements">
             <item href="functional_requirements.html" name="Functional"/>
             <item href="non_functional_requirements.html"
@@ -51,6 +52,10 @@
             <item href="11_technical_risks.html" name="Technical Risks"/>
             <item href="12_glossary.html" name="Glossary"/>
         </menu>
-        <menu ref="reports" inherit="top"/>
+        <menu name="Additional">
+            <item href="apidocs/index.html" name="Javadoc"/>
+            <item href="jacoco-ut/index.html" name="Coverage Unit Tests"/>
+            <item href="jacoco-it/index.html" name="Coverage Integration Tests"/>
+        </menu>
     </body>
 </project>

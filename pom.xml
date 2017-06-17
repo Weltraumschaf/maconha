@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -33,9 +34,12 @@
                 LICENSE
 
                 "THE BEER-WARE LICENSE" (Revision 42):
-                "Sven Strittmatter" &lt;weltraumschaf(at)googlemail(dot)com&gt; wrote this file.
-                As long as you retain this notice you can do whatever you want with
-                this stuff. If we meet some day, and you think this stuff is worth it,
+                "Sven Strittmatter" &lt;weltraumschaf(at)googlemail(dot)com&gt;
+                wrote this file.
+                As long as you retain this notice you can do whatever you want
+                with
+                this stuff. If we meet some day, and you think this stuff is
+                worth it,
                 you can buy me a beer in return.
             </comments>
         </license>
@@ -47,8 +51,10 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/Weltraumschaf/maconha.git</connection>
-        <developerConnection>scm:git:git@github.com:Weltraumschaf/maconha.git</developerConnection>
+        <connection>scm:git:git://github.com/Weltraumschaf/maconha.git
+        </connection>
+        <developerConnection>scm:git:git@github.com:Weltraumschaf/maconha.git
+        </developerConnection>
         <url>https://github.com/Weltraumschaf/maconha.git</url>
     </scm>
 
@@ -68,11 +74,13 @@
         <enforcer.skip>true</enforcer.skip>
 
         <project.build.version.source>1.8</project.build.version.source>
-        <project.build.version.target>${project.build.version.source}</project.build.version.target>
+        <project.build.version.target>${project.build.version.source}
+        </project.build.version.target>
         <java.version>${project.build.version.source}</java.version>
 
         <project.bin.directory>${project.basedir}/bin</project.bin.directory>
-        <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
+        <project.scripts.directory>${project.basedir}/src/main/scripts
+        </project.scripts.directory>
 
         <!-- Dependency versions: -->
         <springframework.version>1.5.4.RELEASE</springframework.version>
@@ -466,7 +474,9 @@
                         </fileset>
 
                         <fileset>
-                            <directory>${project.basedir}/src/main/resources/static/lib</directory>
+                            <directory>
+                                ${project.basedir}/src/main/resources/static/lib
+                            </directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
@@ -515,7 +525,9 @@
 
                         <configuration>
                             <processors>
-                                <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                                <processor>
+                                    org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor
+                                </processor>
                             </processors>
                         </configuration>
                     </execution>
@@ -535,7 +547,8 @@
 
                 <configuration>
                     <!-- Sets the VM argument line used when unit tests are run. -->
-                    <argLine>${surefireArgLine} -Dspring.profiles.active=test</argLine>
+                    <argLine>${surefireArgLine} -Dspring.profiles.active=test
+                    </argLine>
                     <!-- Skips unit tests if the value of skip.unit.tests property is true -->
                     <skipTests>${skip.unit.tests}</skipTests>
                     <!-- Excludes integration tests when unit tests are run. -->
@@ -596,7 +609,9 @@
                         </goals>
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                            <destFile>
+                                ${project.build.directory}/coverage-reports/jacoco-ut.exec
+                            </destFile>
                             <!--
                                 Sets the name of the property containing the settings
                                 for JaCoCo runtime agent.
@@ -616,9 +631,13 @@
                         </goals>
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+                            <dataFile>
+                                ${project.build.directory}/coverage-reports/jacoco-ut.exec
+                            </dataFile>
                             <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                            <outputDirectory>
+                                ${project.reporting.outputDirectory}/jacoco-ut
+                            </outputDirectory>
                         </configuration>
                     </execution>
                     <!--
@@ -633,7 +652,9 @@
                         </goals>
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                            <destFile>
+                                ${project.build.directory}/coverage-reports/jacoco-it.exec
+                            </destFile>
                             <!--
                                 Sets the name of the property containing the settings
                                 for JaCoCo runtime agent.
@@ -653,9 +674,13 @@
                         </goals>
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                            <dataFile>
+                                ${project.build.directory}/coverage-reports/jacoco-it.exec
+                            </dataFile>
                             <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                            <outputDirectory>
+                                ${project.reporting.outputDirectory}/jacoco-it
+                            </outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -767,19 +792,29 @@
 
                         <configuration>
                             <target>
-                                <property name="lib.dir" value="${project.build.directory}/classes/static/lib"/>
+                                <property name="lib.dir"
+                                          value="${project.build.directory}/classes/static/lib"/>
                                 <delete includeemptydirs="true">
                                     <!-- Cleaning the Bootstrap Bower package and just leave the distribution files. -->
-                                    <fileset dir="${lib.dir}/bootstrap" includes="fonts/**/*"/>
-                                    <fileset dir="${lib.dir}/bootstrap" includes="grunt/**/*"/>
-                                    <fileset dir="${lib.dir}/bootstrap" includes="js/**/*"/>
-                                    <fileset dir="${lib.dir}/bootstrap" includes="less/**/*"/>
-                                    <fileset dir="${lib.dir}/bootstrap" includes="nuget/**/*"/>
-                                    <fileset dir="${lib.dir}/bootstrap" includes="*"/>
+                                    <fileset dir="${lib.dir}/bootstrap"
+                                             includes="fonts/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap"
+                                             includes="grunt/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap"
+                                             includes="js/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap"
+                                             includes="less/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap"
+                                             includes="nuget/**/*"/>
+                                    <fileset dir="${lib.dir}/bootstrap"
+                                             includes="*"/>
                                     <!-- Cleaning the Bootstrap Bower package and just leave the distribution files. -->
-                                    <fileset dir="${lib.dir}/jquery" includes="external/**/*"/>
-                                    <fileset dir="${lib.dir}/jquery" includes="src/**/*"/>
-                                    <fileset dir="${lib.dir}/jquery" includes="*"/>
+                                    <fileset dir="${lib.dir}/jquery"
+                                             includes="external/**/*"/>
+                                    <fileset dir="${lib.dir}/jquery"
+                                             includes="src/**/*"/>
+                                    <fileset dir="${lib.dir}/jquery"
+                                             includes="*"/>
                                 </delete>
                             </target>
                         </configuration>
@@ -803,7 +838,8 @@
                                 </copy>
 
                                 <chmod perm="ugo+rx">
-                                    <fileset dir="${project.build.directory}/test-classes">
+                                    <fileset
+                                            dir="${project.build.directory}/test-classes">
                                         <include name="dirhash"/>
                                     </fileset>
                                 </chmod>
@@ -822,21 +858,26 @@
                         <configuration>
                             <target>
                                 <!-- Generate main executable. -->
-                                <concat destfile="${project.bin.directory}/${project.build.finalName}" binary="yes">
-                                    <fileset file="${project.scripts.directory}/${project.build.finalName}.sh" />
-                                    <fileset file="${project.build.directory}/${project.build.finalName}-exec.jar" />
+                                <concat destfile="${project.bin.directory}/${project.build.finalName}"
+                                        binary="yes">
+                                    <fileset
+                                            file="${project.scripts.directory}/${project.build.finalName}.sh"/>
+                                    <fileset
+                                            file="${project.build.directory}/${project.build.finalName}-exec.jar"/>
                                 </concat>
 
                                 <!-- Copy additional scripts. -->
                                 <copy todir="${project.bin.directory}">
                                     <fileset dir="${project.scripts.directory}">
                                         <include name="*.sh"/>
-                                        <exclude name="${project.build.finalName}.sh"/>
+                                        <exclude
+                                                name="${project.build.finalName}.sh"/>
                                     </fileset>
                                     <mapper type="glob" from="*.sh" to="*"/>
                                 </copy>
 
-                                <chmod dir="${project.bin.directory}" perm="ugo+rx"/>
+                                <chmod dir="${project.bin.directory}"
+                                       perm="ugo+rx"/>
                                 <chmod perm="ugo+rx">
                                     <fileset dir="${project.bin.directory}">
                                         <include name="**/*"/>
@@ -856,12 +897,15 @@
 
                         <configuration>
                             <target>
-                                <tar destfile="${project.build.directory}/${project.build.finalName}-dsitribution-${project.version}.tar" compression="none">
-                                    <tarfileset dir="${project.bin.directory}" prefix="${project.build.finalName}-${project.version}/bin/">
+                                <tar destfile="${project.build.directory}/${project.build.finalName}-dsitribution-${project.version}.tar"
+                                     compression="none">
+                                    <tarfileset dir="${project.bin.directory}"
+                                                prefix="${project.build.finalName}-${project.version}/bin/">
                                         <include name="*"/>
                                     </tarfileset>
 
-                                    <tarfileset dir="${project.basedir}/etc" prefix="${project.build.finalName}-${project.version}/etc/">
+                                    <tarfileset dir="${project.basedir}/etc"
+                                                prefix="${project.build.finalName}-${project.version}/etc/">
                                         <include name="*"/>
                                     </tarfileset>
                                 </tar>
@@ -882,6 +926,20 @@
             <plugin>
                 <groupId>com.github.jeluard</groupId>
                 <artifactId>plantuml-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+
+                        <phase>site</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
