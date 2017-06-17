@@ -56,8 +56,8 @@ public final class FilterUnseenFilesTaskletTest {
         final ChunkContext context = contexts.createContext(parameters);
 
         assertThat(
-            sut.execute(mock(StepContribution.class),
-                context), is(RepeatStatus.FINISHED));
+            sut.execute(mock(StepContribution.class), context),
+            is(RepeatStatus.FINISHED));
 
         assertThat(
             new JobParamRetriever().retrieveUnseenFiles(context),
