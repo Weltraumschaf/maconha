@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.repo;
 
 import de.weltraumschaf.maconha.model.FileExtension;
 import de.weltraumschaf.maconha.model.MediaFile;
+import de.weltraumschaf.maconha.model.MediaFile_;
 import de.weltraumschaf.maconha.model.MediaType;
 import de.weltraumschaf.maconha.repo.MediaFileRepo.MediaFileSpecifications;
 import org.hibernate.jpa.criteria.CriteriaBuilderImpl;
@@ -12,11 +13,14 @@ import org.junit.Test;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link MediaFileSpecifications}.
@@ -55,6 +59,7 @@ public final class MediaFileSpecificationsTest {
 
     @Test
     @Ignore
+    @SuppressWarnings("unchecked")
     public void relativeFileNameIgnoreCaseAndTypeAndFormat_relativeFileNameIsNull() {
         final Specification<MediaFile> specification = MediaFileSpecifications.relativeFileNameIgnoreCaseAndTypeAndFormat(
             null,
@@ -64,8 +69,13 @@ public final class MediaFileSpecificationsTest {
         assertThat(specification, is(not(nullValue())));
 
         final CriteriaBuilderImpl cb = new CriteriaBuilderImpl(mock(EntityManagerFactoryImpl.class));
-        @SuppressWarnings("unchecked") final Predicate predicate = specification.toPredicate(
-            mock(RootImpl.class),
+        Root root = mock(Root.class);
+        when(root.get(MediaFile_.relativeFileName)).thenReturn(mock(Path.class));
+        when(root.get(MediaFile_.type)).thenReturn(mock(Path.class));
+        when(root.get(MediaFile_.format)).thenReturn(mock(Path.class));
+
+        final Predicate predicate = specification.toPredicate(
+            root,
             mock(CriteriaQuery.class),
             cb);
 

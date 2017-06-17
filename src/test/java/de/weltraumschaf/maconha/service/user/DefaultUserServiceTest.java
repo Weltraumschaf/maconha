@@ -5,7 +5,6 @@ import de.weltraumschaf.maconha.core.Crypt;
 import de.weltraumschaf.maconha.model.User;
 import de.weltraumschaf.maconha.repo.UserRepo;
 import de.weltraumschaf.maconha.service.UserService;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -39,8 +38,8 @@ public final class DefaultUserServiceTest {
 
     @Test
     public void createUnprivileged() {
-        when(crypt.gensalt(config.getPasswordStrength())).thenReturn("salt");
-        when(crypt.hashpw("pass", "salt")).thenReturn("****");
+        when(crypt.generateSalt(config.getPasswordStrength())).thenReturn("salt");
+        when(crypt.hashPassword("pass", "salt")).thenReturn("****");
 
         final User user = sut.createUnprivileged("user", "pass");
 
@@ -52,8 +51,8 @@ public final class DefaultUserServiceTest {
 
     @Test
     public void createAdmin() {
-        when(crypt.gensalt(config.getPasswordStrength())).thenReturn("salt");
-        when(crypt.hashpw("pass", "salt")).thenReturn("****");
+        when(crypt.generateSalt(config.getPasswordStrength())).thenReturn("salt");
+        when(crypt.hashPassword("pass", "salt")).thenReturn("****");
 
         final User user = sut.createAdmin("user", "pass");
 
@@ -71,7 +70,7 @@ public final class DefaultUserServiceTest {
     @Test(expected = UserService.AuthenticationFailed.class)
     public void authenticate_throwsExceptionIfPasswordDoesNotMatch() {
         when(users.findByName("user")).thenReturn(new User());
-        when(crypt.checkpw(anyString(), anyString())).thenReturn(false);
+        when(crypt.checkPassword(anyString(), anyString())).thenReturn(false);
 
         sut.authenticate("user", "pass");
     }
@@ -81,7 +80,7 @@ public final class DefaultUserServiceTest {
         final User user = new User();
         user.setPassword("hash");
         when(users.findByName("user")).thenReturn(user);
-        when(crypt.checkpw("pass", "hash")).thenReturn(true);
+        when(crypt.checkPassword("pass", "hash")).thenReturn(true);
 
         assertThat(sut.authenticate("user", "pass"), is(user));
     }

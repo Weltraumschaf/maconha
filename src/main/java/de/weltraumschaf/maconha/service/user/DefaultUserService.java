@@ -65,13 +65,13 @@ final class DefaultUserService implements UserService {
         final User user = new User();
 
         user.setName(name);
-        user.setPassword(crypt.hashpw(password, generateSalt()));
+        user.setPassword(crypt.hashPassword(password, generateSalt()));
 
         return user;
     }
 
     private String generateSalt() {
-        return crypt.gensalt(config.getPasswordStrength());
+        return crypt.generateSalt(config.getPasswordStrength());
     }
 
     @Override
@@ -84,7 +84,7 @@ final class DefaultUserService implements UserService {
             throw new AuthenticationFailed("No such user with name %s!", name);
         }
 
-        if (!crypt.checkpw(password, user.getPassword())) {
+        if (!crypt.checkPassword(password, user.getPassword())) {
             throw new AuthenticationFailed("Authentication failed for user %s!", user.getName());
         }
 
