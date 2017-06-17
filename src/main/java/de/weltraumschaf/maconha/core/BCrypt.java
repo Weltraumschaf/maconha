@@ -691,16 +691,6 @@ public final class BCrypt implements Crypt {
         return generateSalt(log_rounds, new SecureRandom());
     }
 
-    /**
-     * Generate a salt for use with the {@link #hashPassword(String, String)} method, selecting a reasonable
-     * default for the number of hashing rounds to apply.
-     *
-     * @return an encoded salt value
-     */
-    public String generateSalt() {
-        return generateSalt(GENSALT_DEFAULT_LOG2_ROUNDS);
-    }
-
     @Override
     public boolean checkPassword(final String plaintext, final String hashed) {
         return equalsNoEarlyReturn(hashed, hashPassword(plaintext, hashed));
