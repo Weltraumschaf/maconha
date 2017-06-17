@@ -65,8 +65,7 @@ import java.security.SecureRandom;
  */
 public final class BCrypt implements Crypt {
     // BCrypt parameters
-    private static final int GENSALT_DEFAULT_LOG2_ROUNDS = 10;
-    private static final int BCRYPT_SALT_LEN = 16;
+    static final int BCRYPT_SALT_LEN = 16;
 
     // Blowfish parameters
     private static final int BLOWFISH_NUM_ROUNDS = 16;
@@ -658,7 +657,7 @@ public final class BCrypt implements Crypt {
      * @param random    an instance of SecureRandom to use
      * @return an encoded salt value
      */
-    private String generateSalt(final int logRounds, final SecureRandom random) {
+    String generateSalt(final int logRounds, final SecureRandom random) {
         if (logRounds < MIN_LOG_ROUNDS || logRounds > MAX_LOG_ROUNDS) {
             throw new IllegalArgumentException("Bad number of rounds");
         }
