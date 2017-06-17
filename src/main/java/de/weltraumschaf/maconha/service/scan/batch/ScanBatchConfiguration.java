@@ -40,15 +40,13 @@ public class ScanBatchConfiguration {
 
     private JobRepository jobs;
     private BucketRepo buckets;
-    private MediaFileRepo mediaFileRepo;
-    private KeywordRepo keywords;
     private MediaFileService mediaFiles;
 
     @Autowired
-    public ScanBatchConfiguration(final ScanJobExecutionListener listener, final JobBuilderFactory jobBuilderss, final StepBuilderFactory stepBuilders, final MaconhaConfiguration config) {
+    public ScanBatchConfiguration(final ScanJobExecutionListener listener, final JobBuilderFactory jobBuilders, final StepBuilderFactory stepBuilders, final MaconhaConfiguration config) {
         super();
         this.listener = listener;
-        this.jobBuilders = jobBuilderss;
+        this.jobBuilders = jobBuilders;
         this.stepBuilders = stepBuilders;
         this.config = config;
     }
@@ -61,16 +59,6 @@ public class ScanBatchConfiguration {
     @Autowired
     public void setBuckets(final BucketRepo buckets) {
         this.buckets = buckets;
-    }
-
-    @Autowired
-    public void setMediaFileRepo(final MediaFileRepo mediaFileRepo) {
-        this.mediaFileRepo = mediaFileRepo;
-    }
-
-    @Autowired
-    public void setKeywords(final KeywordRepo keywords) {
-        this.keywords = keywords;
     }
 
     @Autowired
