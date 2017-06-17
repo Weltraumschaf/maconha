@@ -47,7 +47,7 @@ public final class AdditionalHttpHeadersTest {
         assertThat(response.header, hasEntry("X-Maconha-Version", "snafu"));
         verify(chain, times(1)).doFilter(request, response);
     }
-    
+
     @Test
     public void addVersionHeader() {
         sut.addVersionHeader(mock(HttpServletRequest.class), response);
