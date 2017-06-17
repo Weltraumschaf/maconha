@@ -37,4 +37,19 @@ public final class BCryptTest {
 
         assertThat(buffer.toString(), is("OSHBPCS"));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decodeBase64_numberOfBytesToEncodeLessThanZero() {
+        sut.decodeBase64("", -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decodeBase64_numberOfBytesToEncodeIsZero() {
+        sut.decodeBase64("", 0);
+    }
+
+    @Test
+    public void decodeBase64() {
+        assertThat(sut.decodeBase64("OSHBPCS", 5), is(new byte[] {0x41, 0x42, 0x43, 0x44, 0x45}));
+    }
 }

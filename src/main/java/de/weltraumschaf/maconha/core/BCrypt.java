@@ -290,12 +290,13 @@ public final class BCrypt implements Crypt {
      * @param result                the destination buffer for the base64-encoded string
      */
     void encodeBase64(final byte toEncode[], final int numberOfBytesToEncode, final StringBuilder result) {
-        int off = 0;
-        int c1, c2;
-
         if (numberOfBytesToEncode <= 0 || numberOfBytesToEncode > toEncode.length) {
             throw new IllegalArgumentException("Invalid numberOfBytesToEncode! Must not be less than one or greater than toEncode length.");
         }
+
+        int off = 0;
+        int c1, c2;
+
 
         while (off < numberOfBytesToEncode) {
             c1 = toEncode[off++] & 0xff;
@@ -341,7 +342,7 @@ public final class BCrypt implements Crypt {
     }
 
     /**
-     * Decode a string encoded using bcrypt's base64 scheme to a byte array.
+     * Decode a string encoded using BCrypt's base64 scheme to a byte array.
      * <p>
      * Note that this is <strong>not</strong> compatible with the standard MIME-base64 encoding.
      * </p>
@@ -349,22 +350,23 @@ public final class BCrypt implements Crypt {
      * Throws {@link }IllegalArgumentException} if maxolen is invalid.
      * </p>
      *
-     * @param s       the string to decode
-     * @param maxolen the maximum number of bytes to decode
+     * @param toDecode the string to decode
+     * @param numberOfBytesToEncode  the maximum number of bytes to decode
      * @return an array containing the decoded bytes
      */
-    private byte[] decodeBase64(final String s, final int maxolen) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream(maxolen);
-        int off = 0, slen = s.length(), olen = 0;
-        byte c1, c2, c3, c4, o;
-
-        if (maxolen <= 0) {
-            throw new IllegalArgumentException("Invalid maxolen");
+    byte[] decodeBase64(final String toDecode, final int numberOfBytesToEncode) {
+        if (numberOfBytesToEncode <= 0) {
+            throw new IllegalArgumentException("Parameter numberOfBytesToEncode must not be less than one!");
         }
 
-        while (off < slen - 1 && olen < maxolen) {
-            c1 = char64(s.charAt(off++));
-            c2 = char64(s.charAt(off++));
+        final ByteArrayOutputStream out = new ByteArrayOutputStream(numberOfBytesToEncode);
+        int off = 0, slen = toDecode.length(), olen = 0;
+        byte c1, c2, c3, c4, o;
+
+
+        while (off < slen - 1 && olen < numberOfBytesToEncode) {
+            c1 = char64(toDecode.charAt(off++));
+            c2 = char64(toDecode.charAt(off++));
 
             if (c1 == -1 || c2 == -1) {
                 break;
@@ -374,11 +376,11 @@ public final class BCrypt implements Crypt {
             o |= (c2 & 0x30) >> 4;
             out.write(o);
 
-            if (++olen >= maxolen || off >= slen) {
+            if (++olen >= numberOfBytesToEncode || off >= slen) {
                 break;
             }
 
-            c3 = char64(s.charAt(off++));
+            c3 = char64(toDecode.charAt(off++));
 
             if (c3 == -1) {
                 break;
@@ -388,11 +390,11 @@ public final class BCrypt implements Crypt {
             o |= (c3 & 0x3c) >> 2;
             out.write(o);
 
-            if (++olen >= maxolen || off >= slen) {
+            if (++olen >= numberOfBytesToEncode || off >= slen) {
                 break;
             }
 
-            c4 = char64(s.charAt(off++));
+            c4 = char64(toDecode.charAt(off++));
             o = (byte) ((c3 & 0x03) << 6);
             o |= c4;
             out.write(o);
