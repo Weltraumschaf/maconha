@@ -175,11 +175,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
                 result = dirhash.execute();
             } catch (IOException | InterruptedException e) {
                 LOGGER.warn(e.getMessage(), e);
-                final Notification notification = UiNotifier.notification(
-                    "Scan job failed",
-                    "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                    bucket.getName(), bucket.getDirectory(), e.getMessage());
-                UiNotifier.notifyClient(id, notification, currentUi);
+                notifyError(e.getMessage());
                 return;
             }
 
@@ -187,11 +183,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
                 LOGGER.warn(
                     "Scan job with id {} failed with exit code {} and STDERR: {}",
                     id, result.getExitCode(), result.getStderr());
-                final Notification notification = UiNotifier.notification(
-                    "Scan job failed",
-                    "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                    bucket.getName(), bucket.getDirectory(), result.getStderr());
-                UiNotifier.notifyClient(id, notification, currentUi);
+                notifyError(result.getStderr());
                 return;
             }
 
@@ -202,11 +194,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
                 hashedFiles = new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums"));
             } catch (final IOException e) {
                 LOGGER.warn(e.getMessage(), e);
-                final Notification notification = UiNotifier.notification(
-                    "Scan job failed",
-                    "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                    bucket.getName(), bucket.getDirectory(), e.getMessage());
-                UiNotifier.notifyClient(id, notification, currentUi);
+                notifyError(e.getMessage());
                 return;
             }
 
@@ -215,6 +203,14 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
                 .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
                 .forEach(hashedFile -> mediaFiles.extractAndStoreMetaData(bucket, hashedFile));
             callback.afterScan(id);
+        }
+
+        private void notifyError(final String error) {
+            final Notification notification = UiNotifier.notification(
+                "Scan job failed",
+                "Scan for bucket '%s' in directory '%s' failed with error: %s",
+                bucket.getName(), bucket.getDirectory(), error);
+            UiNotifier.notifyClient(id, notification, currentUi);
         }
     }
 }
