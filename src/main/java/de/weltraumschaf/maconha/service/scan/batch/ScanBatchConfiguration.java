@@ -85,6 +85,7 @@ public class ScanBatchConfiguration {
 
     @Bean
     public ExecutionContextPromotionListener promotionListener() {
+        // Used to promote context values from one step to the next.
         final ExecutionContextPromotionListener listener = new ExecutionContextPromotionListener();
         listener.setKeys(new String[]{
             ContextKeys.UNSEEN_FILES
