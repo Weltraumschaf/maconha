@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.service.scan;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.UIDetachedException;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -64,6 +65,24 @@ public final class UiNotifierTest {
             return null;
         });
         final Page page = mock(Page.class);
+        when(ui.getPage()).thenReturn(page);
+
+        UiNotifier.notifyClient(42L, notification, ui);
+
+        verify(notification, times(1)).show(page);
+    }
+
+    @Test
+    public void notifyClient_throwsUIDetachedException() {
+        final Notification notification = mock(Notification.class);
+        final Page page = mock(Page.class);
+        doThrow(UIDetachedException.class).when(notification).show(page);
+        final UI ui = mock(UI.class);
+        when(ui.access(any())).then(invocation -> {
+            final Runnable runnable = invocation.getArgument(0);
+            runnable.run();
+            return null;
+        });
         when(ui.getPage()).thenReturn(page);
 
         UiNotifier.notifyClient(42L, notification, ui);
