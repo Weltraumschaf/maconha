@@ -14,7 +14,6 @@ import de.weltraumschaf.maconha.shell.Command;
 import de.weltraumschaf.maconha.shell.Commands;
 import de.weltraumschaf.maconha.shell.Result;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
 
     @Lazy
     @Autowired
-    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor,final ScanStatusService statuses) {
+    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor, final ScanStatusService statuses) {
         super(statuses);
         this.config = config;
         this.mediaFiles = mediaFiles;
@@ -108,17 +107,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             execution.getBucket().getName(), execution.getBucket().getDirectory(), id, duration);
         UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
 
-        // TODO Duplicate code, use convert().
-        final ScanStatus status = new ScanStatus(
-            id,
-            execution.getBucket().getName(),
-            formatDateTime(execution.getCreationTime()),
-            formatDateTime(execution.getStartTime()),
-            formatDateTime(execution.getStopTime()),
-            duration,
-            "COMPLETED",
-            ScanServiceFactory.THREAD);
-        statuses.storeStatus(status);
+        statuses.storeStatus(convert(execution));
         scans.remove(id);
     }
 
@@ -135,7 +124,18 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             formattedEndTime = "-";
         }
 
-        // TODO Duplicate code.
+        final String jobStatus;
+
+        if (execution.hasStopTime()) {
+            jobStatus = "COMPLETED";
+        } else {
+            if (execution.hasStartTime()) {
+                jobStatus = "RUNNING";
+            } else {
+                jobStatus = "CREATED";
+            }
+        }
+
         return new ScanStatus(
             execution.getId(),
             execution.getBucket().getName(),
@@ -143,7 +143,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             formatDateTime(execution.getStartTime()),
             formattedEndTime,
             formatDuration(startTime, endTime),
-            execution.hasStartTime()? "RUNNING" : "CREATED",
+            jobStatus,
             ScanServiceFactory.THREAD);
     }
 
