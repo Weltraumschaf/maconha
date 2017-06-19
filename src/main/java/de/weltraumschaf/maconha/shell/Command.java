@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 /**
- * Shell command.
+ * A executable command.
  */
 public interface Command {
 

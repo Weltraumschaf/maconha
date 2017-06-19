@@ -55,9 +55,9 @@ abstract class BaseCommand implements Command {
     @Override
     public final Result execute() throws IOException, InterruptedException {
         final Process process = builder.start(commandDir.resolve(command).toString(), arguments);
-        final IoThreadHandler stdout = new IoThreadHandler(process.getInputStream());
+        final InputThreadHandler stdout = new InputThreadHandler(process.getInputStream());
         stdout.start();
-        final IoThreadHandler stderr = new IoThreadHandler(process.getErrorStream());
+        final InputThreadHandler stderr = new InputThreadHandler(process.getErrorStream());
         stderr.start();
         int errCode = process.waitFor();
         stdout.join();
@@ -66,50 +66,4 @@ abstract class BaseCommand implements Command {
         return new Result(errCode, stdout.getOutput(), stderr.getOutput());
     }
 
-    /**
-     * Reads the output from the process in separate thread.
-     */
-    private static final class IoThreadHandler extends Thread {
-
-        /**
-         * Input to read from.
-         */
-        private final InputStream input;
-        /**
-         * Collects the read input.
-         */
-        private final StringBuilder buffer = new StringBuilder();
-
-        /**
-         * Dedicated constructor.
-         *
-         * @param input must not be {@code null}
-         */
-        IoThreadHandler(final InputStream input) {
-            super();
-            this.input = Validate.notNull(input, "input");
-        }
-
-        @Override
-        public void run() {
-            try (final Scanner br = new Scanner(new InputStreamReader(input))) {
-                while (br.hasNextLine()) {
-                    buffer.append(br.nextLine());
-
-                    if (br.hasNextLine()) {
-                        buffer.append('\n');
-                    }
-                }
-            }
-        }
-
-        /**
-         * Get the collected output.
-         *
-         * @return never {@code null}
-         */
-        String getOutput() {
-            return buffer.toString();
-        }
-    }
 }
