@@ -30,11 +30,12 @@ public class CommandsTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void dirhash() {
         final Command dirhash = new Commands(tmp.getRoot().toPath()).dirhash(Paths.get("/foo/bar"));
 
         assertThat(dirhash, is(not(nullValue())));
-        assertThat(dirhash.getPath(), is(tmp.getRoot().toPath()));
-        assertThat(dirhash.getArguments(), is("/foo/bar"));
+        final Class expectedType = Dirhash.class;
+        assertThat(dirhash, isA(expectedType));
     }
 }

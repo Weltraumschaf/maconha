@@ -17,9 +17,4 @@ public interface Command {
      */
     Result execute() throws IOException, InterruptedException;
 
-    Path getPath();
-
-    String getArguments();
-
-    String getCommand();
 }

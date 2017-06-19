@@ -17,8 +17,10 @@ import java.util.Scanner;
  */
 abstract class BaseCommand implements Command {
 
-    private final Path path;
-
+    /**
+     * Where to command is.
+     */
+    private final Path commandDir;
     /**
      * Command to execute.
      */
@@ -35,13 +37,13 @@ abstract class BaseCommand implements Command {
     /**
      * Dedicated constructor.
      *
-     * @param path must not be {@code null}
-     * @param command must not be {@code null} or empty
-     * @param arguments must not be {@code null}
+     * @param commandDir where the command is, must not be {@code null}
+     * @param command the command itself, must not be {@code null} or empty
+     * @param arguments must not be {@code null}, maybe empty
      */
-    BaseCommand(final Path path, final String command, final String arguments) {
+    BaseCommand(final Path commandDir, final String command, final String arguments) {
         super();
-        this.path = Validate.notNull(path, "path");
+        this.commandDir = Validate.notNull(commandDir, "commandDir");
         this.command = Validate.notEmpty(command, "command");
         this.arguments = Validate.notNull(arguments, "arguments");
     }
@@ -52,7 +54,7 @@ abstract class BaseCommand implements Command {
 
     @Override
     public final Result execute() throws IOException, InterruptedException {
-        final Process process = builder.start(path.resolve(command).toString(), arguments);
+        final Process process = builder.start(commandDir.resolve(command).toString(), arguments);
         final IoThreadHandler stdout = new IoThreadHandler(process.getInputStream());
         stdout.start();
         final IoThreadHandler stderr = new IoThreadHandler(process.getErrorStream());
@@ -62,21 +64,6 @@ abstract class BaseCommand implements Command {
         stderr.join();
 
         return new Result(errCode, stdout.getOutput(), stderr.getOutput());
-    }
-
-    @Override
-    public final Path getPath() {
-        return path;
-    }
-
-    @Override
-    public final String getArguments() {
-        return arguments;
-    }
-
-    @Override
-    public final String getCommand() {
-        return command;
     }
 
     /**
