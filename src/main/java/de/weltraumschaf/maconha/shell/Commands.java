@@ -10,7 +10,7 @@ import java.nio.file.Path;
 public final class Commands {
 
     /**
-     * PAth to the command.
+     * Path to the command.
      */
     private final Path path;
 
