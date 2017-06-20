@@ -1,14 +1,20 @@
 package de.weltraumschaf.maconha.shell;
 
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link DefaultProcessBuilderWrapper}.
  */
 public final class DefaultProcessBuilderWrapperTest {
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
     private final DefaultProcessBuilderWrapper sut = new DefaultProcessBuilderWrapper();
 
     @Test(expected = NullPointerException.class)
@@ -27,8 +33,9 @@ public final class DefaultProcessBuilderWrapperTest {
     }
 
     @Test
-    @Ignore("TODO")
-    public void start() throws IOException {
-        final Process process = sut.start("cmd", "Arg1", "Arg2");
+    public void start() throws IOException, InterruptedException {
+        final Process process = sut.start("ls", "-la", tmp.getRoot().getAbsolutePath());
+
+        assertThat(process.waitFor(), is(0));
     }
 }
