@@ -36,11 +36,11 @@ public final class ScanBatchConfigurationTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void taskExecutor() {
         final TaskExecutor taskExecutor = sut.taskExecutor();
         final Class expectedType = SimpleAsyncTaskExecutor.class;
 
-        //noinspection unchecked
         assertThat(taskExecutor, isA(expectedType));
         assertThat(((SimpleAsyncTaskExecutor)taskExecutor).getConcurrencyLimit(), is(10));
     }
