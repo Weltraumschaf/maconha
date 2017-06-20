@@ -32,11 +32,11 @@ final class InputThreadHandler extends Thread {
 
     @Override
     public void run() {
-        try (final Scanner br = new Scanner(new InputStreamReader(input))) {
-            while (br.hasNextLine()) {
-                buffer.append(br.nextLine());
+        try (final Scanner scanner = new Scanner(new InputStreamReader(input))) {
+            while (scanner.hasNextLine()) {
+                buffer.append(scanner.nextLine());
 
-                if (br.hasNextLine()) {
+                if (scanner.hasNextLine()) {
                     buffer.append('\n');
                 }
             }

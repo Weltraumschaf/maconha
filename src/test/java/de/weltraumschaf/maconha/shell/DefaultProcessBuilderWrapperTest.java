@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.shell;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,5 +24,11 @@ public final class DefaultProcessBuilderWrapperTest {
     @Test(expected = IllegalArgumentException.class)
     public void start_commandArgumentMustNotBeEmpty() throws IOException {
         sut.start();
+    }
+
+    @Test
+    @Ignore("TODO")
+    public void start() throws IOException {
+        final Process process = sut.start("cmd", "Arg1", "Arg2");
     }
 }
