@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
  * This class is package private because it must not be used directly from outside. Use the DI of Spring to get an
  * instance.
  * </p>
- * <p>
+ * <ul>
  * <li><a href="http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/">Writing asynchronous code with CompletableFuture</a></li>
  * <li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html">Interface CompletionStage&lt;T&gt;</a></li>
- * </p>
+ * </ul>
  */
 @Service(ScanServiceFactory.THREAD)
 final class ThreadScanService extends BaseScanService implements ScanService, ScanCallBack {
