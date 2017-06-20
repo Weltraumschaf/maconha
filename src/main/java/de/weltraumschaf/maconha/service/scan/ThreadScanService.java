@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  * </p>
  * <p>
  * <li><a href="http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/">Writing asynchronous code with CompletableFuture</a></li>
- * <li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html">Interface CompletionStage<T></a></li>
+ * <li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html">Interface CompletionStage&lt;T&gt;</a></li>
  * </p>
  */
 @Service(ScanServiceFactory.THREAD)
