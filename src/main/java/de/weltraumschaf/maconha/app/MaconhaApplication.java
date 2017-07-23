@@ -74,17 +74,4 @@ public class MaconhaApplication {
         }
     }
 
-    @Bean
-    public ApplicationContextFactory scanJobFactory() {
-        // Provide a context factory for the scan job so the job registry will be populated with the job.
-        return new GenericApplicationContextFactory(ScanBatchConfiguration.class);
-    }
-
-    @Bean
-    public FactoryBean serviceLocatorFactoryBean() {
-        final ServiceLocatorFactoryBean bean = new ServiceLocatorFactoryBean();
-        bean.setServiceLocatorInterface(ScanServiceFactory.class);
-        return bean;
-    }
-
 }
