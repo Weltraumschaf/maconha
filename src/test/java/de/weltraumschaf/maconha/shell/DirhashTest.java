@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.shell;
 
-import de.weltraumschaf.maconha.service.scan.hashing.HashFileReader;
-import de.weltraumschaf.maconha.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
+import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,7 +10,6 @@ import org.junit.rules.TemporaryFolder;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
