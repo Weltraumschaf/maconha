@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -11,8 +12,8 @@
 
     <groupId>de.weltraumschaf.maconha</groupId>
     <artifactId>maconha</artifactId>
-    <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>Maconha</name>
     <description>Search engine for my NAS.</description>
@@ -51,10 +52,8 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/Weltraumschaf/maconha.git
-        </connection>
-        <developerConnection>scm:git:git@github.com:Weltraumschaf/maconha.git
-        </developerConnection>
+        <connection>scm:git:git://github.com/Weltraumschaf/maconha.git</connection>
+        <developerConnection>scm:git:git@github.com:Weltraumschaf/maconha.git</developerConnection>
         <url>https://github.com/Weltraumschaf/maconha.git</url>
     </scm>
 
@@ -71,19 +70,26 @@
     </ciManagement>
 
     <properties>
-        <enforcer.skip>true</enforcer.skip>
-
+        <!-- Java compile options. -->
         <project.build.version.source>1.8</project.build.version.source>
         <project.build.version.target>${project.build.version.source}</project.build.version.target>
         <java.version>${project.build.version.source}</java.version>
 
+        <!-- Project options. -->
         <project.bin.directory>${project.basedir}/bin</project.bin.directory>
         <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
 
-        <!-- Dependency versions: -->
-        <springframework.version>1.5.4.RELEASE</springframework.version>
-        <vaadin.version>8.0.6</vaadin.version>
-        <vaadin-spring.version>2.0.0.RELEASE</vaadin-spring.version>
+        <!-- Plugin/build options. -->
+        <!--<vaadin.widgetset.mode>fetch</vaadin.widgetset.mode>-->
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <frontend.node.version>v6.11.0</frontend.node.version>
+
+        <!-- Dependency versions. -->
+        <vaadin.version>8.1.0.beta3</vaadin.version>
+        <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+        <springboot.version>1.5.4.RELEASE</springboot.version>
+        <org.vaadin.spring.version>0.0.7.RELEASE</org.vaadin.spring.version>
+        <vaadin-spring.version>2.1.0.beta2</vaadin-spring.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <dbunit.version>2.5.3</dbunit.version>
         <usertype.core.version>5.0.0.GA</usertype.core.version>
@@ -98,48 +104,6 @@
         <dependency.locations.enabled>false</dependency.locations.enabled>
     </properties>
 
-    <!-- http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-build-systems.html -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${springframework.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-bom</artifactId>
-                <version>${vaadin.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.vaadin.spring.extensions</groupId>
-                <artifactId>vaadin-spring-ext-boot</artifactId>
-                <version>${vaadin-spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.vaadin.spring.addons</groupId>
-                <artifactId>vaadin-spring-addon-eventbus</artifactId>
-                <version>${vaadin-spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.vaadin</groupId>
-                <artifactId>viritin</artifactId>
-                <version>2.0.beta1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.vaadin.teemu</groupId>
-                <artifactId>switch</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <repositories>
         <repository>
             <id>spring-milestone</id>
@@ -150,6 +114,16 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
+
+        <repository>
+            <id>vaadin-pre</id>
+            <url>http://maven.vaadin.com/vaadin-prereleases</url>
+        </repository>
+
+        <repository>
+            <id>vaadin-snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -157,45 +131,163 @@
             <id>spring-milestone</id>
             <url>https://repo.spring.io/libs-release</url>
         </pluginRepository>
+
+        <pluginRepository>
+            <id>vaadin-pre</id>
+            <url>http://maven.vaadin.com/vaadin-prereleases</url>
+        </pluginRepository>
+
+        <pluginRepository>
+            <id>vaadin-snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+        </pluginRepository>
     </pluginRepositories>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springboot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- Vaadin https://github.com/mstahv/spring-data-vaadin-crud/blob/master/pom.xml -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-boot</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.spring.addons</groupId>
-            <artifactId>vaadin-spring-addon-eventbus</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin</groupId>
-            <artifactId>viritin</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.vaadin.teemu</groupId>
-            <artifactId>switch</artifactId>
+            <artifactId>vaadin-server</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-push</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-themes</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
+            <version>${vaadin-spring.version}</version>
 
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-spring-boot</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot</artifactId>
+            <version>${vaadin-spring.version}</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring</artifactId>
+            <version>${vaadin-spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-security</artifactId>
+            <version>${vaadin-spring.version}</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addon</groupId>
+            <artifactId>confirmdialog</artifactId>
+            <version>3.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>webcomponents-helper</artifactId>
+            <version>0.2-SNAPSHOT</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jsoup</groupId>
+                    <artifactId>jsoup</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin</groupId>
+            <artifactId>viritin</artifactId>
+            <version>2.0.beta1</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.vaadin.addon</groupId>
+                    <artifactId>confirmdialog</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.teemu</groupId>
+            <artifactId>switch</artifactId>
+            <version>3.0.0</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+
             <exclusions>
-                <exclusion>
-                    <!-- We use Logback for logging. -->
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
                 <exclusion>
                     <!-- We use Jetty because it is cooler ;) -->
                     <groupId>org.springframework.boot</groupId>
@@ -205,15 +297,23 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
+            <groupId>org.vaadin.spring.addons</groupId>
+            <artifactId>vaadin-spring-addon-eventbus</artifactId>
+            <version>${org.vaadin.spring.version}</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-spring</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -222,11 +322,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
 
@@ -242,16 +337,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
-        </dependency>
-
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
         </dependency>
 
         <!-- jsr303 validation -->
@@ -275,7 +360,6 @@
             <version>${javax.el.version}</version>
         </dependency>
 
-        <!-- Joda-Time -->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -288,7 +372,6 @@
             <version>${usertype.core.version}</version>
         </dependency>
 
-        <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -313,7 +396,6 @@
             <version>${reflections.version}</version>
         </dependency>
 
-        <!-- http://tika.apache.org/ -->
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
@@ -323,14 +405,39 @@
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
             <version>1.14</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.tika</groupId>
+                    <artifactId>tika-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jsoup</groupId>
+                    <artifactId>jsoup</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.healthmarketscience.jackcess</groupId>
+                    <artifactId>jackcess</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.healthmarketscience.jackcess</groupId>
+            <artifactId>jackcess</artifactId>
+            <version>2.1.4</version>
         </dependency>
 
-        <!-- Provided from container -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
@@ -343,7 +450,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Testing dependencies -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -362,6 +468,10 @@
                 <exclusion>
                     <groupId>commons-codec</groupId>
                     <artifactId>commons-codec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi-ooxml</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -387,6 +497,10 @@
                 <exclusion>
                     <groupId>org.mockito</groupId>
                     <artifactId>mockito-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -435,7 +549,7 @@
     </dependencies>
 
     <build>
-        <finalName>maconha</finalName>
+        <finalName>${project.artifactId}</finalName>
 
         <resources>
             <resource>
@@ -458,6 +572,7 @@
         </resources>
 
         <plugins>
+            <!-- Project cleaning. -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
 
@@ -482,6 +597,142 @@
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+
+            <!-- Project generation. -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+
+                <configuration>
+                    <nodeVersion>${frontend.node.version}</nodeVersion>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>npm-install</id>
+
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>bower-install</id>
+
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.plugin.version}</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-widgetset</goal>
+                            <goal>update-theme</goal>
+                            <goal>compile</goal>
+                            <goal>compile-theme</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>xml-apis</groupId>
+                        <artifactId>xml-apis</artifactId>
+                        <version>1.4.01</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <extraJvmArgs>-Xmx2G</extraJvmArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>springloaded</artifactId>
+                        <version>1.2.6.RELEASE</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <!--
+                        Due to a change in the failsafe plugin the project artifact (jar) is on classpath instead of
+                        target/classes. The Spring Boot Maven plugin repackages this jar and failsafe plugin does not
+                        know which one to use (original or repackaged). So this is a workaround: The repackaged
+                        jar gets a classifier so that failsafe plugin can pick up the original one.
+
+                        See: https://github.com/spring-projects/spring-boot/issues/6254
+
+                        Will be fixed in failsafe plugin 2.19.2
+                    -->
+                    <classifier>exec</classifier>
+                    <fork>false</fork>
+                    <executable>true</executable>
+                    <!-- For debugging: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -->
+                    <jvmArguments>
+                        -Dspring.profiles.active=dev
+                    </jvmArguments>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>enforce-no-snapshots</id>
+
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+
+                        <configuration>
+                            <rules>
+                                <requireReleaseDeps>
+                                    <message>No Snapshots Allowed!</message>
+                                    <excludes>
+                                        <exclude>
+                                            com.vaadin:webcomponents-helper
+                                        </exclude>
+                                    </excludes>
+                                    <failWhenParentIsSnapshot>false</failWhenParentIsSnapshot>
+                                </requireReleaseDeps>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -661,98 +912,6 @@
                                 ${project.reporting.outputDirectory}/jacoco-it
                             </outputDirectory>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${springframework.version}</version>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>springloaded</artifactId>
-                        <version>1.2.6.RELEASE</version>
-                    </dependency>
-                </dependencies>
-
-                <configuration>
-                    <!--
-                        Due to a change in the failsafe plugin the project artifact (jar) is on classpath instead of
-                        target/classes. The Spring Boot Maven plugin repackages this jar and failsafe plugin does not
-                        know which one to use (original or repackaged). So this is a workaround: The repackaged
-                        jar gets a classifier so that failsafe plugin can pick up the original one.
-
-                        See: https://github.com/spring-projects/spring-boot/issues/6254
-
-                        Will be fixed in failsafe plugin 2.19.2
-                    -->
-                    <classifier>exec</classifier>
-                    <fork>false</fork>
-                    <executable>true</executable>
-                    <!-- For debugging: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 -->
-                    <jvmArguments>
-                        -Dspring.profiles.active=dev
-                    </jvmArguments>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.version}</version>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>update-widgetset</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-
-                <configuration>
-                    <nodeVersion>v6.10.2</nodeVersion>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <id>install-node-and-npm</id>
-
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <id>npm-install</id>
-
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <id>bower-install</id>
-
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
