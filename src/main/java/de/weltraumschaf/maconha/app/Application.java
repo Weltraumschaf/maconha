@@ -29,7 +29,6 @@ import java.util.Arrays;
 @EnableBatchProcessing(modular = true) // Modular because job configuration is in other class.
 @EnableConfigurationProperties(MaconhaConfiguration.class)
 @PropertySource(value = {"classpath:application.properties"})
-@EnableJpaRepositories(basePackageClasses = {RepoBasePackage.class})
 @EntityScan(basePackageClasses = {EntityBasePackage.class})
 @SpringBootApplication(scanBasePackageClasses = {Application.class, UiBasePackage.class, ServiceBasePackage.class})
 public class Application {

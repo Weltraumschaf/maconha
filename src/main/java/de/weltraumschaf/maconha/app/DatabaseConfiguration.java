@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.app;
 
+import de.weltraumschaf.maconha.backend.repo.RepoBasePackage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"de.weltraumschaf.maconha.backend.repo"})
+@EnableJpaRepositories(basePackageClasses = {RepoBasePackage.class})
 public class DatabaseConfiguration {
     @Value("${spring.datasource.driver-class-name}")
     private String driver = "";
