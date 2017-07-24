@@ -773,7 +773,8 @@
                             <target>
                                 <property name="lib.dir"
                                           value="${project.build.directory}/classes/static/lib"/>
-                                <delete includeemptydirs="true">
+
+                                <delete includeemptydirs="true" failonerror="false">
                                     <!-- Cleaning the Bootstrap Bower package and just leave the distribution files. -->
                                     <fileset dir="${lib.dir}/bootstrap"
                                              includes="fonts/**/*"/>
