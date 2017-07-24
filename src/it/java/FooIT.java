@@ -1,4 +1,4 @@
-import de.weltraumschaf.maconha.app.MaconhaApplication;
+import de.weltraumschaf.maconha.app.Application;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {MaconhaApplication.class})
+@ContextConfiguration(classes = {Application.class})
 public class FooIT {
 
 //    @Autowired

@@ -2,7 +2,6 @@ package de.weltraumschaf.maconha.app;
 
 import de.weltraumschaf.maconha.backend.model.entity.EntityBasePackage;
 import de.weltraumschaf.maconha.backend.repo.RepoBasePackage;
-import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.ServiceBasePackage;
 import de.weltraumschaf.maconha.ui.UiBasePackage;
 import org.slf4j.Logger;
@@ -32,17 +31,17 @@ import java.util.Arrays;
 @PropertySource(value = {"classpath:application.properties"})
 @EnableJpaRepositories(basePackageClasses = {RepoBasePackage.class})
 @EntityScan(basePackageClasses = {EntityBasePackage.class})
-@SpringBootApplication(scanBasePackageClasses = {MaconhaApplication.class, UiBasePackage.class, ServiceBasePackage.class})
-public class MaconhaApplication {
+@SpringBootApplication(scanBasePackageClasses = {Application.class, UiBasePackage.class, ServiceBasePackage.class})
+public class Application {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MaconhaApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     private final Environment environment;
 
     private final MaconhaConfiguration config;
 
     @Autowired
-    public MaconhaApplication(final Environment environment, final MaconhaConfiguration config) {
+    public Application(final Environment environment, final MaconhaConfiguration config) {
         super();
         this.environment = environment;
         this.config = config;
@@ -54,7 +53,7 @@ public class MaconhaApplication {
      * @param args arguments from command line
      */
     public static void main(final String[] args) {
-        SpringApplication.run(MaconhaApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     @PostConstruct
