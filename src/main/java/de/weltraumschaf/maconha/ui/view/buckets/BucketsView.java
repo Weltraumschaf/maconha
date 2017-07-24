@@ -9,7 +9,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.ui.view.SubView;
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.repo.BucketRepo;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanServiceFactory;

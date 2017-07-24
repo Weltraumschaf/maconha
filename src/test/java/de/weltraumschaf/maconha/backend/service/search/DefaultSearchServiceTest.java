@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.search;
 
-import de.weltraumschaf.maconha.backend.model.Keyword;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.Keyword;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.repo.KeywordRepo;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import org.junit.Ignore;

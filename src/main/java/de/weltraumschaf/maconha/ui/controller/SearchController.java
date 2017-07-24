@@ -2,7 +2,7 @@ package de.weltraumschaf.maconha.ui.controller;
 
 import de.weltraumschaf.maconha.core.NotAlphaNumeric;
 import de.weltraumschaf.maconha.core.ServedContentTypes;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.model.MediaType;
 import de.weltraumschaf.maconha.backend.service.SearchService;
 import org.slf4j.Logger;

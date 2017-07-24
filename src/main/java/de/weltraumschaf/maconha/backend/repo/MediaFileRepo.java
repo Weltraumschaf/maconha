@@ -1,6 +1,10 @@
 package de.weltraumschaf.maconha.backend.repo;
 
 import de.weltraumschaf.maconha.backend.model.*;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Keyword;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile_;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

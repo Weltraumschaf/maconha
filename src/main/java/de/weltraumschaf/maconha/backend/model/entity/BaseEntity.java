@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.model;
+package de.weltraumschaf.maconha.backend.model.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -11,7 +11,7 @@ import com.vaadin.ui.Label;
 import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.ui.view.buckets.BucketDeleteEvent;
 import de.weltraumschaf.maconha.backend.model.FileExtension;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.model.MediaType;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import org.slf4j.Logger;

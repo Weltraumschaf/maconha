@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.backend.repo;
 
-import de.weltraumschaf.maconha.backend.model.Keyword;
+import de.weltraumschaf.maconha.backend.model.entity.Keyword;
 
 import java.util.Collection;
 import java.util.List;

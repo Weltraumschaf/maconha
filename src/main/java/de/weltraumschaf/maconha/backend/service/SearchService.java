@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.backend.service;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.model.MediaType;
 
 import java.io.IOException;

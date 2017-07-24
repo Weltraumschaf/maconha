@@ -1,5 +1,6 @@
-package de.weltraumschaf.maconha.backend.model;
+package de.weltraumschaf.maconha.backend.model.entity;
 
+import de.weltraumschaf.maconha.backend.model.MediaType;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;

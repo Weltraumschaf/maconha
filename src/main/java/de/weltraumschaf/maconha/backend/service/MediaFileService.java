@@ -1,8 +1,8 @@
 package de.weltraumschaf.maconha.backend.service;
 
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.model.FileMetaData;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
 /**

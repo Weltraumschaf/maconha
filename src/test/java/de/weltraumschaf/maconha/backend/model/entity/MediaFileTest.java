@@ -1,5 +1,7 @@
-package de.weltraumschaf.maconha.backend.model;
+package de.weltraumschaf.maconha.backend.model.entity;
 
+import de.weltraumschaf.maconha.backend.model.FileExtension;
+import de.weltraumschaf.maconha.backend.model.MediaType;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;

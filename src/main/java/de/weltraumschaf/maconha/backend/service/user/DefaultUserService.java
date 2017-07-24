@@ -4,7 +4,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.core.BCrypt;
 import de.weltraumschaf.maconha.core.Crypt;
-import de.weltraumschaf.maconha.backend.model.User;
+import de.weltraumschaf.maconha.backend.model.entity.User;
 import de.weltraumschaf.maconha.backend.repo.UserRepo;
 import de.weltraumschaf.maconha.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

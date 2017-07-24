@@ -3,7 +3,7 @@ package de.weltraumschaf.maconha.backend.service.scan;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanServiceFactory;
 import de.weltraumschaf.maconha.backend.service.ScanStatusService;

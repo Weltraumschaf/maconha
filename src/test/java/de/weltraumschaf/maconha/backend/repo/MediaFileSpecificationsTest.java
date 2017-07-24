@@ -1,8 +1,8 @@
 package de.weltraumschaf.maconha.backend.repo;
 
 import de.weltraumschaf.maconha.backend.model.FileExtension;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
-import de.weltraumschaf.maconha.backend.model.MediaFile_;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile_;
 import de.weltraumschaf.maconha.backend.model.MediaType;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo.MediaFileSpecifications;
 import org.hibernate.jpa.criteria.CriteriaBuilderImpl;

@@ -6,7 +6,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import de.weltraumschaf.maconha.ui.view.SubView;
-import de.weltraumschaf.maconha.backend.model.MediaFile;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.model;
+package de.weltraumschaf.maconha.backend.model.entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

@@ -2,6 +2,9 @@ package de.weltraumschaf.maconha.backend.service.mediafile;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.backend.model.*;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Keyword;
+import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.repo.KeywordRepo;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;

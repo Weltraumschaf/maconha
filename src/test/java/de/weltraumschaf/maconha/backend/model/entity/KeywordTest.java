@@ -1,5 +1,5 @@
 
-package de.weltraumschaf.maconha.backend.model;
+package de.weltraumschaf.maconha.backend.model.entity;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;

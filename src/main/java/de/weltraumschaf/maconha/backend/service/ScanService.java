@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.backend.service;
 
 import com.vaadin.ui.UI;
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 
 import java.util.Collections;
 import java.util.List;

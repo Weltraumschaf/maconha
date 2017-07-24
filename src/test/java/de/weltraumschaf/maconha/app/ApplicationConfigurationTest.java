@@ -10,10 +10,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
- * Tests for {@link MaconhaApplication}.
+ * Tests for {@link ApplicationConfiguration}.
  */
-public final class MaconhaApplicationTest {
-    private final MaconhaApplication sut = new MaconhaApplication(mock(Environment.class), new MaconhaConfiguration());
+public final class ApplicationConfigurationTest {
+    private final ApplicationConfiguration sut = new ApplicationConfiguration();
 
     @Test
     public void scanJobFactory() {

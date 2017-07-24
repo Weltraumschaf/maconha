@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.scan;
 
 import com.vaadin.ui.UI;
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import org.joda.time.DateTime;
 
 /**

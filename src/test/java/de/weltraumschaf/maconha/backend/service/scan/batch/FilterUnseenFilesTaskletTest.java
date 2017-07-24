@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.backend.service.scan.batch;
 
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import org.junit.Rule;

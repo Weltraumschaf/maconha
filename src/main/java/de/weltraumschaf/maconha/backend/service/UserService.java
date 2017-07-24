@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.backend.service;
 
-import de.weltraumschaf.maconha.backend.model.User;
+import de.weltraumschaf.maconha.backend.model.entity.User;
 
 /**
  *

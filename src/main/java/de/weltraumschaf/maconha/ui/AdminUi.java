@@ -11,7 +11,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import de.weltraumschaf.maconha.ui.view.LoginView;
 import de.weltraumschaf.maconha.ui.view.MainView;
-import de.weltraumschaf.maconha.backend.model.User;
+import de.weltraumschaf.maconha.backend.model.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

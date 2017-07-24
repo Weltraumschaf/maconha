@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.scan.hashing;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.backend.model.Bucket;
+import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.model.FileExtension;
 
 import java.io.Serializable;

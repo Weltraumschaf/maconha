@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.backend.repo;
 
-import de.weltraumschaf.maconha.backend.model.User;
+import de.weltraumschaf.maconha.backend.model.entity.User;
 
 import java.util.Collection;
 
