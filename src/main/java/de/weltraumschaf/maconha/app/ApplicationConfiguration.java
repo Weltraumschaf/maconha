@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.app;
 
-//import com.vaadin.spring.access.SecuredViewAccessControl;
-//import org.springframework.context.annotation.Bean;
+import com.vaadin.spring.access.SecuredViewAccessControl;
+import org.springframework.context.annotation.Bean;
 import de.weltraumschaf.maconha.backend.service.ScanServiceFactory;
 import de.weltraumschaf.maconha.backend.service.scan.batch.ScanBatchConfiguration;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
@@ -10,8 +10,8 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * General application configuration.
@@ -24,20 +24,20 @@ public class ApplicationConfiguration {
      *
      * @return never {@code null}, always new instance
      */
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     /**
      * Special implementation to use Spring Security in conjunction with Vaadin.
      *
      * @return never {@code null}, always new instance
      */
-//    @Bean
-//    public SecuredViewAccessControl securedViewAccessControl() {
-//        return new SecuredViewAccessControl();
-//    }
+    @Bean
+    public SecuredViewAccessControl securedViewAccessControl() {
+        return new SecuredViewAccessControl();
+    }
 
     @Bean
     public ApplicationContextFactory scanJobFactory() {

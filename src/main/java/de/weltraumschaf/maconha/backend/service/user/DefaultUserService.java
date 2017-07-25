@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.backend.service.user;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
+import de.weltraumschaf.maconha.backend.model.Role;
 import de.weltraumschaf.maconha.core.BCrypt;
 import de.weltraumschaf.maconha.core.Crypt;
 import de.weltraumschaf.maconha.backend.model.entity.User;
@@ -43,7 +44,7 @@ final class DefaultUserService implements UserService {
     public User createUnprivileged(final String name, final String password) {
         final User unprivileged = createUser(name, password);
 
-        unprivileged.setAdmin(false);
+        unprivileged.setRole(Role.USER);
         users.save(unprivileged);
 
         return unprivileged;
@@ -53,7 +54,7 @@ final class DefaultUserService implements UserService {
     public User createAdmin(final String name, final String password) {
         final User admin = createUser(name, password);
 
-        admin.setAdmin(true);
+        admin.setRole(Role.ADMIN);
         users.save(admin);
 
         return admin;

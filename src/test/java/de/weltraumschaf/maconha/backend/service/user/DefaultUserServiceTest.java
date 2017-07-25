@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.user;
 
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
+import de.weltraumschaf.maconha.backend.model.Role;
 import de.weltraumschaf.maconha.core.Crypt;
 import de.weltraumschaf.maconha.backend.model.entity.User;
 import de.weltraumschaf.maconha.backend.repo.UserRepo;
@@ -45,7 +46,7 @@ public final class DefaultUserServiceTest {
 
         assertThat(user.getName(), is("user"));
         assertThat(user.getPassword(), is("****"));
-        assertThat(user.isAdmin(), is(false));
+        assertThat(user.getRole(), is(Role.USER));
         verify(users, times(1)).save(user);
     }
 
@@ -58,7 +59,7 @@ public final class DefaultUserServiceTest {
 
         assertThat(user.getName(), is("user"));
         assertThat(user.getPassword(), is("****"));
-        assertThat(user.isAdmin(), is(true));
+        assertThat(user.getRole(), is(Role.ADMIN));
         verify(users, times(1)).save(user);
     }
 

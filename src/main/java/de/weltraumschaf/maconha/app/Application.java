@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.app;
 
+import de.weltraumschaf.maconha.app.security.SecurityBasePackage;
 import de.weltraumschaf.maconha.backend.model.entity.EntityBasePackage;
 import de.weltraumschaf.maconha.backend.repo.RepoBasePackage;
 import de.weltraumschaf.maconha.backend.service.ServiceBasePackage;
@@ -30,8 +31,19 @@ import java.util.Arrays;
 @EnableConfigurationProperties(MaconhaConfiguration.class)
 @PropertySource(value = {"classpath:application.properties"})
 @EntityScan(basePackageClasses = {EntityBasePackage.class})
-@SpringBootApplication(scanBasePackageClasses = {Application.class, UiBasePackage.class, ServiceBasePackage.class})
+@SpringBootApplication(scanBasePackageClasses = {
+    Application.class,
+    UiBasePackage.class,
+    ServiceBasePackage.class,
+    SecurityBasePackage.class
+})
 public class Application {
+
+    public static final String ADMIN_URL = "/admin";
+    public static final String LOGIN_URL = "/login.html";
+    public static final String LOGOUT_URL = "/login.html?logout";
+    public static final String LOGIN_FAILURE_URL = "/login.html?error";
+    public static final String LOGIN_PROCESSING_URL = "/login";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 

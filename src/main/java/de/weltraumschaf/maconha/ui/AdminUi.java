@@ -9,6 +9,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
+import de.weltraumschaf.maconha.backend.model.Role;
 import de.weltraumschaf.maconha.ui.view.LoginView;
 import de.weltraumschaf.maconha.ui.view.MainView;
 import de.weltraumschaf.maconha.backend.model.entity.User;
@@ -55,7 +56,7 @@ public final class AdminUi extends UI implements EventBusListener<User> {
     private void updateContent() {
         final User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
 
-        if (null != user && user.isAdmin()) {
+        if (null != user && user.getRole().equalsIgnoreCase(Role.ADMIN)) {
             setContent(main);
             removeStyleName("loginview");
             getNavigator().navigateTo(getNavigator().getState());
