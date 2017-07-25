@@ -1,0 +1,6 @@
+@mixin dashboardview {
+
+  .dashboard-view[width-range~="-599px"] {
+    /* minimize spacing/padding on small screens */
+  }
+}
