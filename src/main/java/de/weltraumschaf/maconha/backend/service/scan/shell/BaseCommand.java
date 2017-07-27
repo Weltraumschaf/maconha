@@ -1,12 +1,9 @@
-package de.weltraumschaf.maconha.shell;
+package de.weltraumschaf.maconha.backend.service.scan.shell;
 
 import de.weltraumschaf.commons.validate.Validate;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.Scanner;
 
 /**
  * Common base class for commands.

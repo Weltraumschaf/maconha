@@ -1,5 +1,5 @@
 
-package de.weltraumschaf.maconha.shell;
+package de.weltraumschaf.maconha.backend.service.scan.shell;
 
 import org.junit.Rule;
 import org.junit.Test;

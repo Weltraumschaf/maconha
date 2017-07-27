@@ -1,7 +1,6 @@
-package de.weltraumschaf.maconha.shell;
+package de.weltraumschaf.maconha.backend.service.scan.shell;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * A executable command.

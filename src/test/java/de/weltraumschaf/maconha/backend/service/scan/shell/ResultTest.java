@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.shell;
+package de.weltraumschaf.maconha.backend.service.scan.shell;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;

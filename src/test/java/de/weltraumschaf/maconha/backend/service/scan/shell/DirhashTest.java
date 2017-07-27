@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.shell;
+package de.weltraumschaf.maconha.backend.service.scan.shell;
 
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
@@ -40,7 +40,7 @@ public class DirhashTest {
 
     @Test
     public void execute() throws IOException, InterruptedException, URISyntaxException {
-        final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/shell/dirhash_fixtures").toURI();
+        final URI fixtures = getClass().getResource("/de/weltraumschaf/maconha/backend/service/scan/shell/dirhash_fixtures").toURI();
         Path target = tmp.getRoot().toPath().resolve("filesToHash");
         FileUtils.copyDirectory(Paths.get(fixtures).toFile(), target.toFile());
         target = target.toRealPath();
