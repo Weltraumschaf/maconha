@@ -1,7 +1,5 @@
 package de.weltraumschaf.maconha.app;
 
-import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.core.BCrypt;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -22,9 +20,6 @@ public class MaconhaConfiguration {
 
     @SuppressWarnings("unused")
     private boolean debug;
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private int passwordStrength = 10;
 
     @NotBlank
     @SuppressWarnings("FieldCanBeLocal")
@@ -72,39 +67,6 @@ public class MaconhaConfiguration {
      */
     public void setDebug(final boolean debug) {
         this.debug = debug;
-    }
-
-    /**
-     * Get the password strength.
-     *
-     * @return number between {@link BCrypt#MIN_LOG_ROUNDS} and {@link BCrypt#MAX_LOG_ROUNDS}
-     */
-    public int getPasswordStrength() {
-        if (passwordStrength < BCrypt.MIN_LOG_ROUNDS) {
-            return BCrypt.MIN_LOG_ROUNDS;
-        }
-
-        if (passwordStrength > BCrypt.MAX_LOG_ROUNDS) {
-            return BCrypt.MAX_LOG_ROUNDS;
-        }
-
-        return passwordStrength;
-    }
-
-    /**
-     * Set the password strength.
-     *
-     * @param passwordStrength must be between {@link BCrypt#MIN_LOG_ROUNDS} and {@link BCrypt#MAX_LOG_ROUNDS}
-     */
-    public void setPasswordStrength(final int passwordStrength) {
-        Validate.greaterThanOrEqual(passwordStrength, BCrypt.MIN_LOG_ROUNDS, "passwordStrength");
-
-        if (passwordStrength > BCrypt.MAX_LOG_ROUNDS) {
-            throw new IllegalArgumentException(
-                "Parameter 'passwordStrength' must not be greater than " + BCrypt.MAX_LOG_ROUNDS + "!");
-        }
-
-        this.passwordStrength = passwordStrength;
     }
 
     /**
@@ -169,7 +131,6 @@ public class MaconhaConfiguration {
 
         final MaconhaConfiguration that = (MaconhaConfiguration) o;
         return debug == that.debug &&
-            passwordStrength == that.passwordStrength &&
             Objects.equals(version, that.version) &&
             Objects.equals(title, that.title) &&
             Objects.equals(bindir, that.bindir) &&
@@ -178,7 +139,7 @@ public class MaconhaConfiguration {
 
     @Override
     public int hashCode() {
-        return Objects.hash(version, debug, passwordStrength, title, bindir, homedir);
+        return Objects.hash(version, debug, title, bindir, homedir);
     }
 
     @Override
@@ -186,7 +147,6 @@ public class MaconhaConfiguration {
         return "MaconhaConfiguration{" +
             "version='" + version + '\'' +
             ", debug=" + debug +
-            ", passwordStrength=" + passwordStrength +
             ", title='" + title + '\'' +
             ", bindir='" + bindir + '\'' +
             ", homedir='" + homedir + '\'' +

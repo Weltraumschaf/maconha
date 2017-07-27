@@ -2,11 +2,11 @@ package de.weltraumschaf.maconha.backend.service.user;
 
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.backend.model.Role;
-import de.weltraumschaf.maconha.core.Crypt;
 import de.weltraumschaf.maconha.backend.model.entity.User;
 import de.weltraumschaf.maconha.backend.repo.UserRepo;
 import de.weltraumschaf.maconha.backend.service.UserService;
 import org.junit.Test;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public final class DefaultUserServiceTest {
     private final UserRepo users = mock(UserRepo.class);
     private final MaconhaConfiguration config = new MaconhaConfiguration();
-    private final Crypt crypt = mock(Crypt.class);
+    private final PasswordEncoder crypt = mock(PasswordEncoder.class);
     private final DefaultUserService sut = new DefaultUserService(users, config, crypt);
 
     @Test
@@ -39,8 +39,7 @@ public final class DefaultUserServiceTest {
 
     @Test
     public void createUnprivileged() {
-        when(crypt.generateSalt(config.getPasswordStrength())).thenReturn("salt");
-        when(crypt.hashPassword("pass", "salt")).thenReturn("****");
+        when(crypt.encode("pass")).thenReturn("****");
 
         final User user = sut.createUnprivileged("user", "pass");
 
@@ -52,8 +51,7 @@ public final class DefaultUserServiceTest {
 
     @Test
     public void createAdmin() {
-        when(crypt.generateSalt(config.getPasswordStrength())).thenReturn("salt");
-        when(crypt.hashPassword("pass", "salt")).thenReturn("****");
+        when(crypt.encode("pass")).thenReturn("****");
 
         final User user = sut.createAdmin("user", "pass");
 
@@ -71,7 +69,7 @@ public final class DefaultUserServiceTest {
     @Test(expected = UserService.AuthenticationFailed.class)
     public void authenticate_throwsExceptionIfPasswordDoesNotMatch() {
         when(users.findByName("user")).thenReturn(new User());
-        when(crypt.checkPassword(anyString(), anyString())).thenReturn(false);
+        when(crypt.matches(anyString(), anyString())).thenReturn(false);
 
         sut.authenticate("user", "pass");
     }
@@ -81,7 +79,7 @@ public final class DefaultUserServiceTest {
         final User user = new User();
         user.setPassword("hash");
         when(users.findByName("user")).thenReturn(user);
-        when(crypt.checkPassword("pass", "hash")).thenReturn(true);
+        when(crypt.matches("pass", "hash")).thenReturn(true);
 
         assertThat(sut.authenticate("user", "pass"), is(user));
     }

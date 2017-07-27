@@ -6,7 +6,6 @@ spring.datasource.username           = maconha
 spring.datasource.password
 
 maconha.title               = Fuder par a paz do mundo!
-maconha.passwordstrength    = 10
 maconha.bindir              = MACONHA_PREFIX/bin
 maconha.homedir             = MACONHA_PREFIX/var/maconha
 
