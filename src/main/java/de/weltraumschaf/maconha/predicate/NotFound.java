@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.predicate;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

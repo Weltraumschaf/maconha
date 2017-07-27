@@ -1,7 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.search;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.core.NotFound;
+import de.weltraumschaf.maconha.predicate.NotFound;
 import de.weltraumschaf.maconha.backend.model.entity.Keyword;
 import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.model.MediaType;

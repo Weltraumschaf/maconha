@@ -2,7 +2,7 @@ package de.weltraumschaf.maconha.backend.service.mediafile;
 
 import java.util.function.Predicate;
 
-import de.weltraumschaf.maconha.core.NotAlphaNumeric;
+import de.weltraumschaf.maconha.predicate.NotAlphaNumeric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

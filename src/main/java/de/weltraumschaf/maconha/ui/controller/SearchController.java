@@ -1,6 +1,6 @@
 package de.weltraumschaf.maconha.ui.controller;
 
-import de.weltraumschaf.maconha.core.NotAlphaNumeric;
+import de.weltraumschaf.maconha.predicate.NotAlphaNumeric;
 import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.model.MediaType;
 import de.weltraumschaf.maconha.backend.service.SearchService;
