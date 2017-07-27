@@ -27,7 +27,6 @@ import java.util.Arrays;
  */
 @EnableAsync
 @EnableEventBus
-@EnableBatchProcessing(modular = true) // Modular because job configuration is in other class.
 @EnableConfigurationProperties(MaconhaConfiguration.class)
 @PropertySource(value = {"classpath:application.properties"})
 @EntityScan(basePackageClasses = {EntityBasePackage.class})

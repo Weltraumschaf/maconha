@@ -12,7 +12,6 @@ import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.repo.BucketRepo;
 import de.weltraumschaf.maconha.backend.service.ScanService;
-import de.weltraumschaf.maconha.backend.service.ScanServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,6 @@ public final class BucketsView extends SubView {
         .withColumnHeaders("ID", "Name", "Directory")
         .withFullWidth();
 
-    private final ScanServiceFactory scanners;
     private final BucketRepo buckets;
     private final BucketForm form;
     private final EventBus.UIEventBus events;
@@ -60,9 +58,9 @@ public final class BucketsView extends SubView {
     private ScanService scanner;
 
     @Autowired
-    public BucketsView(@SuppressWarnings("SpringJavaAutowiringInspection") final ScanServiceFactory scanners, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events, final MaconhaConfiguration config) {
+    public BucketsView(@SuppressWarnings("SpringJavaAutowiringInspection") final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events, final MaconhaConfiguration config) {
         super(TITLE, TITLE_ID);
-        this.scanners = scanners;
+        this.scanner = scanner;
         this.buckets = buckets;
         this.form = form;
         this.events = events;
@@ -71,7 +69,6 @@ public final class BucketsView extends SubView {
 
     @Override
     protected void subInit() {
-        scanner = scanners.create(config.getScanner());
         root.addComponent(buildContent());
         // Listen to change events emitted by PersonForm see onEvent method.
         events.subscribe(this);

@@ -46,8 +46,7 @@ public final class DefaultScanStatusServiceConcurrentTest extends MultithreadedT
         "started",
         "ended",
         "duration",
-        "status",
-        "type"
+        "status"
     );
     private final DefaultScanStatusService sut = new DefaultScanStatusService(config, serializer);
 

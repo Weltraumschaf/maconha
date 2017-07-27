@@ -18,6 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Common functionality for scan services.
+ *
+ * TODO Inline this class.
  */
 abstract class BaseScanService {
 

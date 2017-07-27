@@ -38,10 +38,6 @@ public class MaconhaConfiguration {
     @SuppressWarnings("unused")
     private String homedir;
 
-    @NotBlank
-    @SuppressWarnings("FieldCanBeLocal")
-    private String scanner = "batch";
-
     /**
      * Get the applications semantic version.
      *
@@ -165,14 +161,6 @@ public class MaconhaConfiguration {
         this.homedir = homedir;
     }
 
-    public String getScanner() {
-        return scanner;
-    }
-
-    public void setScanner(final String scanner) {
-        this.scanner = scanner;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (!(o instanceof MaconhaConfiguration)) {
@@ -185,13 +173,12 @@ public class MaconhaConfiguration {
             Objects.equals(version, that.version) &&
             Objects.equals(title, that.title) &&
             Objects.equals(bindir, that.bindir) &&
-            Objects.equals(homedir, that.homedir) &&
-            Objects.equals(scanner, that.scanner);
+            Objects.equals(homedir, that.homedir);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(version, debug, passwordStrength, title, bindir, homedir, scanner);
+        return Objects.hash(version, debug, passwordStrength, title, bindir, homedir);
     }
 
     @Override
@@ -203,7 +190,6 @@ public class MaconhaConfiguration {
             ", title='" + title + '\'' +
             ", bindir='" + bindir + '\'' +
             ", homedir='" + homedir + '\'' +
-            ", scanner='" + scanner + '\'' +
             '}';
     }
 }

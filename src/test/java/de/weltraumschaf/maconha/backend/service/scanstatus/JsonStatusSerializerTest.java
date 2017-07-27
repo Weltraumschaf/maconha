@@ -49,8 +49,7 @@ public final class JsonStatusSerializerTest {
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         ));
 
         try (final BufferedWriter writer = Files.newBufferedWriter(statusFile)) {
@@ -58,7 +57,7 @@ public final class JsonStatusSerializerTest {
         }
 
         assertEquals(
-            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}]",
+            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}]",
             new String(Files.readAllBytes(statusFile)), false);
     }
 
@@ -73,8 +72,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             ), new ScanStatus(
                 43L,
                 "bucketTwo",
@@ -82,8 +80,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             ), new ScanStatus(
                 44L,
                 "bucketThree",
@@ -91,8 +88,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             )
         );
 
@@ -101,9 +97,9 @@ public final class JsonStatusSerializerTest {
         }
 
         assertEquals(
-            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}," +
-                "{\"id\":43,\"bucketName\":\"bucketTwo\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}," +
-                "{\"id\":44,\"bucketName\":\"bucketThree\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}]",
+            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}," +
+                "{\"id\":43,\"bucketName\":\"bucketTwo\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}," +
+                "{\"id\":44,\"bucketName\":\"bucketThree\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}]",
             new String(Files.readAllBytes(statusFile)), false);
     }
 
@@ -126,7 +122,7 @@ public final class JsonStatusSerializerTest {
     @Test
     public void deserialize_oneElement() {
         final Collection<ScanStatus> result = sut.deserialize(new StringReader(
-            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}]"));
+            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}]"));
 
         assertThat(result, containsInAnyOrder(
             new ScanStatus(
@@ -136,8 +132,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             )
         ));
     }
@@ -145,9 +140,9 @@ public final class JsonStatusSerializerTest {
     @Test
     public void deserialize_threeElements() {
         final Collection<ScanStatus> result = sut.deserialize(new StringReader(
-            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}," +
-                "{\"id\":43,\"bucketName\":\"bucketTwo\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}," +
-                "{\"id\":44,\"bucketName\":\"bucketThree\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[],\"type\":\"type\"}]"));
+            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}," +
+                "{\"id\":43,\"bucketName\":\"bucketTwo\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}," +
+                "{\"id\":44,\"bucketName\":\"bucketThree\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}]"));
 
         assertThat(result, containsInAnyOrder(
             new ScanStatus(
@@ -157,8 +152,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             ), new ScanStatus(
                 43L,
                 "bucketTwo",
@@ -166,8 +160,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             ), new ScanStatus(
                 44L,
                 "bucketThree",
@@ -175,8 +168,7 @@ public final class JsonStatusSerializerTest {
                 "started",
                 "ended",
                 "duration",
-                "status",
-                "type"
+                "status"
             )
         ));
     }

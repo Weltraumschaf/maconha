@@ -58,8 +58,7 @@ public final class DefaultScanStatusServiceTest {
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         );
         when(serializer.deserialize(any(Reader.class))).thenReturn(Collections.singletonList(status));
 
@@ -77,8 +76,7 @@ public final class DefaultScanStatusServiceTest {
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         );
 
         sut.storeStatus(status);
@@ -95,17 +93,16 @@ public final class DefaultScanStatusServiceTest {
     @Test
     public void storeStatusesToFile() throws IOException {
         createStatusesFile();
-        final ScanService.ScanStatus strored = new ScanService.ScanStatus(
+        final ScanService.ScanStatus stored = new ScanService.ScanStatus(
             42L,
             "bucket",
             "created",
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         );
-        when(serializer.deserialize(any(Reader.class))).thenReturn(Collections.singletonList(strored));
+        when(serializer.deserialize(any(Reader.class))).thenReturn(Collections.singletonList(stored));
         final ScanService.ScanStatus newStatus = new ScanService.ScanStatus(
             43L,
             "bucket",
@@ -113,14 +110,13 @@ public final class DefaultScanStatusServiceTest {
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         );
 
         sut.storeStatus(newStatus);
 
         verify(serializer, times(1))
-            .serialize(eq(Arrays.asList(strored, newStatus)), any(Appendable.class));
+            .serialize(eq(Arrays.asList(stored, newStatus)), any(Appendable.class));
     }
 
     @Test
@@ -141,8 +137,7 @@ public final class DefaultScanStatusServiceTest {
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         );
         final ScanService.ScanStatus two = new ScanService.ScanStatus(
             23L,
@@ -151,8 +146,7 @@ public final class DefaultScanStatusServiceTest {
             "started",
             "ended",
             "duration",
-            "status",
-            "type"
+            "status"
         );
         when(serializer.deserialize(any(Reader.class))).thenReturn(Arrays.asList(one, two));
 

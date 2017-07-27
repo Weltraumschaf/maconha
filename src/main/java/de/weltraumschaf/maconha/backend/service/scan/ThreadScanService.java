@@ -6,7 +6,6 @@ import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.ScanService;
-import de.weltraumschaf.maconha.backend.service.ScanServiceFactory;
 import de.weltraumschaf.maconha.backend.service.ScanStatusService;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
  * <li><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html">Interface CompletionStage&lt;T&gt;</a></li>
  * </ul>
  */
-@Service(ScanServiceFactory.THREAD)
+@Service
 final class ThreadScanService extends BaseScanService implements ScanService, ScanCallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
@@ -147,8 +146,7 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             formatDateTime(execution.getStartTime()),
             formattedEndTime,
             formatDuration(startTime, endTime),
-            jobStatus,
-            ScanServiceFactory.THREAD);
+            jobStatus);
     }
 
     private static class ScanTask implements Runnable {

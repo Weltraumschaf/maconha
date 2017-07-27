@@ -12,7 +12,6 @@ import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanService.ScanStatus;
-import de.weltraumschaf.maconha.backend.service.ScanServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,20 +38,16 @@ public final class ScansView extends SubView {
         .withProperties("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus", "jobExitCode", "type")
         .withColumnHeaders("ID", "Bucket Name", "Created", "Started", "Finished", "Duration", "Status", "Exit Code", "Type")
         .withFullWidth();
-    private final ScanServiceFactory scanners;
-    private final MaconhaConfiguration config;
-    private ScanService scanner;
+    private final ScanService scanner;
 
     @Autowired
-    ScansView(final ScanServiceFactory scanners, final MaconhaConfiguration config) {
+    ScansView(final ScanService scanner, final MaconhaConfiguration config) {
         super(TITLE, TITLE_ID);
-        this.scanners = scanners;
-        this.config = config;
+        this.scanner = scanner;
     }
 
     @Override
     protected void subInit() {
-        scanner = scanners.create(config.getScanner());
         root.addComponent(buildContent());
     }
 
