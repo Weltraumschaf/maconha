@@ -1,11 +1,11 @@
-package de.weltraumschaf.maconha.core;
+package de.weltraumschaf.maconha.ui.controller;
 
 import org.springframework.http.MediaType;
 
 /**
  * The default content type this application serves.
  */
-public interface ServedContentTypes {
+interface ServedContentTypes {
     /**
      * The default served.
      */

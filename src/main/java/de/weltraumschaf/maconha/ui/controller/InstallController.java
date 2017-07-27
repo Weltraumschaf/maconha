@@ -1,7 +1,6 @@
 package de.weltraumschaf.maconha.ui.controller;
 
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
-import de.weltraumschaf.maconha.core.ServedContentTypes;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.backend.service.UserService;
 import org.slf4j.Logger;
