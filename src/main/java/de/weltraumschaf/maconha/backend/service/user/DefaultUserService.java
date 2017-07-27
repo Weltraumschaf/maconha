@@ -37,7 +37,7 @@ final class DefaultUserService implements UserService {
 
     @Override
     public boolean isThereNoAdminUser() {
-        return users.findByAdmin(true).isEmpty();
+        return users.findByRole(Role.ADMIN).isEmpty();
     }
 
     @Override

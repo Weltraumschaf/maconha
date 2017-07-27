@@ -25,14 +25,14 @@ public final class DefaultUserServiceTest {
 
     @Test
     public void isThereNoAdminUser_trueIfNoUserPresent() {
-        when(users.findByAdmin(true)).thenReturn(Collections.emptyList());
+        when(users.findByRole(Role.ADMIN)).thenReturn(Collections.emptyList());
 
         assertThat(sut.isThereNoAdminUser(), is(true));
     }
 
     @Test
     public void isThereNoAdminUser_falseIfUserPresent() {
-        when(users.findByAdmin(true)).thenReturn(Collections.singletonList(new User()));
+        when(users.findByRole(Role.ADMIN)).thenReturn(Collections.singletonList(new User()));
 
         assertThat(sut.isThereNoAdminUser(), is(false));
     }

@@ -10,5 +10,5 @@ import java.util.Collection;
 public interface UserRepo extends BaseRepo<User> {
     User findByName(String name);
 
-    Collection<User> findByAdmin(boolean isAdmin);
+    Collection<User> findByRole(String role);
 }
