@@ -41,6 +41,12 @@
             </label>
         </div>
 
+        <div class="form-group">
+            <label for="username">Password:
+                <input type="email" class="form-control" name="email">
+            </label>
+        </div>
+
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
 </#if>

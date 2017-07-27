@@ -50,8 +50,9 @@ public final class InstallController extends BaseWebController {
         if (users.isThereNoAdminUser()) {
             final String username = request.getParameter("username");
             final String password = request.getParameter("password");
+            final String email = request.getParameter("email");
             LOGGER.debug("Create first admin with name {}.", username);
-            users.createAdmin(username, password);
+            users.createAdmin(username, password, email);
             model.put("installationDone", true);
             return new ModelAndView("install", model);
         }

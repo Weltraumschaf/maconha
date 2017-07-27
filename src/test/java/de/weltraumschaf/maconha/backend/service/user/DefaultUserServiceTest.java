@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.backend.service.user;
 
-import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.backend.model.Role;
 import de.weltraumschaf.maconha.backend.model.entity.User;
 import de.weltraumschaf.maconha.backend.repo.UserRepo;
@@ -19,9 +18,8 @@ import static org.mockito.Mockito.*;
  */
 public final class DefaultUserServiceTest {
     private final UserRepo users = mock(UserRepo.class);
-    private final MaconhaConfiguration config = new MaconhaConfiguration();
     private final PasswordEncoder crypt = mock(PasswordEncoder.class);
-    private final DefaultUserService sut = new DefaultUserService(users, config, crypt);
+    private final DefaultUserService sut = new DefaultUserService(users, crypt);
 
     @Test
     public void isThereNoAdminUser_trueIfNoUserPresent() {
@@ -41,10 +39,11 @@ public final class DefaultUserServiceTest {
     public void createUnprivileged() {
         when(crypt.encode("pass")).thenReturn("****");
 
-        final User user = sut.createUnprivileged("user", "pass");
+        final User user = sut.createUnprivileged("user", "pass", "email");
 
         assertThat(user.getName(), is("user"));
         assertThat(user.getPassword(), is("****"));
+        assertThat(user.getEmail(), is("email"));
         assertThat(user.getRole(), is(Role.USER));
         verify(users, times(1)).save(user);
     }
@@ -53,10 +52,11 @@ public final class DefaultUserServiceTest {
     public void createAdmin() {
         when(crypt.encode("pass")).thenReturn("****");
 
-        final User user = sut.createAdmin("user", "pass");
+        final User user = sut.createAdmin("user", "pass", "email");
 
         assertThat(user.getName(), is("user"));
         assertThat(user.getPassword(), is("****"));
+        assertThat(user.getEmail(), is("email"));
         assertThat(user.getRole(), is(Role.ADMIN));
         verify(users, times(1)).save(user);
     }

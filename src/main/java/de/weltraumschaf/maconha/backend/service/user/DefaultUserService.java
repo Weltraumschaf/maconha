@@ -1,13 +1,11 @@
 package de.weltraumschaf.maconha.backend.service.user;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.backend.model.Role;
 import de.weltraumschaf.maconha.backend.model.entity.User;
 import de.weltraumschaf.maconha.backend.repo.UserRepo;
 import de.weltraumschaf.maconha.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +16,12 @@ import org.springframework.stereotype.Service;
 final class DefaultUserService implements UserService {
 
     private final UserRepo users;
-    private final MaconhaConfiguration config;
     private final PasswordEncoder crypt;
 
-    @Lazy
     @Autowired
-    DefaultUserService(final UserRepo users, final MaconhaConfiguration config, final PasswordEncoder crypt) {
+    DefaultUserService(final UserRepo users, final PasswordEncoder crypt) {
         super();
         this.users = users;
-        this.config = config;
         this.crypt = crypt;
     }
 
@@ -36,8 +31,8 @@ final class DefaultUserService implements UserService {
     }
 
     @Override
-    public User createUnprivileged(final String name, final String password) {
-        final User unprivileged = createUser(name, password);
+    public User createUnprivileged(final String name, final String password, final String email) {
+        final User unprivileged = createUser(name, password, email);
 
         unprivileged.setRole(Role.USER);
         users.save(unprivileged);
@@ -46,8 +41,8 @@ final class DefaultUserService implements UserService {
     }
 
     @Override
-    public User createAdmin(final String name, final String password) {
-        final User admin = createUser(name, password);
+    public User createAdmin(final String name, final String password, final String email) {
+        final User admin = createUser(name, password, email);
 
         admin.setRole(Role.ADMIN);
         users.save(admin);
@@ -55,13 +50,19 @@ final class DefaultUserService implements UserService {
         return admin;
     }
 
-    private User createUser(final String name, final String password) {
+    private User createUser(final String name, final String password, final String email) {
         Validate.notEmpty(name, "name");
         Validate.notEmpty(password, "password");
         final User user = new User();
 
+        // TODO add some validations:
+        // not blank
+        // name != password
+        // email != password
+        // valid email
         user.setName(name);
         user.setPassword(crypt.encode(password));
+        user.setEmail(email);
 
         return user;
     }
