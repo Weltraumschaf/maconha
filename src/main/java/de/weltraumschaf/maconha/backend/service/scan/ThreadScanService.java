@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.backend.service.scan;
 
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
@@ -13,6 +14,11 @@ import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Result;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +29,11 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -39,18 +48,33 @@ import java.util.stream.Collectors;
  * </ul>
  */
 @Service
-final class ThreadScanService extends BaseScanService implements ScanService, ScanCallBack {
+final class ThreadScanService  implements ScanService, ScanCallBack {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
+
+    // FIXME Make private.
+    final Map<Long, Execution> scans = new ConcurrentHashMap<>();
+    private final ScanStatusService statuses;
+    private final PeriodFormatter secondsFormat =
+        new PeriodFormatterBuilder()
+            .printZeroAlways()
+            .minimumPrintedDigits(2)
+            .appendHours()
+            .appendSeparator(":")
+            .appendMinutes()
+            .appendSeparator(":")
+            .appendSeconds()
+            .toFormatter();
+    private final DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("HH:mm:ss dd.MM.yyyy");
 
     private final MaconhaConfiguration config;
     private final MediaFileService mediaFiles;
     private final TaskExecutor executor;
     private Commands cmds;
 
-    @Lazy
     @Autowired
     ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor, final ScanStatusService statuses) {
-        super(statuses);
+        super();
+        this.statuses = statuses;
         this.config = config;
         this.mediaFiles = mediaFiles;
         this.executor = executor;
@@ -147,6 +171,29 @@ final class ThreadScanService extends BaseScanService implements ScanService, Sc
             formattedEndTime,
             formatDuration(startTime, endTime),
             jobStatus);
+    }
+
+    final Execution getExecution(final Long id) {
+        if (scans.containsKey(id)) {
+            return scans.get(id);
+        }
+
+        throw new ScanService.ScanError("There's no such job with id %d!", id);
+    }
+
+    final String formatDuration(final DateTime startTime, final DateTime endTime ) {
+        Validate.notNull(startTime, "startTime");
+        Validate.notNull(endTime, "endTime");
+        return secondsFormat.print(new Duration(startTime, endTime).toPeriod());
+    }
+
+    final String formatDateTime(final Date date) {
+        return formatDateTime(new DateTime(date));
+    }
+
+    final String formatDateTime(final DateTime dateTime) {
+        Validate.notNull(dateTime, "dateTime");
+        return dateTimeFormat.print(dateTime);
     }
 
     private static class ScanTask implements Runnable {
