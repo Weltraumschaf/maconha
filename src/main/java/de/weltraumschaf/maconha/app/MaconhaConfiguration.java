@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.app;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
  * Class must not be final for Springs sake.
  * </p>
  */
+@Validated
 @ConfigurationProperties(prefix = "maconha")
 public class MaconhaConfiguration {
 
