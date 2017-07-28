@@ -3,6 +3,8 @@ package de.weltraumschaf.maconha.app;
 import com.vaadin.spring.access.SecuredViewAccessControl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -11,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 public class ApplicationConfiguration {
+
+    private static final int JOB_LIMIT = 10;
 
     /**
      * The password encoder to use when encrypting passwords.
@@ -32,4 +36,10 @@ public class ApplicationConfiguration {
         return new SecuredViewAccessControl();
     }
 
+    @Bean
+    public TaskExecutor taskExecutor() {
+        final SimpleAsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("scan_job");
+        taskExecutor.setConcurrencyLimit(JOB_LIMIT);
+        return taskExecutor;
+    }
 }
