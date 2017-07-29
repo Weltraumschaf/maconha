@@ -40,7 +40,7 @@ $app-background-image: url('bg.jpg');
 @import 'dashboardview';
 @import 'menu';
 
-@mixin apptheme {
+@mixin maconha {
   @include valo;
   @include ordersgrid;
   @include ordersview;

@@ -5,4 +5,5 @@ node/
 node_modules/
 run-dev.sh
 src/main/resources/static/lib/
+src/main/webapp/VAADIN/themes/maconha/*.css
 var/

@@ -3,74 +3,50 @@ package de.weltraumschaf.maconha.ui;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
-import com.vaadin.server.Responsive;
+import com.vaadin.annotations.Viewport;
+import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.themes.ValoTheme;
-import de.weltraumschaf.maconha.backend.model.Role;
-import de.weltraumschaf.maconha.ui.view.LoginView;
-import de.weltraumschaf.maconha.ui.view.MainView;
-import de.weltraumschaf.maconha.backend.model.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.weltraumschaf.maconha.app.HasLogger;
+import de.weltraumschaf.maconha.ui.navigation.NavigationManager;
+import de.weltraumschaf.maconha.ui.view.AccessDeniedView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.events.EventBusListener;
 
 import static com.vaadin.shared.ui.ui.Transport.LONG_POLLING;
 
 /**
  * This is the root of the administrative backend UI.
  */
+@Theme("maconha")
 @Title("Maconha - Admin")
 @SpringUI(path = "/admin")
-@Theme(ValoTheme.THEME_NAME)
+@Viewport("width=device-width,initial-scale=1.0,user-scalable=no")
 @Push(transport = LONG_POLLING)
-public final class AdminUi extends UI implements EventBusListener<User> {
+public final class AdminUi extends UI implements HasLogger {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminUi.class);
 
-    private final EventBus.UIEventBus events;
-    private final MainView main;
-    private final LoginView login;
+    private final SpringViewProvider viewProvider;
+    private final NavigationManager navigationManager;
+    private final MainView mainView;
 
     @Autowired
-    public AdminUi(final EventBus.UIEventBus events, final MainView main, final LoginView login) {
+    public AdminUi(final SpringViewProvider viewProvider, final NavigationManager navigationManager, final MainView mainView) {
         super();
-        this.events = events;
-        this.main = main;
-        this.login = login;
+        setErrorHandler(event -> {
+            Throwable t = DefaultErrorHandler.findRelevantThrowable(event.getThrowable());
+            logger().error("Error during request", t);
+        });
+        this.viewProvider = viewProvider;
+        this.navigationManager = navigationManager;
+        this.mainView = mainView;
     }
 
     @Override
-    protected void init(final VaadinRequest request) {
-        events.subscribe(this);
-        Responsive.makeResponsive(this);
-        addStyleName(ValoTheme.UI_WITH_MENU);
-
-        updateContent();
-    }
-
-    private void updateContent() {
-        final User user = (User) VaadinSession.getCurrent().getAttribute(User.class.getName());
-
-        if (null != user && user.getRole().equalsIgnoreCase(Role.ADMIN)) {
-            setContent(main);
-            removeStyleName("loginview");
-            getNavigator().navigateTo(getNavigator().getState());
-        } else {
-            setContent(login);
-            addStyleName("loginview");
-        }
-    }
-
-    @Override
-    public void onEvent(final org.vaadin.spring.events.Event<User> event) {
-        final User user = event.getPayload();
-        LOGGER.info("Login performed: {}", user);
-        VaadinSession.getCurrent().setAttribute(User.class.getName(), user);
-        updateContent();
+    protected void init(final VaadinRequest vaadinRequest) {
+        viewProvider.setAccessDeniedViewClass(AccessDeniedView.class);
+        setContent(mainView);
+        navigationManager.navigateToDefaultView();
     }
 }

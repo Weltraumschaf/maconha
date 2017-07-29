@@ -13,8 +13,8 @@ import org.jsoup.nodes.Element;
  * </p>
  * <pre>
  * {@code
- * <link rel="icon" SIZES="96x96" href="VAADIN/themes/apptheme/icon-96.png">
- * <link rel="apple-touch-icon" SIZES="192x192" href="VAADIN/themes/apptheme/icon-192.png">
+ * <link rel="icon" SIZES="96x96" href="VAADIN/themes/maconha/icon-96.png">
+ * <link rel="apple-touch-icon" SIZES="192x192" href="VAADIN/themes/maconha/icon-192.png">
  * }
  * </pre>
  */
