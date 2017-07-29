@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -36,15 +38,13 @@ import java.util.Arrays;
     ServiceBasePackage.class,
     SecurityBasePackage.class
 })
-public class Application {
+public class Application extends SpringBootServletInitializer implements HasLogger {
 
     public static final String ADMIN_URL = "/admin";
     public static final String LOGIN_URL = "/login.html";
     public static final String LOGOUT_URL = "/login.html?logout";
     public static final String LOGIN_FAILURE_URL = "/login.html?error";
     public static final String LOGIN_PROCESSING_URL = "/login";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     private final Environment environment;
 
@@ -68,12 +68,17 @@ public class Application {
 
     @PostConstruct
     public void postConstruct() {
-        LOGGER.info("Maconha version: {}", config.getVersion());
-        LOGGER.info("Used profiles: {}", Arrays.toString(environment.getActiveProfiles()));
+        logger().info("Maconha version: {}", config.getVersion());
+        logger().info("Used profiles: {}", Arrays.toString(environment.getActiveProfiles()));
 
         if (config.isDebug()) {
-            LOGGER.warn("Debugging is enabled by environment variable MACONHA_DEBUG! Should not be enabled in production.");
+            logger().warn("Debugging is enabled by environment variable MACONHA_DEBUG! Should not be enabled in production.");
         }
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(final SpringApplicationBuilder application) {
+        return application.sources(Application.class);
     }
 
 }
