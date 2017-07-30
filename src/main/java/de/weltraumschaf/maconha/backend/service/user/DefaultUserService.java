@@ -4,16 +4,25 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.backend.model.Role;
 import de.weltraumschaf.maconha.backend.model.entity.User;
 import de.weltraumschaf.maconha.backend.repo.UserRepo;
+import de.weltraumschaf.maconha.backend.service.CrudService;
+import de.weltraumschaf.maconha.backend.service.UserFriendlyDataException;
 import de.weltraumschaf.maconha.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Default implementation.
  */
 @Service
-final class DefaultUserService implements UserService {
+class DefaultUserService implements UserService, CrudService<User> {
+
+    private static final String MODIFY_LOCKED_USER_NOT_PERMITTED = "User has been locked and cannot be modified or deleted";
 
     private final UserRepo users;
     private final PasswordEncoder crypt;
@@ -68,19 +77,64 @@ final class DefaultUserService implements UserService {
     }
 
     @Override
-    public User authenticate(final String name, final String password) {
-        Validate.notEmpty(name, "name");
-        Validate.notEmpty(password, "password");
-        final User user = users.findByName(name);
+    public String encodePassword(final String plaintext) {
+        return crypt.encode(plaintext);
+    }
 
-        if (null == user) {
-            throw new AuthenticationFailed("No such user with name %s!", name);
+    @Override
+    public UserRepo getRepository() {
+        return users;
+    }
+
+    @Override
+    public long countAnyMatching(final Optional<String> filter) {
+        if (filter.isPresent()) {
+            String repositoryFilter = "%" + filter.get() + "%";
+            return getRepository().countByEmailLikeIgnoreCaseOrNameLikeIgnoreCase(repositoryFilter, repositoryFilter);
+        } else {
+            return getRepository().count();
         }
 
-        if (!crypt.matches(password, user.getPassword())) {
-            throw new AuthenticationFailed("Authentication failed for user %s!", user.getName());
+    }
+
+    @Override
+    public Page<User> findAnyMatching(final Optional<String> filter, final Pageable pageable) {
+        if (filter.isPresent()) {
+            String repositoryFilter = "%" + filter.get() + "%";
+            return getRepository().findByEmailLikeIgnoreCaseOrNameLikeIgnoreCaseOrRoleLikeIgnoreCase(repositoryFilter,
+                repositoryFilter, repositoryFilter, pageable);
+        } else {
+            return find(pageable);
+        }
+    }
+
+    @Override
+    public Page<User> find(final Pageable pageable) {
+        return getRepository().findBy(pageable);
+    }
+
+    @Override
+    @Transactional
+    public User save(User entity) {
+        throwIfUserLocked(entity.getId());
+        return getRepository().save(entity);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long userId) {
+        throwIfUserLocked(userId);
+        getRepository().delete(userId);
+    }
+
+    private void throwIfUserLocked(Long userId) {
+        if (userId == null) {
+            return;
         }
 
-        return user;
+        User dbUser = getRepository().findOne(userId);
+        if (dbUser.isLocked()) {
+            throw new UserFriendlyDataException(MODIFY_LOCKED_USER_NOT_PERMITTED);
+        }
     }
 }

@@ -26,6 +26,7 @@ public class MainViewDesign extends HorizontalLayout {
     protected Button keywords;
     protected Button scans;
     protected Button duplicates;
+    protected Button users;
     protected Button logout;
     protected VerticalLayout content;
 

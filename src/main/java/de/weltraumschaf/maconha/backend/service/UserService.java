@@ -5,7 +5,7 @@ import de.weltraumschaf.maconha.backend.model.entity.User;
 /**
  * Service to manage users.
  */
-public interface UserService {
+public interface UserService extends CrudService<User> {
     /**
      * If there is at least one user with administrator role.
      *
@@ -33,24 +33,6 @@ public interface UserService {
      */
     User createAdmin(String name, String password, String email);
 
-    /**
-     * Authenticates a user identified by name and password.
-     * <p>
-     * Throws an {@link AuthenticationFailed} if the given credentials can't be authenticated.
-     * </p>
-     *
-     * @param name must not be {@code null} or blank
-     * @param password in plaintext, must not be {@code null} or blank
-     * @return authenticated user, never {@code null}
-     */
-    User authenticate(String name, String password);
+    String encodePassword(String plaintext);
 
-    /**
-     * Indicates a failed authentication.
-     */
-    final class AuthenticationFailed extends RuntimeException {
-        public AuthenticationFailed(final String message, final Object... args) {
-            super(String.format(message, args));
-        }
-    }
 }

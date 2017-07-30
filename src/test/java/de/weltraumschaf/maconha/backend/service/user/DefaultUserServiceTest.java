@@ -61,26 +61,4 @@ public final class DefaultUserServiceTest {
         verify(users, times(1)).save(user);
     }
 
-    @Test(expected = UserService.AuthenticationFailed.class)
-    public void authenticate_throwsExceptionIfUserIsNull() {
-        sut.authenticate("user", "pass");
-    }
-
-    @Test(expected = UserService.AuthenticationFailed.class)
-    public void authenticate_throwsExceptionIfPasswordDoesNotMatch() {
-        when(users.findByName("user")).thenReturn(new User());
-        when(crypt.matches(anyString(), anyString())).thenReturn(false);
-
-        sut.authenticate("user", "pass");
-    }
-
-    @Test
-    public void authenticate_returnsUserIfAuthenticated() {
-        final User user = new User();
-        user.setPassword("hash");
-        when(users.findByName("user")).thenReturn(user);
-        when(crypt.matches("pass", "hash")).thenReturn(true);
-
-        assertThat(sut.authenticate("user", "pass"), is(user));
-    }
 }

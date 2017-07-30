@@ -8,7 +8,7 @@ import java.util.Collection;
  * Shared functionality for entities.
  */
 @MappedSuperclass
-abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
     // For the sake of the JPA implementation.
     private static final long serialVersionUID = 1L;
@@ -24,16 +24,18 @@ abstract class BaseEntity implements Serializable {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    // Must not be final for Vaadin bean property access.
-    public long getId() {
-        return id;
+    @Version
+    private int version;
+
+    public boolean isNew() {
+        return id == null;
     }
 
     // Must not be final for Vaadin bean property access.
-    public void setId(final long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     /**
@@ -65,4 +67,30 @@ abstract class BaseEntity implements Serializable {
         return oldValues.contains(newValue);
     }
 
+    @Override
+    public int hashCode() {
+        if (id == null) {
+            return super.hashCode();
+        }
+
+        return 31 + id.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (id == null) {
+            // New entities are only equal if the instance if the same
+            return super.equals(other);
+        }
+
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof BaseEntity)) {
+            return false;
+        }
+
+        return id.equals(((BaseEntity) other).id);
+    }
 }
