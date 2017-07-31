@@ -18,13 +18,13 @@ import java.util.List;
 
 @SpringComponent
 @PrototypeScope
-public class UserAdminDataProvider extends FilterablePageableDataProvider<User, Object> {
+public class UserDataProvider extends FilterablePageableDataProvider<User, Object> {
 
     private final BeanLocator locator;
     private transient UserService userService;
 
     @Autowired
-    public UserAdminDataProvider(final BeanLocator locator) {
+    public UserDataProvider(final BeanLocator locator) {
         super();
         this.locator = locator;
     }

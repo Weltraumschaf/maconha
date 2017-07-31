@@ -16,10 +16,10 @@ import de.weltraumschaf.maconha.ui.view.BaseCrudView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringView
-public class UserAdminView extends BaseCrudView<User> {
+public class UserView extends BaseCrudView<User> {
 
-    private final UserAdminViewDesign userAdminViewDesign = new UserAdminViewDesign();
-    private final UserAdminPresenter presenter;
+    private final UserViewDesign userViewDesign = new UserViewDesign();
+    private final UserPresenter presenter;
 
     private boolean passwordRequired;
 
@@ -45,7 +45,7 @@ public class UserAdminView extends BaseCrudView<User> {
     };
 
     @Autowired
-    public UserAdminView(final UserAdminPresenter presenter) {
+    public UserView(final UserPresenter presenter) {
         super();
         this.presenter = presenter;
     }
@@ -76,12 +76,12 @@ public class UserAdminView extends BaseCrudView<User> {
     }
 
     @Override
-    public UserAdminViewDesign getViewComponent() {
-        return userAdminViewDesign;
+    public UserViewDesign getViewComponent() {
+        return userViewDesign;
     }
 
     @Override
-    protected UserAdminPresenter getPresenter() {
+    protected UserPresenter getPresenter() {
         return presenter;
     }
 

@@ -12,10 +12,10 @@ import java.io.Serializable;
 
 @ViewScope
 @SpringComponent
-public class UserAdminPresenter extends BaseCrudPresenter<User, UserService, UserAdminView> implements Serializable {
+public class UserPresenter extends BaseCrudPresenter<User, UserService, UserView> implements Serializable {
 
     @Autowired
-    public UserAdminPresenter(final UserAdminDataProvider provider, final NavigationManager navigation, final UserService service) {
+    public UserPresenter(final UserDataProvider provider, final NavigationManager navigation, final UserService service) {
         super(provider, navigation, service);
     }
 

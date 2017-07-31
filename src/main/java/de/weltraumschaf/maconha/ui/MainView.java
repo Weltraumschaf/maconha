@@ -15,7 +15,7 @@ import de.weltraumschaf.maconha.ui.view.duplicates.DuplicatesView;
 import de.weltraumschaf.maconha.ui.view.keywords.KeywordsView;
 import de.weltraumschaf.maconha.ui.view.mediafiles.MediaFilesView;
 import de.weltraumschaf.maconha.ui.view.scans.ScansView;
-import de.weltraumschaf.maconha.ui.view.user.UserAdminView;
+import de.weltraumschaf.maconha.ui.view.user.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -54,7 +54,7 @@ public class MainView extends MainViewDesign implements ViewDisplay {
         attachNavigation(keywords, KeywordsView.class);
         attachNavigation(scans, ScansView.class);
         attachNavigation(duplicates, DuplicatesView.class);
-        attachNavigation(users, UserAdminView.class);
+        attachNavigation(users, UserView.class);
 
         logout.addClickListener(e -> logout());
     }
