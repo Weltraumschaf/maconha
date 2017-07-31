@@ -10,15 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 
-@SpringComponent
 @ViewScope
-public class UserAdminPresenter extends BaseCrudPresenter<User, UserService, UserAdminView>
-    implements Serializable {
+@SpringComponent
+public class UserAdminPresenter extends BaseCrudPresenter<User, UserService, UserAdminView> implements Serializable {
 
     @Autowired
-    public UserAdminPresenter(UserAdminDataProvider userAdminDataProvider, NavigationManager navigationManager,
-                              UserService service) {
-        super(navigationManager, service, userAdminDataProvider);
+    public UserAdminPresenter(final UserAdminDataProvider provider, final NavigationManager navigation, final UserService service) {
+        super(provider, navigation, service);
     }
 
     public String encodePassword(String value) {

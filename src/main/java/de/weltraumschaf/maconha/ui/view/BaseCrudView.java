@@ -70,14 +70,14 @@ public abstract class BaseCrudView<T extends BaseEntity> implements Serializable
         getPresenter().beforeLeavingView(event);
     }
 
-    public void showInitialState() {
+    public final void showInitialState() {
         getForm().setEnabled(false);
         getGrid().deselectAll();
         getUpdate().setCaption(CAPTION_UPDATE);
         getCancel().setCaption(CAPTION_DISCARD);
     }
 
-    public void editItem(boolean isNew) {
+    public final void editItem(final boolean isNew) {
         if (isNew) {
             getGrid().deselectAll();
             getUpdate().setCaption(CAPTION_ADD);
@@ -120,19 +120,19 @@ public abstract class BaseCrudView<T extends BaseEntity> implements Serializable
 
     }
 
-    public void setDataProvider(DataProvider<T, Object> dataProvider) {
+    public final void setDataProvider(DataProvider<T, Object> dataProvider) {
         getGrid().setDataProvider(dataProvider);
     }
 
-    public void setUpdateEnabled(boolean enabled) {
+    public final void setUpdateEnabled(boolean enabled) {
         getUpdate().setEnabled(enabled);
     }
 
-    public void setCancelEnabled(boolean enabled) {
+    public final void setCancelEnabled(boolean enabled) {
         getCancel().setEnabled(enabled);
     }
 
-    public void focusField(HasValue<?> field) {
+    public final void focusField(final HasValue<?> field) {
         if (field instanceof Focusable) {
             ((Focusable) field).focus();
         } else {

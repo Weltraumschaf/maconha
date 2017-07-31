@@ -19,69 +19,66 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
 
 public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudService<T>, V extends BaseCrudView<T>>
     implements HasLogger, Serializable {
 
-    private final NavigationManager navigationManager;
+    private final NavigationManager navigation;
     private final S service;
     @Autowired
     private BeanLocator locator;
     private V view;
-    private FilterablePageableDataProvider<T, Object> dataProvider;
-
+    private FilterablePageableDataProvider<T, Object> provider;
     private BeanValidationBinder<T> binder;
-
-    // The model for the view. Not extracted to a class to reduce clutter. If
-    // the model becomes more complex, it could be encapsulated in a separate
-    // class.
     private T editItem;
 
-    protected BaseCrudPresenter(NavigationManager navigationManager, S service,
-                                FilterablePageableDataProvider<T, Object> dataProvider) {
+    protected BaseCrudPresenter(final FilterablePageableDataProvider<T, Object> provider, final NavigationManager navigation, final S service) {
+        super();
+        this.provider = provider;
+        this.navigation = navigation;
         this.service = service;
-        this.navigationManager = navigationManager;
-        this.dataProvider = dataProvider;
-        createBinder();
     }
 
-    public void viewEntered(ViewChangeEvent event) {
+    public final void viewEntered(ViewChangeEvent event) {
         if (!event.getParameters().isEmpty()) {
             editRequest(event.getParameters());
         }
     }
 
-    public void beforeLeavingView(ViewBeforeLeaveEvent event) {
+    public final void beforeLeavingView(ViewBeforeLeaveEvent event) {
         runWithConfirmation(event::navigate, () -> {
             // Nothing special needs to be done if user aborts the navigation
         });
     }
 
-    protected void createBinder() {
+    @PostConstruct
+    public final void createBinder() {
         binder = new BeanValidationBinder<>(getEntityType());
         binder.addStatusChangeListener(this::onFormStatusChange);
     }
 
-    protected BeanValidationBinder<T> getBinder() {
+    protected final BeanValidationBinder<T> getBinder() {
         return binder;
     }
 
-    protected S getService() {
+    protected final S getService() {
         return service;
     }
 
-    protected void filterGrid(String filter) {
-        dataProvider.setFilter(filter);
+    protected final void filterGrid(final String filter) {
+        provider.setFilter(filter);
     }
 
-    protected T loadEntity(long id) {
+    protected final T loadEntity(long id) {
         return service.load(id);
     }
 
     @SuppressWarnings("unchecked")
-    protected Class<T> getEntityType() {
+    protected final Class<T> getEntityType() {
+        // FIXME Extremely dirty because it relies on the position here in the source file!
         return (Class<T>) ResolvableType.forClass(getClass()).getSuperType().getGeneric(0).resolve();
     }
 
@@ -94,7 +91,7 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         }
     }
 
-    protected void deleteEntity(T entity) {
+    protected void deleteEntity(final T entity) {
         if (entity.isNew()) {
             throw new IllegalArgumentException("Cannot delete an entity which is not in the database");
         } else {
@@ -102,9 +99,9 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         }
     }
 
-    public void init(V view) {
+    public void init(final V view) {
         this.view = view;
-        view.setDataProvider(dataProvider);
+        view.setDataProvider(provider);
         view.bindFormFields(getBinder());
         view.showInitialState();
     }
@@ -113,11 +110,12 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         return view;
     }
 
-    public void editRequest(String parameters) {
+    public final void editRequest(final String parameters) {
         long id;
+
         try {
             id = Long.parseLong(parameters);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             id = -1;
         }
 
@@ -128,20 +126,21 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         }
     }
 
-    private void selectAndEditEntity(T entity) {
+    private void selectAndEditEntity(final T entity) {
         getView().getGrid().select(entity);
         editRequest(entity);
     }
 
-    public void editRequest(T entity) {
+    public final void editRequest(final T entity) {
         runWithConfirmation(() -> {
             // Fetch a fresh item so we have the latest changes (less optimistic
             // locking problems)
-            T freshEntity = loadEntity(entity.getId());
+            final T freshEntity = loadEntity(entity.getId());
             editItem(freshEntity);
         }, () -> {
             // Revert selection in grid
-            Grid<T> grid = getView().getGrid();
+            final Grid<T> grid = getView().getGrid();
+
             if (editItem == null) {
                 grid.deselectAll();
             } else {
@@ -150,28 +149,30 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         });
     }
 
-    protected void editItem(T item) {
+    protected void editItem(final T item) {
         if (item == null) {
             throw new IllegalArgumentException("The entity to edit cannot be null");
         }
-        this.editItem = item;
 
-        boolean isNew = item.isNew();
+        this.editItem = item;
+        final boolean isNew = item.isNew();
+
         if (isNew) {
-            navigationManager.updateViewParameter("new");
+            navigation.updateViewParameter("new");
         } else {
-            navigationManager.updateViewParameter(String.valueOf(item.getId()));
+            navigation.updateViewParameter(String.valueOf(item.getId()));
         }
 
         getBinder().readBean(editItem);
         getView().editItem(isNew);
     }
 
-    public void addNewClicked() {
+    public final void addNewClicked() {
         runWithConfirmation(() -> {
-            T entity = createEntity();
+            final T entity = createEntity();
             editItem(entity);
         }, () -> {
+            // Do nothing on cancel.
         });
     }
 
@@ -184,7 +185,7 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
      * @param onCancel       the command to run if there are changes and the user pushes
      *                       {@literal cancel}
      */
-    private void runWithConfirmation(Runnable onConfirmation, Runnable onCancel) {
+    private void runWithConfirmation(final Runnable onConfirmation, final Runnable onCancel) {
         if (hasUnsavedChanges()) {
             locator.find(ConfirmPopup.class).showLeaveViewConfirmDialog(view, onConfirmation, onCancel);
         } else {
@@ -196,37 +197,40 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         return editItem != null && getBinder().hasChanges();
     }
 
-    public void updateClicked() {
+    public final void updateClicked() {
         try {
             // The validate() call is needed only to ensure that the error
             // indicator is properly shown for the field in case of an error
             getBinder().validate();
             getBinder().writeBean(editItem);
-        } catch (ValidationException e) {
+        } catch (final ValidationException e) {
             // Commit failed because of validation errors
-            List<BindingValidationStatus<?>> fieldErrors = e.getFieldValidationErrors();
+            final List<BindingValidationStatus<?>> fieldErrors = e.getFieldValidationErrors();
+
             if (!fieldErrors.isEmpty()) {
                 // Field level error
-                HasValue<?> firstErrorField = fieldErrors.get(0).getField();
+                final HasValue<?> firstErrorField = fieldErrors.get(0).getField();
                 getView().focusField(firstErrorField);
             } else {
                 // Bean validation error
-                ValidationResult firstError = e.getBeanValidationErrors().get(0);
+                final ValidationResult firstError = e.getBeanValidationErrors().get(0);
                 Notification.show(firstError.getErrorMessage(), Type.ERROR_MESSAGE);
             }
+
             return;
         }
 
-        boolean isNew = editItem.isNew();
-        T entity;
+        final boolean isNew = editItem.isNew();
+        final T entity;
+
         try {
             entity = service.save(editItem);
         } catch (OptimisticLockingFailureException e) {
             // Somebody else probably edited the data at the same time
-            Notification.show("Somebody else might have updated the data. Please refresh and try again.",
+            Notification.show(
+                "Somebody else might have updated the data. Please refresh and try again.",
                 Type.ERROR_MESSAGE);
-            logger().debug("Optimistic locking error while saving entity of type " + editItem.getClass().getName(),
-                e);
+            logger().debug("Optimistic locking error while saving entity of type " + editItem.getClass().getName(), e);
             return;
         } catch (UserFriendlyDataException e) {
             Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
@@ -241,16 +245,16 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
 
         if (isNew) {
             // Move to the "Updating an entity" state
-            dataProvider.refreshAll();
+            provider.refreshAll();
             selectAndEditEntity(entity);
         } else {
             // Stay in the "Updating an entity" state
-            dataProvider.refreshItem(entity);
+            provider.refreshItem(entity);
             editRequest(entity);
         }
     }
 
-    public void cancelClicked() {
+    public final void cancelClicked() {
         if (editItem.isNew()) {
             revertToInitialState();
         } else {
@@ -262,27 +266,29 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
         editItem = null;
         getBinder().readBean(null);
         getView().showInitialState();
-        navigationManager.updateViewParameter("");
+        navigation.updateViewParameter("");
     }
 
-    public void deleteClicked() {
+    public final void deleteClicked() {
         try {
             deleteEntity(editItem);
-        } catch (UserFriendlyDataException e) {
+        } catch (final UserFriendlyDataException e) {
             Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
             logger().debug("Unable to delete entity of type " + editItem.getClass().getName(), e);
             return;
-        } catch (DataIntegrityViolationException e) {
-            Notification.show("The given entity cannot be deleted as there are references to it in the database",
+        } catch (final DataIntegrityViolationException e) {
+            Notification.show(
+                "The given entity cannot be deleted as there are references to it in the database",
                 Type.ERROR_MESSAGE);
             logger().error("Unable to delete entity of type " + editItem.getClass().getName(), e);
             return;
         }
-        dataProvider.refreshAll();
+
+        provider.refreshAll();
         revertToInitialState();
     }
 
-    public void onFormStatusChange(StatusChangeEvent event) {
+    public final void onFormStatusChange(final StatusChangeEvent event) {
         boolean hasChanges = event.getBinder().hasChanges();
         boolean hasValidationErrors = event.hasValidationErrors();
         getView().setUpdateEnabled(hasChanges && !hasValidationErrors);
