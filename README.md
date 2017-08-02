@@ -56,6 +56,7 @@ Maybe you need to set JAVA_HOME with the right path (below are FreeBSD paths):
     - [Spring Boot Digest Authentication](http://stackoverflow.com/questions/33918432/digest-auth-in-spring-security-with-rest-and-javaconfig)
     - [Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2)
     - [Task Execution and Scheduling](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/scheduling.html#scheduling-annotation-support-scheduled)
+    - [Dynamically add jars to SpringBoot at runtime](https://stackoverflow.com/questions/41148353/dynamically-add-jars-to-springboot-at-runtime)
 - Vaadin
     - <http://vaadin.github.io/spring-tutorial/>
     - <https://vaadin.com/docs/-/part/framework/tutorial.html>

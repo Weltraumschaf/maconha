@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringView
 public class UserView extends BaseCrudView<User> {
 
-    private final UserViewDesign userViewDesign = new UserViewDesign();
+    private final UserViewDesign design = new UserViewDesign();
     private final UserPresenter presenter;
 
     private boolean passwordRequired;
@@ -77,7 +77,7 @@ public class UserView extends BaseCrudView<User> {
 
     @Override
     public UserViewDesign getViewComponent() {
-        return userViewDesign;
+        return design;
     }
 
     @Override
