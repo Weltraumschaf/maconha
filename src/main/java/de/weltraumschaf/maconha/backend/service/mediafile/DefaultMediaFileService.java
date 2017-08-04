@@ -25,7 +25,7 @@ import java.util.HashSet;
  * Default implementation.
  */
 @Service
-final class DefaultMediaFileService implements MediaFileService {
+class DefaultMediaFileService implements MediaFileService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMediaFileService.class);
 
@@ -33,7 +33,6 @@ final class DefaultMediaFileService implements MediaFileService {
     private final KeywordRepo keywords;
     private final Extractor<FileMetaData> extractor;
 
-    @Lazy
     @Autowired
     DefaultMediaFileService(final MediaFileRepo mediaFiles, final KeywordRepo keywords) {
         this(mediaFiles, keywords, new MetaDataExtractor());
@@ -122,5 +121,15 @@ final class DefaultMediaFileService implements MediaFileService {
             }).forEach(media::addKeyword);
 
         mediaFiles.save(media);
+    }
+
+    @Override
+    public long numberOfIndexedFiles() {
+        return mediaFiles.count();
+    }
+
+    @Override
+    public long numberOfDuplicateFiles() {
+        return mediaFiles.countDuplicates();
     }
 }

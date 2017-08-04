@@ -25,4 +25,7 @@ public interface MediaFileService {
     FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file);
 
     void extractAndStoreMetaData(final Bucket bucket, final HashedFile file);
+
+    long numberOfIndexedFiles();
+    long numberOfDuplicateFiles();
 }
