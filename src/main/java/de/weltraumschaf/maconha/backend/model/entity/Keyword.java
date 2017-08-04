@@ -25,7 +25,7 @@ public class Keyword extends BaseEntity {
     private String literal;
 
     @JsonIgnore // Prevent endless recursion on serialization.
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @SuppressWarnings("FieldMayBeFinal") // XXX Must not be final?
     @JoinTable(name = "Keyword_MediaFile", joinColumns = {@JoinColumn(name = "keyword_id")}, inverseJoinColumns = {@JoinColumn(name = "media_id")})
     private Set<MediaFile> mediaFiles = new HashSet<>();
