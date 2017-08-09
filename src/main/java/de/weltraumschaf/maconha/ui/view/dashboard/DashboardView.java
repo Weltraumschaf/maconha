@@ -30,7 +30,7 @@ public final class DashboardView implements View {
         design.numberOfIndexedFiles.setValue(formatter.format(files.numberOfIndexedFiles()));
         design.numberOfDuplicteFiles.setValue(formatter.format(files.numberOfDuplicateFiles()));
         design.numberOfFoundKeywords.setValue(formatter.format(keywords.numberOfKeywords()));
-        design.topTenKeywords.setColumns("literal");
+        design.topTenKeywords.setColumns("literal", "numberOfMediaFiles");
         design.topTenKeywords.removeHeaderRow(0);
         design.topTenKeywords.setItems(keywords.topTen());
     }

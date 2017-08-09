@@ -1,20 +1,23 @@
 package de.weltraumschaf.maconha.backend.service.keywords;
 
+import de.weltraumschaf.maconha.app.HasLogger;
+import de.weltraumschaf.maconha.backend.model.KeywordAndNumberOfMediaFiles;
 import de.weltraumschaf.maconha.backend.model.entity.Keyword;
 import de.weltraumschaf.maconha.backend.repo.KeywordRepo;
 import de.weltraumschaf.maconha.backend.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation.
  */
 @Service
-class DefaultKeywordService implements KeywordService {
+class DefaultKeywordService implements KeywordService, HasLogger {
     private final KeywordRepo keywords;
 
     @Autowired
@@ -24,16 +27,20 @@ class DefaultKeywordService implements KeywordService {
     }
 
     @Override
-    public Collection<Keyword> topTen() {
-        final Collection<Keyword> topTen = new ArrayList<>();
+    public Collection<KeywordAndNumberOfMediaFiles> topTen() {
+        logger().debug("Find top ten keywords.");
+        final List<Keyword> allKeywords = keywords.findAll();
+        allKeywords.sort((keyword1, keyword2) -> {
+            final Integer numberOfMediaFiles1 = keyword1.getMediaFiles().size();
+            final Integer numberOfMediaFiles2 = keyword2.getMediaFiles().size();
+            return numberOfMediaFiles1.compareTo(numberOfMediaFiles2);
+        });
 
-        for (int i = 1; i <= 10; ++i) {
-            final Keyword keyword = new Keyword();
-            keyword.setLiteral("keyword" + i);
-            topTen.add(keyword);
-        }
-
-        return Collections.unmodifiableCollection(topTen);
+        final List<KeywordAndNumberOfMediaFiles> mapped = allKeywords.subList(0, 10)
+            .stream()
+            .map(k -> new KeywordAndNumberOfMediaFiles(k.getLiteral(), k.getMediaFiles().size()))
+            .collect(Collectors.toList());
+        return Collections.unmodifiableCollection(mapped);
     }
 
     @Override

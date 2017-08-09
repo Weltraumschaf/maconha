@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.backend.service;
 
+import de.weltraumschaf.maconha.backend.model.KeywordAndNumberOfMediaFiles;
 import de.weltraumschaf.maconha.backend.model.entity.Keyword;
 
 import java.util.Collection;
@@ -17,7 +18,8 @@ public interface KeywordService {
      *
      * @return never {@code null}, unmodifiable
      */
-    Collection<Keyword> topTen();
+    Collection<KeywordAndNumberOfMediaFiles> topTen();
 
     long numberOfKeywords();
+
 }
