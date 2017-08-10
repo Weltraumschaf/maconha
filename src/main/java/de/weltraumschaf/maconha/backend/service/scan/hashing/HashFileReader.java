@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.scan.hashing;
 
 import de.weltraumschaf.commons.validate.Validate;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
  */
 public final class HashFileReader {
 
+    private final HashedFileLineParser parser = new HashedFileLineParser();
+
     /**
      * Read in a checksum file.
      *
@@ -33,12 +36,8 @@ public final class HashFileReader {
     public Set<HashedFile> read(final Path checksums) throws IOException {
         return Files.readAllLines(Validate.notNull(checksums, "checksums"))
             .stream()
-            .map(line -> {
-                final int splitPos = line.indexOf(' ');
-                final String hash = line.substring(0, splitPos).trim();
-                final String file = line.substring(splitPos).trim();
-                return new HashedFile(hash, file.replace("//", "/"));
-            }).collect(Collectors.toSet());
+            .map(parser::parse)
+            .collect(Collectors.toSet());
     }
 
 }
