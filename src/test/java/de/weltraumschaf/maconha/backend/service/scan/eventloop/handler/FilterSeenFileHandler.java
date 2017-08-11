@@ -9,7 +9,7 @@ import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 /**
  *
  */
-final class FilterSeenFileHandler implements EventHandler, HasLogger{
+public final class FilterSeenFileHandler implements EventHandler, HasLogger{
     @Override
     public void process(final EventContext context, final Event event) {
         final HashedFile hashedFile = (HashedFile) event.getData();

@@ -21,23 +21,23 @@ public final class DefaultQueueTest {
     public void emit() {
         assertThat(sut.size(), is(0));
 
-        sut.emmit(new Event("type", new Object()));
+        sut.emmit(new Event(EventType.LOAD_FILE_HASHES, new Object()));
         assertThat(sut.size(), is(1));
 
-        sut.emmit(new Event("type", new Object()));
+        sut.emmit(new Event(EventType.LOAD_FILE_HASHES, new Object()));
         assertThat(sut.size(), is(2));
 
-        sut.emmit(new Event("type", new Object()));
+        sut.emmit(new Event(EventType.LOAD_FILE_HASHES, new Object()));
         assertThat(sut.size(), is(3));
     }
 
     @Test
     public void nex() {
-        final Event one = new Event("type", new Object());
+        final Event one = new Event(EventType.LOAD_FILE_HASHES, new Object());
         sut.emmit(one);
-        final Event two = new Event("type", new Object());
+        final Event two = new Event(EventType.LOAD_FILE_HASHES, new Object());
         sut.emmit(two);
-        final Event three = new Event("type", new Object());
+        final Event three = new Event(EventType.LOAD_FILE_HASHES, new Object());
         sut.emmit(three);
 
         assertThat(sut.next(), is(one));
@@ -51,7 +51,7 @@ public final class DefaultQueueTest {
     public void isEmpty() {
         assertThat(sut.isEmpty(), is(true));
 
-        sut.emmit(new Event("type", new Object()));
+        sut.emmit(new Event(EventType.LOAD_FILE_HASHES, new Object()));
         assertThat(sut.isEmpty(), is(false));
 
         sut.next();

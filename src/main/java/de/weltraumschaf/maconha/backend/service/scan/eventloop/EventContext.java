@@ -14,7 +14,7 @@ import java.util.Map;
 public final class EventContext {
 
     private final EventEmitter emitter;
-    private final Map<String, Object> globals;
+    private final Map<Global, Object> globals;
 
     /**
      * Dedicated constructor.
@@ -22,7 +22,7 @@ public final class EventContext {
      * @param emitter must not be {@code null}
      * @param globals must not be {@code null}
      */
-    EventContext(final EventEmitter emitter, final Map<String, Object> globals) {
+    EventContext(final EventEmitter emitter, final Map<Global, Object> globals) {
         super();
         this.emitter = Validate.notNull(emitter, "emitter");
         this.globals = Validate.notNull(globals, "globals");
@@ -48,7 +48,7 @@ public final class EventContext {
      *
      * @return must not be {@code null}
      */
-    public Map<String, Object> globals() {
+    public Map<Global, Object> globals() {
         return globals;
     }
 

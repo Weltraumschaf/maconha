@@ -13,11 +13,11 @@ public final class EventLoop implements HasLogger {
     /**
      * Stores global data available to all events via its {@link EventContext context}.
      */
-    private final Map<String, Object> globals = new ConcurrentHashMap<>();
+    private final Map<Global, Object> globals = new ConcurrentHashMap<>();
     /**
      * Stores the event handlers by event type.
      */
-    private final Map<String, EventHandler> handlers = new ConcurrentHashMap<>();
+    private final Map<EventType, EventHandler> handlers = new ConcurrentHashMap<>();
     /**
      * Class to hold events.
      */
@@ -64,11 +64,11 @@ public final class EventLoop implements HasLogger {
      * There can only one handler be registered for a particular type.
      * </p>
      *
-     * @param type    must not be {@code null} or empty
+     * @param type    must not be {@code null}
      * @param handler must not be {@code null}
      */
-    public void register(final String type, final EventHandler handler) {
-        Validate.notEmpty(type, "type");
+    public void register(final EventType type, final EventHandler handler) {
+        Validate.notNull(type, "type");
         Validate.notNull(handler, "handler");
 
         if (handlers.containsKey(type)) {

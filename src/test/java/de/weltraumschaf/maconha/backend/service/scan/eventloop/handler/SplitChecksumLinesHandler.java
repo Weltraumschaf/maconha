@@ -4,11 +4,12 @@ import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.Event;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventContext;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventHandler;
+import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventType;
 
 /**
  *
  */
-final class SplitChecksumLinesHandler implements EventHandler, HasLogger {
+public final class SplitChecksumLinesHandler implements EventHandler, HasLogger {
     @Override
     public void process(final EventContext context, final Event event) {
         logger().debug("Split checkusm file content ...");

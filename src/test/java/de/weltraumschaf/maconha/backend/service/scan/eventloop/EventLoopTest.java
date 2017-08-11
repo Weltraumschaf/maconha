@@ -18,21 +18,16 @@ public final class EventLoopTest {
         sut.register(null, (context, event) -> {});
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void register_typeMustNotBeEmpty() {
-        sut.register("", (context, event) -> {});
-    }
-
     @Test(expected = NullPointerException.class)
     public void register_handlerMustNotBeNull() {
-        sut.register("type", null);
+        sut.register(EventType.LOAD_FILE_HASHES, null);
     }
 
     @Test
     public void start_invokesRegisteredHandlers() {
-        final Event firstEvent = new Event("handlerOne", "firstEvent");
-        final Event secondEvent = new Event("handlerTwo", "secondEvent");
-        final Event thirdEvent = new Event("handlerThree", "thirdEvent");
+        final Event firstEvent = new Event(EventType.DIR_HASH, "firstEvent");
+        final Event secondEvent = new Event(EventType.FILTER_SEEN_FILE, "secondEvent");
+        final Event thirdEvent = new Event(EventType.LOAD_FILE_HASHES, "thirdEvent");
 
         final EventHandler handlerOne = mock(EventHandler.class);
         doAnswer(invocation -> {
@@ -50,9 +45,9 @@ public final class EventLoopTest {
 
         final EventHandler handlerThree = mock(EventHandler.class);
 
-        sut.register("handlerOne", handlerOne);
-        sut.register("handlerTwo", handlerTwo);
-        sut.register("handlerThree", handlerThree);
+        sut.register(EventType.DIR_HASH, handlerOne);
+        sut.register(EventType.FILTER_SEEN_FILE, handlerTwo);
+        sut.register(EventType.LOAD_FILE_HASHES, handlerThree);
 
         sut.start(firstEvent);
 

@@ -14,7 +14,7 @@ public final class Event {
     /**
      * Type of the event.
      */
-    private final String type;
+    private final EventType type;
     /**
      * Dat of the event.
      */
@@ -23,12 +23,12 @@ public final class Event {
     /**
      * Dedicated constructor.
      *
-     * @param type must not be {@code null} or empty
+     * @param type must not be {@code null}
      * @param data must not be {@code null}
      */
-    public Event(final String type, final Object data) {
+    public Event(final EventType type, final Object data) {
         super();
-        this.type = Validate.notEmpty(type, "type");
+        this.type = Validate.notNull(type, "type");
         this.data = Validate.notNull(data, "data");
     }
 
@@ -37,7 +37,7 @@ public final class Event {
      *
      * @return never {@code null} or empty
      */
-    public String getType() {
+    public EventType getType() {
         return type;
     }
 
