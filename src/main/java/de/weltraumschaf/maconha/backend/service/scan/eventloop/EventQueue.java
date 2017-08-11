@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.eventloop;
+package de.weltraumschaf.maconha.backend.service.scan.eventloop;
 
 /**
  * Implementors give access to the sored event queue.

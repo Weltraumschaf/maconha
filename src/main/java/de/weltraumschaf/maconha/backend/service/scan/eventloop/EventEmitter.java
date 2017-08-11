@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.eventloop;
+package de.weltraumschaf.maconha.backend.service.scan.eventloop;
 
 /**
  * Implementors emits events.

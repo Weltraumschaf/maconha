@@ -1,10 +1,7 @@
-package de.weltraumschaf.maconha.backend.eventloop;
+package de.weltraumschaf.maconha.backend.service.scan.eventloop;
 
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
