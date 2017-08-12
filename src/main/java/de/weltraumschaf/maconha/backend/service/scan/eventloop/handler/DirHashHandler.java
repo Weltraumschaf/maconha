@@ -20,7 +20,7 @@ import java.nio.file.Paths;
  * under the key {@link Global#BUCKET}.
  * </p>
  */
-public final class DirHashHandler implements EventHandler, HasLogger {
+public final class DirHashHandler extends BaseHandler implements EventHandler, HasLogger {
 
     private final CommandFactory cmds;
 
@@ -31,16 +31,7 @@ public final class DirHashHandler implements EventHandler, HasLogger {
 
     @Override
     public void process(final EventContext context, final Event event) {
-        Validate.notNull(context, "context");
-        Validate.notNull(event, "event");
-
-        if (event.getData() == null) {
-            throw new IllegalEventData("The passed in event has no data (is null)!");
-        }
-
-        if (!(event.getData() instanceof Bucket)) {
-            throw new IllegalEventData("The passed in event data is not of type %s!", Bucket.class.getSimpleName());
-        }
+        assertPreConditions(context, event, Bucket.class);
 
         final Bucket bucket = (Bucket) event.getData();
         logger().debug("Dirhashing bucket {} ...", bucket);

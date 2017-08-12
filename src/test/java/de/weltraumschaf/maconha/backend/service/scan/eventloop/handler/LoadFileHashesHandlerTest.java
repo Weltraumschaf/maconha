@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 
-import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,9 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests for {@link LoadFileHashesHandler}.

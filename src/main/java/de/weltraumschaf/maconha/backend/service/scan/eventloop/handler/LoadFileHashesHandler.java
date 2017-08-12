@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 
-import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 
@@ -15,15 +14,10 @@ import java.nio.file.Paths;
  * Expects a string with the file path as {@link Event#getData() event data}.
  * </p>
  */
-public final class LoadFileHashesHandler implements EventHandler, HasLogger {
+public final class LoadFileHashesHandler extends BaseHandler implements EventHandler, HasLogger {
     @Override
     public void process(final EventContext context, final Event event) {
-        Validate.notNull(context, "context");
-        Validate.notNull(event, "event");
-
-        if (event.getData() == null) {
-            throw new IllegalEventData("The passed in event has no data (is null)!");
-        }
+        assertPreConditions(context, event, String.class);
 
         if (!(event.getData() instanceof String)) {
             throw new IllegalEventData(
