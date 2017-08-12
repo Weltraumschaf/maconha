@@ -5,15 +5,12 @@ import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
-import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
@@ -26,8 +23,7 @@ import static org.mockito.Mockito.*;
 public final class DirHashHandlerTest {
 
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final Map<Global, Object> globals = new HashMap<>();
-    private final EventContext context = new EventContext(emitter, globals);
+    private final EventContext context = new EventContext(emitter, new HashMap<>());
     private final CommandFactory cmds = mock(CommandFactory.class);
     private final DirHashHandler sut = new DirHashHandler(cmds);
 
