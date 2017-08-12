@@ -5,9 +5,9 @@ import de.weltraumschaf.commons.validate.Validate;
 import java.nio.file.Path;
 
 /**
- * Factory which provides various pre configured {@link Command shell commands}.
+ * Default implementation.
  */
-public final class Commands {
+public final class Commands implements CommandFactory{
 
     /**
      * Path to the command.
@@ -24,12 +24,7 @@ public final class Commands {
         this.path = Validate.notNull(path, "path");
     }
 
-    /**
-     * Create directory hash command.
-     *
-     * @param directory must not be {@code null}
-     * @return never {@code null}, always new object
-     */
+    @Override
     public Command dirhash(final Path directory) {
         return new Dirhash(path, Validate.notNull(directory, "directory"));
     }

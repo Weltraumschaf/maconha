@@ -1,18 +1,62 @@
 package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
+import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
+import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
+import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
+import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
- *
+ * Handles the event for hashing a bucket directory.
+ * <p>
+ * This handler expects a {@link Bucket bucket} as {@link Event#getData() event data}. It stores the bucket globally
+ * under the key {@link Global#BUCKET}.
+ * </p>
  */
 public final class DirHashHandler implements EventHandler, HasLogger {
+
+    private final CommandFactory cmds;
+
+    public DirHashHandler(final CommandFactory cmds) {
+        super();
+        this.cmds = Validate.notNull(cmds, "cmds");
+    }
+
     @Override
     public void process(final EventContext context, final Event event) {
+        Validate.notNull(context, "context");
+        Validate.notNull(event, "event");
+
+        if (event.getData() == null) {
+            throw new IllegalEventData("The passed in event has no data (is null)!");
+        }
+
+        if (!(event.getData() instanceof Bucket)) {
+            throw new IllegalEventData("The passed in event data is not of type %s!", Bucket.class.getSimpleName());
+        }
+
         final Bucket bucket = (Bucket) event.getData();
         logger().debug("Dirhashing bucket {} ...", bucket);
+
+        final Path directory = Paths.get(bucket.getDirectory());
+        final Command dirhash = cmds.dirhash(directory);
+
+        try {
+            dirhash.execute();
+        } catch (final IOException | InterruptedException e) {
+            throw new EventHandlerFailed("Dirhashing of bucket directory '%s' failed!", e, directory);
+        }
+
         context.globals().put(Global.BUCKET, bucket);
-        context.emitter().emmit(new Event(EventType.LOAD_FILE_HASHES, event.getData() + "/.checksums"));
+        final String checksumFile = bucket.getDirectory() + "/" + ScanService.CHECKSUM_FILE;
+        context.emitter().emmit(new Event(EventType.LOAD_FILE_HASHES, checksumFile));
     }
+
 }

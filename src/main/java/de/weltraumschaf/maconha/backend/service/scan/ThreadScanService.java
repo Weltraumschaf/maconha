@@ -11,6 +11,7 @@ import de.weltraumschaf.maconha.backend.service.ScanStatusService;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
+import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Result;
 import org.joda.time.DateTime;
@@ -22,12 +23,12 @@ import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,7 @@ import java.util.stream.Collectors;
  */
 @Service
 final class ThreadScanService  implements ScanService, ScanCallBack {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
     // FIXME Make private.
@@ -69,7 +71,7 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
     private final MaconhaConfiguration config;
     private final MediaFileService mediaFiles;
     private final TaskExecutor executor;
-    private Commands cmds;
+    private CommandFactory cmds;
 
     @Autowired
     ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor, final ScanStatusService statuses) {
@@ -240,7 +242,8 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
             final Set<HashedFile> hashedFiles;
 
             try {
-                hashedFiles = new HashFileReader().read(Paths.get(bucket.getDirectory()).resolve(".checksums"));
+                final Path checksums = Paths.get(bucket.getDirectory()).resolve(CHECKSUM_FILE);
+                hashedFiles = new HashFileReader().read(checksums);
             } catch (final IOException e) {
                 LOGGER.warn(e.getMessage(), e);
                 notifyError(e.getMessage());

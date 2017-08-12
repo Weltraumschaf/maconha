@@ -1,5 +1,6 @@
 package de.weltraumschaf.maconha.backend.service.scan.shell;
 
+import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import org.apache.commons.io.FileUtils;
@@ -53,7 +54,7 @@ public class DirhashTest {
         assertThat("STDOUT must not be empty!", result.getStdout(), not(isEmptyString()));
         assertThat("Result was not successful!", result.isSuccessful(), is(true));
 
-        final Set<HashedFile> hashedFiles = new HashFileReader().read(target.resolve(".checksums"));
+        final Set<HashedFile> hashedFiles = new HashFileReader().read(target.resolve(ScanService.CHECKSUM_FILE));
         assertThat(hashedFiles, hasSize(13));
         assertThat(hashedFiles, containsInAnyOrder(
             new HashedFile(

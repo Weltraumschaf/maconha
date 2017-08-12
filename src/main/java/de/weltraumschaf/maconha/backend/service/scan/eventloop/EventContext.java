@@ -22,7 +22,7 @@ public final class EventContext {
      * @param emitter must not be {@code null}
      * @param globals must not be {@code null}
      */
-    EventContext(final EventEmitter emitter, final Map<Global, Object> globals) {
+    public EventContext(final EventEmitter emitter, final Map<Global, Object> globals) {
         super();
         this.emitter = Validate.notNull(emitter, "emitter");
         this.globals = Validate.notNull(globals, "globals");

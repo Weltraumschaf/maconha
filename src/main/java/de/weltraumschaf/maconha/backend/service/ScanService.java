@@ -13,6 +13,11 @@ import java.util.Objects;
 public interface ScanService {
 
     /**
+     * The file name used to store the resulting file hashes.
+     */
+    String CHECKSUM_FILE = ".checksums";
+
+    /**
      * Scan the media files found in the given bucket
      *
      * @param bucket must not be {@code null}
