@@ -9,16 +9,19 @@ import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFileLineParser;
 
 /**
- *
+ * Handles the event for parsing a checksum file line.
+ * <p>
+ * Expects a string with the line as {@link Event#getData() event data}.
+ * </p>
  */
-public final class ParseChecksumLineHandler implements EventHandler, HasLogger {
+public final class ParseChecksumLineHandler extends BaseHandler implements EventHandler, HasLogger {
     @Override
     public void process(final EventContext context, final Event event) {
-        final String line = (String)event.getData();
+        assertPreConditions(context, event, String.class);
+
+        final String line = (String) event.getData();
         logger().debug("Parse checksum line {} ...", line);
         final HashedFileLineParser parser = new HashedFileLineParser();
-        final HashedFile hashedFile = parser.parse(line);
-        context.emitter().emmit(new Event(EventType.RELATIVIZE_FILE, hashedFile));
-
+        context.emitter().emmit(new Event(EventType.RELATIVIZE_FILE, parser.parse(line)));
     }
 }
