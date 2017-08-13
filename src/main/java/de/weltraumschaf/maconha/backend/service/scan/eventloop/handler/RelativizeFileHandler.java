@@ -25,6 +25,7 @@ public final class RelativizeFileHandler extends BaseHandler implements EventHan
         }
 
         final Bucket bucket = (Bucket) context.globals().get(Global.BUCKET);
-        context.emitter().emmit(new Event(EventType.FILTER_SEEN_HASHED_FILE, hashedFile.relativizeFilename(bucket)));
+        context.emitter()
+            .emmit(new Event(EventType.FILTER_SEEN_HASHED_FILE, hashedFile.relativizeFilename(bucket)));
     }
 }
