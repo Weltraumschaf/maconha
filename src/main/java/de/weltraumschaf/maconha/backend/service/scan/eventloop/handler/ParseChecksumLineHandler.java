@@ -5,7 +5,6 @@ import de.weltraumschaf.maconha.backend.service.scan.eventloop.Event;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventContext;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventHandler;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventType;
-import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFileLineParser;
 
 /**
@@ -22,6 +21,6 @@ public final class ParseChecksumLineHandler extends BaseHandler implements Event
         final String line = (String) event.getData();
         logger().debug("Parse checksum line {} ...", line);
         final HashedFileLineParser parser = new HashedFileLineParser();
-        context.emitter().emmit(new Event(EventType.RELATIVIZE_FILE, parser.parse(line)));
+        context.emitter().emmit(new Event(EventType.RELATIVIZE_HASHED_FILE, parser.parse(line)));
     }
 }

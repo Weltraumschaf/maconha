@@ -41,7 +41,7 @@ public final class ParseChecksumLineHandlerTest {
 
         verify(emitter, times(1))
             .emmit(new Event(
-                EventType.RELATIVIZE_FILE,
+                EventType.RELATIVIZE_HASHED_FILE,
                 new HashedFile("2f04335a0b0a96b50f9e19de9fa5a4aac2c0cc42e474bf3b9401790e33e166cb", "Animation/android_207_HQ.mp4")));
     }
 }

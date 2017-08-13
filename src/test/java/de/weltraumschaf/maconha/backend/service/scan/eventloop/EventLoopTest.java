@@ -26,7 +26,7 @@ public final class EventLoopTest {
     @Test
     public void start_invokesRegisteredHandlers() {
         final Event firstEvent = new Event(EventType.DIR_HASH, "firstEvent");
-        final Event secondEvent = new Event(EventType.FILTER_SEEN_FILE, "secondEvent");
+        final Event secondEvent = new Event(EventType.FILTER_SEEN_HASHED_FILE, "secondEvent");
         final Event thirdEvent = new Event(EventType.LOAD_FILE_HASHES, "thirdEvent");
 
         final EventHandler handlerOne = mock(EventHandler.class);
@@ -46,7 +46,7 @@ public final class EventLoopTest {
         final EventHandler handlerThree = mock(EventHandler.class);
 
         sut.register(EventType.DIR_HASH, handlerOne);
-        sut.register(EventType.FILTER_SEEN_FILE, handlerTwo);
+        sut.register(EventType.FILTER_SEEN_HASHED_FILE, handlerTwo);
         sut.register(EventType.LOAD_FILE_HASHES, handlerThree);
 
         sut.start(firstEvent);
