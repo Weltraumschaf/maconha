@@ -8,9 +8,10 @@ import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
 /**
- * Handles the event for fltering out already seen {@link HashedFile hashed file}.
+ * Handles the event for filtering out already seen {@link HashedFile hashed file}.
+ * <p></p>
  */
-public final class FilterSeenFileHandler extends BaseHandler implements EventHandler, HasLogger{
+public final class FilterSeenFileHandler extends BaseHandler implements EventHandler, HasLogger {
     private final MediaFileService mediaFiles;
 
     public FilterSeenFileHandler(final MediaFileService mediaFiles) {

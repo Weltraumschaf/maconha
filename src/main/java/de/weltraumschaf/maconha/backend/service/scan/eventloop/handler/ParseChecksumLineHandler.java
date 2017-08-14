@@ -21,6 +21,6 @@ public final class ParseChecksumLineHandler extends BaseHandler implements Event
         final String line = (String) event.getData();
         logger().debug("Parse checksum line {} ...", line);
         final HashedFileLineParser parser = new HashedFileLineParser();
-        context.emitter().emmit(new Event(EventType.RELATIVIZE_HASHED_FILE, parser.parse(line)));
+        context.emitter().emmit(new Event(EventType.FILTER_FILE_EXTENSION, parser.parse(line)));
     }
 }

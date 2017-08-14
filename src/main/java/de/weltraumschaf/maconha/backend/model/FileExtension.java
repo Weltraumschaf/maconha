@@ -10,6 +10,8 @@ import java.util.Map;
  * <p>
  * File extension is the string portion after the last dot of a file name.
  * </p>
+ *
+ * TODO Remov eMIME because this is extracted by Tika.
  */
 public enum FileExtension {
 

@@ -21,6 +21,10 @@ public enum EventType {
      */
     PARSE_CHECKSUM_LINE,
     /**
+     * Filter ouyt files with unwanted file extension.
+     */
+    FILTER_FILE_EXTENSION,
+    /**
      * Make the absolute path of a hashed file relative to a bucket.
      */
     RELATIVIZE_HASHED_FILE,
