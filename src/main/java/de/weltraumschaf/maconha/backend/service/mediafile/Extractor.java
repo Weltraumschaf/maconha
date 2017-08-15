@@ -3,7 +3,7 @@ package de.weltraumschaf.maconha.backend.service.mediafile;
 /**
  * Extracts data from a given string.
  */
-interface Extractor<T> {
+public interface Extractor<T> {
     /**
      * Extracts metadata from given string in ny way.
      *

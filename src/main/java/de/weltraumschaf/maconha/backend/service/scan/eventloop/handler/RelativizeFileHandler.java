@@ -6,7 +6,7 @@ import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
 /**
- * Handles the event for relative a the path aif a {@link HashedFile hashed file}.
+ * Handles the event for relative the path of a {@link HashedFile hashed file}.
  * <p>
  * Expects a {@link HashedFile hashed file} as {@link Event#getData() event data} and expects a {@link Bucket bucket}
  * as global data under the key {@link Global#BUCKET}.

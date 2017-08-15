@@ -35,5 +35,7 @@ public enum EventType {
     /**
      * Extract the meta data from a file.
      */
-    EXTRACT_FILE_META_DATA;
+    EXTRACT_FILE_META_DATA,
+    EXTRACT_KEYWORDS_FROM_FILE_NAME,
+    EXTRACT_KEYWORDS_FROM_META_DATA;
 }

@@ -6,7 +6,7 @@ import de.weltraumschaf.maconha.backend.service.mediafile.MetaDataExtractor;
 import java.util.Objects;
 
 /**
- * Immutable value object whoch contains the meta data found by {@link MetaDataExtractor}.
+ * Immutable value object which contains the meta data found by {@link MetaDataExtractor}.
  */
 public final class FileMetaData {
 

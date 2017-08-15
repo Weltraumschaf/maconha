@@ -9,7 +9,10 @@ import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
 /**
  * Handles the event for filtering out already seen {@link HashedFile hashed file}.
- * <p></p>
+ * <p>
+ * Expects a {@link HashedFile hashed file} as {@link Event#getData() event data} and expects a {@link Bucket bucket}
+ * as global data under the key {@link Global#BUCKET}.
+ * </p>
  */
 public final class FilterSeenFileHandler extends BaseHandler implements EventHandler, HasLogger {
     private final MediaFileService mediaFiles;
