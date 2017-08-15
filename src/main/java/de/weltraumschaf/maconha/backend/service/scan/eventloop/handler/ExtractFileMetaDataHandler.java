@@ -5,6 +5,7 @@ import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.model.FileMetaData;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.mediafile.Extractor;
+import de.weltraumschaf.maconha.backend.service.mediafile.MetaDataExtractor;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
@@ -13,11 +14,19 @@ import java.nio.file.Paths;
 
 /**
  * Handles the event for extracting meta data from a {@link HashedFile hashed file}.
+ * <p>
+ * Expects a {@link HashedFile hashed file} as {@link Event#getData() event data} and expects a {@link Bucket bucket}
+ * as global data under the key {@link Global#BUCKET}.
+ * </p>
  */
 public final class ExtractFileMetaDataHandler extends BaseHandler implements EventHandler, HasLogger {
     private final Extractor<FileMetaData> extractor;
 
-    public ExtractFileMetaDataHandler(final Extractor<FileMetaData> extractor) {
+    public ExtractFileMetaDataHandler() {
+        this(new MetaDataExtractor());
+    }
+
+    ExtractFileMetaDataHandler(final Extractor<FileMetaData> extractor) {
         super();
         this.extractor = Validate.notNull(extractor, "extractor");
     }

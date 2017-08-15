@@ -36,6 +36,16 @@ public enum EventType {
      * Extract the meta data from a file.
      */
     EXTRACT_FILE_META_DATA,
+    /**
+     * Extract keywords from file name.
+     */
     EXTRACT_KEYWORDS_FROM_FILE_NAME,
-    EXTRACT_KEYWORDS_FROM_META_DATA;
+    /**
+     * Extract keywords from meta data.
+     */
+    EXTRACT_KEYWORDS_FROM_META_DATA,
+    /**
+     * Store media file and keywords persistent.
+     */
+    STORE_FILE_AND_KEYWORDS;
 }

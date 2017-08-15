@@ -8,6 +8,6 @@ import java.util.Collection;
  * The resulting collection does not contain duplicates.
  * </p>
  */
-interface KeywordExtractor extends Extractor<Collection<String>> {
+public interface KeywordExtractor extends Extractor<Collection<String>> {
 
 }
