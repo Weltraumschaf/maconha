@@ -33,7 +33,7 @@ public final class LoadFileHashesHandlerTest {
     }
 
     @Test(expected = IllegalEventData.class)
-    public void process_eventDataIsNotOfTypeBucket() {
+    public void process_eventDataIsNotOfRightType() {
         sut.process(context, new Event(EventType.LOAD_FILE_HASHES, new Object()));
     }
 

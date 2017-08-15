@@ -5,6 +5,8 @@ import de.weltraumschaf.maconha.backend.model.FileMetaData;
 import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
+import java.util.Collection;
+
 /**
  * Service to deal with {@link MediaFile media files}.
  */
@@ -20,11 +22,12 @@ public interface MediaFileService {
      * @param bucket must not be {@code null}
      * @return {@code true} if never seen, else {@code false}
      */
-    boolean isFileUnseen(final HashedFile file, final Bucket bucket);
+    boolean isFileUnseen(HashedFile file, Bucket bucket);
 
-    FileMetaData extractFileMetaData(final Bucket bucket, final HashedFile file);
+    FileMetaData extractFileMetaData(Bucket bucket, HashedFile file);
 
-    void extractAndStoreMetaData(final Bucket bucket, final HashedFile file);
+    void extractAndStoreMetaData(Bucket bucket, HashedFile file);
+    void storeMetaData(Bucket bucket, HashedFile file, final String mime, Collection<String> foundKeywords);
 
     long numberOfIndexedFiles();
     long numberOfDuplicateFiles();

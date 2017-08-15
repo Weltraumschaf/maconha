@@ -45,7 +45,7 @@ public final class ExtractKeywordsFromMetaDataHandlerTest {
 
         verify(emitter, times(1))
             .emmit(new Event(
-                EventType.STORE_FILE_AND_KEYWORDS,
+                EventType.FILTER_UNWANTED_KEYWORDS,
                 input.addKeyWords(Arrays.asList("k1", "k2"))));
     }
 }

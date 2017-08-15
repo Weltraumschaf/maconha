@@ -45,6 +45,10 @@ public enum EventType {
      */
     EXTRACT_KEYWORDS_FROM_META_DATA,
     /**
+     * Filter out unwanted keywords.
+     */
+    FILTER_UNWANTED_KEYWORDS,
+    /**
      * Store media file and keywords persistent.
      */
     STORE_FILE_AND_KEYWORDS;

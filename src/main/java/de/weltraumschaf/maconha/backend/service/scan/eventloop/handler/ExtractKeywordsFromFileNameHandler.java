@@ -35,6 +35,7 @@ public final class ExtractKeywordsFromFileNameHandler extends BaseHandler implem
         assertPreConditions(context, event, MediaDataCollector.class);
 
         final MediaDataCollector collector = (MediaDataCollector) event.getData();
+        logger().debug("Extract keywords from file name of {} ...", collector.getFile());
         final Collection<String> keywords = extractor.extract(collector.getFile().getFile());
 
         context.emitter()

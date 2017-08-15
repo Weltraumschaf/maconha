@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Predicate which tests if a keyword is ignored or or not.
  */
-final class IgnoredKeywords implements Predicate<String> {
+public final class IgnoredKeywords implements Predicate<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IgnoredKeywords.class);
     static final Collection<String> IGNORED_KEYWORDS = Arrays.asList(

@@ -4,7 +4,9 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.backend.model.FileMetaData;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * Immutable value class to carry around data from one event to another.
@@ -26,7 +28,7 @@ final class MediaDataCollector {
     /**
      * Dedicated constructor.
      *
-     * @param file must not be {@code null}
+     * @param file     must not be {@code null}
      * @param metaData must not be {@code null}
      */
     private MediaDataCollector(final HashedFile file, final FileMetaData metaData) {
@@ -84,11 +86,27 @@ final class MediaDataCollector {
      * </p>
      *
      * @param keywords must not be {@code null}
-     * @return never {@code null}, new version with updated meta data
+     * @return never {@code null}, new version with updated keywords
      */
     MediaDataCollector addKeyWords(final Collection<String> keywords) {
         final MediaDataCollector newCollector = copy(metaData);
         newCollector.keywords.addAll(Validate.notNull(keywords, "keywords"));
+        return newCollector;
+    }
+
+    /**
+     * Sets the keywords.
+     * <p>
+     * This method overwrites preexisting keywords instead of merging them.
+     * </p>
+     *
+     * @param keywords must not be {@code null}
+     * @return never {@code null}, new version with updated keywords
+     */
+    MediaDataCollector setKeyWords(final Collection<String> keywords) {
+        final MediaDataCollector newCollector = copy(metaData);
+        newCollector.keywords.clear();
+        newCollector.keywords.addAll(keywords);
         return newCollector;
     }
 

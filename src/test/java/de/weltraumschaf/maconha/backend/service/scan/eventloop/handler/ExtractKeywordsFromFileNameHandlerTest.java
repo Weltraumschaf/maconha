@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 
-import de.weltraumschaf.maconha.backend.model.FileMetaData;
 import de.weltraumschaf.maconha.backend.service.mediafile.KeywordExtractor;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;

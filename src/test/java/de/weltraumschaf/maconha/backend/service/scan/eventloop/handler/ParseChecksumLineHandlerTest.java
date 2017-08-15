@@ -29,7 +29,7 @@ public final class ParseChecksumLineHandlerTest {
     }
 
     @Test(expected = IllegalEventData.class)
-    public void process_eventDataIsNotOfTypeBucket() {
+    public void process_eventDataIsNotOfRightType() {
         sut.process(context, new Event(EventType.PARSE_CHECKSUM_LINE, new Object()));
     }
 

@@ -124,6 +124,33 @@ class DefaultMediaFileService implements MediaFileService {
     }
 
     @Override
+    @Transactional
+    public void storeMetaData(final Bucket bucket, final HashedFile file, final String mime, final Collection<String> foundKeywords) {
+        LOGGER.debug("Store media file for {}.", file);
+        final MediaFile media = new MediaFile();
+        media.setType(MediaType.forValue(file.extractExtension()));
+        media.setFormat(mime);
+        media.setRelativeFileName(file.getFile());
+        media.setFileHash(file.getHash());
+        media.setBucket(bucket);
+
+        foundKeywords.stream().map(literal -> {
+            Keyword keyword = keywords.findByLiteral(literal);
+
+            if (null == keyword) {
+                LOGGER.debug("Save new keyword '{}'.", literal);
+                keyword = new Keyword();
+                keyword.setLiteral(literal);
+                keywords.save(keyword);
+            }
+
+            return keyword;
+        }).forEach(media::addKeyword);
+
+        mediaFiles.save(media);
+    }
+
+    @Override
     public long numberOfIndexedFiles() {
         return mediaFiles.count();
     }

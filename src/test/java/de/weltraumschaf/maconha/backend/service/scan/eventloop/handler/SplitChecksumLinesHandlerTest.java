@@ -28,7 +28,7 @@ public final class SplitChecksumLinesHandlerTest {
     }
 
     @Test(expected = IllegalEventData.class)
-    public void process_eventDataIsNotOfTypeBucket() {
+    public void process_eventDataIsNotOfRightType() {
         sut.process(context, new Event(EventType.SPLIT_CHECKSUM_LINES, new Object()));
     }
 

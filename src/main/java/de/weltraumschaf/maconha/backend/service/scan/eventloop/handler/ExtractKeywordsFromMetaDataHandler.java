@@ -34,9 +34,10 @@ public final class ExtractKeywordsFromMetaDataHandler extends BaseHandler implem
     public void process(final EventContext context, final Event event) {
         assertPreConditions(context, event, MediaDataCollector.class);
         final MediaDataCollector collector = (MediaDataCollector) event.getData();
+        logger().debug("Extract keywords from meta data of {} ...", collector.getFile());
         final Collection<String> keywords = extractor.extract(collector.getMetaData().getData());
 
         context.emitter()
-            .emmit(new Event(EventType.STORE_FILE_AND_KEYWORDS, collector.addKeyWords(keywords)));
+            .emmit(new Event(EventType.FILTER_UNWANTED_KEYWORDS, collector.addKeyWords(keywords)));
     }
 }

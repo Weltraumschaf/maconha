@@ -31,7 +31,7 @@ public final class RelativizeFileHandlerTest {
     }
 
     @Test(expected = IllegalEventData.class)
-    public void process_eventDataIsNotOfTypeBucket() {
+    public void process_eventDataIsNotOfRightType() {
         sut.process(context, new Event(EventType.RELATIVIZE_HASHED_FILE, new Object()));
     }
 

@@ -74,4 +74,12 @@ public final class MediaDataCollectorTest {
 
         assertThat(newCollector.getKeywords(), contains("k1", "k2", "k3", "k4"));
     }
+
+    @Test
+    public void setKeyWords() {
+        final MediaDataCollector newCollector = sut.addKeyWords(Arrays.asList("k1", "k2"))
+            .setKeyWords(Arrays.asList("k3", "k4"));
+
+        assertThat(newCollector.getKeywords(), contains("k3", "k4"));
+    }
 }

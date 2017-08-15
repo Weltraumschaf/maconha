@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Checks whether a keyword will be accepted or not.
  */
-final class MalformedKeywords implements Predicate<String> {
+public final class MalformedKeywords implements Predicate<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MalformedKeywords.class);
     private final Predicate<String> notAlphaNum = new NotAlphaNumeric();
