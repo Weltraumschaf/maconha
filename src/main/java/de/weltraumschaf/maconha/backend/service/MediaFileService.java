@@ -26,6 +26,7 @@ public interface MediaFileService {
 
     FileMetaData extractFileMetaData(Bucket bucket, HashedFile file);
 
+    @Deprecated
     void extractAndStoreMetaData(Bucket bucket, HashedFile file);
     void storeMetaData(Bucket bucket, HashedFile file, final String mime, Collection<String> foundKeywords);
 

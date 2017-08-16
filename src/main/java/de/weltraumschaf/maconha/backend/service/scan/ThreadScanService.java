@@ -8,12 +8,9 @@ import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanStatusService;
-import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
-import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
-import de.weltraumschaf.maconha.backend.service.scan.shell.Result;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
@@ -27,13 +24,10 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -92,7 +86,7 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
     public void scan(final Bucket bucket, final UI currentUi) {
         final long id = statuses.nextId();
         final Command dirhash = cmds.dirhash(Paths.get(bucket.getDirectory()));
-        final ScanTask task = new ScanTask(id, bucket, currentUi, dirhash, mediaFiles, this);
+        final ScanTask task = new DefaultScanTask(id, bucket, currentUi, dirhash, mediaFiles, this);
         final Execution execution = new Execution(id, bucket, currentUi, task);
         executor.execute(task);
         scans.put(id, execution);
@@ -198,71 +192,4 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
         return dateTimeFormat.print(dateTime);
     }
 
-    private static class ScanTask implements Runnable {
-
-        private final Long id;
-        private final Bucket bucket;
-        private final UI currentUi;
-        private final Command dirhash;
-        private final MediaFileService mediaFiles;
-        private final ScanCallBack callback;
-
-        ScanTask(final Long id, final Bucket bucket, final UI currentUi, final Command dirhash, final MediaFileService mediaFiles, final ScanCallBack callback) {
-            super();
-            this.id = id;
-            this.bucket = bucket;
-            this.currentUi = currentUi;
-            this.dirhash = dirhash;
-            this.mediaFiles = mediaFiles;
-            this.callback = callback;
-        }
-
-        @Override
-        public void run() {
-            callback.beforeScan(id);
-            final Result result;
-
-            try {
-                result = dirhash.execute();
-            } catch (IOException | InterruptedException e) {
-                LOGGER.warn(e.getMessage(), e);
-                notifyError(e.getMessage());
-                return;
-            }
-
-            if (result.isFailed()) {
-                LOGGER.warn(
-                    "Scan job with id {} failed with exit code {} and STDERR: {}",
-                    id, result.getExitCode(), result.getStderr());
-                notifyError(result.getStderr());
-                return;
-            }
-
-            LOGGER.debug(result.getStdout());
-            final Set<HashedFile> hashedFiles;
-
-            try {
-                final Path checksums = Paths.get(bucket.getDirectory()).resolve(CHECKSUM_FILE);
-                hashedFiles = new HashFileReader().read(checksums);
-            } catch (final IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-                notifyError(e.getMessage());
-                return;
-            }
-
-            hashedFiles.stream()
-                .map(hashedFile -> hashedFile.relativizeFilename(bucket))
-                .filter(hashedFile -> mediaFiles.isFileUnseen(hashedFile, bucket))
-                .forEach(hashedFile -> mediaFiles.extractAndStoreMetaData(bucket, hashedFile));
-            callback.afterScan(id);
-        }
-
-        private void notifyError(final String error) {
-            final Notification notification = UiNotifier.notification(
-                "Scan job failed",
-                "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                bucket.getName(), bucket.getDirectory(), error);
-            UiNotifier.notifyClient(id, notification, currentUi);
-        }
-    }
 }
