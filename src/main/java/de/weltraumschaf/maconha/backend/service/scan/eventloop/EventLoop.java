@@ -85,7 +85,7 @@ public final class EventLoop implements HasLogger {
         }
 
         final EventHandler handler = determineHandler(current);
-        logger().debug("Processing event %s with handler %s", current, handler);
+        logger().debug("Processing event {} with handler {}.", current, handler);
         handler.process(new EventContext(events, globals), current);
     }
 

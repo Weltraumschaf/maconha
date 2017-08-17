@@ -7,7 +7,6 @@ import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
-import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
 
 import java.io.IOException;
 import java.nio.file.Path;

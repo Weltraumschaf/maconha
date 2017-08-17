@@ -8,6 +8,7 @@ import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashFileReader;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
+import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Result;
 
 import java.io.IOException;
@@ -26,12 +27,12 @@ final class DefaultScanTask implements ScanTask, HasLogger {
     private final MediaFileService mediaFiles;
     private final ScanCallBack callback;
 
-    DefaultScanTask(final Long id, final Bucket bucket, final UI currentUi, final Command dirhash, final MediaFileService mediaFiles, final ScanCallBack callback) {
+    DefaultScanTask(final Long id, final Bucket bucket, final UI currentUi, final CommandFactory cmds, final MediaFileService mediaFiles, final ScanCallBack callback) {
         super();
         this.id = id;
         this.bucket = bucket;
         this.currentUi = currentUi;
-        this.dirhash = dirhash;
+        this.dirhash = cmds.dirhash(Paths.get(bucket.getDirectory()));
         this.mediaFiles = mediaFiles;
         this.callback = callback;
     }

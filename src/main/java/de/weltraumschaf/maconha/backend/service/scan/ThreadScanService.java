@@ -85,8 +85,8 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
     @Override
     public void scan(final Bucket bucket, final UI currentUi) {
         final long id = statuses.nextId();
-        final Command dirhash = cmds.dirhash(Paths.get(bucket.getDirectory()));
-        final ScanTask task = new DefaultScanTask(id, bucket, currentUi, dirhash, mediaFiles, this);
+//        final ScanTask task = new DefaultScanTask(id, bucket, currentUi, cmds, mediaFiles, this);
+        final ScanTask task = new EventBasedScanTask(id, bucket, currentUi, cmds, mediaFiles, this);
         final Execution execution = new Execution(id, bucket, currentUi, task);
         executor.execute(task);
         scans.put(id, execution);
