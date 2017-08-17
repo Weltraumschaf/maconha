@@ -1,3 +1,4 @@
+
 <#ftl strip_whitespace = false strip_text = false>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +43,7 @@
         </div>
 
         <div class="form-group">
-            <label for="username">Password:
+            <label for="email">E-Mail:
                 <input type="email" class="form-control" name="email">
             </label>
         </div>
