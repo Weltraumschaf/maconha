@@ -1,12 +1,7 @@
 package de.weltraumschaf.maconha.ui.controller;
 
-import de.weltraumschaf.maconha.app.MaconhaConfiguration;
-import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.backend.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,8 +19,7 @@ public final class IndexController extends BaseWebController {
     private final UserService users;
 
     @Autowired
-    public IndexController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
-        super(files, config);
+    public IndexController(final UserService users) {
         this.users = users;
     }
 
@@ -37,7 +31,7 @@ public final class IndexController extends BaseWebController {
             return new ModelAndView("redirect:/install");
         }
 
-        model.put("title", config.getTitle());
+        model.put("title", getConfig().getTitle());
 
         return new ModelAndView("index", model);
     }

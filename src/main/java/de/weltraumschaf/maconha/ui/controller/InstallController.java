@@ -26,8 +26,7 @@ public final class InstallController extends BaseWebController {
     private final UserService users;
 
     @Autowired
-    public InstallController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
-        super(files, config);
+    public InstallController(final UserService users) {
         this.users = users;
     }
 
