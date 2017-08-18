@@ -15,13 +15,11 @@ abstract class BaseWebController {
     private final RequestTracer tracer = new RequestTracer();
     private final MediaFileRepo files;
     final MaconhaConfiguration config;
-    final UserService users;
 
-    BaseWebController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
+    BaseWebController(final MediaFileRepo files, final MaconhaConfiguration config) {
         super();
         this.files = files;
         this.config = config;
-        this.users = users;
     }
 
     void onMethodEntry(final HttpServletRequest request, final UriComponentsBuilder uri, final Map<String, Object> model) {

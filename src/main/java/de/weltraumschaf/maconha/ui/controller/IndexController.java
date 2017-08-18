@@ -21,12 +21,12 @@ import java.util.Map;
 @Controller
 public final class IndexController extends BaseWebController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
+    private final UserService users;
 
-    @Lazy
     @Autowired
     public IndexController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
-        super(files, config, users);
+        super(files, config);
+        this.users = users;
     }
 
     @GetMapping(value = "/", produces = ServedContentTypes.TEXT_HTML)

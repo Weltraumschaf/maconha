@@ -23,11 +23,12 @@ import java.util.Map;
 public final class InstallController extends BaseWebController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InstallController.class);
+    private final UserService users;
 
-    @Lazy
     @Autowired
     public InstallController(final MediaFileRepo files, final MaconhaConfiguration config, final UserService users) {
-        super(files, config, users);
+        super(files, config);
+        this.users = users;
     }
 
     @GetMapping(value = "/install", produces = ServedContentTypes.TEXT_HTML)
