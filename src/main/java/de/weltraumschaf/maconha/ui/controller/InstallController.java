@@ -1,12 +1,9 @@
 package de.weltraumschaf.maconha.ui.controller;
 
-import de.weltraumschaf.maconha.app.MaconhaConfiguration;
-import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
 import de.weltraumschaf.maconha.backend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
