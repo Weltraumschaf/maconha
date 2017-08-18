@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Used to signal HTTP not found.
+ *
+ * FIXME Is in wrong package.
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public final class NotFound extends RuntimeException {
