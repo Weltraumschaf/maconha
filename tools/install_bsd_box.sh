@@ -13,7 +13,10 @@ cd -
 
 # Install stuff.
 portmaster \
+    sysutils/tmux 
+tmux
+portmaster \
     editors/nano \
-    sysutils/tmux \
     databases/mysql57-server \
-    java/openjdk8-jre
+    java/openjdk8-jre \
+    ftp/curl
