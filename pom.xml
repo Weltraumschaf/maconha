@@ -80,7 +80,6 @@
         <project.scripts.directory>${project.basedir}/src/main/scripts</project.scripts.directory>
 
         <!-- Plugin/build options. -->
-        <!--<vaadin.widgetset.mode>fetch</vaadin.widgetset.mode>-->
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <frontend.node.version>v6.11.0</frontend.node.version>
 
@@ -646,6 +645,39 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <!--
+                        Suddenly the application was broken: The theme was not in
+                        the JAR anymore. I don't know why, but this fixes it.
+                        See https://stackoverflow.com/questions/32326361/vaadin-spring-boot-compiled-widgetset-is-missed-in-jar-package
+                        -->
+                        <id>copy-vaadin-themes</id>
+                        <phase>prepare-package</phase>
+
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes</outputDirectory>
+
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/webapp</directory>
+                                    <excludes>
+                                        <exclude>**/*.scss</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
                 <version>${vaadin.plugin.version}</version>
@@ -653,10 +685,11 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>update-widgetset</goal>
+                            <goal>resources</goal>
                             <goal>update-theme</goal>
-                            <goal>compile</goal>
+                            <goal>update-widgetset</goal>
                             <goal>compile-theme</goal>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
                 </executions>
