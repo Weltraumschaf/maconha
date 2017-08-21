@@ -13,9 +13,7 @@ cd -
 
 # Install stuff.
 portmaster --no-confirm -yd \
-    sysutils/tmux 
-tmux
-portmaster --no-confirm -yd \
+    sysutils/tmux \
     editors/nano \
     databases/mysql57-server \
     java/openjdk8-jre \
