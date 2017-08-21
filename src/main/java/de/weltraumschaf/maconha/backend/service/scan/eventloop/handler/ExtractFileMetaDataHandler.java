@@ -9,6 +9,7 @@ import de.weltraumschaf.maconha.backend.service.mediafile.MetaDataExtractor;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
 
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -43,7 +44,15 @@ public final class ExtractFileMetaDataHandler extends BaseHandler implements Eve
         }
 
         final Bucket bucket = (Bucket) context.globals().get(Global.BUCKET);
-        final Path absoluteFile = Paths.get(bucket.getDirectory()).resolve(hashedFile.getFile());
+        final Path absoluteFile;
+
+        try {
+            absoluteFile = Paths.get(bucket.getDirectory()).resolve(hashedFile.getFile());
+        } catch (final InvalidPathException e) {
+            logger().warn(e.getMessage(), e);
+            return;
+        }
+
         final MediaDataCollector collector = new MediaDataCollector(hashedFile)
             .setMetaData(extractor.extract(absoluteFile.toString()));
 
