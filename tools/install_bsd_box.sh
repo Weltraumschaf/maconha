@@ -12,10 +12,10 @@ rehash
 cd -
 
 # Install stuff.
-portmaster \
+portmaster --no-confirm -y \
     sysutils/tmux 
 tmux
-portmaster \
+portmaster --no-confirm -y \
     editors/nano \
     databases/mysql57-server \
     java/openjdk8-jre \
