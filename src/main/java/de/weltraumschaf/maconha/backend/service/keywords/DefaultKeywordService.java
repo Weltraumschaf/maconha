@@ -33,7 +33,7 @@ class DefaultKeywordService implements KeywordService, HasLogger {
         allKeywords.sort((keyword1, keyword2) -> {
             final Integer numberOfMediaFiles1 = keyword1.getMediaFiles().size();
             final Integer numberOfMediaFiles2 = keyword2.getMediaFiles().size();
-            return numberOfMediaFiles1.compareTo(numberOfMediaFiles2);
+            return numberOfMediaFiles2.compareTo(numberOfMediaFiles1);
         });
 
         final List<KeywordAndNumberOfMediaFiles> mapped = allKeywords.subList(0, 10)
