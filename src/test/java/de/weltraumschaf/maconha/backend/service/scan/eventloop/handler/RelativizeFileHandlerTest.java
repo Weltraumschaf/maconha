@@ -3,11 +3,11 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static de.weltraumschaf.maconha.backend.model.entity.MediaFile_.bucket;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
  */
 public final class RelativizeFileHandlerTest {
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     private final RelativizeFileHandler sut = new RelativizeFileHandler();
 
     @Test(expected = NullPointerException.class)

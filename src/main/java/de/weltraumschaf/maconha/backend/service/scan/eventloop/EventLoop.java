@@ -2,6 +2,8 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.HasLogger;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Report;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +24,10 @@ public final class EventLoop implements HasLogger {
      * Class to hold events.
      */
     private final EventQueue events = new DefaultQueue();
+    /**
+     * Used to collect reporting stuff for this event loop.
+     */
+    private final Reporter reporter = new Reporter();
     /**
      * Indicates if the loop should be executed or not.
      */
@@ -78,6 +84,19 @@ public final class EventLoop implements HasLogger {
         handlers.put(type, handler);
     }
 
+    /**
+     * Returns the current state report.
+     * <p>
+     * If this method is called while the loop is running the report will contain different reports. After the loop has
+     * stopped the report will not change anymore.
+     * </p>
+     *
+     * @return never {@code null}, always new instance
+     */
+    public Report getReport() {
+        return reporter.getReport();
+    }
+
     private void process(final Event current) {
         if (null == current) {
             logger().debug("Current event is null, ignoring!");
@@ -86,7 +105,7 @@ public final class EventLoop implements HasLogger {
 
         final EventHandler handler = determineHandler(current);
         logger().debug("Processing event {} with handler {}.", current, handler);
-        handler.process(new EventContext(events, globals), current);
+        handler.process(new EventContext(events, globals, reporter), current);
     }
 
     private EventHandler determineHandler(final Event e) {

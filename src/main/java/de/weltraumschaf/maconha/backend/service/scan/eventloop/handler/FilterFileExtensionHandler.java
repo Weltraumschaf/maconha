@@ -14,18 +14,23 @@ import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
  * </p>
  */
 public final class FilterFileExtensionHandler extends BaseHandler implements EventHandler, HasLogger {
+    public FilterFileExtensionHandler() {
+        super("processing event to filter files by file extension");
+    }
+
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, HashedFile.class);
         final HashedFile hashedFile = (HashedFile) event.getData();
-        logger().debug("Filter file extension for {} ...", hashedFile);
+        context.reporter().normal(getClass(),"Filter file extension for %s.", hashedFile.getFile());
 
         final String extension = FileExtension.extractExtension(hashedFile.getFile());
 
         if (FileExtension.hasValue(extension)) {
             context.emitter().emmit(new Event(EventType.RELATIVIZE_HASHED_FILE, hashedFile));
         } else {
-            logger().debug("Filter out file {}", hashedFile.getFile());
+            context.reporter().normal(getClass(),
+                "Filter out file %s.", hashedFile.getFile());
         }
 
     }

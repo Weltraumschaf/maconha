@@ -21,17 +21,17 @@ public final class StoreFileAndKeywordsHandler extends BaseHandler implements Ev
     private final MediaFileService mediaFiles;
 
     public StoreFileAndKeywordsHandler(final MediaFileService mediaFiles) {
-        super();
+        super("processing event to store a media file and its keywords");
         this.mediaFiles = Validate.notNull(mediaFiles, "mediaFiles");
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, MediaDataCollector.class);
 
         final MediaDataCollector collector = (MediaDataCollector) event.getData();
         final HashedFile hashedFile = collector.getFile();
-        logger().debug("Storing media file {} ...", hashedFile);
+        context.reporter().normal(getClass(),"Storing media file %s.", hashedFile.getFile());
 
         if (!(context.globals().get(Global.BUCKET) instanceof Bucket)) {
             throw new IllegalGlobalData("The passed in event data is not of type %s!",

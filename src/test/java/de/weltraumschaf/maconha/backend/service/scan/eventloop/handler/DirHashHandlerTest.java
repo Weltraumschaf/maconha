@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 public final class DirHashHandlerTest {
 
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     private final CommandFactory cmds = mock(CommandFactory.class);
     private final DirHashHandler sut = new DirHashHandler(cmds);
 

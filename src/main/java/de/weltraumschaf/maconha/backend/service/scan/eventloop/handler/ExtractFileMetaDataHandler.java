@@ -28,15 +28,15 @@ public final class ExtractFileMetaDataHandler extends BaseHandler implements Eve
     }
 
     ExtractFileMetaDataHandler(final Extractor<FileMetaData> extractor) {
-        super();
+        super("processing event to extract metadata from a file");
         this.extractor = Validate.notNull(extractor, "extractor");
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, HashedFile.class);
         final HashedFile hashedFile = (HashedFile) event.getData();
-        logger().debug("Extracting meta data from {} ...", hashedFile);
+        context.reporter().normal(getClass(), "Extracting meta data from %s.", hashedFile.getFile());
 
         if (!(context.globals().get(Global.BUCKET) instanceof Bucket)) {
             throw new IllegalGlobalData("The passed in event data is not of type %s!",
@@ -49,7 +49,8 @@ public final class ExtractFileMetaDataHandler extends BaseHandler implements Eve
         try {
             absoluteFile = Paths.get(bucket.getDirectory()).resolve(hashedFile.getFile());
         } catch (final InvalidPathException e) {
-            logger().warn(e.getMessage(), e);
+            context.reporter().error(getClass(),
+                "Can't extract meta data from file %s! Reason was: %s", hashedFile.getFile(), e.getMessage());
             return;
         }
 

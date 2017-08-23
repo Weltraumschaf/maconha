@@ -18,16 +18,17 @@ public final class FilterSeenFileHandler extends BaseHandler implements EventHan
     private final MediaFileService mediaFiles;
 
     public FilterSeenFileHandler(final MediaFileService mediaFiles) {
-        super();
+        super("processing event to filter out already seen file");
         this.mediaFiles = Validate.notNull(mediaFiles, "mediaFiles");
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, HashedFile.class);
 
         final HashedFile hashedFile = (HashedFile) event.getData();
-        logger().debug("Check if file {} is unseen ...", hashedFile);
+        context.reporter().normal(getClass(),
+            "Check if file %s with hash %s is unseen.", hashedFile.getFile(), hashedFile.getHash());
 
         if (!(context.globals().get(Global.BUCKET) instanceof Bucket)) {
             throw new IllegalGlobalData("The passed in event data is not of type %s!",
@@ -38,6 +39,9 @@ public final class FilterSeenFileHandler extends BaseHandler implements EventHan
 
         if (mediaFiles.isFileUnseen(hashedFile, bucket)) {
             context.emitter().emmit(new Event(EventType.EXTRACT_FILE_META_DATA, hashedFile));
+        } else {
+            context.reporter().normal(getClass(),
+                "File %s with hash %s is already seen.", hashedFile.getFile(), hashedFile.getHash());
         }
     }
 }

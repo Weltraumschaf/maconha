@@ -15,8 +15,12 @@ import java.nio.file.Paths;
  * </p>
  */
 public final class LoadFileHashesHandler extends BaseHandler implements EventHandler, HasLogger {
+    public LoadFileHashesHandler() {
+        super("processing event to load files with hashes");
+    }
+
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, String.class);
 
         if (!(event.getData() instanceof String)) {
@@ -25,9 +29,9 @@ public final class LoadFileHashesHandler extends BaseHandler implements EventHan
                 String.class.getSimpleName());
         }
 
-        final String data = (String) event.getData();
-        logger().debug("Loading hashes from {} ...", data);
-        final Path checksumFiles = Paths.get(data);
+        final String file = (String) event.getData();
+        context.reporter().normal(getClass(),"Loading hashes from %s.", file);
+        final Path checksumFiles = Paths.get(file);
         final String checksums;
 
         try {

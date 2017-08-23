@@ -13,11 +13,15 @@ import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
  * </p>
  */
 public final class RelativizeFileHandler extends BaseHandler implements EventHandler, HasLogger {
+    public RelativizeFileHandler() {
+        super("processing event to relativize a file to its bucket directory");
+    }
+
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, HashedFile.class);
         final HashedFile hashedFile = (HashedFile) event.getData();
-        logger().debug("Relativize file {} ...", hashedFile);
+        context.reporter().normal(getClass(),"Relativize file %s.", hashedFile.getFile());
 
         if (!(context.globals().get(Global.BUCKET) instanceof Bucket)) {
             throw new IllegalGlobalData("The passed in event data is not of type %s!",

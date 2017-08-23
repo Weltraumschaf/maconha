@@ -24,16 +24,16 @@ public final class DirHashHandler extends BaseHandler implements EventHandler, H
     private final CommandFactory cmds;
 
     public DirHashHandler(final CommandFactory cmds) {
-        super();
+        super("processing event to hash a bucket directory");
         this.cmds = Validate.notNull(cmds, "cmds");
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, Bucket.class);
 
         final Bucket bucket = (Bucket) event.getData();
-        logger().debug("Dirhashing bucket {} ...", bucket);
+        context.reporter().normal(getClass(), "Dirhashing bucket %s.", bucket);
 
         final Path directory = Paths.get(bucket.getDirectory());
         final Command dirhash = cmds.dirhash(directory);

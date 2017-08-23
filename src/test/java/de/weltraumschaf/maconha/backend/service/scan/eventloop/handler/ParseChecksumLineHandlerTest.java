@@ -2,6 +2,7 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.verify;
  */
 public final class ParseChecksumLineHandlerTest {
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     private final ParseChecksumLineHandler sut = new ParseChecksumLineHandler();
 
     @Test(expected = NullPointerException.class)

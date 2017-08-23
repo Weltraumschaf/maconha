@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -19,7 +20,7 @@ public final class LoadFileHashesHandlerTest {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     private final LoadFileHashesHandler sut = new LoadFileHashesHandler();
 
     @Test(expected = NullPointerException.class)

@@ -26,15 +26,16 @@ public final class ExtractKeywordsFromMetaDataHandler extends BaseHandler implem
     }
 
     ExtractKeywordsFromMetaDataHandler(final KeywordExtractor extractor) {
-        super();
+        super("processing event to extract keywords from meta data");
         this.extractor = Validate.notNull(extractor, "extractor");
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, MediaDataCollector.class);
         final MediaDataCollector collector = (MediaDataCollector) event.getData();
-        logger().debug("Extract keywords from meta data of {} ...", collector.getFile());
+        context.reporter().normal(getClass(),
+            "Extract keywords from meta data of %s.", collector.getFile());
         final Collection<String> keywords = extractor.extract(collector.getMetaData().getData());
 
         context.emitter()

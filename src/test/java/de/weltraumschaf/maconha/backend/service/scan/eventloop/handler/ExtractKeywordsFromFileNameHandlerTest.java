@@ -3,6 +3,7 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 import de.weltraumschaf.maconha.backend.service.mediafile.KeywordExtractor;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.*;
  */
 public final class ExtractKeywordsFromFileNameHandlerTest {
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     private KeywordExtractor extractor = mock(KeywordExtractor.class);
     private final ExtractKeywordsFromFileNameHandler sut = new ExtractKeywordsFromFileNameHandler(extractor);
 

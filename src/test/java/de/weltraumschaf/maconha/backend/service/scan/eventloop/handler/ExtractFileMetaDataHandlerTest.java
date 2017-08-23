@@ -5,6 +5,7 @@ import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.mediafile.Extractor;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.*;
  */
 public final class ExtractFileMetaDataHandlerTest {
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     @SuppressWarnings("unchecked")
     private Extractor<FileMetaData> extractor = mock(Extractor.class);
     private final ExtractFileMetaDataHandler sut = new ExtractFileMetaDataHandler(extractor);

@@ -14,12 +14,16 @@ import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFileLineParse
  * </p>
  */
 public final class ParseChecksumLineHandler extends BaseHandler implements EventHandler, HasLogger {
+    public ParseChecksumLineHandler() {
+        super("processing event to parse a checksum line");
+    }
+
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, String.class);
 
         final String line = (String) event.getData();
-        logger().debug("Parse checksum line {} ...", line);
+        context.reporter().normal(getClass(),"Parse checksum line %s.", line);
         final HashedFileLineParser parser = new HashedFileLineParser();
         context.emitter().emmit(new Event(EventType.FILTER_FILE_EXTENSION, parser.parse(line)));
     }

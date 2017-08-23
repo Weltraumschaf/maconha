@@ -26,16 +26,17 @@ public final class ExtractKeywordsFromFileNameHandler extends BaseHandler implem
     }
 
     ExtractKeywordsFromFileNameHandler(final KeywordExtractor extractor) {
-        super();
+        super("processing event to extract keywords from a filename");
         this.extractor = Validate.notNull(extractor, "extractor");
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, MediaDataCollector.class);
 
         final MediaDataCollector collector = (MediaDataCollector) event.getData();
-        logger().debug("Extract keywords from file name of {} ...", collector.getFile());
+        context.reporter().normal(getClass(),
+            "Extract keywords from file name of %s.", collector.getFile());
         final Collection<String> keywords = extractor.extract(collector.getFile().getFile());
 
         context.emitter()

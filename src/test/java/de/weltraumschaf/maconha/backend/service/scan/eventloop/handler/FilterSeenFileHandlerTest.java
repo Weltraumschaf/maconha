@@ -4,6 +4,7 @@ import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
+import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.*;
  */
 public final class FilterSeenFileHandlerTest {
     private final EventEmitter emitter = mock(EventEmitter.class);
-    private final EventContext context = new EventContext(emitter, new HashMap<>());
+    private final EventContext context = new EventContext(emitter, new HashMap<>(), new Reporter());
     private final MediaFileService mediaFiles = mock(MediaFileService.class);
     private final FilterSeenFileHandler sut = new FilterSeenFileHandler(mediaFiles);
 

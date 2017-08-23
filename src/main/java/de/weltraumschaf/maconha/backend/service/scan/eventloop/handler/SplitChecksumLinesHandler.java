@@ -13,11 +13,15 @@ import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventType;
  * </p>
  */
 public final class SplitChecksumLinesHandler extends BaseHandler implements EventHandler, HasLogger {
+    public SplitChecksumLinesHandler() {
+        super("processing event to split a checksum files into lines");
+    }
+
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, String.class);
 
-        logger().debug("Split checkusm file content ...");
+        context.reporter().normal(getClass(),"Split checkusm file content.");
         final String checksums = (String) event.getData();
 
         for (final String line : checksums.split("\\r?\\n")) {

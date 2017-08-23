@@ -16,7 +16,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
+ * Handles the event for filtering out unwanted keywords.
+ * <p>
+ * Expects a {@link MediaDataCollector} as {@link Event#getData() event data}.
+ * </p>
  */
 public final class FilterUnwantedKeywords extends BaseHandler implements EventHandler, HasLogger {
     private final Collection<Predicate<String>> filters;
@@ -26,22 +29,26 @@ public final class FilterUnwantedKeywords extends BaseHandler implements EventHa
     }
 
     FilterUnwantedKeywords(final Collection<Predicate<String>> filters) {
-        super();
+        super("processing event to filter out unwanted keywords");
         this.filters = new ArrayList<>(filters);
     }
 
     @Override
-    public void process(final EventContext context, final Event event) {
+    void doWork(final EventContext context, final Event event) {
         assertPreConditions(context, event, MediaDataCollector.class);
 
         final MediaDataCollector collector = (MediaDataCollector) event.getData();
-        logger().debug("Filter unwanted keywords ({}) of file {} ...", collector.getKeywords(), collector.getFile());
+        context.reporter().normal(getClass(),
+            "Filter unwanted keywords (%s) of file %s.", collector.getKeywords(), collector.getFile());
         Stream<String> keywords = collector.getKeywords().stream();
 
         for (final Predicate<String> filter : filters) {
+            context.reporter().normal(getClass(),
+                "Applying filter %s to keywords.", filter.getClass().getName());
             keywords = keywords.filter(filter);
         }
 
+        context.reporter().normal(getClass(), "Filtered keywords are %s.", keywords);
         context.emitter()
             .emmit(new Event(
                 EventType.STORE_FILE_AND_KEYWORDS,
