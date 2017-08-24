@@ -8,6 +8,8 @@ import de.weltraumschaf.maconha.backend.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,19 +30,17 @@ class DefaultKeywordService implements KeywordService, HasLogger {
 
     @Override
     public Collection<KeywordAndNumberOfMediaFiles> topTen() {
-        logger().debug("Find top ten keywords.");
-        final List<Keyword> allKeywords = keywords.findAll();
-        allKeywords.sort((keyword1, keyword2) -> {
-            final Integer numberOfMediaFiles1 = keyword1.getMediaFiles().size();
-            final Integer numberOfMediaFiles2 = keyword2.getMediaFiles().size();
-            return numberOfMediaFiles2.compareTo(numberOfMediaFiles1);
-        });
+        logger().debug("Find top ten keywords. {}");
 
-        final List<KeywordAndNumberOfMediaFiles> mapped = allKeywords.subList(0, 10)
+        final List<KeywordAndNumberOfMediaFiles> topTen = keywords.topTen()
             .stream()
-            .map(k -> new KeywordAndNumberOfMediaFiles(k.getLiteral(), k.getMediaFiles().size()))
-            .collect(Collectors.toList());
-        return Collections.unmodifiableCollection(mapped);
+            .map(o -> {
+                final String literal = (String) o[0];
+                final BigInteger numberOfMediaFiles = (BigInteger) o[1];
+                return new KeywordAndNumberOfMediaFiles(literal, numberOfMediaFiles.longValue());
+            }).collect(Collectors.toList());
+
+        return Collections.unmodifiableCollection(topTen);
     }
 
     @Override
