@@ -47,8 +47,7 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadScanService.class);
 
-    // FIXME Make private.
-    final Map<Long, Execution> scans = new ConcurrentHashMap<>();
+    private final Map<Long, Execution> scans = new ConcurrentHashMap<>();
     private final ScanStatusService statuses;
     private final PeriodFormatter secondsFormat =
         new PeriodFormatterBuilder()
