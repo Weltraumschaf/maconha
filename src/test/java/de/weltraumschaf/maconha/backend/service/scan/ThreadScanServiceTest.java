@@ -42,9 +42,6 @@ public final class ThreadScanServiceTest {
         assertThat(
             sut.formatDateTime(dateTime),
             is("12:30:00 14.07.2017"));
-        assertThat(
-            sut.formatDateTime(dateTime.toDate()),
-            is("12:30:00 14.07.2017"));
     }
 
     @Test(expected = ScanService.ScanError.class)

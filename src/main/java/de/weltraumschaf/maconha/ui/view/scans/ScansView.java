@@ -27,7 +27,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 @SpringComponent
 @SpringView(name = ScansView.VIEW_NAME)
 public final class ScansView extends SubView {
-    public static final String VIEW_NAME = "scans";
+    static final String VIEW_NAME = "scans";
     public static final String TITLE = "Scans";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScansView.class);
@@ -35,10 +35,10 @@ public final class ScansView extends SubView {
 
     private final Button stop = new MButton(VaadinIcons.STOP_COG, this::stop);
     private final MGrid<ScanStatus> list = new MGrid<>(ScanStatus.class)
-        .withProperties("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus", "jobExitCode")
-        .withColumnHeaders("ID", "Bucket Name", "Created", "Started", "Finished", "Duration", "Status", "Exit Code")
+        .withProperties("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus")
+        .withColumnHeaders("ID", "Bucket Name", "Created", "Started", "Finished", "Duration", "Status")
         .withFullWidth();
-    private final ScanService scanner;
+    private final transient ScanService scanner;
 
     @Autowired
     ScansView(final ScanService scanner, final MaconhaConfiguration config) {
@@ -83,14 +83,11 @@ public final class ScansView extends SubView {
         LOGGER.debug("Stop scan job with id {}.", status.getId());
 
         try {
-            if (scanner.stop(status.getId())) {
-                Notification.show(
-                    "Scan stopped",
-                    String.format("Scan with id %d stopped.", status.getId()),
-                    Notification.Type.TRAY_NOTIFICATION);
-            } else {
-                Notification.show("Stop failed", "Send stop message failed", Notification.Type.WARNING_MESSAGE);
-            }
+            scanner.stop(status.getId());
+            Notification.show(
+                "Scan stopped",
+                String.format("Scan with id %d stopped.", status.getId()),
+                Notification.Type.TRAY_NOTIFICATION);
         } catch (final ScanService.ScanError e) {
             LOGGER.error(e.getMessage(), e);
             Notification.show("Stop failed", e.getMessage(), Notification.Type.ERROR_MESSAGE);

@@ -8,35 +8,19 @@ import org.joda.time.DateTime;
  * Data structure to remember started scan jobs.
  */
 final class Execution {
-    private static final Runnable NO_THREAD = new Runnable() {
-        @Override
-        public void run() {
-
-        }
-    };
-    private final Long id;
     private final Bucket bucket;
     private final UI currentUi;
-    private final Runnable thread;
+    private final ScanTask task;
     private final DateTime creationTime;
     private DateTime startTime;
     private DateTime stopTime;
 
-    Execution(final Long id, final Bucket bucket, final UI currentUi) {
-        this(id, bucket, currentUi, NO_THREAD);
-    }
-
-    Execution(final Long id, final Bucket bucket, final UI currentUi, final Runnable thread) {
+    Execution(final Bucket bucket, final UI currentUi, final ScanTask task) {
         super();
-        this.id = id;
         this.bucket = bucket;
         this.currentUi = currentUi;
-        this.thread = thread;
+        this.task = task;
         this.creationTime = DateTime.now();
-    }
-
-    Long getId() {
-        return id;
     }
 
     Bucket getBucket() {
@@ -47,8 +31,8 @@ final class Execution {
         return currentUi;
     }
 
-    Runnable getThread() {
-        return thread;
+    ScanTask getTask() {
+        return task;
     }
 
     DateTime getCreationTime() {
@@ -98,10 +82,9 @@ final class Execution {
     @Override
     public String toString() {
         return "Execution{" +
-            "id=" + id +
-            ", bucket=" + bucket +
+            "bucket=" + bucket +
             ", currentUi=" + currentUi +
-            ", thread=" + thread +
+            ", task=" + task +
             ", creationTime=" + creationTime +
             ", startTime=" + startTime +
             ", stopTime=" + stopTime +

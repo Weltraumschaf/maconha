@@ -40,6 +40,7 @@ public final class EventLoop implements HasLogger {
      */
     public void start(final Event initial) {
         logger().debug("Start loop.");
+        reporter.normal(getClass(), "Starting loop.");
         events.emmit(initial);
 
         while (running) {
@@ -61,6 +62,7 @@ public final class EventLoop implements HasLogger {
      */
     public void stop() {
         logger().debug("Stopping loop.");
+        reporter.normal(getClass(), "Stopping loop.");
         running = false;
     }
 

@@ -83,16 +83,18 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
 
     @Override
     public void scan(final Bucket bucket, final UI currentUi) {
-        final long id = statuses.nextId();
-        final ScanTask task = new EventBasedScanTask(id, bucket, currentUi, cmds, mediaFiles, this);
-        final Execution execution = new Execution(id, bucket, currentUi, task);
-        executor.execute(task);
-        scans.put(id, execution);
+        executor.execute(createTask(bucket, currentUi));
+    }
+
+    private ScanTask createTask(final Bucket bucket, final UI currentUi) {
+        final ScanTask task = new EventBasedScanTask(statuses.nextId(), bucket, cmds, mediaFiles, this);
+        scans.put(task.getId(), new Execution(bucket, currentUi, task));
+        return task;
     }
 
     @Override
-    public boolean stop(final long executionId) {
-        throw new UnsupportedOperationException("Not implemented yet!");
+    public void stop(final long executionId) {
+        getExecution(executionId).getTask().stop();
     }
 
     @Override
@@ -101,35 +103,52 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
             .stream()
             .map(this::convert)
             .collect(Collectors.toList());
+
         allScans.addAll(statuses.allStatuses());
+
         return allScans;
     }
 
     @Override
     public void beforeScan(final long id) {
         final Execution execution = getExecution(id);
+
         execution.start();
-        Notification notification = UiNotifier.notification(
+        final Notification notification = UiNotifier.notification(
             "Scan job started",
             "Scan for bucket '%s' in directory '%s' with id %d started.",
             execution.getBucket().getName(), execution.getBucket().getDirectory(), id);
+
         UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
     }
 
     @Override
     public void afterScan(final long id) {
         final Execution execution = getExecution(id);
-        execution.stop();
-        final String duration = formatDuration(execution.getStartTime(), execution.getStopTime());
 
+        execution.stop();
+        statuses.storeStatus(convert(execution));
+        scans.remove(id);
+
+        final String duration = formatDuration(execution.getStartTime(), execution.getStopTime());
         final Notification notification = UiNotifier.notification(
             "Scan job finished",
             "Scan for bucket '%s' in directory '%s' with id %d finished in %s.",
             execution.getBucket().getName(), execution.getBucket().getDirectory(), id, duration);
-        UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
 
-        statuses.storeStatus(convert(execution));
-        scans.remove(id);
+        UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
+    }
+
+    @Override
+    public void onError(final long id, final Exception e) {
+        final Execution execution = getExecution(id);
+        final Bucket bucket = execution.getBucket();
+
+        final Notification notification = UiNotifier.notification(
+            "Scan job failed",
+            "Scan for bucket '%s' in directory '%s' failed with error: %s",
+            bucket.getName(), bucket.getDirectory(), e.getMessage());
+        UiNotifier.notifyClient(id, notification, execution.getCurrentUi());
     }
 
     private ScanStatus convert(final Execution execution) {
@@ -145,26 +164,14 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
             formattedEndTime = "-";
         }
 
-        final String jobStatus;
-
-        if (execution.hasStopTime()) {
-            jobStatus = "COMPLETED";
-        } else {
-            if (execution.hasStartTime()) {
-                jobStatus = "RUNNING";
-            } else {
-                jobStatus = "CREATED";
-            }
-        }
-
         return new ScanStatus(
-            execution.getId(),
+            execution.getTask().getId(),
             execution.getBucket().getName(),
             formatDateTime(execution.getCreationTime()),
             formatDateTime(execution.getStartTime()),
             formattedEndTime,
             formatDuration(startTime, endTime),
-            jobStatus);
+            execution.getTask().getStatus().name());
     }
 
     final Execution getExecution(final Long id) {
@@ -179,10 +186,6 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
         Validate.notNull(startTime, "startTime");
         Validate.notNull(endTime, "endTime");
         return secondsFormat.print(new Duration(startTime, endTime).toPeriod());
-    }
-
-    final String formatDateTime(final Date date) {
-        return formatDateTime(new DateTime(date));
     }
 
     final String formatDateTime(final DateTime dateTime) {

@@ -26,7 +26,7 @@ public interface ScanService {
      */
     void scan(Bucket bucket, UI currentUi);
 
-    boolean stop(long executionId);
+    void stop(long executionId);
 
     List<ScanStatus> overview();
 
@@ -41,14 +41,8 @@ public interface ScanService {
         private final String endTime;
         private final String duration;
         private final String jobStatus;
-        private final String jobExitCode;
-        private final List<Throwable> allFailureExceptions;
 
         public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus) {
-            this(id,bucketName, creationTime, startTime, endTime, duration, jobStatus, jobStatus, Collections.emptyList());
-        }
-
-        public ScanStatus(final Long id, final String bucketName, final String creationTime, final String startTime, final String endTime, final String duration, final String jobStatus, final String jobExitCode, final List<Throwable> allFailureExceptions) {
             super();
             this.id = id;
             this.bucketName = bucketName;
@@ -57,8 +51,6 @@ public interface ScanService {
             this.endTime = endTime;
             this.duration = duration;
             this.jobStatus = jobStatus;
-            this.jobExitCode = jobExitCode;
-            this.allFailureExceptions = allFailureExceptions;
         }
 
         public Long getId() {
@@ -89,13 +81,6 @@ public interface ScanService {
             return jobStatus;
         }
 
-        public String getJobExitCode() {
-            return jobExitCode;
-        }
-
-        public List<Throwable> getAllFailureExceptions() {
-            return allFailureExceptions;
-        }
 
         @Override
         public boolean equals(final Object o) {
@@ -110,14 +95,12 @@ public interface ScanService {
                 Objects.equals(startTime, status.startTime) &&
                 Objects.equals(endTime, status.endTime) &&
                 Objects.equals(duration, status.duration) &&
-                Objects.equals(jobStatus, status.jobStatus) &&
-                Objects.equals(jobExitCode, status.jobExitCode) &&
-                Objects.equals(allFailureExceptions, status.allFailureExceptions);
+                Objects.equals(jobStatus, status.jobStatus);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, bucketName, creationTime, startTime, endTime, duration, jobStatus, jobExitCode, allFailureExceptions);
+            return Objects.hash(id, bucketName, creationTime, startTime, endTime, duration, jobStatus);
         }
 
         @Override
@@ -130,8 +113,6 @@ public interface ScanService {
                 ", endTime='" + endTime + '\'' +
                 ", duration='" + duration + '\'' +
                 ", jobStatus='" + jobStatus + '\'' +
-                ", jobExitCode='" + jobExitCode + '\'' +
-                ", allFailureExceptions=" + allFailureExceptions +
                 '}';
         }
     }

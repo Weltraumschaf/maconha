@@ -57,7 +57,7 @@ public final class JsonStatusSerializerTest {
         }
 
         assertEquals(
-            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}]",
+            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\"}]",
             new String(Files.readAllBytes(statusFile)), false);
     }
 
@@ -97,9 +97,9 @@ public final class JsonStatusSerializerTest {
         }
 
         assertEquals(
-            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}," +
-                "{\"id\":43,\"bucketName\":\"bucketTwo\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}," +
-                "{\"id\":44,\"bucketName\":\"bucketThree\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\",\"jobExitCode\":\"status\",\"allFailureExceptions\":[]}]",
+            "[{\"id\":42,\"bucketName\":\"bucketOne\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\"}," +
+                "{\"id\":43,\"bucketName\":\"bucketTwo\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\"}," +
+                "{\"id\":44,\"bucketName\":\"bucketThree\",\"creationTime\":\"created\",\"startTime\":\"started\",\"endTime\":\"ended\",\"duration\":\"duration\",\"jobStatus\":\"status\"}]",
             new String(Files.readAllBytes(statusFile)), false);
     }
 

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
  */
 public final class ExecutionTest {
 
-    private final Execution sut = new Execution(42L, new Bucket(), mock(UI.class));
+    private final Execution sut = new Execution(new Bucket(), mock(UI.class), mock(ScanTask.class));
 
     @Test
     public void hasStartTime_falseByDefault() {

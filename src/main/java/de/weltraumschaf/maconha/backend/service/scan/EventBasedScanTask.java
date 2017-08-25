@@ -1,7 +1,5 @@
 package de.weltraumschaf.maconha.backend.service.scan;
 
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
@@ -19,16 +17,15 @@ final class EventBasedScanTask implements ScanTask, HasLogger {
     private final EventLoop loop = new EventLoop();
     private final Long id;
     private final Bucket bucket;
-    private final UI currentUi;
     private final CommandFactory cmds;
     private final MediaFileService mediaFiles;
     private final ScanCallBack callback;
+    private ScanStatus status = ScanStatus.CREATED;
 
-    EventBasedScanTask(final Long id, final Bucket bucket, final UI currentUi, final CommandFactory cmds, final MediaFileService mediaFiles, final ScanCallBack callback) {
+    EventBasedScanTask(final Long id, final Bucket bucket, final CommandFactory cmds, final MediaFileService mediaFiles, final ScanCallBack callback) {
         super();
         this.id = id;
         this.bucket = bucket;
-        this.currentUi = currentUi;
         this.cmds = cmds;
         this.mediaFiles = mediaFiles;
         this.callback = callback;
@@ -52,24 +49,35 @@ final class EventBasedScanTask implements ScanTask, HasLogger {
 
     @Override
     public void stop() {
+        status = ScanStatus.STOPPING;
         loop.stop();
+        status = ScanStatus.STOPPED;
     }
 
     @Override
     public void run() {
+        status = ScanStatus.RUNNING;
         callback.beforeScan(id);
 
         try {
             loop.start(new Event(EventType.DIR_HASH, bucket));
         } catch (final EventLoopError e) {
             logger().error(e.getMessage(), e);
-            final Notification notification = UiNotifier.notification(
-                "Scan job failed",
-                "Scan for bucket '%s' in directory '%s' failed with error: %s",
-                bucket.getName(), bucket.getDirectory(), e.getMessage());
-            UiNotifier.notifyClient(id, notification, currentUi);
+            status = ScanStatus.ABORTED;
+            callback.onError(id, e);
+            return;
         }
 
+        status = ScanStatus.COMPLETED;
         callback.afterScan(id);
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public ScanStatus getStatus() {
+        return status;
     }
 }
