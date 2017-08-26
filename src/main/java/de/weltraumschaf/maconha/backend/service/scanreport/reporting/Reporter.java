@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.service.scan.reporting;
+package de.weltraumschaf.maconha.backend.service.scanreport.reporting;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.HasLogger;
@@ -43,7 +43,7 @@ public final class Reporter implements HasLogger {
     }
 
     private void createAndAdd(final ReportEntryType type, final Class<?> source, final String formatMessage, final Object... formatArguments) {
-        final ReportEntry entry = new ReportEntry(type, source, formatMessage, formatArguments);
+        final ReportEntry entry = new ReportEntry(type, source.getName(), formatMessage, formatArguments);
 
         if (type == ReportEntryType.ERROR) {
             logger().warn(entry.getMessage());

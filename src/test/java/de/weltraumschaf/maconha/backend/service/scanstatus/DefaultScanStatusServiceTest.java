@@ -79,7 +79,7 @@ public final class DefaultScanStatusServiceTest {
             "status"
         );
 
-        sut.storeStatus(status);
+        sut.store(status);
 
         assertThat(
             "Directory was not created!",
@@ -113,7 +113,7 @@ public final class DefaultScanStatusServiceTest {
             "status"
         );
 
-        sut.storeStatus(newStatus);
+        sut.store(newStatus);
 
         verify(serializer, times(1))
             .serialize(eq(Arrays.asList(stored, newStatus)), any(Appendable.class));

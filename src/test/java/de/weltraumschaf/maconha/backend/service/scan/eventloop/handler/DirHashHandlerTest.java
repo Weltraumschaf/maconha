@@ -3,7 +3,7 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop.handler;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
-import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
+import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Reporter;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
 import org.junit.Test;

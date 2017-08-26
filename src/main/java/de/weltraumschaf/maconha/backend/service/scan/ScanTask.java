@@ -1,5 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.scan;
 
+import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Report;
+
 /**
  * Background task to scan a bucket.
  */
@@ -21,12 +23,22 @@ interface ScanTask extends Runnable {
      *
      * @return never {@code null}
      */
-    ScanStatus getStatus();
+    ScanTaskStatus getStatus();
+
+    /**
+     * Get the current report.
+     * <p>
+     * The report may have more more entries until the task ist {@link #stop() stopped}.
+     * </p>
+     *
+     * @return never {@code null}, maybe {@link Report#EMPTY}
+     */
+    Report getReport();
 
     /**
      * The status of a scan.
      */
-    enum ScanStatus {
+    enum ScanTaskStatus {
         /**
          * Newly created task.
          */

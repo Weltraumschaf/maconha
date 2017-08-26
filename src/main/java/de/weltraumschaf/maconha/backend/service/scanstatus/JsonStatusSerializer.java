@@ -1,6 +1,7 @@
 package de.weltraumschaf.maconha.backend.service.scanstatus;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.backend.service.ScanService.ScanStatus;
@@ -15,7 +16,7 @@ import java.util.Collection;
  */
 public final class JsonStatusSerializer implements StatusSerializer {
 
-    private final Gson json = new Gson();
+    private final Gson json = new GsonBuilder().setPrettyPrinting().create();
     private final Type genericType = new TypeToken<ArrayList<ScanStatus>>() {
     }.getType();
 

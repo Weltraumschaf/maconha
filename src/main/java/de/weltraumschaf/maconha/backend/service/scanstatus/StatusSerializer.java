@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Helper to de-/serialize statuses.
  */
-public interface StatusSerializer {
+interface StatusSerializer {
     /**
      * Serializes the given collection of statuses to a given writer.
      *

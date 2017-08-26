@@ -1,9 +1,8 @@
 package de.weltraumschaf.maconha.backend.service.scan;
 
-import com.vaadin.ui.UI;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
-import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
+import de.weltraumschaf.maconha.backend.service.ScanReportService;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanStatusService;
 import org.joda.time.DateTime;
@@ -24,7 +23,8 @@ public final class ThreadScanServiceTest {
     private final MediaFileService mediaFiles = mock(MediaFileService.class);
     private final TaskExecutor executor = mock(TaskExecutor.class);
     private final ScanStatusService statuses = mock(ScanStatusService.class);
-    private final ThreadScanService sut = new ThreadScanService(config, mediaFiles, executor, statuses);
+    private final ScanReportService reports = mock(ScanReportService.class);
+    private final ThreadScanService sut = new ThreadScanService(config, mediaFiles, executor, statuses, reports);
 
     @Test
     public void formatDuration() {

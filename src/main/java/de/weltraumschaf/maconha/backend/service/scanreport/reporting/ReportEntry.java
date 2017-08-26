@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.service.scan.reporting;
+package de.weltraumschaf.maconha.backend.service.scanreport.reporting;
 
 import de.weltraumschaf.commons.validate.Validate;
 
@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public final class ReportEntry {
     private final ReportEntryType type;
-    private final Class<?> source;
+    private final String source;
     private final String message;
 
     /**
@@ -19,14 +19,14 @@ public final class ReportEntry {
      * </p>
      *
      * @param type must not be {@code null}
-     * @param source must not be {@code null}
+     * @param source must not be {@code null} or empty
      * @param formatMessage   must not be {@code null} or empty
      * @param formatArguments optional format arguments
      */
-    ReportEntry(final ReportEntryType type, final Class<?> source, final String formatMessage, final Object... formatArguments) {
+    ReportEntry(final ReportEntryType type, final String source, final String formatMessage, final Object... formatArguments) {
         super();
         this.type = Validate.notNull(type, "type");
-        this.source = Validate.notNull(source, "source");
+        this.source = Validate.notEmpty(source, "source");
         this.message = String.format(Validate.notEmpty(formatMessage, "formatMessage"), formatArguments);
     }
 
@@ -35,7 +35,7 @@ public final class ReportEntry {
      *
      * @return never {@code null}
      */
-    ReportEntryType getType() {
+    public ReportEntryType getType() {
         return type;
     }
 
@@ -44,7 +44,7 @@ public final class ReportEntry {
      *
      * @return never {@code null}
      */
-    Class<?> getSource() {
+    public String getSource() {
         return source;
     }
 
@@ -53,7 +53,7 @@ public final class ReportEntry {
      *
      * @return never {@code null} or empty
      */
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 

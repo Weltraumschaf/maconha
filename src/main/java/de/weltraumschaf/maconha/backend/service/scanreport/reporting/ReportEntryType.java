@@ -1,4 +1,4 @@
-package de.weltraumschaf.maconha.backend.service.scan.reporting;
+package de.weltraumschaf.maconha.backend.service.scanreport.reporting;
 
 /**
  * Type of {@link ReportEntry}.

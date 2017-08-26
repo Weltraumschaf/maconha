@@ -6,9 +6,9 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
+import de.weltraumschaf.maconha.backend.service.ScanReportService;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanStatusService;
-import de.weltraumschaf.maconha.backend.service.scan.shell.Command;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
 import de.weltraumschaf.maconha.backend.service.scan.shell.Commands;
 import org.joda.time.DateTime;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +48,7 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
 
     private final Map<Long, Execution> scans = new ConcurrentHashMap<>();
     private final ScanStatusService statuses;
+    private final ScanReportService reports;
     private final PeriodFormatter secondsFormat =
         new PeriodFormatterBuilder()
             .printZeroAlways()
@@ -67,12 +67,13 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
     private CommandFactory cmds;
 
     @Autowired
-    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor, final ScanStatusService statuses) {
+    ThreadScanService(final MaconhaConfiguration config, final MediaFileService mediaFiles, final TaskExecutor executor, final ScanStatusService statuses, final ScanReportService reports) {
         super();
         this.statuses = statuses;
         this.config = config;
         this.mediaFiles = mediaFiles;
         this.executor = executor;
+        this.reports = reports;
     }
 
     @PostConstruct
@@ -127,7 +128,9 @@ final class ThreadScanService  implements ScanService, ScanCallBack {
         final Execution execution = getExecution(id);
 
         execution.stop();
-        statuses.storeStatus(convert(execution));
+        final ScanStatus status = convert(execution);
+        statuses.store(status);
+        reports.store(status, execution.getTask().getReport());
         scans.remove(id);
 
         final String duration = formatDuration(execution.getStartTime(), execution.getStopTime());

@@ -9,6 +9,7 @@ import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventLoopError;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.EventType;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.handler.*;
 import de.weltraumschaf.maconha.backend.service.scan.shell.CommandFactory;
+import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Report;
 
 /**
  * Implementation based on {@link de.weltraumschaf.maconha.backend.service.scan.eventloop.EventLoop}.
@@ -20,7 +21,7 @@ final class EventBasedScanTask implements ScanTask, HasLogger {
     private final CommandFactory cmds;
     private final MediaFileService mediaFiles;
     private final ScanCallBack callback;
-    private ScanStatus status = ScanStatus.CREATED;
+    private ScanTaskStatus status = ScanTaskStatus.CREATED;
 
     EventBasedScanTask(final Long id, final Bucket bucket, final CommandFactory cmds, final MediaFileService mediaFiles, final ScanCallBack callback) {
         super();
@@ -49,26 +50,26 @@ final class EventBasedScanTask implements ScanTask, HasLogger {
 
     @Override
     public void stop() {
-        status = ScanStatus.STOPPING;
+        status = ScanTaskStatus.STOPPING;
         loop.stop();
-        status = ScanStatus.STOPPED;
+        status = ScanTaskStatus.STOPPED;
     }
 
     @Override
     public void run() {
-        status = ScanStatus.RUNNING;
+        status = ScanTaskStatus.RUNNING;
         callback.beforeScan(id);
 
         try {
             loop.start(new Event(EventType.DIR_HASH, bucket));
         } catch (final EventLoopError e) {
             logger().error(e.getMessage(), e);
-            status = ScanStatus.ABORTED;
+            status = ScanTaskStatus.ABORTED;
             callback.onError(id, e);
             return;
         }
 
-        status = ScanStatus.COMPLETED;
+        status = ScanTaskStatus.COMPLETED;
         callback.afterScan(id);
     }
 
@@ -77,7 +78,13 @@ final class EventBasedScanTask implements ScanTask, HasLogger {
         return id;
     }
 
-    public ScanStatus getStatus() {
+    @Override
+    public ScanTaskStatus getStatus() {
         return status;
+    }
+
+    @Override
+    public Report getReport() {
+        return loop.getReport();
     }
 }

@@ -4,7 +4,7 @@ import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.service.MediaFileService;
 import de.weltraumschaf.maconha.backend.service.scan.eventloop.*;
 import de.weltraumschaf.maconha.backend.service.scan.hashing.HashedFile;
-import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
+import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Reporter;
 import org.junit.Test;
 
 import java.util.HashMap;

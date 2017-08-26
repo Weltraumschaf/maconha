@@ -2,7 +2,7 @@ package de.weltraumschaf.maconha.backend.service.scan.eventloop;
 
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.maconha.backend.service.scan.reporting.Reporter;
+import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Reporter;
 
 import java.util.Map;
 

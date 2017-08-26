@@ -1,7 +1,9 @@
 package de.weltraumschaf.maconha.backend.service.scanstatus;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.app.MaconhaConfiguration;
+import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanService.ScanStatus;
 import de.weltraumschaf.maconha.backend.service.ScanStatusService;
 import org.slf4j.Logger;
@@ -30,11 +32,11 @@ import java.util.Collections;
  * </p>
  */
 @Service
-final class DefaultScanStatusService implements ScanStatusService {
+final class DefaultScanStatusService implements ScanStatusService, HasLogger {
     static final String STATUSES_FILE_NAME = "statuses.json";
     static final String STATUSES_DIR_NAME = "scans";
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScanStatusService.class);
 
+    private final Object lock = new Object();
     private final MaconhaConfiguration config;
     private final StatusSerializer serializer;
 
@@ -51,66 +53,108 @@ final class DefaultScanStatusService implements ScanStatusService {
 
     @Override
     public synchronized Collection<ScanStatus> allStatuses() {
-        return Collections.unmodifiableCollection(readStatusFile());
+        logger().debug("Get all statuses.");
+
+        synchronized (lock) {
+            return Collections.unmodifiableCollection(readStatusFile());
+        }
     }
 
     @Override
-    public synchronized void storeStatus(final ScanStatus status) {
+    public synchronized void store(final ScanStatus status) {
         Validate.notNull(status, "status");
-        final Collection<ScanStatus> statuses = new ArrayList<>();
-        statuses.addAll(readStatusFile());
-        statuses.add(status);
-        storeStatusesToFile(statuses);
+        logger().debug("Store status {}.", status);
+
+        synchronized (lock) {
+            final Collection<ScanStatus> statuses = new ArrayList<>(readStatusFile());
+            statuses.add(status);
+            storeStatusesToFile(statuses);
+        }
+
+        logger().debug("Status deleted.");
+    }
+
+    @Override
+    public void delete(final ScanStatus status) {
+        Validate.notNull(status, "status");
+        logger().debug("Delete statuses {}.", status);
+
+        synchronized (lock) {
+            final Collection<ScanStatus> statuses = new ArrayList<>(readStatusFile());
+            statuses.remove(status);
+            storeStatusesToFile(statuses);
+        }
+
+        logger().debug("Status deleted.");
+    }
+
+    @Override
+    public void deleteAll() {
+        final Path statusFile = resolveStatusFile();
+        logger().debug("Delete all statuses from file {}.", statusFile);
+
+        synchronized (lock) {
+            if (Files.exists(statusFile)) {
+                try {
+                    Files.delete(statusFile);
+                    logger().debug("Statuses file {} deleted.", statusFile);
+                } catch (final IOException e) {
+                    logger().error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
     @Override
     public synchronized long nextId() {
-        return readStatusFile()
-            .stream()
-            .mapToLong(ScanStatus::getId)
-            .max()
-            .orElse(0L) + 1;
+        synchronized (lock) {
+            return readStatusFile()
+                .stream()
+                .mapToLong(ScanStatus::getId)
+                .max()
+                .orElse(0L) + 1;
+        }
     }
 
     private Collection<ScanStatus> readStatusFile() {
         final Path statusFile = resolveStatusFile();
-        LOGGER.debug("Read statuses from file {}.", statusFile);
+        logger().debug("Read statuses from file {}.", statusFile);
 
         if (Files.exists(statusFile)) {
             try (final Reader reader = Files.newBufferedReader(statusFile)) {
-                LOGGER.debug("Loading stored statuses.");
+                logger().debug("Loading stored statuses.");
                 return serializer.deserialize(reader);
             } catch (final IOException e) {
-                LOGGER.error(e.getMessage(), e);
+                logger().error(e.getMessage(), e);
             }
         } else {
-            LOGGER.debug("There is no such status file '{}' to load.", statusFile);
+            logger().warn("There is no such status file '{}' to load.", statusFile);
         }
 
         return new ArrayList<>();
     }
 
     private void storeStatusesToFile(final Collection<ScanStatus> statuses) {
-        LOGGER.warn("Persist statuses.");
+        logger().warn("Persist statuses.");
         final Path statusDir = resolveStatusDir();
 
         if (!Files.exists(statusDir)) {
-            LOGGER.debug("Create directory '{}' to store status file.", statusDir);
+            logger().debug("Create directory '{}' to store status file.", statusDir);
 
             try {
                 Files.createDirectories(statusDir);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
+            } catch (final IOException e) {
+                logger().error(e.getMessage(), e);
                 return;
             }
         }
 
         final Path statusFile = resolveStatusFile();
         try (final BufferedWriter writer = Files.newBufferedWriter(statusFile)) {
-            LOGGER.debug("Store statuses in file {}.", statusFile);
+            logger().debug("Store statuses in file {}.", statusFile);
             serializer.serialize(statuses, writer);
         } catch (final IOException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger().error(e.getMessage(), e);
         }
     }
 
