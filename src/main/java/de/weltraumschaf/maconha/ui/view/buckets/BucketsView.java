@@ -54,17 +54,15 @@ public final class BucketsView extends SubView {
     private final BucketRepo buckets;
     private final BucketForm form;
     private final EventBus.UIEventBus events;
-    private final MaconhaConfiguration config;
     private ScanService scanner;
 
     @Autowired
-    public BucketsView(@SuppressWarnings("SpringJavaAutowiringInspection") final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events, final MaconhaConfiguration config) {
+    public BucketsView(@SuppressWarnings("SpringJavaAutowiringInspection") final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events) {
         super(TITLE, TITLE_ID);
         this.scanner = scanner;
         this.buckets = buckets;
         this.form = form;
         this.events = events;
-        this.config = config;
     }
 
     @Override
