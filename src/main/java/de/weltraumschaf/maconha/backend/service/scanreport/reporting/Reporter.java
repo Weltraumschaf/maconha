@@ -43,7 +43,7 @@ public final class Reporter implements HasLogger {
     }
 
     private void createAndAdd(final ReportEntryType type, final Class<?> source, final String formatMessage, final Object... formatArguments) {
-        final ReportEntry entry = new ReportEntry(type, source.getName(), formatMessage, formatArguments);
+        final ReportEntry entry = new ReportEntry(type, source.getSimpleName(), formatMessage, formatArguments);
 
         if (type == ReportEntryType.ERROR) {
             logger().warn(entry.getMessage());

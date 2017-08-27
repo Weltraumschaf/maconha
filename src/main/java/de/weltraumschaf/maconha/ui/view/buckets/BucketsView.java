@@ -7,7 +7,6 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
-import de.weltraumschaf.maconha.app.MaconhaConfiguration;
 import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.repo.BucketRepo;
@@ -46,13 +45,13 @@ public final class BucketsView extends SubView {
         "Are you sure you want to delete the entry?", this::remove);
     private final Button scan = new MButton(VaadinIcons.COGS, "Scan", this::scan);
     private final Button schedule = new MButton(VaadinIcons.ALARM, "Schedule", this::schedule);
-    private final MGrid<Bucket> list = new MGrid<>(Bucket.class)
+    private final MGrid<Bucket> bucketList = new MGrid<>(Bucket.class)
         .withProperties("id", "name", "directory")
         .withColumnHeaders("ID", "Name", "Directory")
         .withFullWidth();
 
     private final BucketRepo buckets;
-    private final BucketForm form;
+    private final BucketForm editForm;
     private final EventBus.UIEventBus events;
     private ScanService scanner;
 
@@ -61,7 +60,7 @@ public final class BucketsView extends SubView {
         super(TITLE, TITLE_ID);
         this.scanner = scanner;
         this.buckets = buckets;
-        this.form = form;
+        this.editForm = form;
         this.events = events;
     }
 
@@ -75,11 +74,11 @@ public final class BucketsView extends SubView {
     private Component buildContent() {
         final MVerticalLayout content = new MVerticalLayout(
                 new MHorizontalLayout(filterByDirectory, addNew, edit, delete, scan, schedule),
-                list
-            ).expand(list);
+            bucketList
+            ).expand(bucketList);
 
         listEntities();
-        list.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
+        bucketList.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
         filterByDirectory.addValueChangeListener(e -> listEntities(e.getValue()));
 
         return content;
@@ -91,12 +90,12 @@ public final class BucketsView extends SubView {
 
     private void listEntities(final String nameFilter) {
         final String likeFilter = "%" + nameFilter + "%";
-        list.setRows(buckets.findByDirectoryLikeIgnoreCase(likeFilter));
+        bucketList.setRows(buckets.findByDirectoryLikeIgnoreCase(likeFilter));
         adjustActionButtonState();
     }
 
     private void adjustActionButtonState() {
-        boolean hasSelection = !list.getSelectedItems().isEmpty();
+        boolean hasSelection = !bucketList.getSelectedItems().isEmpty();
         edit.setEnabled(hasSelection);
         delete.setEnabled(hasSelection);
         scan.setEnabled(hasSelection);
@@ -108,31 +107,32 @@ public final class BucketsView extends SubView {
     }
 
     public void edit(final Button.ClickEvent event) {
-        edit(list.asSingleSelect().getValue());
+        edit(bucketList.asSingleSelect().getValue());
     }
 
     public void remove() {
-        final Bucket toDelete = list.asSingleSelect().getValue();
+        final Bucket toDelete = bucketList.asSingleSelect().getValue();
         LOGGER.debug("Delete bucket {}.", toDelete.getName());
         buckets.delete(toDelete);
-        list.deselectAll();
+        bucketList.deselectAll();
         listEntities();
         events.publish(this, new BucketDeleteEvent());
     }
 
     private void edit(final Bucket bucket) {
-        form.setEntity(bucket);
-        form.openInModalPopup();
+        editForm.setModalWindowTitle("Edit bucket " + bucket.getName());
+        editForm.setEntity(bucket);
+        editForm.openInModalPopup();
     }
 
     public void schedule(final Button.ClickEvent event) {
-        final Bucket bucket = list.asSingleSelect().getValue();
+        final Bucket bucket = bucketList.asSingleSelect().getValue();
     }
 
     public void scan(final Button.ClickEvent event) {
         this.getUI();
         try {
-            final Bucket bucket = list.asSingleSelect().getValue();
+            final Bucket bucket = bucketList.asSingleSelect().getValue();
             scanner.scan(bucket, getUI());
         } catch (final ScanService.ScanError e) {
             LOGGER.error(e.getMessage(), e);
@@ -144,7 +144,7 @@ public final class BucketsView extends SubView {
     public void onBucketModified(final BucketModifiedEvent event) {
         LOGGER.debug("Event 'onBucketModified' triggered.");
         listEntities();
-        form.closePopup();
+        editForm.closePopup();
     }
 
 }

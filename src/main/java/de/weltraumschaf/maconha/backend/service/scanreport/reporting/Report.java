@@ -5,6 +5,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Immutable holder of event loop report.
@@ -14,7 +15,7 @@ public final class Report {
      * Empty report used instead of {@code null}.
      */
     public static final Report EMPTY = new Report(Collections.emptyList());
-    private final Collection<ReportEntry> entries;
+    private final List<ReportEntry> entries;
 
     /**
      * Dedicated constructor.
@@ -31,7 +32,7 @@ public final class Report {
      *
      * @return never {@code null}, unmodifiable
      */
-    public Collection<ReportEntry> entries() {
-        return Collections.unmodifiableCollection(entries);
+    public List<ReportEntry> entries() {
+        return Collections.unmodifiableList(entries);
     }
 }

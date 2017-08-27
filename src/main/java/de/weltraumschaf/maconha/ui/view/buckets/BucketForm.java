@@ -15,6 +15,9 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Form to edit buckets.
+ */
 @UIScope
 @SpringComponent
 final class BucketForm extends AbstractForm<Bucket> {
