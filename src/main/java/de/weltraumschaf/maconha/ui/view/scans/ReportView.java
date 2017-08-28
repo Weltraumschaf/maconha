@@ -6,8 +6,6 @@ import com.vaadin.ui.*;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Report;
 import de.weltraumschaf.maconha.backend.service.scanreport.reporting.ReportEntry;
-import org.vaadin.viritin.grid.MGrid;
-import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import javax.annotation.PostConstruct;
 
@@ -44,7 +42,7 @@ final class ReportView extends CustomComponent {
         list.getColumn("source").setCaption("Source");
         list.getColumn("message").setCaption("Message");
         list.setWidth("100%");
-        return new MVerticalLayout(
+        return new VerticalLayout(
             list
         );
     }
