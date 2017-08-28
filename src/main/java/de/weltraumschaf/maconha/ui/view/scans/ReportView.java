@@ -32,6 +32,8 @@ final class ReportView extends CustomComponent {
     void openInModalPopup() {
         final Window popup = new Window(modalWindowTitle, this);
         popup.setModal(true);
+        popup.setWidth("90%");
+        popup.setHeight("90%");
         listEntities();
         UI.getCurrent().addWindow(popup);
     }
@@ -41,10 +43,12 @@ final class ReportView extends CustomComponent {
         list.getColumn("type").setCaption("Type");
         list.getColumn("source").setCaption("Source");
         list.getColumn("message").setCaption("Message");
-        list.setWidth("100%");
-        return new VerticalLayout(
-            list
-        );
+        list.setSizeFull();
+
+        final VerticalLayout layout = new VerticalLayout(list);
+        layout.setSizeFull();
+
+        return layout;
     }
 
     private void listEntities() {
