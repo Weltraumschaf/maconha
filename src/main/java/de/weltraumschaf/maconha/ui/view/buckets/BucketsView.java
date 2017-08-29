@@ -7,18 +7,16 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
+import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.repo.BucketRepo;
 import de.weltraumschaf.maconha.backend.service.ScanService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.viritin.button.ConfirmButton;
-import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
@@ -30,21 +28,19 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 @UIScope
 @SpringComponent
 @SpringView(name = BucketsView.VIEW_NAME)
-public final class BucketsView extends SubView {
-    public static final String VIEW_NAME = "buckets";
+public final class BucketsView extends SubView implements HasLogger {
     public static final String TITLE = "Buckets";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BucketsView.class);
+    static final String VIEW_NAME = "buckets";
     private static final String TITLE_ID = "buckets-title";
 
     private MTextField filterByDirectory = new MTextField()
         .withPlaceholder("Filter by directory");
-    private final Button addNew = new MButton(VaadinIcons.PLUS, "Add", this::add);
-    private final Button edit = new MButton(VaadinIcons.PENCIL, "Edit", this::edit);
+    private final Button addNew = new Button("Add", VaadinIcons.PLUS);
+    private final Button edit = new Button("Edit", VaadinIcons.PENCIL);
     private final Button delete = new ConfirmButton(VaadinIcons.TRASH, "Delete",
         "Are you sure you want to delete the entry?", this::remove);
-    private final Button scan = new MButton(VaadinIcons.COGS, "Scan", this::scan);
-    private final Button schedule = new MButton(VaadinIcons.ALARM, "Schedule", this::schedule);
+    private final Button scan = new Button("Scan", VaadinIcons.COGS);
+    private final Button schedule = new Button("Schedule", VaadinIcons.ALARM);
     private final MGrid<Bucket> bucketList = new MGrid<>(Bucket.class)
         .withProperties("id", "name", "directory")
         .withColumnHeaders("ID", "Name", "Directory")
@@ -62,6 +58,10 @@ public final class BucketsView extends SubView {
         this.buckets = buckets;
         this.editForm = form;
         this.events = events;
+        this.addNew.addClickListener(this::add);
+        this.edit.addClickListener(this::edit);
+        this.scan.addClickListener(this::scan);
+        this.schedule.addClickListener(this::schedule);
     }
 
     @Override
@@ -112,7 +112,7 @@ public final class BucketsView extends SubView {
 
     public void remove() {
         final Bucket toDelete = bucketList.asSingleSelect().getValue();
-        LOGGER.debug("Delete bucket {}.", toDelete.getName());
+        logger().debug("Delete bucket {}.", toDelete.getName());
         buckets.delete(toDelete);
         bucketList.deselectAll();
         listEntities();
@@ -135,14 +135,14 @@ public final class BucketsView extends SubView {
             final Bucket bucket = bucketList.asSingleSelect().getValue();
             scanner.scan(bucket, getUI());
         } catch (final ScanService.ScanError e) {
-            LOGGER.error(e.getMessage(), e);
+            logger().error(e.getMessage(), e);
             Notification.show("Scan failed", e.getMessage(), Notification.Type.ERROR_MESSAGE);
         }
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)
     public void onBucketModified(final BucketModifiedEvent event) {
-        LOGGER.debug("Event 'onBucketModified' triggered.");
+        logger().debug("Event 'onBucketModified' triggered.");
         listEntities();
         editForm.closePopup();
     }
