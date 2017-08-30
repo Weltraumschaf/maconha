@@ -5,20 +5,17 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.*;
 import de.weltraumschaf.maconha.backend.service.ScanReportService;
-import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.backend.service.ScanService;
 import de.weltraumschaf.maconha.backend.service.ScanService.ScanStatus;
+import de.weltraumschaf.maconha.ui.helper.Expander;
+import de.weltraumschaf.maconha.ui.view.SubView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.grid.MGrid;
-import org.vaadin.viritin.layouts.MHorizontalLayout;
-import org.vaadin.viritin.layouts.MVerticalLayout;
 
 /**
  * This view shows an {@link ScanStatus status} overview of all jobs started.
@@ -62,10 +59,10 @@ public final class ScansView extends SubView {
     }
 
     private Component buildContent() {
-        final MVerticalLayout content = new MVerticalLayout(
-            new MHorizontalLayout(stop, report),
-            statusesList
-        ).expand(statusesList);
+        final VerticalLayout content = new VerticalLayout(
+            new HorizontalLayout(stop, report)
+        );
+        Expander.addAndExpand(content, statusesList);
 
         listEntities();
         statusesList.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());

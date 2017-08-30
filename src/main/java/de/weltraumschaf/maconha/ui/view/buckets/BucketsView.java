@@ -4,23 +4,18 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.*;
 import de.weltraumschaf.maconha.app.HasLogger;
-import de.weltraumschaf.maconha.ui.view.SubView;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.repo.BucketRepo;
 import de.weltraumschaf.maconha.backend.service.ScanService;
+import de.weltraumschaf.maconha.ui.helper.Expander;
+import de.weltraumschaf.maconha.ui.view.SubView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.viritin.button.ConfirmButton;
-import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.grid.MGrid;
-import org.vaadin.viritin.layouts.MHorizontalLayout;
-import org.vaadin.viritin.layouts.MVerticalLayout;
 
 /**
  * Vie to manage {@link Bucket buckets}.
@@ -33,18 +28,15 @@ public final class BucketsView extends SubView implements HasLogger {
     static final String VIEW_NAME = "buckets";
     private static final String TITLE_ID = "buckets-title";
 
-    private MTextField filterByDirectory = new MTextField()
-        .withPlaceholder("Filter by directory");
+    private TextField filterByDirectory = new TextField();
     private final Button addNew = new Button("Add", VaadinIcons.PLUS);
     private final Button edit = new Button("Edit", VaadinIcons.PENCIL);
+    // FIXME Remove dependency to ConfirmButton.
     private final Button delete = new ConfirmButton(VaadinIcons.TRASH, "Delete",
         "Are you sure you want to delete the entry?", this::remove);
     private final Button scan = new Button("Scan", VaadinIcons.COGS);
     private final Button schedule = new Button("Schedule", VaadinIcons.ALARM);
-    private final MGrid<Bucket> bucketList = new MGrid<>(Bucket.class)
-        .withProperties("id", "name", "directory")
-        .withColumnHeaders("ID", "Name", "Directory")
-        .withFullWidth();
+    private final Grid<Bucket> bucketList = new Grid<>(Bucket.class);
 
     private final BucketRepo buckets;
     private final BucketForm editForm;
@@ -72,10 +64,18 @@ public final class BucketsView extends SubView implements HasLogger {
     }
 
     private Component buildContent() {
-        final MVerticalLayout content = new MVerticalLayout(
-                new MHorizontalLayout(filterByDirectory, addNew, edit, delete, scan, schedule),
-            bucketList
-            ).expand(bucketList);
+        filterByDirectory.setPlaceholder("Filter by directory");
+
+        bucketList.setColumns("id", "name", "directory");
+        bucketList.getColumn("id").setCaption("ID");
+        bucketList.getColumn("name").setCaption("Name");
+        bucketList.getColumn("directory").setCaption("Directory");
+        bucketList.setSizeFull();
+
+        final VerticalLayout content = new VerticalLayout(
+            new HorizontalLayout(filterByDirectory, addNew, edit, delete, scan, schedule)
+        );
+        Expander.addAndExpand(content, bucketList);
 
         listEntities();
         bucketList.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
@@ -90,7 +90,7 @@ public final class BucketsView extends SubView implements HasLogger {
 
     private void listEntities(final String nameFilter) {
         final String likeFilter = "%" + nameFilter + "%";
-        bucketList.setRows(buckets.findByDirectoryLikeIgnoreCase(likeFilter));
+        bucketList.setItems(buckets.findByDirectoryLikeIgnoreCase(likeFilter));
         adjustActionButtonState();
     }
 

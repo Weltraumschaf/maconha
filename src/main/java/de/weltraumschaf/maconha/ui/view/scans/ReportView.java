@@ -6,6 +6,7 @@ import com.vaadin.ui.*;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.maconha.backend.service.scanreport.reporting.Report;
 import de.weltraumschaf.maconha.backend.service.scanreport.reporting.ReportEntry;
+import de.weltraumschaf.maconha.ui.helper.Expander;
 
 import javax.annotation.PostConstruct;
 
@@ -16,7 +17,7 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 final class ReportView extends CustomComponent {
 
-    private final Grid<ReportEntry> list = new Grid<>(ReportEntry.class);
+    private final Grid<ReportEntry> reportList = new Grid<>(ReportEntry.class);
     private String modalWindowTitle = "Report";
     private Report report;
 
@@ -39,20 +40,20 @@ final class ReportView extends CustomComponent {
     }
 
     private Component buildContent() {
-        list.setColumns("type", "source", "message");
-        list.getColumn("type").setCaption("Type");
-        list.getColumn("source").setCaption("Source");
-        list.getColumn("message").setCaption("Message");
-        list.setSizeFull();
+        reportList.setColumns("type", "source", "message");
+        reportList.getColumn("type").setCaption("Type");
+        reportList.getColumn("source").setCaption("Source");
+        reportList.getColumn("message").setCaption("Message");
+        reportList.setSizeFull();
 
-        final VerticalLayout layout = new VerticalLayout(list);
-        layout.setSizeFull();
+        final VerticalLayout content = new VerticalLayout();
+        Expander.addAndExpand(content, reportList);
 
-        return layout;
+        return content;
     }
 
     private void listEntities() {
-        list.setItems(report.entries());
+        reportList.setItems(report.entries());
     }
 
     void setReport(final Report report) {
