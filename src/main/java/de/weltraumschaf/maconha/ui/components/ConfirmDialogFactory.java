@@ -22,7 +22,7 @@ public class ConfirmDialogFactory extends DefaultConfirmDialogFactory {
 
     @Override
     protected Button buildOkButton(String okCaption) {
-        Button okButton = super.buildOkButton(okCaption);
+        final Button okButton = super.buildOkButton(okCaption);
         okButton.addStyleName(ValoTheme.BUTTON_DANGER);
         return okButton;
     }

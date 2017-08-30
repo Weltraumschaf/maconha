@@ -48,10 +48,14 @@ public class ConfirmPopup {
      * @param runOnCancel  the runnable to execute if the user presses {@literal cancel}
      *                     in the dialog
      */
-    public void showLeaveViewConfirmDialog(View view, Runnable runOnConfirm, Runnable runOnCancel) {
-        ConfirmDialog dialog = confirmDialogFactory.create("Please confirm",
-            "You have unsaved changes that will be discarded if you navigate away.", "Discard Changes", "Cancel",
+    public void showLeaveViewConfirmDialog(final View view, final Runnable runOnConfirm, final Runnable runOnCancel) {
+        final ConfirmDialog dialog = confirmDialogFactory.create(
+            "Please confirm",
+            "You have unsaved changes that will be discarded if you navigate away.",
+            "Discard Changes",
+            "Cancel",
             null);
+
         dialog.show(view.getViewComponent().getUI(), event -> {
             if (event.isConfirmed()) {
                 runOnConfirm.run();
