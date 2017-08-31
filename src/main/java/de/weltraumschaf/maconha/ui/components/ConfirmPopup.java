@@ -2,24 +2,15 @@ package de.weltraumschaf.maconha.ui.components;
 
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.ui.Component;
 import de.weltraumschaf.maconha.app.BeanLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.annotation.PrototypeScope;
 
-@SpringComponent
-@PrototypeScope
 public class ConfirmPopup {
 
-    private final BeanLocator locator;
-    private final ConfirmDialogFactory confirmDialogFactory;
-
-    @Autowired
-    public ConfirmPopup(final BeanLocator locator, final ConfirmDialogFactory confirmDialogFactory) {
-        super();
-        this.locator = locator;
-        this.confirmDialogFactory = confirmDialogFactory;
-    }
+    private final ConfirmDialogFactory confirmDialogFactory = new ConfirmDialogFactory();
 
     /**
      * Shows the standard before leave confirm dialog on given ui. If the user
@@ -63,5 +54,23 @@ public class ConfirmPopup {
                 runOnCancel.run();
             }
         }, true);
+    }
+
+    public void showDeleteConfirmDialog(final Component component, final Runnable runOnConfirm, final Runnable runOnCancel) {
+        final ConfirmDialog dialog = confirmDialogFactory.create(
+            "Please confirm",
+            "Do you really want to delete this item?",
+            "Delete",
+            "Cancel",
+            null);
+
+        dialog.show(component.getUI(), event -> {
+            if (event.isConfirmed()) {
+                runOnConfirm.run();
+            } else {
+                runOnCancel.run();
+            }
+        }, true);
+
     }
 }

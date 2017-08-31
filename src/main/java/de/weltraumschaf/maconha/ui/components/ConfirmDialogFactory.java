@@ -1,6 +1,5 @@
 package de.weltraumschaf.maconha.ui.components;
 
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
@@ -9,10 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Singleton factory for creating the "are you sure"-type confirmation dialogs
- * in the application.
+ * Factory for creating the "are you sure"-type confirmation dialogs in the application.
  */
-@SpringComponent
 public class ConfirmDialogFactory extends DefaultConfirmDialogFactory {
 
     @Override

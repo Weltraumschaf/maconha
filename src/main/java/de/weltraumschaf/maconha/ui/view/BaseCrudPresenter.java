@@ -187,7 +187,7 @@ public abstract class BaseCrudPresenter<T extends BaseEntity, S extends CrudServ
      */
     private void runWithConfirmation(final Runnable onConfirmation, final Runnable onCancel) {
         if (hasUnsavedChanges()) {
-            locator.find(ConfirmPopup.class).showLeaveViewConfirmDialog(view, onConfirmation, onCancel);
+            new ConfirmPopup().showLeaveViewConfirmDialog(view, onConfirmation, onCancel);
         } else {
             onConfirmation.run();
         }

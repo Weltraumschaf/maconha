@@ -9,13 +9,13 @@ import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.model.entity.Bucket;
 import de.weltraumschaf.maconha.backend.repo.BucketRepo;
 import de.weltraumschaf.maconha.backend.service.ScanService;
+import de.weltraumschaf.maconha.ui.components.DeleteButton;
 import de.weltraumschaf.maconha.ui.helper.Expander;
 import de.weltraumschaf.maconha.ui.view.SubView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
-import org.vaadin.viritin.button.ConfirmButton;
 
 /**
  * Vie to manage {@link Bucket buckets}.
@@ -31,9 +31,7 @@ public final class BucketsView extends SubView implements HasLogger {
     private TextField filterByDirectory = new TextField();
     private final Button addNew = new Button("Add", VaadinIcons.PLUS);
     private final Button edit = new Button("Edit", VaadinIcons.PENCIL);
-    // FIXME Remove dependency to ConfirmButton.
-    private final Button delete = new ConfirmButton(VaadinIcons.TRASH, "Delete",
-        "Are you sure you want to delete the entry?", this::remove);
+    private final Button delete = new DeleteButton("Delete", VaadinIcons.TRASH);
     private final Button scan = new Button("Scan", VaadinIcons.COGS);
     private final Button schedule = new Button("Schedule", VaadinIcons.ALARM);
     private final Grid<Bucket> bucketList = new Grid<>(Bucket.class);
@@ -54,6 +52,7 @@ public final class BucketsView extends SubView implements HasLogger {
         this.edit.addClickListener(this::edit);
         this.scan.addClickListener(this::scan);
         this.schedule.addClickListener(this::schedule);
+        this.delete.addClickListener(this::remove);
     }
 
     @Override
@@ -110,7 +109,7 @@ public final class BucketsView extends SubView implements HasLogger {
         edit(bucketList.asSingleSelect().getValue());
     }
 
-    public void remove() {
+    public void remove(final Button.ClickEvent event) {
         final Bucket toDelete = bucketList.asSingleSelect().getValue();
         logger().debug("Delete bucket {}.", toDelete.getName());
         buckets.delete(toDelete);
