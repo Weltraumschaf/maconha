@@ -14,8 +14,6 @@ import de.weltraumschaf.maconha.ui.view.SubView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.viritin.button.MButton;
-import org.vaadin.viritin.grid.MGrid;
 
 /**
  * This view shows an {@link ScanStatus status} overview of all jobs started.
@@ -30,12 +28,9 @@ public final class ScansView extends SubView {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScansView.class);
     private static final String TITLE_ID = "Scans-title";
 
-    private final Button stop = new MButton(VaadinIcons.STOP_COG, "Stop", this::stop);
-    private final Button report = new MButton(VaadinIcons.LIST, "Report", this::report);
-    private final MGrid<ScanStatus> statusesList = new MGrid<>(ScanStatus.class)
-        .withProperties("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus")
-        .withColumnHeaders("ID", "Bucket Name", "Created", "Started", "Finished", "Duration", "Status")
-        .withFullWidth();
+    private final Button stop = new Button("Stop", VaadinIcons.STOP_COG);
+    private final Button report = new Button("Report", VaadinIcons.LIST);
+    private final Grid<ScanStatus> statusesList = new Grid<>(ScanStatus.class);
     private final ReportView reportDialog;
     private final transient ScanService scanner;
     private final transient ScanReportService reports;
@@ -59,6 +54,19 @@ public final class ScansView extends SubView {
     }
 
     private Component buildContent() {
+        stop.addClickListener(this::stop);
+        report.addClickListener(this::report);
+
+        statusesList.setColumns("id", "bucketName", "creationTime", "startTime", "endTime", "duration", "jobStatus");
+        statusesList.getColumn("id").setCaption("ID");
+        statusesList.getColumn("bucketName").setCaption("Bucket Name");
+        statusesList.getColumn("creationTime").setCaption("Created");
+        statusesList.getColumn("startTime").setCaption("Started");
+        statusesList.getColumn("endTime").setCaption("Finished");
+        statusesList.getColumn("duration").setCaption("Duration");
+        statusesList.getColumn("jobStatus").setCaption("Status");
+        statusesList.setSizeFull();
+
         final VerticalLayout content = new VerticalLayout(
             new HorizontalLayout(stop, report)
         );
@@ -71,7 +79,7 @@ public final class ScansView extends SubView {
     }
 
     private void listEntities() {
-        statusesList.setRows(scanner.overview());
+        statusesList.setItems(scanner.overview());
         adjustActionButtonState();
     }
 

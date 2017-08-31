@@ -7,19 +7,14 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
-import de.weltraumschaf.maconha.ui.view.SubView;
+import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.model.entity.Keyword;
 import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.repo.KeywordRepo;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.weltraumschaf.maconha.ui.helper.Expander;
+import de.weltraumschaf.maconha.ui.view.SubView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.viritin.button.MButton;
-import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.grid.MGrid;
-import org.vaadin.viritin.layouts.MHorizontalLayout;
-import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import java.util.List;
 
@@ -29,22 +24,17 @@ import java.util.List;
 @UIScope
 @SpringComponent
 @SpringView(name = KeywordsView.VIEW_NAME)
-public final class KeywordsView extends SubView {
-    public static final String VIEW_NAME = "keywords";
+public final class KeywordsView extends SubView implements HasLogger {
     public static final String TITLE = "Keywords";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KeywordsView.class);
+    static final String VIEW_NAME = "keywords";
     private static final String TITLE_ID = "keywords-title";
     private static final String TOTAL_NUMBER_OF_FOUND_KEYWORDS = "Total number of found keywords: %d";
 
     private final Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, 0));
-    private final Button showFiles = new MButton(VaadinIcons.BULLETS, "Show files", this::showFiles);
-    private final MTextField filterByLiteral = new MTextField()
-        .withPlaceholder("Filter by literal");
-    private final MGrid<Keyword> list = new MGrid<>(Keyword.class)
-        .withProperties("id", "literal")
-        .withColumnHeaders("ID", "Literal")
-        .withFullWidth();
+    private final Button showFiles = new Button("Show files", VaadinIcons.BULLETS);
+    private final TextField filterByLiteral = new TextField();
+    private final Grid<Keyword> list = new Grid<>(Keyword.class);
 
     private final KeywordRepo keywords;
     private final MediaFileRepo mediaFiles;
@@ -67,11 +57,19 @@ public final class KeywordsView extends SubView {
     }
 
     private Component buildContent() {
-        final MVerticalLayout content = new MVerticalLayout(
-            new MHorizontalLayout(filterByLiteral, showFiles),
-            totalNumber,
-            list
-        ).expand(list);
+        showFiles.addClickListener(this::showFiles);
+        filterByLiteral.setPlaceholder("Filter by literal");
+
+        final VerticalLayout content = new VerticalLayout(
+            new HorizontalLayout(filterByLiteral, showFiles),
+            totalNumber
+        );
+
+        list.setColumns("id", "literal");
+        list.getColumn("id").setCaption("ID");
+        list.getColumn("literal").setCaption("Literal");
+        list.setSizeFull();
+        Expander.addAndExpand(content, list);
         listEntities();
 
         list.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
@@ -89,16 +87,16 @@ public final class KeywordsView extends SubView {
         final List<Keyword> found;
 
         if (normalizedFilter.isEmpty()) {
-            LOGGER.debug("List all keyword entities.");
+            logger().debug("List all keyword entities.");
              found= keywords.findAll();
         } else {
             final String likeFilter = "%" + normalizedFilter + "%";
-            LOGGER.debug("List all keyword entities like {}.", likeFilter);
+            logger().debug("List all keyword entities like {}.", likeFilter);
             found = keywords.findByLiteralLike(likeFilter);
         }
 
         totalNumber.setValue(String.format(TOTAL_NUMBER_OF_FOUND_KEYWORDS, found.size()));
-        list.setRows(found);
+        list.setItems(found);
         adjustActionButtonState();
     }
 
@@ -108,16 +106,19 @@ public final class KeywordsView extends SubView {
     }
 
     private void showFiles(final Button.ClickEvent event) {
-        final MGrid<MediaFile> fileList = new MGrid<>(MediaFile.class)
-            .withProperties("id", "type", "format", "relativeFileName")
-            .withColumnHeaders("ID", "Type", "Format", "relative File Name")
-            .withFullWidth();
+        final Grid<MediaFile> fileList = new Grid<>(MediaFile.class);
+        fileList.setColumns("id", "type", "format", "relativeFileName");
+        fileList.getColumn("id").setCaption("ID");
+        fileList.getColumn("type").setCaption("Type");
+        fileList.getColumn("format").setCaption("Format");
+        fileList.getColumn("relativeFileName").setCaption("relative File Name");
+        fileList.setSizeFull();
 
         final Keyword keyword = list.asSingleSelect().getValue();
         final List<MediaFile> files = mediaFiles.findByKeywords(keyword);
-        fileList.setRows(files);
+        fileList.setItems(files);
 
-        final VerticalLayout content = new MVerticalLayout(
+        final VerticalLayout content = new VerticalLayout(
             new Label(
                 String.format("Keyword '<strong>%s</strong>' found in <strong>%d</strong> files",
                     keyword.getLiteral(), files.size()),

@@ -4,15 +4,17 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
-import de.weltraumschaf.maconha.ui.view.SubView;
+import com.vaadin.ui.VerticalLayout;
+import de.weltraumschaf.maconha.app.HasLogger;
 import de.weltraumschaf.maconha.backend.model.entity.MediaFile;
 import de.weltraumschaf.maconha.backend.repo.MediaFileRepo;
+import de.weltraumschaf.maconha.ui.helper.Expander;
+import de.weltraumschaf.maconha.ui.view.SubView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.viritin.grid.MGrid;
-import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import java.util.List;
 
@@ -22,19 +24,15 @@ import java.util.List;
 @UIScope
 @SpringComponent
 @SpringView(name = DuplicatesView.VIEW_NAME)
-public final class DuplicatesView extends SubView {
-    public static final String VIEW_NAME = "duplicates";
+public final class DuplicatesView extends SubView implements HasLogger {
     public static final String TITLE = "Duplicates";
+    static final String VIEW_NAME = "duplicates";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DuplicatesView.class);
     private static final String TITLE_ID = "duplicates-title";
     private static final String TOTAL_NUMBER_OF_FOUND_DUPLICATES = "Total number of found duplicates: %d";
 
     private final Label totalNumber = new Label(String.format(TOTAL_NUMBER_OF_FOUND_DUPLICATES, 0));
-    private final MGrid<MediaFile> list = new MGrid<>(MediaFile.class)
-        .withProperties("id", "fileHash", "relativeFileName", "type", "format", "lastScanned")
-        .withColumnHeaders("ID", "File Hash", "relative File Name", "Type", "Format", "Last Scanned")
-        .withFullWidth();
+    private final Grid<MediaFile> list = new Grid<>(MediaFile.class);
     private final MediaFileRepo mediaFiles;
 
     @Autowired
@@ -49,9 +47,17 @@ public final class DuplicatesView extends SubView {
     }
 
     private Component buildContent() {
-        final MVerticalLayout content = new MVerticalLayout(
-            totalNumber,
-            list).expand(list);
+        final VerticalLayout content = new VerticalLayout(totalNumber);
+        list.setColumns("id", "fileHash", "relativeFileName", "type", "format", "lastScanned");
+        list.getColumn("id").setCaption("ID");
+        list.getColumn("fileHash").setCaption("File Hash");
+        list.getColumn("relativeFileName").setCaption("Relative File Name");
+        list.getColumn("type").setCaption("Type");
+        list.getColumn("format").setCaption("Format");
+        list.getColumn("lastScanned").setCaption("Last Scanned");
+        list.setSizeFull();
+        Expander.addAndExpand(content, list);
+
         listEntities();
 
         return content;
@@ -59,8 +65,8 @@ public final class DuplicatesView extends SubView {
 
     private void listEntities() {
         final List<MediaFile> found = mediaFiles.findDuplicates();
-        LOGGER.debug("Found {} duplicate media files.", found.size());
-        list.setRows(found);
+        logger().debug("Found {} duplicate media files.", found.size());
+        list.setItems(found);
         totalNumber.setValue(String.format(TOTAL_NUMBER_OF_FOUND_DUPLICATES, found.size()));
     }
 }
