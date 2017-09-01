@@ -42,7 +42,7 @@ public final class BucketsView extends SubView implements HasLogger {
     private ScanService scanner;
 
     @Autowired
-    public BucketsView(@SuppressWarnings("SpringJavaAutowiringInspection") final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events) {
+    public BucketsView(final ScanService scanner, final BucketRepo buckets, final BucketForm form, final EventBus.UIEventBus events) {
         super(TITLE, TITLE_ID);
         this.scanner = scanner;
         this.buckets = buckets;

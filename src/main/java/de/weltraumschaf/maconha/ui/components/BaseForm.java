@@ -123,18 +123,20 @@ public abstract class BaseForm<T> extends CustomComponent {
     }
 
     /**
-     * This method should return the actual content of the form, including
-     * possible toolbar.
+     * This method should return the actual content of the form, including possible toolbar.
+     *
      * <p>
      * Use setEntity(T entity) to fill in the data. Am example implementation
      * could look like this:
-     * <pre><code>
+     * </p>
+     *
+     * <pre>{@code
      * public class PersonForm extends AbstractForm&lt;Person&gt; {
      *
      *     private TextField firstName = new TextField(&quot;First Name&quot;);
      *     private TextField lastName = new TextField(&quot;Last Name&quot;);
      *
-     *    {@literal @}Override
+     *     &#064;Override
      *     protected Component createContent() {
      *         return new VerticalLayout(
      *                 new FormLayout(
@@ -145,7 +147,7 @@ public abstract class BaseForm<T> extends CustomComponent {
      *         );
      *     }
      * }
-     * </code></pre>
+     * }</pre>
      *
      * @return the content of the form
      */
@@ -200,6 +202,7 @@ public abstract class BaseForm<T> extends CustomComponent {
             getResetButton().setEnabled(true);
             return;
         }
+
         if (isBound()) {
             boolean modified = hasChanges();
             getResetButton().setEnabled(modified || popup != null);
@@ -207,28 +210,29 @@ public abstract class BaseForm<T> extends CustomComponent {
     }
 
     /**
-     * @return the currently edited entity or null if the form is currently
-     * unbound
+     * Get the currently edited entity.
+     *
+     * @return {@code null} if the form is currently unbound
      */
     public T getEntity() {
         return entity;
     }
 
-    protected void save(Button.ClickEvent e) {
+    protected void save(final Button.ClickEvent e) {
         savedHandler.onSave(getEntity());
         hasChanges = false;
         adjustSaveButtonState();
         adjustResetButtonState();
     }
 
-    protected void reset(Button.ClickEvent e) {
+    protected void reset(final Button.ClickEvent e) {
         resetHandler.onReset(getEntity());
         hasChanges = false;
         adjustSaveButtonState();
         adjustResetButtonState();
     }
 
-    protected void delete(Button.ClickEvent e) {
+    protected void delete(final Button.ClickEvent e) {
         deleteHandler.onDelete(getEntity());
         hasChanges = false;
     }
@@ -244,12 +248,11 @@ public abstract class BaseForm<T> extends CustomComponent {
         );
     }
 
-    public Window openInModalPopup() {
+    public void openInModalPopup() {
         popup = new Window(getModalWindowTitle(), this);
         popup.setModal(true);
         UI.getCurrent().addWindow(popup);
         focusFirst();
-        return popup;
     }
 
     /**
@@ -261,7 +264,7 @@ public abstract class BaseForm<T> extends CustomComponent {
         findFieldAndFocus(compositionRoot);
     }
 
-    private boolean findFieldAndFocus(Component compositionRoot) {
+    private boolean findFieldAndFocus(final Component compositionRoot) {
         if (compositionRoot instanceof AbstractComponentContainer) {
             final AbstractComponentContainer cc = (AbstractComponentContainer) compositionRoot;
 
@@ -285,20 +288,13 @@ public abstract class BaseForm<T> extends CustomComponent {
                 }
             }
         }
+
         return false;
     }
 
-    /**
-     * @return the last Popup into which the Form was opened with
-     * #openInModalPopup method or null if the form hasn't been use in window
-     */
-    private Window getPopup() {
-        return popup;
-    }
-
     public void closePopup() {
-        if (getPopup() != null) {
-            getPopup().close();
+        if (popup != null) {
+            popup.close();
         }
     }
 

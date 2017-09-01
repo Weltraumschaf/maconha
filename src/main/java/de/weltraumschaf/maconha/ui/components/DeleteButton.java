@@ -10,6 +10,11 @@ import de.weltraumschaf.commons.validate.Validate;
  */
 public final class DeleteButton extends Button {
 
+    /**
+     * Convenience constructor w/o icon.
+     *
+     * @param caption must not be {@code null} or empty
+     */
     public DeleteButton(final String caption) {
         super(Validate.notEmpty(caption, "caption"));
     }
