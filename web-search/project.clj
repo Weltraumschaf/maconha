@@ -9,9 +9,11 @@
                  [ring/ring-defaults "0.3.2"]
                  [ring/ring-jetty-adapter "1.6.1"]
                  [hiccup "1.0.5"]]
-  :plugins [[lein-ring "0.12.5"]]
-  :main my-webapp.handler
+  :plugins [[lein-ring "0.12.5"]
+            [lein-bin "0.3.4"]]
+  :main web-search.handler
   :ring {:handler web-search.handler/app}
   :profiles
-  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+  {:uberjar {:aot :all}
+   :dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring/ring-mock "0.3.2"]]}})
