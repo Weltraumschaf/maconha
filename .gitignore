@@ -1,4 +1,15 @@
 .envrc
 bin/
+cache/
 etc/maconha-config.yml
+log/
 stash/
+
+ # Leiningen stuff to ignore
+classes/
+checkouts/
+profiles.clj
+pom.xml
+pom.xml.asc
+.lein-*
+.nrepl-port
