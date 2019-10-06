@@ -1,4 +1,0 @@
-== Maconha
-
-Maconha is an application which crawls some given directories for media files and provides
-an easy and simply search interface to find the crawled media.

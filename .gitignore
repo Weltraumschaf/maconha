@@ -1,10 +1,4 @@
-.designer/
 .envrc
 bin/
-etc/maconha.properties
-node/
-node_modules/
-run-dev.sh
-src/main/resources/static/lib/
-src/main/webapp/VAADIN/themes/maconha/*.css
-var/
+etc/maconha-config.yml
+stash/

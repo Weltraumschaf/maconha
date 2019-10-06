@@ -1,8 +1,0 @@
-[[section-glossary]]
-== Glossary
-
-[options="header"]
-|===
-| Term | Definition
-| Bucket | Locaion of a direcotry to be crawled.
-|===
