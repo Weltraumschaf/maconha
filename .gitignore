@@ -4,6 +4,7 @@ cache/
 etc/maconha-config.yml
 log/
 stash/
+testdata/
 
  # Leiningen stuff to ignore
 classes/
