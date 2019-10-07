@@ -1,0 +1,8 @@
+---
+port: 8080
+sources:
+    - path: /foo/bar
+      description: Folder with bar files
+    - path: /foo/baz
+      description: Folder with baz files
+
