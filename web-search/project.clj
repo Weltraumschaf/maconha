@@ -10,7 +10,7 @@
                  [ring/ring-jetty-adapter "1.6.1"]
                  [hiccup "1.0.5"]]
   :plugins [[lein-ring "0.12.5"]
-            [lein-bin "0.3.4"]]
+            [lein-binplus "0.6.5"]]
   :bin {:name "web-search"}
   :main web-search.handler
   :ring {:handler web-search.handler/app}
