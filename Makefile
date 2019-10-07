@@ -7,6 +7,12 @@ clean:
 	@cd cli-indexer; lein clean
 	@cd web-search; lein clean
 
+clean-local: clean
+	@echo "Cleaning the local development files ..."
+	@rm $(PROJECT)/bin/cli-indexer
+	@rm $(PROJECT)/bin/web-search
+	@rm $(PROJECT)/etc/maconha-config.yml
+
 build:
 	@echo "Building Maconha Search ..."
 	@cd cli-indexer; lein bin
@@ -22,6 +28,8 @@ install: build
 
 help:
 	@echo "Execute one of these targets:"
-	@echo "make clean"
-	@echo "make build (default target)"
-	@echo "make [make PREFIX="/usr/local"] install"
+	@echo "  make clean"
+	@echo "  make build (default target)"
+	@echo "  make [make PREFIX="/usr/local"] install"
+	@echo "Special development targets:"
+	@echo "  make clean-local"
