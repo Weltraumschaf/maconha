@@ -1,6 +1,6 @@
 (ns cli-indexer.core
   (:require [clojure.string :as string]
-            [clojure.tools.cli :refer [parse-opts]])
+            [clojure.tools.cli :as cli])
   (:import (java.net InetAddress))
   (:gen-class))
 
@@ -68,7 +68,7 @@
   should exit (with a error message, and optional ok status), or a map
   indicating the action the program should take and the options provided."
   [args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
+  (let [{:keys [options arguments errors summary]} (cli/parse-opts args cli-options)]
     (cond
       (:help options)                                       ; help => exit OK with usage summary
       {:exit-message (usage summary) :ok? true}
