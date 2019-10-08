@@ -9,8 +9,8 @@ clean:
 
 clean-local: clean
 	@echo "Cleaning the local development files ..."
-	@rm $(PROJECT)/bin/cli-indexer
-	@rm $(PROJECT)/bin/web-search
+	@rm $(PROJECT)/bin/maconha-indexer
+	@rm $(PROJECT)/bin/maconha-search
 	@rm $(PROJECT)/etc/maconha-config.yml
 
 build:
@@ -23,8 +23,8 @@ install: build
 	@mkdir -p $(PREFIX)/etc
 	@cp etc/maconha-config-sample.yml $(PREFIX)/etc/maconha-config.yml
 	@mkdir -p $(PREFIX)/bin
-	@cp cli-indexer/target/cli-indexer $(PREFIX)/bin/cli-indexer
-	@cp web-search/target/web-search $(PREFIX)/bin/web-search
+	@cp cli-indexer/target/maconha-indexer $(PREFIX)/bin/
+	@cp web-search/target/maconha-search $(PREFIX)/bin/
 
 help:
 	@echo "Execute one of these targets:"

@@ -6,6 +6,6 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/tools.cli "0.4.2"]]
   :plugins [[lein-binplus "0.6.5"]]
-  :bin {:name "cli-indexer"}
+  :bin {:name "maconha-indexer"}
   :main cli-indexer.core
   :profiles {:uberjar {:aot :all}})

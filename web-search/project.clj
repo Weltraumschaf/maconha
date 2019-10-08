@@ -11,7 +11,7 @@
                  [hiccup "1.0.5"]]
   :plugins [[lein-ring "0.12.5"]
             [lein-binplus "0.6.5"]]
-  :bin {:name "web-search"}
+  :bin {:name "maconha-search"}
   :main web-search.handler
   :ring {:handler web-search.handler/app}
   :profiles
