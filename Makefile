@@ -18,7 +18,7 @@ build:
 	@cd cli-indexer; lein bin
 	@cd web-search; lein bin
 
-install: build
+install:
 	@echo "Installing Maconha Search into $(PREFIX) ..."
 	@mkdir -p $(PREFIX)/etc
 	@cp etc/maconha-config-sample.yml $(PREFIX)/etc/maconha-config.yml
