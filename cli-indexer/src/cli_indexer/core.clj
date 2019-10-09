@@ -1,7 +1,8 @@
 (ns cli-indexer.core
   (:require [clojure.string :as string]
-            [clojure.tools.cli :as cli])
-  (:import (java.net InetAddress))
+            [clojure.tools.cli :as cli]
+            [clojure.java.io :as io]
+            [cli-indexer.app :as app])
   (:gen-class))
 
 (def cli-options
@@ -39,8 +40,8 @@
       {:exit-message (usage summary) :ok? true}
       errors                                                ; errors => exit with description of errors
       {:exit-message (error-msg errors)}
-      ;; TODO Check if config file is readable
-      (:config options)
+      ;; Check if config file exists:
+      (.exists (io/file (:config options)))                 ; FIXME PRint error message that file does not exist.
       {:options options}
       :else                                                 ; failed custom validation => exit with usage summary
       {:exit-message (usage summary)})))
@@ -53,4 +54,4 @@
   (let [{:keys [options exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (println "Hello, World!" options))))
+      (app/run options))))

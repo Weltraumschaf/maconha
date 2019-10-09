@@ -27,3 +27,9 @@ The `install` target installs the binaries into `$PREFIX/bin` and configuration 
 ```text
 make clean && make PREFIX=/usr/local install
 ```
+
+## Links
+
+- [Basic Web Development](http://clojure-doc.org/articles/tutorials/basic_web_development.html#create-and-set-up-your-project)
+- [tools.cli](https://github.com/clojure/tools.cli)
+- [Working with Files and Directories in Clojure](http://clojure-doc.org/articles/cookbooks/files_and_directories.html)

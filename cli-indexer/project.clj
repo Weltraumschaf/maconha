@@ -4,7 +4,8 @@
   :license {:name "\"THE BEER-WARE LICENSE\" (Revision 43)"
             :url  "https://www.weltraumschaf.de/the-beer-ware-license.txt"}
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/tools.cli "0.4.2"]]
+                 [org.clojure/tools.cli "0.4.2"]
+                 [clj-commons/clj-yaml "0.7.0"]]
   :plugins [[lein-binplus "0.6.5"]]
   :bin {:name "maconha-indexer"}
   :main cli-indexer.core
