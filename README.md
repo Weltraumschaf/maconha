@@ -30,6 +30,9 @@ make clean && make PREFIX=/usr/local install
 
 ## Links
 
+- [Clojure Introduction](http://clojure-doc.org/articles/tutorials/introduction.html)
+- [Clojure Cheatshet](https://clojure.org/api/cheatsheet)
 - [Basic Web Development](http://clojure-doc.org/articles/tutorials/basic_web_development.html#create-and-set-up-your-project)
 - [tools.cli](https://github.com/clojure/tools.cli)
 - [Working with Files and Directories in Clojure](http://clojure-doc.org/articles/cookbooks/files_and_directories.html)
+- [YAML](https://github.com/clj-commons/clj-yaml)
